@@ -1,0 +1,22 @@
+{
+  "product": "AirDraw Production Release",
+  "version": "1.0.0",
+  "developer": "SARHANG IO",
+  "frontend": {
+    "framework": "Vite",
+    "entry": "web/index.html"
+  },
+  "backend": {
+    "framework": "FastAPI",
+    "entry": "server/app/main.py"
+  },
+  "modules": [
+    "Touch and stylus drawing",
+    "MediaPipe hand tracking",
+    "IndexedDB data vault + recovery",
+    "PWA cache policy",
+    "Optional API and WebSocket sync",
+    "Lottie motion logo and UI skins",
+    "Docker, Nginx, Netlify and Vercel deployment configs"
+  ]
+}

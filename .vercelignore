@@ -1,0 +1,14 @@
+# Backend is deployed independently; Vercel builds only the Vite frontend.
+server/
+UPLOAD_NOW_STATIC/
+releases/
+docs/
+*.zip
+web/dist/
+web/node_modules/
+**/__pycache__/
+*.pyc
+.env
+server/.env
+.vercel/
+.git/

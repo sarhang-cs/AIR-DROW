@@ -1,0 +1,26 @@
+services:
+  api:
+    build:
+      context: ./server
+    env_file:
+      - ./server/.env
+    volumes:
+      - airdraw_data:/app/data
+    restart: unless-stopped
+    ports:
+      - "8787:8787"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://127.0.0.1:8787}
+    depends_on:
+      - api
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+
+volumes:
+  airdraw_data:

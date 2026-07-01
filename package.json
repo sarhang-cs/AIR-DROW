@@ -1,0 +1,18 @@
+{
+  "name": "air-drow",
+  "version": "1.0.3",
+  "private": true,
+  "description": "AIR-DROW production repository by SARHANG IO",
+  "engines": {
+    "node": ">=20.19.0",
+    "npm": ">=10"
+  },
+  "scripts": {
+    "install:web": "npm --prefix web ci --include=dev",
+    "dev": "npm --prefix web run dev",
+    "build": "npm --prefix web run build",
+    "check": "npm --prefix web run check",
+    "preflight": "node scripts/preflight.mjs",
+    "vercel-build": "npm run preflight && npm run check && npm run build"
+  }
+}

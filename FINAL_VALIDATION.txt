@@ -1,0 +1,23 @@
+AirDraw Production Release v1.0.0 — Final Validation
+
+Completed:
+- Vite frontend JavaScript checks passed.
+- Release preflight passed.
+- Vite production build completed.
+- FastAPI Python source compiled with py_compile.
+- Built static app copied to UPLOAD_NOW_STATIC/.
+- node_modules was intentionally excluded from the release archive.
+- package-lock.json is included so installs can be reproduced with npm ci.
+
+Build output:
+- dist/index.html
+- dist/assets/index-C6qeTGhJ.css
+- dist/assets/index-CMrxRyWb.js
+- dist/assets/airdraw-logo-lottie.json
+- dist/manifest.webmanifest
+- dist/offline.html
+- dist/sw.js
+
+Security note:
+- The server and deployment files are examples and require HTTPS/WSS, environment configuration,
+  real account authorization and backups before public production use.

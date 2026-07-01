@@ -1,0 +1,22 @@
+# Node/Vite
+web/node_modules/
+web/dist/
+web/.vite/
+
+# Python/server
+server/.venv/
+server/data/
+server/__pycache__/
+server/app/__pycache__/
+*.pyc
+
+# Deployment/local secrets
+.env
+server/.env
+.vercel/
+.DS_Store
+*.log
+
+# Keep a source-release zip in releases/, but ignore ad-hoc archive files elsewhere.
+*.zip
+!releases/*.zip

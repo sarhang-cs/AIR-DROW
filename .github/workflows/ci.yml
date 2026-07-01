@@ -1,0 +1,28 @@
+name: AirDraw CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate frontend
+        working-directory: web
+        run: |
+          npm install
+          npm run preflight
+          npm run check
+          npm run build
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Validate API source
+        run: python -m py_compile server/app/main.py

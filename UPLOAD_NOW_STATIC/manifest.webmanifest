@@ -1,0 +1,9 @@
+{
+  "name": "AirDraw Motion Skin Studio",
+  "short_name": "AirDraw",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080d18",
+  "theme_color": "#080d18",
+  "description": "AirDraw Phase 23 Motion Skin Studio by SARHANG IO"
+}

@@ -1,0 +1,18 @@
+AIRDraw Production Release — Direct Upload
+
+1) بۆ hosting ـی static کە build ناکات:
+   تەنها ناوەڕۆکی فولدەری `UPLOAD_NOW_STATIC/` upload بکە بۆ root ـی domain.
+
+2) بۆ Netlify / Vercel / GitHub repository:
+   هەموو root ـی ئەم release ـە upload/push بکە؛ config و source code هەمووی تێدایە.
+
+3) API و realtime بە دۆمەینی static بەخۆی کار ناکات:
+   بۆ API/WebSocket، `server/` بە جیاوازی deploy بکە و پاشان API Base URL لە app ـەکە دابنێ.
+
+4) هەموو پڕۆژەکە پێش build تاقی کراوەتەوە:
+   - JavaScript syntax
+   - Python syntax
+   - Vite production build
+   - Release preflight
+
+`UPLOAD_NOW_STATIC` contains a built static frontend. No node_modules folder is needed for direct static upload.

@@ -1,0 +1,6 @@
+AIR-DROW v1.0.3 Termux Build Bypass
+
+- Node source checks and release preflight passed.
+- FastAPI Python syntax check passed.
+- Termux upload scripts do not execute local Vite/Rolldown build.
+- Vercel cloud builds the Vite project after source deployment.

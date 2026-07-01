@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="ku" dir="rtl" data-skin="aurora">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#080d18" />
+    <meta name="description" content="AirDraw Phase 23 by SARHANG IO — animated motion skin, Lottie logo, glass UI, local data vault, touch and hand tracking." />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>AirDraw Motion Skin Studio</title>
+    <script type="module" crossorigin src="/assets/index-CMrxRyWb.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-C6qeTGhJ.css">
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar glass-zone">
+        <div class="brand no-select">
+          <div class="brand-visual" aria-hidden="true">
+            <div id="logoLottie" class="logo-lottie"></div>
+            <span class="brand-fallback">AD</span>
+          </div>
+          <div>
+            <div class="eyebrow">SARHANG IO • PHASE 23</div>
+            <h1>AirDraw Motion Skin Studio</h1>
+            <p>Dynamic logo • Lottie JSON • Glass UI • Touch & Hand</p>
+          </div>
+        </div>
+
+        <nav class="nav-tabs no-select" aria-label="Main tabs">
+          <button class="nav-tab active" type="button" data-ui-tab="studio" aria-pressed="true">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5V4.8c0-.7.8-1.1 1.4-.7l13.2 7.2c.6.3.6 1.2 0 1.5L5.4 20.2c-.6.4-1.4 0-1.4-.7Z"/></svg><span>Studio</span>
+          </button>
+          <button class="nav-tab" type="button" data-ui-tab="style" aria-pressed="false">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9c0-1.1-.9-2-2-2h-2a2 2 0 0 1-2-2V6a3 3 0 0 0-3-3Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="15" cy="7.5" r="1"/></svg><span>Style</span>
+          </button>
+          <button class="nav-tab" type="button" data-ui-tab="data" aria-pressed="false">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v7c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 12v7c0 1.7 3.1 3 7 3s7-1.3 7-3v-7"/></svg><span>Data</span>
+          </button>
+          <button class="nav-tab" type="button" data-ui-tab="api" aria-pressed="false">
+            <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 3 12l4-5"/><path d="m17 7 4 5-4 5"/><path d="m14 4-4 16"/></svg><span>API</span>
+          </button>
+        </nav>
+
+        <div class="header-actions no-select">
+          <button id="saveBtn" class="button primary" type="button" data-busy-lock>
+            <span class="button-orb"></span><span>Save Now</span>
+          </button>
+          <button id="styleBtn" class="icon-button" type="button" aria-label="Open Style Studio">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9c0-1.1-.9-2-2-2h-2a2 2 0 0 1-2-2V6a3 3 0 0 0-3-3Z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="15" cy="7.5" r="1"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="workspace-card glass-zone" aria-label="Drawing workspace">
+          <div class="workspace-head no-select">
+            <div>
+              <span class="section-kicker">LIVE CANVAS</span>
+              <h2>Draw with touch, stylus or hand</h2>
+            </div>
+            <div class="live-chip"><span class="live-dot"></span><span id="motionStatus">Motion ready</span></div>
+          </div>
+
+          <div id="canvasStage" class="canvas-stage interaction-surface" aria-label="Canvas. One pointer draws; two fingers pan and zoom. Long press opens quick actions.">
+            <div class="canvas-orb orb-one"></div>
+            <div class="canvas-orb orb-two"></div>
+            <video id="camera" playsinline muted></video>
+            <canvas id="paintCanvas"></canvas>
+            <canvas id="overlayCanvas"></canvas>
+            <div id="canvasNotice" class="canvas-notice">Manual input ready.</div>
+
+            <div id="quickMenu" class="quick-menu glass-zone" hidden>
+              <button id="quickSaveBtn" type="button">Save</button>
+              <button id="quickResetBtn" type="button">Reset View</button>
+              <button id="quickCancelBtn" type="button">Cancel</button>
+            </div>
+          </div>
+
+          <div class="workspace-toolbar no-select" aria-label="Canvas controls">
+            <button id="manualBtn" class="button active" type="button"><span class="button-icon">M</span>Manual</button>
+            <button id="handBtn" class="button" type="button" data-busy-lock><span class="button-icon">H</span>Hand</button>
+            <button id="cameraBtn" class="button" type="button" data-busy-lock><span class="button-icon">C</span>Start Camera</button>
+            <button id="undoBtn" class="button" type="button" data-busy-lock><span class="button-icon">U</span>Undo</button>
+            <button id="clearBtn" class="button danger" type="button" data-busy-lock><span class="button-icon">X</span>Clear</button>
+            <button id="resetViewBtn" class="button" type="button"><span class="button-icon">R</span>Reset</button>
+            <button id="exportBtn" class="button" type="button"><span class="button-icon">P</span>PNG</button>
+          </div>
+
+          <p class="gesture-help">
+            One touch / pen: draw. Two touches: pan + zoom. Stylus pressure is used only when the browser sends actual pressure.
+            Long press is captured only inside the canvas. Hand mode: pinch thumb and index finger to draw.
+          </p>
+        </section>
+
+        <aside class="panel" aria-label="Settings">
+          <section class="panel-section glass-zone runtime-card">
+            <div class="card-title-row"><h2>Live Runtime</h2><span class="status-pill">REAL</span></div>
+            <dl class="status-grid">
+              <div><dt>Mode</dt><dd id="modeStatus">Manual</dd></div>
+              <div><dt>Pointer</dt><dd id="pointerStatus">Unknown</dd></div>
+              <div><dt>Hand</dt><dd id="handStatus">Not started</dd></div>
+              <div><dt>FPS</dt><dd id="fpsStatus">0</dd></div>
+              <div><dt>Save</dt><dd id="saveStatus">Loading…</dd></div>
+              <div><dt>Network</dt><dd id="networkStatus">Checking…</dd></div>
+            </dl>
+          </section>
+
+          <section class="panel-section glass-zone">
+            <div class="card-title-row"><h2>Touch & Line</h2><span class="mini-orbit"></span></div>
+            <label>
+              Brush size
+              <input id="brushSize" type="range" min="2" max="36" value="8" />
+              <output id="brushSizeOut">8</output>
+            </label>
+            <label>
+              Smoothing
+              <input id="smoothing" type="range" min="0" max="90" value="42" />
+              <output id="smoothingOut">42%</output>
+            </label>
+            <label>
+              Color
+              <input id="colorPicker" type="color" value="#7fd8ff" />
+            </label>
+            <label class="toggle-row">
+              <span>Pressure line width</span>
+              <input id="pressureToggle" type="checkbox" checked />
+            </label>
+          </section>
+
+          <section class="panel-section glass-zone">
+            <div class="card-title-row"><h2>Hand Tracking</h2><span class="mini-orbit"></span></div>
+            <label>
+              Profile
+              <select id="handProfile">
+                <option value="balanced">Balanced</option>
+                <option value="sensitive">Sensitive</option>
+                <option value="stable">Stable</option>
+              </select>
+            </label>
+            <label>
+              Tracking FPS
+              <select id="trackingFps">
+                <option value="20">20 FPS – Eco</option>
+                <option value="30" selected>30 FPS – Balanced</option>
+                <option value="45">45 FPS – Fast</option>
+              </select>
+            </label>
+            <label class="toggle-row">
+              <span>Camera preview</span>
+              <input id="cameraPreview" type="checkbox" />
+            </label>
+            <p class="small-note">The engine tracks hands. It does not label unknown objects as hands.</p>
+          </section>
+
+          <section class="panel-section glass-zone">
+            <div class="card-title-row"><h2>Interaction Guard</h2><span class="mini-orbit"></span></div>
+            <label class="toggle-row">
+              <span>Long press quick menu</span>
+              <input id="longPressToggle" type="checkbox" checked />
+            </label>
+            <label class="toggle-row">
+              <span>Lock canvas during save/load</span>
+              <input id="busyLockToggle" type="checkbox" checked />
+            </label>
+            <p class="small-note">Selection and callout blocking apply to the canvas only, not all app text or links.</p>
+          </section>
+        </aside>
+      </main>
+
+      <aside id="styleSheet" class="sheet style-sheet glass-zone" aria-label="Property and Skin Studio">
+        <div class="sheet-head">
+          <div>
+            <span class="section-kicker">PROPERTY MANAGEMENT</span>
+            <h2>Motion Skin Studio</h2>
+          </div>
+          <button class="button close-style-sheet" type="button">Close</button>
+        </div>
+
+        <div class="sheet-grid">
+          <section class="panel-section">
+            <h2>Complete Skin</h2>
+            <div id="skinChoices" class="skin-choices">
+              <button type="button" class="skin-choice active" data-skin-choice="aurora"><span class="skin-swatch aurora"></span><b>Aurora Glass</b><small>Cool blue and mint</small></button>
+              <button type="button" class="skin-choice" data-skin-choice="berry"><span class="skin-swatch berry"></span><b>Berry Candy</b><small>Soft berry and peach</small></button>
+              <button type="button" class="skin-choice" data-skin-choice="midnight"><span class="skin-swatch midnight"></span><b>Midnight Ink</b><small>Deep ink contrast</small></button>
+            </div>
+          </section>
+
+          <section class="panel-section">
+            <h2>Motion Properties</h2>
+            <label>Glass blur <input id="skinBlur" type="range" min="0" max="28" value="16" /><output id="skinBlurOut">16px</output></label>
+            <label>Card radius <input id="skinRadius" type="range" min="12" max="30" value="22" /><output id="skinRadiusOut">22px</output></label>
+            <label>Motion intensity <input id="skinMotion" type="range" min="0" max="100" value="70" /><output id="skinMotionOut">70%</output></label>
+            <label class="toggle-row"><span>Animated Lottie logo</span><input id="skinLogoToggle" type="checkbox" checked /></label>
+            <label class="toggle-row"><span>Dynamic tab icons</span><input id="skinIconToggle" type="checkbox" checked /></label>
+            <label class="toggle-row"><span>Glass cards and blur</span><input id="skinGlassToggle" type="checkbox" checked /></label>
+            <label class="toggle-row"><span>Button micro-interactions</span><input id="skinButtonToggle" type="checkbox" checked /></label>
+          </section>
+
+          <section class="panel-section wide">
+            <div class="card-title-row"><h2>Live Skin Preview</h2><span id="skinStatus" class="status-pill">Preview</span></div>
+            <div class="skin-preview">
+              <div class="preview-logo"><span>AD</span></div>
+              <div>
+                <b>Adaptive property state</b>
+                <p id="skinPreviewText">Aurora Glass • 16px blur • 22px cards • 70% motion</p>
+              </div>
+              <button class="button primary" type="button">Hover Sample</button>
+            </div>
+            <div class="button-row">
+              <button id="applySkinBtn" class="button primary" type="button">Apply & Save</button>
+              <button id="cancelSkinBtn" class="button" type="button">Cancel Changes</button>
+              <button id="resetSkinBtn" class="button danger" type="button">Reset Skin</button>
+            </div>
+          </section>
+        </div>
+      </aside>
+
+      <aside id="dataSheet" class="sheet glass-zone" aria-label="Data and cache panel">
+        <div class="sheet-head">
+          <div><span class="section-kicker">LOCAL VAULT</span><h2>Data & Cache Center</h2></div>
+          <button class="button close-sheet" type="button">Close</button>
+        </div>
+        <div class="sheet-grid">
+          <section class="panel-section">
+            <h2>Reload & Recovery</h2>
+            <dl class="status-grid">
+              <div><dt>IndexedDB</dt><dd id="idbStatus">Checking…</dd></div>
+              <div><dt>Integrity</dt><dd id="integrityStatus">Checking…</dd></div>
+              <div><dt>Checkpoint</dt><dd id="checkpointStatus">Checking…</dd></div>
+              <div><dt>Reload mirror</dt><dd id="mirrorStatus">Checking…</dd></div>
+            </dl>
+            <div class="button-row">
+              <button id="verifyDataBtn" class="button" type="button" data-busy-lock>Verify Data</button>
+              <button id="restoreBtn" class="button" type="button" data-busy-lock>Restore Checkpoint</button>
+            </div>
+          </section>
+          <section class="panel-section">
+            <h2>Cache Rules</h2>
+            <dl class="status-grid">
+              <div><dt>Cache Storage</dt><dd id="cacheStatus">Checking…</dd></div>
+              <div><dt>Storage</dt><dd id="storageStatus">Checking…</dd></div>
+              <div><dt>Service Worker</dt><dd id="swStatus">Checking…</dd></div>
+              <div><dt>Outbox</dt><dd id="outboxStatus">Checking…</dd></div>
+            </dl>
+            <div class="button-row">
+              <button id="clearCacheBtn" class="button danger" type="button" data-busy-lock>Clear App Cache</button>
+              <button id="protectStorageBtn" class="button" type="button">Protect Storage</button>
+            </div>
+          </section>
+          <section class="panel-section wide">
+            <h2>Local Data Rules</h2>
+            <p class="small-note">Save is serialized. A local save must finish before optional API sync starts. Server conflicts are not overwritten silently.</p>
+          </section>
+        </div>
+      </aside>
+
+      <aside id="apiSheet" class="sheet glass-zone" aria-label="API and server panel">
+        <div class="sheet-head">
+          <div><span class="section-kicker">CONNECTED LAYER</span><h2>API & Server Center</h2></div>
+          <button class="button close-sheet" type="button">Close</button>
+        </div>
+        <div class="sheet-grid">
+          <section class="panel-section wide">
+            <h2>Server Connection</h2>
+            <label>API base URL<input id="apiBaseInput" type="url" inputmode="url" placeholder="http://127.0.0.1:8787" /></label>
+            <label>Project ID<input id="apiProjectIdInput" type="text" value="default-project-v22" maxlength="64" /></label>
+            <label>Bearer token (session only)<input id="apiTokenInput" type="password" autocomplete="off" placeholder="Optional server token" /></label>
+            <div class="button-row">
+              <button id="healthBtn" class="button" type="button" data-busy-lock>Health Check</button>
+              <button id="pushBtn" class="button primary" type="button" data-busy-lock>Push Server</button>
+              <button id="pullBtn" class="button" type="button" data-busy-lock>Pull Server</button>
+              <button id="flushOutboxBtn" class="button" type="button" data-busy-lock>Flush Outbox</button>
+            </div>
+          </section>
+          <section class="panel-section">
+            <h2>API State</h2>
+            <dl class="status-grid">
+              <div><dt>Health</dt><dd id="apiHealthStatus">Not checked</dd></div>
+              <div><dt>Remote revision</dt><dd id="remoteRevisionStatus">0</dd></div>
+              <div><dt>Transport</dt><dd id="transportStatus">Not connected</dd></div>
+              <div><dt>Last API result</dt><dd id="apiResultStatus">None</dd></div>
+            </dl>
+          </section>
+          <section class="panel-section">
+            <h2>Realtime</h2>
+            <label>WebSocket room<input id="wsRoomInput" type="text" value="default-room" maxlength="64" /></label>
+            <div class="button-row">
+              <button id="connectWsBtn" class="button" type="button" data-busy-lock>Connect WS</button>
+              <button id="disconnectWsBtn" class="button" type="button">Disconnect WS</button>
+            </div>
+            <p class="small-note">Cross-device send/receive requires your FastAPI server. BroadcastChannel still syncs same-browser tabs without internet.</p>
+          </section>
+        </div>
+      </aside>
+
+      <div id="confirmOverlay" class="confirm-overlay" hidden>
+        <section class="confirm-dialog glass-zone" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText">
+          <h2 id="confirmTitle">Confirm action</h2>
+          <p id="confirmText">This action needs confirmation.</p>
+          <div class="button-row">
+            <button id="confirmCancelBtn" class="button" type="button">Cancel</button>
+            <button id="confirmAcceptBtn" class="button danger" type="button">Confirm</button>
+          </div>
+        </section>
+      </div>
+
+      <div id="toast" class="toast glass-zone" role="status" aria-live="polite"></div>
+    </div>
+  </body>
+</html>
