@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v507-deploy-build-order-fix";
+const BUILD_ID = "air-drow-v509-official-task-binary-fix";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [
@@ -38,7 +38,7 @@ const APP_SHELL = [
   "/assets/js/features/air-challenge.js",
   "/assets/js/features/template-studio.js",
   "/assets/js/features/ai-studio.js",
-  "/vendor/models/hand_landmarker.task",
+  "/vendor/models/hand_landmarker.task?model=v2-fbc2a300",
   "/vendor/mediapipe/vision_bundle.js",
   "/vendor/mediapipe/wasm/vision_wasm_internal.js",
   "/vendor/mediapipe/wasm/vision_wasm_internal.wasm",

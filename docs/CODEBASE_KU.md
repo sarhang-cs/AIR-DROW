@@ -1,4 +1,4 @@
-# ڕێکخستنی کۆدی AIR-DROW v5.0.7
+# ڕێکخستنی کۆدی AIR-DROW v5.0.9
 
 ئەم پڕۆژەیە بە شێوەی module ـی ڕوون ڕێکخراوە. هیچ feature ـێک نابێت بە patch ی شاراوە یان کۆدی دۆباری زیاد بکرێت؛ هەر گۆڕانکارییەک دەبێت لە شوێنی سروشتی خۆی بکرێت.
 
@@ -39,5 +39,5 @@ docs/
 5. **No hidden patches:** feature ـی نوێ دەبێت module و verification ـی خۆی هەبێت؛ کۆدی سەرەتایی `app.js` تەنها orchestration ـە.
 
 
-## v5.0.7 — Hand Runtime Loader Fix
+## v5.0.9 — Hand Runtime Loader Fix
 ئەم وەشانە CPU-first local hand engine، drawer scroll ـی سەربەخۆ، toggle ـی تەواو، RTL/LTR geometry ـی جێگیر و redo SVG ـی لۆکاڵ زیاد دەکات.

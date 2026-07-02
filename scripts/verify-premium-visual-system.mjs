@@ -15,7 +15,7 @@ for (const file of [
 ]) {
   if (!existsSync(resolve(root, file))) throw new Error(`Premium visual source missing: ${file}`);
 }
-if (!html.includes('href="./assets/css/visual-system.css?v=506"')) throw new Error("Premium visual stylesheet is not linked.");
+if (!html.includes('href="./assets/css/visual-system.css?v=509"')) throw new Error("Premium visual stylesheet is not linked.");
 if (!app.includes('normalizeSkin') || !app.includes('from "./config/appearance.js"')) throw new Error("Appearance normalizer is not used by app.js.");
 for (const skin of ["violet", "pink", "sapphire", "obsidian", "silver", "gold"]) {
   if (!html.includes(`data-skin="${skin}"`)) throw new Error(`Premium skin control missing: ${skin}`);

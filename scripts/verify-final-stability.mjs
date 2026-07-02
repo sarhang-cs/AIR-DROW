@@ -22,6 +22,6 @@ for (const id of ["exportBackupBtn", "importBackupBtn", "importBackupInput", "re
 for (const marker of ["backup-manager.js", "final-stability.js", "AIRDROW_SKIP_WAITING"]) {
   if (!worker.includes(marker)) throw new Error(`Reliability service-worker marker missing: ${marker}`);
 }
-if (release.version !== "5.0.7" || release.buildId !== "air-drow-v507-deploy-build-order-fix") throw new Error("Release metadata is invalid.");
-if (packageJson.version !== "5.0.7" || packageJson.engines?.node !== "24.x") throw new Error("Package metadata is invalid.");
+if (release.version !== "5.0.9" || release.buildId !== "air-drow-v509-official-task-binary-fix") throw new Error("Release metadata is invalid.");
+if (packageJson.version !== "5.0.9" || packageJson.engines?.node !== ">=22") throw new Error("Package metadata is invalid.");
 console.log("AIR-DROW reliability release verified: backup, safe restore, PWA update safety and stability audit are wired.");

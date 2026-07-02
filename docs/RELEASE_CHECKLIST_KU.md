@@ -1,14 +1,22 @@
-# Release checklist — AIR-DROW v5.0.7
+# Release checklist — AIR-DROW v5.0.9
 
-- [x] `web/vendor/models/hand_landmarker.task` لە source ـدا هەیە.
-- [x] checksum ـی مۆدێل لە `scripts/verify-local-hand-model.mjs` یەکخراوە.
-- [x] `npm run model:verify` تێپەڕبوو.
-- [x] `npm run build` MediaPipe runtime و مۆدێل بۆ `public/vendor/` کۆپی دەکات.
-- [x] service worker ڕێگای local model/runtime cache دەکات.
+## پێش deploy
+
+- [x] source ZIP ـەکە هیچ legacy hand-model ـێکی کۆنی تێدا نییە.
+- [x] `scripts/sync-official-hand-model.mjs` URL، قەبارە و SHA-256 ـی مۆدێلی فەرمی پشکنین دەکات.
+- [x] runtime بە `/vendor/models/hand_landmarker.task?model=v2-fbc2a300` ڕێکخراوە بۆ بەتاڵکردنەوەی cache ـی کۆن.
+- [x] service worker URL ـی نوێی مۆدێل و runtime ـە لۆکاڵەکان cache دەکات.
 - [x] version و build ID لە manifest، runtime، health API و service worker یەکخراون.
 - [x] هیچ remote model URL یان runtime download fallback نییە.
-- [x] Termux replacement script مۆدێلی ناو زیپ پشکنین دەکات.
 
+## لە کاتی build/deploy
 
-## v5.0.7 — Hand Runtime Loader Fix
-ئەم وەشانە CPU-first local hand engine، drawer scroll ـی سەربەخۆ، toggle ـی تەواو، RTL/LTR geometry ـی جێگیر و redo SVG ـی لۆکاڵ زیاد دەکات.
+- [ ] `npm run build` بە سەرکەوتوویی تەواو بێت.
+- [ ] `npm run model:verify` checksum ـی مۆدێلی دابەزێنراو پشتڕاست بکاتەوە.
+- [ ] `public/vendor/models/hand_landmarker.task` دوای build هەبێت.
+- [ ] deploy بە `npm run build` بکرێت، نەک `--prebuilt` یان public folder ـی بە تەنها.
+
+## دوای deploy
+
+- [ ] پەڕەکە refresh بکە و پەیامی update ـی PWA قبوڵ بکە، یان Chrome بکەوە و دووبارە بیکەرەوە.
+- [ ] Camera/Hand mode لە Android Chrome تاقی بکەرەوە و دڵنیابەوە پەیامی `Hand runtime is unavailable` نەماوە.

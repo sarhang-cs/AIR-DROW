@@ -1,40 +1,32 @@
-# مۆدێلی دەستی لۆکاڵ — AIR-DROW v5.0.7
+# مۆدێلی دەستی AIR-DROW — v5.0.9
 
-مۆدێلی دەست لە ناو زیپی پڕۆژەکەیە و هیچ download ـێکی دیکەی پێویست نییە.
+لە وەشانی `v5.0.9`، پڕۆژەکە مۆدێلی legacy ـی کۆن بەکارناهێنێت. ئەو مۆدێلە بە شێوەی دەستی لە پێکهاتەکانی MediaPipe Hands کۆکرابووەوە و لە Android Chrome هەڵەی `NormalizationOptions` ـی دروست دەکرد.
 
-## شوێنی source
+## چارەسەرەکە
 
-```text
-web/vendor/models/hand_landmarker.task
-```
-
-## شوێنی static output
-
-```text
-public/vendor/models/hand_landmarker.task
-```
-
-## پشکنین
-
-- قەبارە: `7820242` byte
-- SHA-256: `168ca8a3f698e93e2caba5c5e8234c3443e56b2ea3ebacec205e4df33bc899da`
-- ناوەڕۆک: `hand_detector.tflite` و `hand_landmarks_detector.tflite`
-- runtime: `@mediapipe/tasks-vision@0.10.35`
+پێش هەر build ـێک، ئەم فرمانە بە ئۆتۆماتیکی کار دەکات:
 
 ```bash
-npm run model:verify
+npm run model:sync
 ```
 
-ئەگەر checksum یان قەبارەکە یەکسان نەبوو، build دەوەستێت. ئەمە بۆ ئەوەیە فایلێکی ناقص یان تێکچوو نەچێتە deploy.
+فایلە فەرمییەکەی Google MediaPipe بۆ `hand_landmarker/float16/1` دابەزێنرێت، پاشان بە:
 
-## سیاسەتی تۆڕ
+- قەبارەی پێویست: `7,819,105` bytes
+- SHA-256: `fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1`
 
-- هیچ remote model URL ـێک بەکارناهێنرێت.
-- هیچ fallback ـێکی شاراوە بۆ download نییە.
-- service worker مۆدێل و MediaPipe runtime ـی لۆکاڵ cache دەکات بۆ کارکردنی offline دوای یەکەم load ـی سەرکەوتوو.
+پشکنین دەکرێت. ئەگەر قەبارە یان checksum جیاواز بێت، build ـەکە وەستێنرێت و هیچ مۆدێلێکی نادروست deploy ناکرێت.
 
-مۆدێلی task bundle لە پێکهاتە local ـەکانی MediaPipe Hands دروست کراوە و وەک بەشێک لە AIR-DROW دابین کراوە.
+## دوای build
 
+لە کاتی بەکارهێنانی ئەپەکە، مۆدێل بە شێوەی local لەم شوێنەوە دەخوێندرێتەوە:
 
-## v5.0.7 — Hand Runtime Loader Fix
-ئەم وەشانە CPU-first local hand engine، drawer scroll ـی سەربەخۆ، toggle ـی تەواو، RTL/LTR geometry ـی جێگیر و redo SVG ـی لۆکاڵ زیاد دەکات.
+```text
+/vendor/models/hand_landmarker.task?model=v2-fbc2a300
+```
+
+واتە تەنها کاتی build پەیوەندی ئینتەرنێت پێویستە؛ لە ناو browser ـدا مۆدێلەکە دووبارە لە دەرەوە دابەزێنرێت.
+
+## بۆ Vercel
+
+Deploy ـی ئاسایی بە `npm run build` بکە. `--prebuilt` یان deploy ـکردنی تەنها ناوەڕۆکی `public/` بەکارمەهێنە، چونکە `public/vendor/models/hand_landmarker.task` تەنها لە build ـدا دروست دەکرێت.

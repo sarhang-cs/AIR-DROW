@@ -1,27 +1,7 @@
-# ڕێنمایی build و deploy ـی AIR-DROW v5.0.7
+# ڕێنمایی build و deploy ـی AIR-DROW v5.0.9
 
-## پێش deploy
+لە Vercel، `buildCommand` بریتییە لە `npm run build` و `outputDirectory` بریتییە لە `public`.
 
-```bash
-npm install
-npm run model:verify
-npm run build
-```
+لە سەرەتای build، `npm run model:sync` مۆدێلی فەرمی Google MediaPipe ـی `hand_landmarker/float16/1` دادەبەزێنێت و بە SHA-256 پشکنینی دەکات. ئەگەر تۆڕ لە build ـدا نەبێت، build بە ئەنقەست دەوەستێت تا مۆدێلی ناقص deploy نەکرێت.
 
-ئەنجامی deploy لە `public/` ـە. مۆدێلی دەست و MediaPipe runtime ـەکە بە شێوەی خۆکار لە ناو `public/vendor/` دانراون.
-
-## پشکنینی پێش upload
-
-```bash
-node scripts/verify-final-release.mjs
-```
-
-پشکنینەکە وەشان، build ID، docs، model checksum و asset contract ـەکە یەکخراو دەکات.
-
-## تێبینی
-
-بۆ کامێرا HTTPS یان localhost پێویستە. مۆدێلی دەست لە package ـەکەدا هەیە؛ هیچ download ـێکی زیادە مەکە.
-
-
-## v5.0.7 — Hand Runtime Loader Fix
-ئەم وەشانە CPU-first local hand engine، drawer scroll ـی سەربەخۆ، toggle ـی تەواو، RTL/LTR geometry ـی جێگیر و redo SVG ـی لۆکاڵ زیاد دەکات.
+دوای build، مۆدێلەکە لە `public/vendor/models/hand_landmarker.task` ـە و کاتی بەکارهێنانی ئەپەکە هیچ download ـێکی دیکەی پێویست نییە.

@@ -10,18 +10,18 @@ const worker = read("web/sw.js");
 const vercel = read("vercel.json");
 const model = resolve(root, "web/vendor/models/hand_landmarker.task");
 
-if (!existsSync(model) || statSync(model).size < 7000000) throw new Error("Bundled local hand model is missing or incomplete.");
-for (const marker of ["vision_bundle.js", "vendor/mediapipe/wasm", "hand_landmarker.task"]) {
-  if (!runtime.includes(marker)) throw new Error("Hand runtime source configuration is incomplete.");
+if (!existsSync(model) || statSync(model).size < 7_000_000) throw new Error("Bundled local hand model is missing or incomplete.");
+for (const marker of ["vision_bundle.js", "vendor/mediapipe/wasm", "hand_landmarker.task?model=v2-fbc2a300"]) {
+  if (!runtime.includes(marker)) throw new Error(`Hand runtime source configuration is missing ${marker}.`);
 }
 for (const marker of ["createLocalHandLandmarker", "local-url-cpu", "local-buffer-cpu", "FilesetResolver.forVisionTasks"]) {
-  if (!bootstrap.includes(marker)) throw new Error("Hand bootstrap source is incomplete.");
+  if (!bootstrap.includes(marker)) throw new Error(`Hand bootstrap source is missing ${marker}.`);
 }
 for (const marker of ["waitForCameraFrame", "reportHandEngineFailure", "engineDiagnostic"]) {
-  if (!app.includes(marker)) throw new Error("Hand startup source is incomplete.");
+  if (!app.includes(marker)) throw new Error(`Hand startup source is missing ${marker}.`);
 }
 for (const marker of ["/vendor/mediapipe/vision_bundle.js", "/vendor/models/hand_landmarker.task"]) {
-  if (!worker.includes(marker)) throw new Error("Service-worker source is incomplete.");
+  if (!worker.includes(marker)) throw new Error(`Service-worker source is missing ${marker}.`);
 }
 if (!vercel.includes("application/javascript; charset=utf-8") || !vercel.includes("application/wasm")) {
   throw new Error("Vercel runtime MIME headers are incomplete.");

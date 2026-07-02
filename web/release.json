@@ -1,21 +1,18 @@
 {
-  "version": "5.0.7",
-  "buildId": "air-drow-v507-deploy-build-order-fix",
-  "releasedAt": "2026-07-02T12:35:00Z",
+  "version": "5.0.9",
+  "buildId": "air-drow-v509-official-task-binary-fix",
+  "releasedAt": "2026-07-02T13:45:00Z",
   "channel": "release",
   "updatePolicy": "user-controlled-save-before-apply",
-  "handEngine": "fully-local-js-bundle-no-trailing-slash-wasm-runtime",
+  "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Hand Runtime Loader Fix: local MediaPipe is served as JavaScript, uses a no-trailing-slash WASM base, and surfaces exact local task diagnostics when a browser blocks initialization.",
+  "summary": "Official Task Binary Fix: the build downloads and SHA-256-verifies Google's compatible task asset, then self-hosts it locally with a cache-busted release URL.",
   "features": [
+    "Checksum-pinned Google MediaPipe HandLandmarker task asset synchronized before every deploy build",
+    "Strict rejection of the legacy locally-assembled task bundle that caused Android normalization metadata errors",
+    "Self-hosted runtime and model delivery after build; no model download during app use",
+    "Cache-busted local model URL so old service-worker entries cannot serve the rejected bundle",
     "CPU-first local MediaPipe hand-engine initialization for reliable Android camera inference",
-    "Local model buffer initialization with same-file local URL fallback only",
-    "Separate camera and hand-engine recovery states with no stale camera error after a stream starts",
-    "Viewport-safe drawer grid with guaranteed independent touch scrolling",
-    "Stable header mark and close control placement in Kurdish and English",
-    "Dedicated chevron grid cell and reserved select-arrow spacing for RTL labels",
-    "Android-safe DOM switch controls with visible off and on states",
-    "Editable inline toolbar undo and redo icons",
-    "Bundled local hand model, local MediaPipe runtime and offline cache coverage"
+    "Separate camera and hand-engine recovery states with visible diagnostics"
   ]
 }

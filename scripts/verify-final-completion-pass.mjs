@@ -24,7 +24,7 @@ for (const file of requiredIcons) {
   if (!existsSync(absolute) || statSync(absolute).size < 50) throw new Error(`Missing local icon: ${file}`);
 }
 if (!existsSync(resolve(root, "web/assets/icons/toolbar/hand.svg"))) throw new Error("Existing editable toolbar icons must remain available.");
-if (!html.includes('href="./assets/css/icon-system.css?v=506"')) throw new Error("Icon system CSS is not linked.");
+if (!html.includes('href="./assets/css/icon-system.css?v=509"')) throw new Error("Icon system CSS is not linked.");
 if (!html.includes('class="app-icon')) throw new Error("Semantic icon classes are not used by the UI.");
 const inlineSvgs = [...html.matchAll(/<svg\b/gi)].length;
 if (inlineSvgs !== 10) throw new Error(`Expected only the ten preserved toolbar SVG bundles; found ${inlineSvgs}.`);
@@ -36,5 +36,5 @@ if (!app.includes('document.querySelectorAll("[data-i18n-title]")')) throw new E
 if (!builder.includes("verify-local-hand-model.mjs") || builder.includes("fetchWithRetry") || builder.includes("storage.googleapis.com")) {
   throw new Error("MediaPipe static build must verify the bundled local model and remain network-free.");
 }
-if (release.version !== "5.0.7" || release.buildId !== "air-drow-v507-deploy-build-order-fix") throw new Error("Completion-pass version metadata is inconsistent.");
+if (release.version !== "5.0.9" || release.buildId !== "air-drow-v509-official-task-binary-fix") throw new Error("Completion-pass version metadata is inconsistent.");
 console.log("AIR-DROW Final Completion Pass verified: local icons, centralized translations and strict local model build contract are correct.");

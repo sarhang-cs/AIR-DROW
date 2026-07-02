@@ -68,7 +68,7 @@ if (!worker.includes("reliability-center.js")) throw new Error("Service worker m
 if (!aiFunction.includes("OPENAI_API_KEY") || !aiFunction.includes("/v1/images/edits")) throw new Error("Server-side AI image endpoint is incomplete.");
 if (!html.includes('id="updateBanner"')) throw new Error("Update banner is missing from index.html.");
 if (!html.includes('id="redoBtn"')) throw new Error("Redo control is missing from index.html.");
-if (!html.includes('icon-system.css?v=506')) throw new Error("Local icon system stylesheet is missing.");
+if (!html.includes('icon-system.css?v=509')) throw new Error("Local icon system stylesheet is missing.");
 if (!html.includes('id="aiStudioSection"') || !html.includes('id="creatorPackSection"')) throw new Error("AI Final Studio UI is missing from index.html.");
 if (!worker.includes("AIRDROW_SKIP_WAITING")) throw new Error("Service worker update message is missing.");
 

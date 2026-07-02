@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "5.0.7",
-  "buildId": "air-drow-v507-deploy-build-order-fix",
-  "release": "Hand Runtime Loader Fix Release",
+  "version": "5.0.9",
+  "buildId": "air-drow-v509-official-task-binary-fix",
+  "release": "Official HandLandmarker Integrity Fix Release",
   "architecture": {
     "styles": [
       "web/assets/css/app.css",
@@ -24,9 +24,10 @@
     "Phase 3: hand tracking reliability, pinch stability, writing smoothness and camera isolation",
     "Phase 4: export, save, update and onboarding reliability",
     "Phase 5: final release metadata, documentation, Termux replacement and deploy checklist",
-    "v5.0.7: fully local .js MediaPipe bundle, normalized WASM resolver base, explicit MIME rules and actionable hand-engine diagnostics."
+    "v5.0.9: fixed official HandLandmarker task-binary validation and deployed cache revision.",
+    "v5.0.9: checksum-pinned official task asset, no invalid ZIP-header assertion, and cache-busted local model delivery."
   ],
   "privacy": "Drawing data stays local unless the creator explicitly requests an export, share or AI generation.",
-  "stage": "phase-5.0.7-hand-runtime-loader-fix",
-  "releaseGate": "The verified local hand model is bundled at web/vendor/models/hand_landmarker.task; build copies it and the local MediaPipe runtime to public/vendor/. No model download is used at build time or runtime."
+  "stage": "phase-5.0.9-official-task-binary-fix",
+  "releaseGate": "npm run build first synchronizes the official Google HandLandmarker task to web/vendor/models, verifies its pinned SHA-256, then copies it and the local MediaPipe runtime to public/vendor/. The runtime never downloads a model."
 }

@@ -1,30 +1,16 @@
-# AIR-DROW v5.0.7 — Hand Runtime Loader Fix
+# AIR-DROW v5.0.9 — Official Hand Model Fix
 
-AIR-DROW is a local-first drawing studio for touch, pen, camera and hand tracking. Drawings remain on-device unless the creator explicitly exports, shares, restores a backup or requests AI generation.
+This release fixes the Android hand-runtime failure caused by a legacy locally assembled HandLandmarker task bundle.
 
-## Release focus
-
-- Fully local MediaPipe runtime and hand model
-- CPU-first camera hand engine for Android reliability
-- Local buffer initialization with local-file-only fallback
-- Separate camera and hand-engine recovery messages
-- Android-safe switches, fixed bilingual settings header and protected RTL controls
-- Drawer cards stay reachable in an independent scroll region
-- Local editable toolbar SVG icons, including undo and redo
-
-## Build
+## Deploy
 
 ```bash
 npm install
 npm run build
 ```
 
-The deployable output is `public/`. The local model lives at `web/vendor/models/hand_landmarker.task` and is copied to `public/vendor/models/` during the build.
+`npm run build` synchronizes Google's official `hand_landmarker/float16/1` model, validates its pinned SHA-256, builds the self-hosted MediaPipe assets, and verifies the deployment output. The deployed app keeps the runtime and task bundle local.
 
-## Checks
+## Important
 
-```bash
-npm run model:verify
-npm run camera-ui:verify
-npm run verify:release
-```
+Do not deploy `public/` directly from this source archive. Deploy through the included Vercel build configuration so the verified task bundle is generated first.

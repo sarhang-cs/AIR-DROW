@@ -1,18 +1,18 @@
-# AIR-DROW local hand model
+# Official HandLandmarker asset
 
-AIR-DROW now includes its complete hand-tracking task bundle in the repository and release zip. No separate download is required.
+`hand_landmarker.task` is intentionally **not** stored in this source archive. The prior archive contained a locally assembled legacy asset and Android Chrome rejected it with a `NormalizationOptions` metadata error.
+
+Before every build, `npm run model:sync` downloads the official Google `hand_landmarker/float16/1` asset and verifies it exactly:
+
+- bytes: `7,819,105`
+- SHA-256: `fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1`
+
+The exact official download for this model release must be validated by **size + SHA-256 only**. It must not be rejected merely because it does not expose a generic `PK` ZIP header. The build then copies the verified asset to `public/vendor/models/`.
+
+At runtime the browser reads only the locally deployed asset:
 
 ```text
-web/vendor/models/hand_landmarker.task
+/vendor/models/hand_landmarker.task?model=v2-fbc2a300
 ```
 
-## Integrity contract
-
-- Size: `7820242` bytes
-- SHA-256: `168ca8a3f698e93e2caba5c5e8234c3443e56b2ea3ebacec205e4df33bc899da`
-- Bundle entries: `hand_detector.tflite`, `hand_landmarks_detector.tflite`
-- Runtime: `@mediapipe/tasks-vision@0.10.35`
-
-Run `npm run model:verify` to verify the exact local file before a build. `npm run build` validates the model, copies it to `public/vendor/models/`, and copies the local MediaPipe runtime to `public/vendor/mediapipe/`.
-
-The bundle is generated from local MediaPipe Hands components and is shipped as part of AIR-DROW. The app does not use a remote model URL or a silent runtime fallback.
+The browser does not download a third-party model. Network access is needed only during build/deploy to fetch and verify the official source asset.

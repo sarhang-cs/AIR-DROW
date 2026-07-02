@@ -1,14 +1,19 @@
 # داواکارییەکانی asset ـە لۆکاڵەکان
 
-AIR-DROW هەموو asset ـە گرنگەکانی خۆی بە شێوەی لۆکاڵ لە پڕۆژەکەدا هەیە.
+AIR-DROW لە کاتی بەکارهێنانی ئەپەکەدا هەموو asset ـە گرنگەکانی خۆی بە شێوەی لۆکاڵ لە deploy ـەکەدا هەیە.
 
 ## مۆدێلی دەست
+
+لە source ZIP ـەکەدا، فایلی خۆیی مۆدێل بە ئەنقەست نییە. لە سەرەتای build ـدا `npm run model:sync` مۆدێلی فەرمی دابەزێنێت و checksum ـی پشکنین دەکات:
 
 ```text
 web/vendor/models/hand_landmarker.task
 ```
 
-ئەم فایلە لە زیپی `v5.0.7` ـدا هەیە و قەبارەی `7820242` byte ـە. `npm run model:verify` checksum ـەکەی پشکنین دەکات.
+قەبارەی پەسەندکراو: `7,819,105` byte  
+SHA-256: `fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1`
+
+`npm run model:verify` تەنها **دوای** `npm run model:sync` یان `npm run build` دەبێت بەکاربهێنرێت.
 
 ## Runtime ـی MediaPipe
 
@@ -17,6 +22,7 @@ web/vendor/models/hand_landmarker.task
 ```text
 public/vendor/mediapipe/vision_bundle.js
 public/vendor/mediapipe/wasm/
+public/vendor/models/hand_landmarker.task
 ```
 
 ## ئایکۆن و فۆنت
@@ -27,10 +33,11 @@ public/vendor/mediapipe/wasm/
 
 ## یاسا
 
-- asset ـی لۆکاڵ مەسڕەوە.
-- بۆ مۆدێلی دەست هیچ لینکێکی دەرەکی زیاد مەکە.
-- ئەگەر مۆدێل تێکچوو، `npm run build` بە ئەنقەست وەستێت.
+- لە deploy ـی تەواودا asset ـە لۆکاڵەکان مەسڕەوە.
+- بۆ runtime ـی browser هیچ remote model URL یان fallback ـێکی دەرەکی زیاد مەکە.
+- تەنها `model:sync` لە کاتی build ـدا ڕێگەیە بۆ دابەزاندنی سەرچاوەی فەرمی.
+- ئەگەر مۆدێل تێکچوو یان تۆڕ لە کاتی build نەبێت، `npm run build` بە ئەنقەست وەستێت.
 
+## v5.0.9 — Official Hand Model Integrity Fix
 
-## v5.0.7 — Hand Runtime Loader Fix
-ئەم وەشانە CPU-first local hand engine، drawer scroll ـی سەربەخۆ، toggle ـی تەواو، RTL/LTR geometry ـی جێگیر و redo SVG ـی لۆکاڵ زیاد دەکات.
+ئەم وەشانە مۆدێلی legacy ـی نادروست لادەبات، مۆدێلی فەرمییەکە بە checksum پشکنین دەکات، و بە URL ـی cache-busted لە runtime ـدا لۆکاڵ بەکاردێت.

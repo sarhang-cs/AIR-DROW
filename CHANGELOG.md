@@ -1,24 +1,27 @@
-# AIR-DROW v5.0.7 — Hand Runtime Loader Fix
+# AIR-DROW v5.0.9 — Official Task Binary Validation Fix
 
-- Publishes the local MediaPipe bundle as `vision_bundle.js` for Android-safe JavaScript MIME handling.
-- Removes the trailing slash from the MediaPipe WASM base path; the resolver now creates deterministic local asset URLs.
-- Adds explicit local-runtime MIME rules and visible diagnostic details if task initialization fails.
+- Corrected the official `hand_landmarker.task` validator: the model is now accepted only by its exact byte length and SHA-256, without an invalid generic ZIP-header assertion.
+- Removed archive-entry assumptions that blocked the valid Google-hosted model before it could be written.
+- Updated the model cache revision to `model=v2-fbc2a300` and the service-worker build ID.
+- Improved the Termux replacement script so it stops at the first build failure and restores the backup cleanly.
+- Expanded the Node engine range to include the current Termux Node 26 release.
+
+# Changelog
+
+## v5.0.9 — Official Hand Model Fix
+
+- Replaced the rejected locally assembled legacy hand task with a checksum-pinned synchronization of Google's official `hand_landmarker/float16/1` bundle.
+- Fails the build if the expected official model bytes or SHA-256 are not present.
+- Added a release-specific model query key to prevent stale service-worker entries from returning the legacy model.
+- Keeps MediaPipe and the synchronized model self-hosted at runtime.
 
 # AIR-DROW Changelog
 
-## v5.0.7 — Hand Runtime Loader Fix
-- Starts MediaPipe only after the camera has delivered a live frame.
-- Uses local model URL as the primary Android path, followed by local-only alternatives.
-- Separates asset, WASM and task-creation diagnostics and stops stale camera previews after engine failure.
-- Background warm-up only primes local assets; it never creates a task.
+## v5.0.9 — Official Task Binary Fix
+- Fixed the real Vercel/GitHub CI failure where `public/vendor/mediapipe/vision_bundle.js` was checked before `build:static` generated it.
+- Split source validation from post-build deploy-output validation.
+- Added explicit verification of build order and generated local MediaPipe/WASM/model output.
+- Verified `npm run build` from a clean source tree with no pre-existing `public/` directory.
 
-
-## v5.0.7 — Hand Runtime Loader Fix
-
-- Rebuilt hand startup as a fully local, CPU-first MediaPipe path for Android reliability.
-- Reads the bundled hand task into memory first; if a WebView rejects it, retries only the exact local task URL.
-- Separates camera-stream recovery from hand-engine recovery so a working camera is never shown as a generic camera failure.
-- Rebuilt the drawer as a fixed header + tabs + independent scroll region; expanded cards are focused after Android layout settles.
-- Locked the settings mark and close control to fixed visual positions across Kurdish RTL and English LTR.
-- Replaced input pseudo-element toggles with real DOM visual tracks and visible off/on knobs.
-- Reserved dedicated chevron/select space for RTL text and bundled a local redo toolbar SVG beside undo.
+## v5.0.6 — Hand Runtime Loader Fix
+- Published the local MediaPipe bundle as JavaScript and added local runtime diagnostics.
