@@ -1,9 +1,9 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# AIR-DROW v5.1.0 bootstrap/PWA recovery replacement: validates the source, backs up the old
+# AIR-DROW v5.1.1 bootstrap/PWA recovery replacement: validates the source, backs up the old
 # directory, installs dependencies, synchronizes the verified official model,
 # builds, then validates the generated local runtime.
 set -Eeuo pipefail
-RELEASE_VERSION="5.1.0"
+RELEASE_VERSION="5.1.1"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET_DIR="$HOME/AIR-DROW"
 STAMP="$(date +%Y%m%d-%H%M%S)"

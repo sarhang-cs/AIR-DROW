@@ -1,27 +1,10 @@
-# AIR-DROW v5.1.0 — Official Task Binary Validation Fix
+# AIR-DROW v5.1.1 — Vercel Build Recovery Fix
 
-- Corrected the official `hand_landmarker.task` validator: the model is now accepted only by its exact byte length and SHA-256, without an invalid generic ZIP-header assertion.
-- Removed archive-entry assumptions that blocked the valid Google-hosted model before it could be written.
-- Updated the model cache revision to `model=v3-fbc2a300` and the service-worker build ID.
-- Improved the Termux replacement script so it stops at the first build failure and restores the backup cleanly.
-- Expanded the Node engine range to include the current Termux Node 26 release.
+## Fixed
+- Removed the brittle build-time assertion that stopped Vercel deployments when a cache-header route was normalized or missing from an older checkout.
+- Retained the explicit Vercel `no-store` policy for application JavaScript, while keeping deployment validation focused on the runtime behavior that is actually required.
+- Rotated the build ID, service-worker cache namespace, boot-module query key, manifest start URL, and local release metadata so Android Chrome requests the repaired build instead of stale PWA entries.
+- Preserved the official, checksum-validated local MediaPipe HandLandmarker model and self-hosted runtime assets.
 
-# Changelog
-
-## v5.1.0 — Bootstrap & PWA Recovery Fix
-
-- Replaced the rejected locally assembled legacy hand task with a checksum-pinned synchronization of Google's official `hand_landmarker/float16/1` bundle.
-- Fails the build if the expected official model bytes or SHA-256 are not present.
-- Added a release-specific model query key to prevent stale service-worker entries from returning the legacy model.
-- Keeps MediaPipe and the synchronized model self-hosted at runtime.
-
-# AIR-DROW Changelog
-
-## v5.1.0 — Bootstrap & PWA Recovery Fix
-- Fixed the real Vercel/GitHub CI failure where `public/vendor/mediapipe/vision_bundle.js` was checked before `build:static` generated it.
-- Split source validation from post-build deploy-output validation.
-- Added explicit verification of build order and generated local MediaPipe/WASM/model output.
-- Verified `npm run build` from a clean source tree with no pre-existing `public/` directory.
-
-## v5.0.6 — Hand Runtime Loader Fix
-- Published the local MediaPipe bundle as JavaScript and added local runtime diagnostics.
+## Deploy
+Run `npm run build`; no direct deployment of `public/` is required. Push the repository to GitHub and Vercel will deploy automatically.

@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW v5.1.0 — Bootstrap & PWA Recovery Fix",
+  "name": "AIR-DROW v5.1.1 — Vercel Build Recovery Fix",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v510",
+  "start_url": "./?build=v511",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",

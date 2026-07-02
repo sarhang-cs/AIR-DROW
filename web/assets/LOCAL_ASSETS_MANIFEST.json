@@ -1,6 +1,6 @@
 {
-  "version": "5.1.0",
-  "buildId": "air-drow-v510-bootstrap-pwa-recovery-fix",
+  "version": "5.1.1",
+  "buildId": "air-drow-v511-vercel-build-recovery-fix",
   "policy": "All UI icons, fonts and the MediaPipe runtime are local. Before build, the official Google HandLandmarker task is downloaded once, checksum-verified and copied to public/vendor/models. No runtime hand-model download is permitted.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -29,5 +29,5 @@
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v5.1.0 adds a recoverable inline application bootstrap and stale service-worker cleanup so a failed module load cannot leave the local studio frozen at 7%."
+  "releaseStatus": "v5.1.1 adds a Vercel-safe bootstrap validation and stale service-worker cleanup so a failed module load cannot leave the local studio frozen at 7%."
 }

@@ -1,12 +1,12 @@
 {
-  "version": "5.1.0",
-  "buildId": "air-drow-v510-bootstrap-pwa-recovery-fix",
+  "version": "5.1.1",
+  "buildId": "air-drow-v511-vercel-build-recovery-fix",
   "releasedAt": "2026-07-02T16:00:00Z",
   "channel": "release",
   "updatePolicy": "user-controlled-save-before-apply",
   "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Bootstrap & PWA Recovery Fix: stale service-worker/cache responses can no longer strand the application at its initial 7% boot screen.",
+  "summary": "Vercel Build Recovery Fix: stale service-worker/cache responses can no longer strand the application at its initial 7% boot screen.",
   "features": [
     "Inline recoverable module bootstrap prevents a frozen 7% screen when a stale service worker returns an invalid JavaScript response",
     "One automatic local cache and service-worker cleanup followed by a cache-busted retry",

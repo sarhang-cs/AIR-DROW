@@ -5,8 +5,8 @@ import { spawnSync } from "node:child_process";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = file => readFileSync(resolve(root, file), "utf8");
-const version = "5.1.0";
-const buildId = "air-drow-v510-bootstrap-pwa-recovery-fix";
+const version = "5.1.1";
+const buildId = "air-drow-v511-vercel-build-recovery-fix";
 const packageJson = JSON.parse(read("package.json"));
 const release = JSON.parse(read("web/release.json"));
 const manifest = JSON.parse(read("PROJECT_MANIFEST.json"));

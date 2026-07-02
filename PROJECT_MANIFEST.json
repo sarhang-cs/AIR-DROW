@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "5.1.0",
-  "buildId": "air-drow-v510-bootstrap-pwa-recovery-fix",
-  "release": "Bootstrap & PWA Recovery Fix Release",
+  "version": "5.1.1",
+  "buildId": "air-drow-v511-vercel-build-recovery-fix",
+  "release": "Vercel Build Recovery Fix Release",
   "architecture": {
     "styles": [
       "web/assets/css/app.css",
@@ -24,9 +24,9 @@
     "Phase 3: hand tracking reliability, pinch stability, writing smoothness and camera isolation",
     "Phase 4: export, save, update and onboarding reliability",
     "Phase 5: final release metadata, documentation, Termux replacement and deploy checklist",
-    "v5.1.0: recoverable boot loader, stale PWA cache repair and safe module-request service-worker fallback."
+    "v5.1.1: recoverable boot loader, stale PWA cache repair and safe module-request service-worker fallback."
   ],
   "privacy": "Drawing data stays local unless the creator explicitly requests an export, share or AI generation.",
-  "stage": "phase-5.1.0-bootstrap-pwa-recovery-fix",
+  "stage": "phase-5.1.1-vercel-build-recovery-fix",
   "releaseGate": "npm run build first synchronizes the official Google HandLandmarker task, validates the pinned SHA-256, then copies the local runtime and the recoverable boot shell to public/. The runtime never downloads a model."
 }

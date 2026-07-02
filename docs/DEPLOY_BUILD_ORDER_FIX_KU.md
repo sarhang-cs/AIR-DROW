@@ -1,4 +1,4 @@
-# چاکسازیی build order و deploy — AIR-DROW v5.1.0
+# چاکسازیی build order و deploy — AIR-DROW v5.1.1
 
 ## هۆکاری ڕاستەقینە
 لە deploy ـی Vercel، فۆڵدەری `public/` بە `.vercelignore` لە source upload نەدەچوو. ئەمە خودی خۆی دروستە، چونکە `public/` دەبێت لە build دروست بکرێت. بەڵام پشکنینی runtime پێش `build:static` کار دەکرد و پێش دروستبوونی `public/vendor/mediapipe/vision_bundle.js` وەستابوو.

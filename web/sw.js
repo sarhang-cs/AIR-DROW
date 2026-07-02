@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v510-bootstrap-pwa-recovery-fix";
+const BUILD_ID = "air-drow-v511-vercel-build-recovery-fix";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [

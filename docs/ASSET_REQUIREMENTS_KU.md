@@ -38,6 +38,6 @@ public/vendor/models/hand_landmarker.task
 - تەنها `model:sync` لە کاتی build ـدا ڕێگەیە بۆ دابەزاندنی سەرچاوەی فەرمی.
 - ئەگەر مۆدێل تێکچوو یان تۆڕ لە کاتی build نەبێت، `npm run build` بە ئەنقەست وەستێت.
 
-## v5.1.0 — Official Hand Model Integrity Fix
+## v5.1.1 — Official Hand Model Integrity Fix
 
 ئەم وەشانە مۆدێلی legacy ـی نادروست لادەبات، مۆدێلی فەرمییەکە بە checksum پشکنین دەکات، و بە URL ـی cache-busted لە runtime ـدا لۆکاڵ بەکاردێت.
