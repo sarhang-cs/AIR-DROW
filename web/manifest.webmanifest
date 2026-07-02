@@ -1,9 +1,9 @@
 {
-  "name": "AIR-DROW v5.2.0 — Hand Sync & GPU Performance Fix",
+  "name": "AIR-DROW v5.2.1 — Transparent Status HUD Fix",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v520",
+  "start_url": "./?build=v521",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
-  "description": "AIR-DROW final release: local drawing, premium UI, reliable export, guided use and self-hosted hand tracking."
+  "description": "AIR-DROW: local drawing and hand tracking with a transparent live camera status HUD."
 }

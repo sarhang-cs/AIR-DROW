@@ -1,6 +1,6 @@
-# مۆدێلی دەستی AIR-DROW — v5.2.0
+# مۆدێلی دەستی AIR-DROW — v5.2.1
 
-لە وەشانی `v5.2.0`، پڕۆژەکە مۆدێلی legacy ـی کۆن بەکارناهێنێت. ئەو مۆدێلە بە شێوەی دەستی لە پێکهاتەکانی MediaPipe Hands کۆکرابووەوە و لە Android Chrome هەڵەی `NormalizationOptions` ـی دروست دەکرد.
+لە وەشانی `v5.2.1`، پڕۆژەکە مۆدێلی legacy ـی کۆن بەکارناهێنێت. ئەو مۆدێلە بە شێوەی دەستی لە پێکهاتەکانی MediaPipe Hands کۆکرابووەوە و لە Android Chrome هەڵەی `NormalizationOptions` ـی دروست دەکرد.
 
 ## چارەسەرەکە
 
@@ -30,3 +30,7 @@ npm run model:sync
 ## بۆ Vercel
 
 Deploy ـی ئاسایی بە `npm run build` بکە. `--prebuilt` یان deploy ـکردنی تەنها ناوەڕۆکی `public/` بەکارمەهێنە، چونکە `public/vendor/models/hand_landmarker.task` تەنها لە build ـدا دروست دەکرێت.
+
+
+## v5.2.1 status overlay note
+FPS, Online and CAM are source-defined transparent text overlays with no background panel.

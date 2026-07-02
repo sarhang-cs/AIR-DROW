@@ -1,4 +1,4 @@
-# Release checklist — AIR-DROW v5.2.0
+# Release checklist — AIR-DROW v5.2.1
 
 ## پێش deploy
 
@@ -20,3 +20,7 @@
 
 - [ ] پەڕەکە refresh بکە و پەیامی update ـی PWA قبوڵ بکە، یان Chrome بکەوە و دووبارە بیکەرەوە.
 - [ ] Camera/Hand mode لە Android Chrome تاقی بکەرەوە و دڵنیابەوە پەیامی `Hand runtime is unavailable` نەماوە.
+
+
+## v5.2.1 status overlay note
+FPS, Online and CAM are source-defined transparent text overlays with no background panel.

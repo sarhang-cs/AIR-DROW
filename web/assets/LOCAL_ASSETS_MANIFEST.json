@@ -1,6 +1,6 @@
 {
-  "version": "5.2.0",
-  "buildId": "air-drow-v520-hand-sync-gpu-performance-fix",
+  "version": "5.2.1",
+  "buildId": "air-drow-v521-transparent-status-hud-fix",
   "policy": "All UI icons, fonts and the MediaPipe runtime are local. Before build, the official Google HandLandmarker task is downloaded once, checksum-verified and copied to public/vendor/models. No runtime hand-model download is permitted.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -29,5 +29,5 @@
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v5.2.0 adds rendered-video hand projection, GPU-first MediaPipe startup and Android-safe tracking performance recovery."
+  "releaseStatus": "v5.2.1 removes the FPS, Online and CAM status backgrounds while retaining camera-safe readable overlay text."
 }

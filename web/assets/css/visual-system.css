@@ -411,15 +411,25 @@ textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in
 }
 .boot-logo { background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 14px 28px var(--skin-shadow), inset 0 1px 0 rgba(255,255,255,.52); }
 
-.live-hud,
-.camera-indicator {
-  color: var(--hud);
-  border-color: color-mix(in srgb, var(--accent) 18%, var(--line));
-  background: color-mix(in srgb, var(--panel-2) 72%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+/* Live camera status is intentionally text-only: the preview remains unobstructed. */
+.live-hud {
+  color: rgba(255, 255, 255, .96);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .92), 0 0 8px rgba(0, 0, 0, .52);
 }
-.camera-indicator { color: var(--accent); }
+.camera-indicator {
+  color: var(--accent);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .92), 0 0 8px rgba(0, 0, 0, .52);
+}
 
 .update-banner {
   border-color: color-mix(in srgb, var(--accent) 25%, var(--line));

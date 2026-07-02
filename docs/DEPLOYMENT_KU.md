@@ -1,4 +1,4 @@
-# ڕێنمایی build و deploy ـی AIR-DROW v5.2.0
+# ڕێنمایی build و deploy ـی AIR-DROW v5.2.1
 
 لە Vercel، `buildCommand` بریتییە لە `npm run build` و `outputDirectory` بریتییە لە `public`.
 
@@ -6,5 +6,9 @@
 
 دوای build، مۆدێلەکە لە `public/vendor/models/hand_landmarker.task` ـە و کاتی بەکارهێنانی ئەپەکە هیچ download ـێکی دیکەی پێویست نییە.
 
-## v5.2.0 — Vercel build fix
+## v5.2.1 — Vercel build fix
 لە `package.json` ـدا `engines` دیاری نەکراوە، بۆیە Vercel هەمان Node runtime ـی خۆی بەکار دەهێنێت و ئاگادارییەتی auto-upgrade ـی `engines` دەرناکەوێت. build ـەکە تەنها ئەو پشکنینانە دەکات کە پێویستن بۆ کارکردنی ئەپ؛ پشکنینی ناوخۆی cache-header چیتر ناتوانێت deploy ڕابگرێت.
+
+
+## v5.2.1 status overlay note
+FPS, Online and CAM are source-defined transparent text overlays with no background panel.

@@ -1,18 +1,22 @@
 {
-  "version": "5.2.0",
-  "buildId": "air-drow-v520-hand-sync-gpu-performance-fix",
-  "releasedAt": "2026-07-02T17:35:00Z",
+  "version": "5.2.1",
+  "buildId": "air-drow-v521-transparent-status-hud-fix",
+  "releasedAt": "2026-07-02T18:00:00Z",
   "channel": "release",
   "updatePolicy": "user-controlled-save-before-apply",
   "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Hand Sync & GPU Performance Fix: exact camera-overlay projection, local GPU-first HandLandmarker, and Android tracking recovery.",
+  "summary": "Transparent Status HUD Fix: FPS, Online and CAM remain readable over the live preview without panels, borders or backdrop effects.",
   "features": [
+    "FPS, Online and CAM now render as direct overlay text with no background panel, no border, no blur and no status-chip surface",
+    "HUD text uses a camera-safe high-contrast text shadow instead of a filled rectangle",
+    "The live status and camera indicator styles are defined in the core visual source rather than appended as an override",
+    "The new service-worker build namespace clears the older boxed HUD assets during the normal user-controlled update flow",
     "Hand guide projection reads the rendered video rectangle and cover crop instead of assuming the studio aspect ratio",
     "Landmark mirror orientation is applied once and follows the displayed front-camera preview",
     "Local MediaPipe GPU delegate is attempted first with deterministic CPU fallback",
     "Lower video tracking thresholds reduce repeated full palm detection while the same hand remains visible",
-    "Normal mobile hand mode requests a lighter 320\u00d7240 capture stream and falls back there on weak measured inference",
+    "Normal mobile hand mode requests a lighter 320×240 capture stream and falls back there on weak measured inference",
     "Low-latency adaptive stabilizer reduces perceived guide and drawing lag without removing jump or pinch safeguards"
   ]
 }

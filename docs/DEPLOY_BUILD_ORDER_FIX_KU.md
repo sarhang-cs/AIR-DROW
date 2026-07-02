@@ -1,4 +1,4 @@
-# چاکسازیی build order و deploy — AIR-DROW v5.2.0
+# چاکسازیی build order و deploy — AIR-DROW v5.2.1
 
 ## هۆکاری ڕاستەقینە
 لە deploy ـی Vercel، فۆڵدەری `public/` بە `.vercelignore` لە source upload نەدەچوو. ئەمە خودی خۆی دروستە، چونکە `public/` دەبێت لە build دروست بکرێت. بەڵام پشکنینی runtime پێش `build:static` کار دەکرد و پێش دروستبوونی `public/vendor/mediapipe/vision_bundle.js` وەستابوو.
@@ -10,3 +10,7 @@
 - `npm run build` لە clone ـی پاکی بێ `public/` تاقیکراوەتەوە.
 
 ئەم گۆڕانکارییە تەنها کێشەی deploy/build ـی Vercel چارەسەر دەکات؛ تاقیکردنەوەی کارکردنی live ـی ئینجینی دەست لە مۆبایل هێشتا دوای deploy دەبێت بکرێت.
+
+
+## v5.2.1 status overlay note
+FPS, Online and CAM are source-defined transparent text overlays with no background panel.

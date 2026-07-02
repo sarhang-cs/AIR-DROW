@@ -1,9 +1,9 @@
-# AIR-DROW v5.2.0 — Hand Sync & GPU Performance Fix
+# AIR-DROW v5.2.1 — Transparent Status HUD Fix
 
 AIR-DROW is a local-first drawing studio for touch, pen, camera and hand tracking.
 
-## Hand tracking improvements
-The camera guide now uses the browser’s real rendered video geometry, including cover cropping and mirror orientation. Hand tracking attempts MediaPipe GPU first and safely falls back to CPU when needed.
+## Status overlay fix
+The camera preview keeps the FPS, Online and CAM indicators as direct overlay text. They have no filled panel, border, pill, blur backdrop or boxed background. A compact text shadow keeps the labels readable over either a bright or dark camera feed.
 
 ## Deploy
 ```bash

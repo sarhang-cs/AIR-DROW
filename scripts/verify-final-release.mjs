@@ -5,8 +5,8 @@ import { spawnSync } from "node:child_process";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = file => readFileSync(resolve(root, file), "utf8");
-const version = "5.2.0";
-const buildId = "air-drow-v520-hand-sync-gpu-performance-fix";
+const version = "5.2.1";
+const buildId = "air-drow-v521-transparent-status-hud-fix";
 const packageJson = JSON.parse(read("package.json"));
 const release = JSON.parse(read("web/release.json"));
 const manifest = JSON.parse(read("PROJECT_MANIFEST.json"));
@@ -16,6 +16,7 @@ const runtime = read("web/assets/js/config/runtime.js");
 const worker = read("web/sw.js");
 const index = read("web/index.html");
 const health = read("api/health.js");
+const hudVerifier = read("scripts/verify-transparent-status-hud.mjs");
 
 for (const file of [
   "README.md", "README_KU.md", "CHANGELOG.md", "docs/CODEBASE_KU.md",
@@ -24,7 +25,7 @@ for (const file of [
   "termux/replace-with-final-release.sh", "termux/verify-final-release.sh",
   "web/vendor/models/README.md", "web/vendor/models/MODEL_MANIFEST.json",
   "web/vendor/models/hand_landmarker.task", "scripts/verify-local-hand-model.mjs",
-  "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-hand-sync-performance.mjs"
+  "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-hand-sync-performance.mjs", "scripts/verify-transparent-status-hud.mjs"
 ]) {
   if (!existsSync(resolve(root, file))) throw new Error(`Required final-release file is missing: ${file}`);
 }
@@ -48,6 +49,7 @@ if (!/SHA-256/.test(String(modelManifest.validation || ""))) throw new Error("Of
 if (statSync(resolve(root, "web/vendor/models/hand_landmarker.task")).size !== modelManifest.bytes) throw new Error("Bundled hand-model size is inconsistent.");
 if (!read("scripts/sync-official-hand-model.mjs").includes("storage.googleapis.com")) throw new Error("Official hand-model synchronization source is missing.");
 if (read("termux/replace-with-final-release.sh").includes("rm -rf /")) throw new Error("Unsafe Termux replacement command found.");
+if (!hudVerifier.includes("Legacy boxed HUD background must not ship")) throw new Error("Transparent status HUD verification contract is missing.");
 const localModel = spawnSync(process.execPath, [resolve(root, "scripts/verify-local-hand-model.mjs")], { cwd: root, encoding: "utf8" });
 if (localModel.status !== 0) throw new Error(`Bundled local model verification failed: ${localModel.stderr || localModel.stdout}`);
 console.log(`AIR-DROW release integrity verified: v${version} / ${buildId}`);

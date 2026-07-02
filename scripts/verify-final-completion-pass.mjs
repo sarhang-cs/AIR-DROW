@@ -36,5 +36,5 @@ if (!app.includes('document.querySelectorAll("[data-i18n-title]")')) throw new E
 if (!builder.includes("verify-local-hand-model.mjs") || builder.includes("fetchWithRetry") || builder.includes("storage.googleapis.com")) {
   throw new Error("MediaPipe static build must verify the bundled local model and remain network-free.");
 }
-if (release.version !== "5.2.0" || release.buildId !== "air-drow-v520-hand-sync-gpu-performance-fix") throw new Error("Completion-pass version metadata is inconsistent.");
+if (release.version !== "5.2.1" || release.buildId !== "air-drow-v521-transparent-status-hud-fix") throw new Error("Completion-pass version metadata is inconsistent.");
 console.log("AIR-DROW Final Completion Pass verified: local icons, centralized translations and strict local model build contract are correct.");

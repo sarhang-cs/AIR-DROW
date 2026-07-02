@@ -7,8 +7,8 @@
   <meta name="description" content="AIR-DROW Export, Save & Onboarding — local-first drawing, reliable files and guided first use." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <link rel="manifest" href="./manifest.webmanifest?v=520" />
-  <meta name="air-drow-build" content="air-drow-v520-hand-sync-gpu-performance-fix" />
-  <meta name="air-drow-icon-pack" content="official-task-binary-fix-v520" />
+  <meta name="air-drow-build" content="air-drow-v521-transparent-status-hud-fix" />
+  <meta name="air-drow-icon-pack" content="official-task-binary-fix-v521" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
@@ -16,7 +16,7 @@
   <link rel="modulepreload" href="./vendor/mediapipe/vision_bundle.js" />
   <link rel="preload" as="fetch" href="./vendor/models/hand_landmarker.task?model=v4-fbc2a300" crossorigin="anonymous" />
   <link rel="preload" as="fetch" href="./vendor/mediapipe/wasm/vision_wasm_internal.wasm" crossorigin="anonymous" />
-  <title>AIR-DROW v5.2.0 — Hand Sync & GPU Performance Fix</title>
+  <title>AIR-DROW v5.2.1 — Transparent Status HUD Fix</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
       font-family: "Noto Kufi Arabic";
@@ -631,7 +631,7 @@
             </div>
             <div class="about-grid">
               <div><span data-i18n="developer">گەشەپێدەر</span><b>SARHANG IO</b></div>
-              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b class="numeric-value">v5.2.0</b></div>
+              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b class="numeric-value">v5.2.1</b></div>
               <div><span data-i18n="uiFont">فۆنتی UI</span><b id="fontStatus">Noto / System</b></div>
               <div><span data-i18n="release">Release</span><b data-i18n="releaseCameraUiComplete">Export, Save & Onboarding</b></div>
             </div>
@@ -682,7 +682,7 @@
       recovery path because the application module never evaluated.
     */
     (() => {
-      const BUILD_ID = "air-drow-v520-hand-sync-gpu-performance-fix";
+      const BUILD_ID = "air-drow-v521-transparent-status-hud-fix";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

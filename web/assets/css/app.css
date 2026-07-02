@@ -90,14 +90,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .camera-indicator {
   position: fixed;
   z-index: 9;
-  right: 14px;
-  top: calc(var(--safe-top) + 62px);
-  width: 10px;
-  height: 10px;
-  border: 2px solid #fff;
-  border-radius: 999px;
-  background: #ff586c;
-  box-shadow: 0 0 0 5px rgba(255, 88, 108, .16);
+  pointer-events: none;
 }
 .toast {
   position: fixed;
@@ -344,7 +337,7 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
 :root[data-theme="light"] .toast { background: rgba(255,255,255,.92); }
 :root[data-theme="light"] .consent-card { background: rgba(255,255,255,.94); box-shadow: 0 24px 62px rgba(20, 54, 85, .22); }
 :root[data-theme="light"] .camera-indicator { color: #087a5b; }
-:root[data-theme="light"] .live-hud { text-shadow: 0 1px 3px rgba(255,255,255,.72); }
+:root[data-theme="light"] .live-hud { text-shadow: 0 1px 3px rgba(0,0,0,.92), 0 0 8px rgba(0,0,0,.52); }
 
 .studio.camera-hidden .camera { display: none !important; }
 .live-hud {
@@ -355,11 +348,18 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: var(--hud);
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  color: rgba(255,255,255,.96);
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   font: 700 11px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   letter-spacing: .02em;
   direction: ltr;
-  text-shadow: 0 1px 4px rgba(0,0,0,.62);
+  text-shadow: 0 1px 3px rgba(0,0,0,.92), 0 0 8px rgba(0,0,0,.52);
   pointer-events: none;
 }
 .live-hud span { display: inline-flex; align-items: center; gap: 5px; }
@@ -372,12 +372,15 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
   height: auto;
   border: 0;
   border-radius: 0;
+  padding: 0;
   color: var(--accent-2);
   background: transparent;
   box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   font: 800 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   letter-spacing: .08em;
-  text-shadow: 0 1px 4px rgba(0,0,0,.68);
+  text-shadow: 0 1px 3px rgba(0,0,0,.92), 0 0 8px rgba(0,0,0,.52);
 }
 .camera-indicator::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-inline-end: 5px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; vertical-align: -1px; }
 .tool-button.eraser-active { color: #07101b; background: linear-gradient(135deg, #ffb5ca, #ff8da7); }
