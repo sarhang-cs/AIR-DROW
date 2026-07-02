@@ -5,8 +5,8 @@ import { spawnSync } from "node:child_process";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = file => readFileSync(resolve(root, file), "utf8");
-const version = "5.0.6";
-const buildId = "air-drow-v506-hand-runtime-loader-fix";
+const version = "5.0.7";
+const buildId = "air-drow-v507-deploy-build-order-fix";
 const packageJson = JSON.parse(read("package.json"));
 const release = JSON.parse(read("web/release.json"));
 const manifest = JSON.parse(read("PROJECT_MANIFEST.json"));

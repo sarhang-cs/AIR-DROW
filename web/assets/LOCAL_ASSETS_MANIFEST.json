@@ -1,6 +1,6 @@
 {
-  "version": "5.0.6",
-  "buildId": "air-drow-v506-hand-runtime-loader-fix",
+  "version": "5.0.7",
+  "buildId": "air-drow-v507-deploy-build-order-fix",
   "policy": "All UI icons, fonts, the MediaPipe runtime and the AIR-DROW hand-model task bundle are local. No build-time or runtime hand-model download is permitted. Hand calibration and tracking health run locally unless the user explicitly sends a sketch to AI.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -29,5 +29,5 @@
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v5.0.6 publishes the fully local MediaPipe bundle as JavaScript, normalizes the WASM base URL and shows the exact engine-start diagnostic if initialization fails."
+  "releaseStatus": "v5.0.7 publishes the fully local MediaPipe bundle as JavaScript, normalizes the WASM base URL and shows the exact engine-start diagnostic if initialization fails."
 }

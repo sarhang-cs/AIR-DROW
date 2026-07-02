@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW v5.0.6 — Hand Runtime Loader Fix",
+  "name": "AIR-DROW v5.0.7 — Hand Runtime Loader Fix",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v506",
+  "start_url": "./?build=v507",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",

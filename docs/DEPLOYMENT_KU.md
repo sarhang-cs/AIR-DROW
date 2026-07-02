@@ -1,4 +1,4 @@
-# ڕێنمایی build و deploy ـی AIR-DROW v5.0.6
+# ڕێنمایی build و deploy ـی AIR-DROW v5.0.7
 
 ## پێش deploy
 
@@ -23,5 +23,5 @@ node scripts/verify-final-release.mjs
 بۆ کامێرا HTTPS یان localhost پێویستە. مۆدێلی دەست لە package ـەکەدا هەیە؛ هیچ download ـێکی زیادە مەکە.
 
 
-## v5.0.6 — Hand Runtime Loader Fix
+## v5.0.7 — Hand Runtime Loader Fix
 ئەم وەشانە CPU-first local hand engine، drawer scroll ـی سەربەخۆ، toggle ـی تەواو، RTL/LTR geometry ـی جێگیر و redo SVG ـی لۆکاڵ زیاد دەکات.

@@ -1,6 +1,6 @@
 {
-  "version": "5.0.6",
-  "buildId": "air-drow-v506-hand-runtime-loader-fix",
+  "version": "5.0.7",
+  "buildId": "air-drow-v507-deploy-build-order-fix",
   "releasedAt": "2026-07-02T12:35:00Z",
   "channel": "release",
   "updatePolicy": "user-controlled-save-before-apply",

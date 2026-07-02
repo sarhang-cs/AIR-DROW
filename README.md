@@ -1,4 +1,4 @@
-# AIR-DROW v5.0.6 — Hand Runtime Loader Fix
+# AIR-DROW v5.0.7 — Hand Runtime Loader Fix
 
 AIR-DROW is a local-first drawing studio for touch, pen, camera and hand tracking. Drawings remain on-device unless the creator explicitly exports, shares, restores a backup or requests AI generation.
 

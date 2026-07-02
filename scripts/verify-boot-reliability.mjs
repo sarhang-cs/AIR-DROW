@@ -8,5 +8,5 @@ if (!app.includes("let ui = null;") || !app.includes("ui = collectUi();")) throw
 if (!app.includes("function showFatalBootFailure")) throw new Error("Fatal boot failures require visible recovery.");
 if (!html.includes('id="bootRetryBtn"')) throw new Error("Boot retry control is missing.");
 if (!css.includes('.boot-retry')) throw new Error("Boot retry style is missing.");
-if (!html.includes('app.js?v=506')) throw new Error("Application entry cache key must be v506.");
+if (!html.includes('app.js?v=506')) throw new Error("Application entry cache key must be v507.");
 console.log("AIR-DROW boot reliability verified.");

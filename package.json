@@ -1,8 +1,8 @@
 {
   "name": "air-drow",
-  "version": "5.0.6",
+  "version": "5.0.7",
   "private": true,
-  "description": "AIR-DROW v5.0.6: camera-frame-first fully local hand-engine startup reliability fix for Android.",
+  "description": "AIR-DROW v5.0.7: deploy-safe self-hosted MediaPipe build ordering and output validation.",
   "type": "module",
   "engines": {
     "node": "24.x"
@@ -16,7 +16,7 @@
     "preflight": "node scripts/preflight.mjs",
     "check": "node scripts/validate-inline.mjs",
     "build:static": "node scripts/build-selfhosted-mediapipe.mjs",
-    "build": "npm run icons:sync && npm run icons:verify && npm run updates:verify && npm run preflight && npm run completion:verify && npm run clean:verify && npm run visual:verify && npm run ui:verify && npm run check && npm run shape:verify && npm run workspace:verify && npm run loading:verify && npm run performance:verify && npm run calibration:verify && npm run hand:verify && npm run export:verify && npm run polish:verify && npm run final:verify && npm run model:verify && npm run boot:verify && npm run drawer:verify && npm run camera-ui:verify && npm run hand-start:verify && npm run verify:release && npm run hand-loader:verify && npm run build:static",
+    "build": "npm run verify:source && npm run build:static && npm run verify:deploy-output",
     "updates:verify": "node scripts/verify-update-runtime.mjs",
     "ui:verify": "node scripts/verify-ui-contract.mjs",
     "shape:verify": "node scripts/verify-smart-shape.mjs",
@@ -35,8 +35,12 @@
     "model:verify": "node scripts/verify-local-hand-model.mjs",
     "boot:verify": "node scripts/verify-boot-reliability.mjs",
     "drawer:verify": "node scripts/verify-drawer-layout.mjs",
-    "camera-ui:verify": "node scripts/verify-hand-runtime-loader-fix.mjs",
-    "hand-start:verify": "node scripts/verify-hand-runtime-loader-fix.mjs",
-    "hand-loader:verify": "node scripts/verify-hand-runtime-loader-fix.mjs"
+    "camera-ui:verify": "node scripts/verify-hand-runtime-source.mjs",
+    "hand-start:verify": "node scripts/verify-hand-runtime-source.mjs",
+    "hand-loader:verify": "node scripts/verify-hand-runtime-loader-fix.mjs",
+    "verify:source": "npm run icons:sync && npm run icons:verify && npm run updates:verify && npm run preflight && npm run completion:verify && npm run clean:verify && npm run visual:verify && npm run ui:verify && npm run check && npm run shape:verify && npm run workspace:verify && npm run loading:verify && npm run performance:verify && npm run calibration:verify && npm run hand:verify && npm run export:verify && npm run polish:verify && npm run final:verify && npm run model:verify && npm run boot:verify && npm run drawer:verify && npm run verify:release && npm run hand-source:verify",
+    "hand-source:verify": "node scripts/verify-hand-runtime-source.mjs",
+    "verify:deploy-output": "npm run hand-loader:verify && npm run deploy-build:verify",
+    "deploy-build:verify": "node scripts/verify-deployment-build-order.mjs"
   }
 }

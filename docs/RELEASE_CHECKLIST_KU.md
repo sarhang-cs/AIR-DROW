@@ -1,4 +1,4 @@
-# Release checklist — AIR-DROW v5.0.6
+# Release checklist — AIR-DROW v5.0.7
 
 - [x] `web/vendor/models/hand_landmarker.task` لە source ـدا هەیە.
 - [x] checksum ـی مۆدێل لە `scripts/verify-local-hand-model.mjs` یەکخراوە.
@@ -10,5 +10,5 @@
 - [x] Termux replacement script مۆدێلی ناو زیپ پشکنین دەکات.
 
 
-## v5.0.6 — Hand Runtime Loader Fix
+## v5.0.7 — Hand Runtime Loader Fix
 ئەم وەشانە CPU-first local hand engine، drawer scroll ـی سەربەخۆ، toggle ـی تەواو، RTL/LTR geometry ـی جێگیر و redo SVG ـی لۆکاڵ زیاد دەکات.

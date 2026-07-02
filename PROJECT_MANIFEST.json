@@ -1,7 +1,7 @@
 {
   "project": "AIR-DROW",
-  "version": "5.0.6",
-  "buildId": "air-drow-v506-hand-runtime-loader-fix",
+  "version": "5.0.7",
+  "buildId": "air-drow-v507-deploy-build-order-fix",
   "release": "Hand Runtime Loader Fix Release",
   "architecture": {
     "styles": [
@@ -24,9 +24,9 @@
     "Phase 3: hand tracking reliability, pinch stability, writing smoothness and camera isolation",
     "Phase 4: export, save, update and onboarding reliability",
     "Phase 5: final release metadata, documentation, Termux replacement and deploy checklist",
-    "v5.0.6: fully local .js MediaPipe bundle, normalized WASM resolver base, explicit MIME rules and actionable hand-engine diagnostics."
+    "v5.0.7: fully local .js MediaPipe bundle, normalized WASM resolver base, explicit MIME rules and actionable hand-engine diagnostics."
   ],
   "privacy": "Drawing data stays local unless the creator explicitly requests an export, share or AI generation.",
-  "stage": "phase-5.0.6-hand-runtime-loader-fix",
+  "stage": "phase-5.0.7-hand-runtime-loader-fix",
   "releaseGate": "The verified local hand model is bundled at web/vendor/models/hand_landmarker.task; build copies it and the local MediaPipe runtime to public/vendor/. No model download is used at build time or runtime."
 }

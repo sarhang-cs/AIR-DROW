@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# AIR-DROW v5.0.6 safe full replacement. It validates first, makes a backup,
+# AIR-DROW v5.0.7 safe full replacement. It validates first, makes a backup,
 # then replaces only $HOME/AIR-DROW.
 set -Eeuo pipefail
-RELEASE_VERSION="5.0.6"
+RELEASE_VERSION="5.0.7"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET_DIR="$HOME/AIR-DROW"
 STAMP="$(date +%Y%m%d-%H%M%S)"

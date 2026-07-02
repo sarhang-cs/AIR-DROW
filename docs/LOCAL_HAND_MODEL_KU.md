@@ -1,4 +1,4 @@
-# مۆدێلی دەستی لۆکاڵ — AIR-DROW v5.0.6
+# مۆدێلی دەستی لۆکاڵ — AIR-DROW v5.0.7
 
 مۆدێلی دەست لە ناو زیپی پڕۆژەکەیە و هیچ download ـێکی دیکەی پێویست نییە.
 
@@ -36,5 +36,5 @@ npm run model:verify
 مۆدێلی task bundle لە پێکهاتە local ـەکانی MediaPipe Hands دروست کراوە و وەک بەشێک لە AIR-DROW دابین کراوە.
 
 
-## v5.0.6 — Hand Runtime Loader Fix
+## v5.0.7 — Hand Runtime Loader Fix
 ئەم وەشانە CPU-first local hand engine، drawer scroll ـی سەربەخۆ، toggle ـی تەواو، RTL/LTR geometry ـی جێگیر و redo SVG ـی لۆکاڵ زیاد دەکات.
