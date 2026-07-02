@@ -1,10 +1,10 @@
-# Release checklist — AIR-DROW v5.0.9
+# Release checklist — AIR-DROW v5.1.0
 
 ## پێش deploy
 
 - [x] source ZIP ـەکە هیچ legacy hand-model ـێکی کۆنی تێدا نییە.
 - [x] `scripts/sync-official-hand-model.mjs` URL، قەبارە و SHA-256 ـی مۆدێلی فەرمی پشکنین دەکات.
-- [x] runtime بە `/vendor/models/hand_landmarker.task?model=v2-fbc2a300` ڕێکخراوە بۆ بەتاڵکردنەوەی cache ـی کۆن.
+- [x] runtime بە `/vendor/models/hand_landmarker.task?model=v3-fbc2a300` ڕێکخراوە بۆ بەتاڵکردنەوەی cache ـی کۆن.
 - [x] service worker URL ـی نوێی مۆدێل و runtime ـە لۆکاڵەکان cache دەکات.
 - [x] version و build ID لە manifest، runtime، health API و service worker یەکخراون.
 - [x] هیچ remote model URL یان runtime download fallback نییە.

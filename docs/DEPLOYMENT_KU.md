@@ -1,4 +1,4 @@
-# ڕێنمایی build و deploy ـی AIR-DROW v5.0.9
+# ڕێنمایی build و deploy ـی AIR-DROW v5.1.0
 
 لە Vercel، `buildCommand` بریتییە لە `npm run build` و `outputDirectory` بریتییە لە `public`.
 

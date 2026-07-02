@@ -1,6 +1,6 @@
 {
-  "version": "5.0.9",
-  "buildId": "air-drow-v509-official-task-binary-fix",
+  "version": "5.1.0",
+  "buildId": "air-drow-v510-bootstrap-pwa-recovery-fix",
   "policy": "All UI icons, fonts and the MediaPipe runtime are local. Before build, the official Google HandLandmarker task is downloaded once, checksum-verified and copied to public/vendor/models. No runtime hand-model download is permitted.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -29,5 +29,5 @@
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v5.0.9 synchronizes the official checksum-pinned HandLandmarker task before static build, then serves the verified task locally with a cache-busted model URL."
+  "releaseStatus": "v5.1.0 adds a recoverable inline application bootstrap and stale service-worker cleanup so a failed module load cannot leave the local studio frozen at 7%."
 }

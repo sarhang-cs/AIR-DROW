@@ -20,5 +20,5 @@ for (const id of ["recoveryNotice", "recoveryActionBtn", "recoveryDismissBtn", "
 if (!html.includes("data-i18n-placeholder=\"aiDirectionPlaceholder\"")) throw new Error("Localized AI direction placeholder is missing.");
 if (!css.includes('html[lang="ku"] input[type="url"]')) throw new Error("RTL/LTR typography guard is missing.");
 if (!worker.includes("reliability-center.js")) throw new Error("Service worker must cache reliability center.");
-if (release.version !== "5.0.9" || release.buildId !== "air-drow-v509-official-task-binary-fix") throw new Error("Release metadata is not v5.0.9.");
+if (release.version !== "5.1.0" || release.buildId !== "air-drow-v510-bootstrap-pwa-recovery-fix") throw new Error("Release metadata is not v5.1.0.");
 console.log("AIR-DROW reliability baseline verified: onboarding, localized typography, recoverable states and offline guard are wired.");

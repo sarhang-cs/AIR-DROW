@@ -24,6 +24,9 @@ import { normalizeSkin } from "./config/appearance.js";
 import { I18N } from "./i18n/translations.js";
 import { collectUi, setText } from "./ui/registry.js";
 
+window.__AIRDROW_APP_MODULE_READY = true;
+
+// Signal the inline bootstrap as soon as this module graph has evaluated.
 const defaults = createDefaultSettings();
 
 // Create DOM bindings during boot so a registry failure is handled instead of

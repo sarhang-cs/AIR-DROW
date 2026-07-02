@@ -5,8 +5,8 @@ import { spawnSync } from "node:child_process";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = file => readFileSync(resolve(root, file), "utf8");
-const version = "5.0.9";
-const buildId = "air-drow-v509-official-task-binary-fix";
+const version = "5.1.0";
+const buildId = "air-drow-v510-bootstrap-pwa-recovery-fix";
 const packageJson = JSON.parse(read("package.json"));
 const release = JSON.parse(read("web/release.json"));
 const manifest = JSON.parse(read("PROJECT_MANIFEST.json"));
@@ -24,7 +24,7 @@ for (const file of [
   "termux/replace-with-final-release.sh", "termux/verify-final-release.sh",
   "web/vendor/models/README.md", "web/vendor/models/MODEL_MANIFEST.json",
   "web/vendor/models/hand_landmarker.task", "scripts/verify-local-hand-model.mjs",
-  "scripts/build-selfhosted-mediapipe.mjs"
+  "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs"
 ]) {
   if (!existsSync(resolve(root, file))) throw new Error(`Required final-release file is missing: ${file}`);
 }

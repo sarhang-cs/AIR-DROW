@@ -8,5 +8,7 @@ if (!app.includes("let ui = null;") || !app.includes("ui = collectUi();")) throw
 if (!app.includes("function showFatalBootFailure")) throw new Error("Fatal boot failures require visible recovery.");
 if (!html.includes('id="bootRetryBtn"')) throw new Error("Boot retry control is missing.");
 if (!css.includes('.boot-retry')) throw new Error("Boot retry style is missing.");
-if (!html.includes('app.js?v=509')) throw new Error("Application entry cache key must be v509.");
+if (!html.includes("air-drow-bootstrap-repair")) throw new Error("Inline bootstrap recovery loader is missing.");
+if (!html.includes('app.js?build=${encodeURIComponent(BUILD_ID)}')) throw new Error("Application bootstrap entry is missing.");
+if (!app.includes("__AIRDROW_APP_MODULE_READY")) throw new Error("Application module readiness marker is missing.");
 console.log("AIR-DROW boot reliability verified.");

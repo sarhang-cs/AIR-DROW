@@ -34,5 +34,5 @@ for (const marker of [
 ]) if (!css.includes(marker)) throw new Error(`Drawer/RTL reliability marker is missing: ${marker}`);
 if (!html.includes('data-toolbar-icon="redo"') || !html.includes('AIRDROW_ICON:redo:START')) throw new Error("Redo must use the same inline local toolbar icon contract as undo.");
 for (const marker of ["/assets/css/icon-system.css", "/assets/css/drawer-layout.css", "/vendor/models/hand_landmarker.task", "/vendor/mediapipe/vision_bundle.js"]) if (!worker.includes(marker)) throw new Error(`Service-worker cache is missing ${marker}`);
-if (release.version !== "5.0.9" || release.buildId !== "air-drow-v509-official-task-binary-fix") throw new Error("Camera/UI release metadata is inconsistent.");
+if (release.version !== "5.1.0" || release.buildId !== "air-drow-v510-bootstrap-pwa-recovery-fix") throw new Error("Camera/UI release metadata is inconsistent.");
 console.log("AIR-DROW Hand Runtime Loader Fix verified: local camera-frame-first hand engine, Android-safe toggles, fixed drawer geometry, stable RTL/LTR header and visible history icons.");

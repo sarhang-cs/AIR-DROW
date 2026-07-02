@@ -11,7 +11,7 @@ const vercel = read("vercel.json");
 const model = resolve(root, "web/vendor/models/hand_landmarker.task");
 
 if (!existsSync(model) || statSync(model).size < 7_000_000) throw new Error("Bundled local hand model is missing or incomplete.");
-for (const marker of ["vision_bundle.js", "vendor/mediapipe/wasm", "hand_landmarker.task?model=v2-fbc2a300"]) {
+for (const marker of ["vision_bundle.js", "vendor/mediapipe/wasm", "hand_landmarker.task?model=v3-fbc2a300"]) {
   if (!runtime.includes(marker)) throw new Error(`Hand runtime source configuration is missing ${marker}.`);
 }
 for (const marker of ["createLocalHandLandmarker", "local-url-cpu", "local-buffer-cpu", "FilesetResolver.forVisionTasks"]) {

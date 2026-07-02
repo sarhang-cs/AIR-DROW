@@ -18,5 +18,5 @@ for (const marker of ["quickStartDots", "exportStatus"]) if (!registry.includes(
 for (const marker of ['id="exportStatus"', 'data-quick-start-dot', 'id="updateBanner"']) if (!html.includes(marker)) throw new Error(`Export/onboarding UI marker missing: ${marker}`);
 if (!worker.includes("onboarding-flow.js")) throw new Error("Service worker must cache onboarding-flow.js.");
 if (!runtime.includes(`buildId: "${release.buildId}"`)) throw new Error("Runtime build ID must match release.json.");
-if (release.version !== "5.0.9") throw new Error("Expected v5.0.9 release metadata.");
+if (release.version !== "5.1.0") throw new Error("Expected v5.1.0 release metadata.");
 console.log("AIR-DROW export, save, update and onboarding runtime verified.");

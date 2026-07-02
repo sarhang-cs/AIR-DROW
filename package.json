@@ -1,8 +1,8 @@
 {
   "name": "air-drow",
-  "version": "5.0.9",
+  "version": "5.1.0",
   "private": true,
-  "description": "AIR-DROW v5.0.9: official HandLandmarker integrity sync, cache-busted local runtime, and deploy-safe output validation.",
+  "description": "AIR-DROW v5.1.0: recoverable boot loader, stale PWA cache repair, and official self-hosted HandLandmarker runtime.",
   "type": "module",
   "engines": {
     "node": ">=22"
@@ -38,10 +38,11 @@
     "camera-ui:verify": "node scripts/verify-hand-runtime-source.mjs",
     "hand-start:verify": "node scripts/verify-hand-runtime-source.mjs",
     "hand-loader:verify": "node scripts/verify-hand-runtime-loader-fix.mjs",
-    "verify:source": "npm run icons:sync && npm run icons:verify && npm run updates:verify && npm run preflight && npm run completion:verify && npm run clean:verify && npm run visual:verify && npm run ui:verify && npm run check && npm run shape:verify && npm run workspace:verify && npm run loading:verify && npm run performance:verify && npm run calibration:verify && npm run hand:verify && npm run export:verify && npm run polish:verify && npm run final:verify && npm run model:verify && npm run boot:verify && npm run drawer:verify && npm run verify:release && npm run hand-source:verify",
+    "verify:source": "npm run icons:sync && npm run icons:verify && npm run updates:verify && npm run bootstrap:verify && npm run preflight && npm run completion:verify && npm run clean:verify && npm run visual:verify && npm run ui:verify && npm run check && npm run shape:verify && npm run workspace:verify && npm run loading:verify && npm run performance:verify && npm run calibration:verify && npm run hand:verify && npm run export:verify && npm run polish:verify && npm run final:verify && npm run model:verify && npm run boot:verify && npm run drawer:verify && npm run verify:release && npm run hand-source:verify",
     "verify:deploy-output": "npm run hand-loader:verify && npm run deploy-build:verify",
     "hand-source:verify": "node scripts/verify-hand-runtime-source.mjs",
     "deploy-build:verify": "node scripts/verify-deployment-build-order.mjs",
-    "model:sync": "node scripts/sync-official-hand-model.mjs"
+    "model:sync": "node scripts/sync-official-hand-model.mjs",
+    "bootstrap:verify": "node scripts/verify-bootstrap-pwa-recovery.mjs"
   }
 }

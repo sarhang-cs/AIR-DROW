@@ -1,4 +1,4 @@
-# AIR-DROW v5.0.9 — Official Hand Model Fix
+# AIR-DROW v5.1.0 — Bootstrap & PWA Recovery Fix
 
 This release fixes the Android hand-runtime failure caused by a legacy locally assembled HandLandmarker task bundle.
 

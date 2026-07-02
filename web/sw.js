@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v509-official-task-binary-fix";
+const BUILD_ID = "air-drow-v510-bootstrap-pwa-recovery-fix";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [
@@ -38,7 +38,7 @@ const APP_SHELL = [
   "/assets/js/features/air-challenge.js",
   "/assets/js/features/template-studio.js",
   "/assets/js/features/ai-studio.js",
-  "/vendor/models/hand_landmarker.task?model=v2-fbc2a300",
+  "/vendor/models/hand_landmarker.task",
   "/vendor/mediapipe/vision_bundle.js",
   "/vendor/mediapipe/wasm/vision_wasm_internal.js",
   "/vendor/mediapipe/wasm/vision_wasm_internal.wasm",
@@ -87,9 +87,19 @@ async function staleWhileRevalidate(request) {
 
 self.addEventListener("install", event => {
   // Do not call skipWaiting here: the app shows a user-controlled update banner.
+  // A failed optional vendor/model pre-cache must never prevent the worker from
+  // installing. The app can fetch that asset on demand, while the shell stays
+  // recoverable on constrained Android connections.
   event.waitUntil((async () => {
     const cache = await caches.open(STATIC_CACHE);
-    await cache.addAll(APP_SHELL);
+    await Promise.all(APP_SHELL.map(async asset => {
+      try {
+        const response = await fetch(new Request(asset, { cache: "no-store" }));
+        if (response?.ok) await cache.put(asset, response.clone());
+      } catch (error) {
+        console.warn("AIR-DROW optional pre-cache skipped", asset, error);
+      }
+    }));
   })());
 });
 
@@ -125,7 +135,10 @@ self.addEventListener("fetch", event => {
   const isFresh = isNavigation || freshPaths.includes(url.pathname) || url.pathname.startsWith("/assets/js/") || url.pathname.startsWith("/assets/icons/toolbar/");
 
   if (isFresh) {
-    event.respondWith(networkFresh(event.request, "/index.html"));
+    // Never return index.html as a fallback for JavaScript modules. An HTML
+    // response for app.js causes a silent module MIME failure and leaves the
+    // branded boot shell at its initial 7% state.
+    event.respondWith(networkFresh(event.request, isNavigation ? "/index.html" : undefined));
     return;
   }
   if (url.pathname.startsWith("/vendor/") || url.pathname.startsWith("/assets/")) {

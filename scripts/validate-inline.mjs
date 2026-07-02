@@ -38,7 +38,7 @@ for (const file of modules) {
   execFileSync(process.execPath, ["--check", absolute], { stdio: "inherit" });
 }
 const index = readFileSync(resolve(root, "web/index.html"), "utf8");
-if (!index.includes('src="./assets/js/app.js?v=509"')) throw new Error("Application module is not linked from index.html.");
+if (!index.includes("air-drow-bootstrap-repair") || !index.includes('entry.type = "module"')) throw new Error("Recoverable application bootstrap is not linked from index.html.");
 if (index.includes("gateNewestRelease")) throw new Error("Legacy forced-update gate must not be shipped.");
 console.log("AIR-DROW source modules passed syntax and entrypoint validation.");
 

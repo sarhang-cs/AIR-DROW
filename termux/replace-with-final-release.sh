@@ -1,9 +1,9 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# AIR-DROW v5.0.9 safe replacement: validates the source, backs up the old
+# AIR-DROW v5.1.0 bootstrap/PWA recovery replacement: validates the source, backs up the old
 # directory, installs dependencies, synchronizes the verified official model,
 # builds, then validates the generated local runtime.
 set -Eeuo pipefail
-RELEASE_VERSION="5.0.9"
+RELEASE_VERSION="5.1.0"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET_DIR="$HOME/AIR-DROW"
 STAMP="$(date +%Y%m%d-%H%M%S)"
@@ -12,7 +12,7 @@ fail() { printf '\n[ERROR] %s\n' "$1" >&2; exit 1; }
 info() { printf '\n[INFO] %s\n' "$1"; }
 command -v node >/dev/null 2>&1 || fail "Node.js نەدۆزرایەوە. سەرەتا: pkg install nodejs"
 command -v npm >/dev/null 2>&1 || fail "npm نەدۆزرایەوە. سەرەتا: pkg install nodejs"
-for file in package.json package-lock.json web/index.html scripts/sync-official-hand-model.mjs scripts/build-selfhosted-mediapipe.mjs scripts/verify-local-hand-model.mjs scripts/verify-hand-runtime-source.mjs scripts/verify-hand-runtime-loader-fix.mjs scripts/verify-final-release.mjs; do
+for file in package.json package-lock.json web/index.html scripts/sync-official-hand-model.mjs scripts/build-selfhosted-mediapipe.mjs scripts/verify-local-hand-model.mjs scripts/verify-hand-runtime-source.mjs scripts/verify-hand-runtime-loader-fix.mjs scripts/verify-final-release.mjs scripts/verify-bootstrap-pwa-recovery.mjs; do
   [[ -f "$SOURCE_DIR/$file" ]] || fail "فایلی پێویست نەدۆزرایەوە: $file"
 done
 ACTUAL_VERSION="$(node -p "require(process.argv[1]).version" "$SOURCE_DIR/package.json")"
@@ -23,6 +23,7 @@ info "پشکنینی source package..."
   cd "$SOURCE_DIR"
   node scripts/preflight.mjs
   node scripts/validate-inline.mjs
+  node scripts/verify-bootstrap-pwa-recovery.mjs
   node --check scripts/sync-official-hand-model.mjs
   node --check scripts/build-selfhosted-mediapipe.mjs
 ) || fail "Source package سەرکەوتوو نەبوو؛ هیچ فایلێک نەگۆڕدرا."
