@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v521-transparent-status-hud-fix";
+const BUILD_ID = "air-drow-v523-release-verification-recovery-fix";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [

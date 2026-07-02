@@ -6,7 +6,7 @@ const html = readFileSync(resolve(root, "web/index.html"), "utf8");
 const drawerCss = readFileSync(resolve(root, "web/assets/css/drawer-layout.css"), "utf8");
 const app = readFileSync(resolve(root, "web/assets/js/app.js"), "utf8");
 const registry = readFileSync(resolve(root, "web/assets/js/ui/registry.js"), "utf8");
-if (!html.includes('drawer-layout.css?v=520')) throw new Error("Drawer layout stylesheet must be cache-versioned and linked.");
+if (!html.includes('drawer-layout.css?v=522')) throw new Error("Drawer layout stylesheet must be cache-versioned and linked.");
 for (const marker of [
   'grid-template-rows: var(--drawer-header-height) var(--drawer-tabs-height) minmax(0, 1fr)',
   'overflow-y: auto !important', 'scroll-padding-block', 'toggle-control', 'toggle-visual',

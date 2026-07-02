@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "5.2.1",
-  "buildId": "air-drow-v521-transparent-status-hud-fix",
-  "release": "Transparent Status HUD Fix Release",
+  "version": "5.2.3",
+  "buildId": "air-drow-v523-release-verification-recovery-fix",
+  "release": "Release Verification Recovery Fix",
   "architecture": {
     "styles": [
       "web/assets/css/app.css",
@@ -24,9 +24,12 @@
     "Phase 3: hand tracking reliability, pinch stability, writing smoothness and camera isolation",
     "Phase 4: export, save, update and onboarding reliability",
     "Phase 5: final release metadata, documentation, Termux replacement and deploy checklist",
-    "v5.2.1: transparent FPS, Online and CAM overlay status with no HUD panel or blur surface."
+    "v5.2.3: a confidently detected closed fist keeps its visible guide; gesture and drawing gates remain strict."
   ],
   "privacy": "Drawing data stays local unless the creator explicitly requests an export, share or AI generation.",
-  "stage": "phase-5.2.1-transparent-status-hud-fix",
-  "releaseGate": "npm run build verifies the transparent status HUD contract, synchronizes the official Google HandLandmarker task, validates the pinned SHA-256 and builds the local runtime. The runtime never downloads a model."
+  "stage": "phase-5.2.3-release-verification-recovery-fix",
+  "releaseGate": "npm run build verifies closed-fist guide continuity, closed-fist guide continuity, synchronizes the official Google HandLandmarker task, validates the pinned SHA-256 and builds the local runtime. The runtime never downloads a model.",
+  "notes": [
+    "v5.2.3: release checks validate transparent HUD and closed-fist continuity independently."
+  ]
 }

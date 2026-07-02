@@ -93,6 +93,9 @@ const state = {
   handWarmTimer: 0,
   handWarmed: false,
   handRawPoint: null,
+  lastGuideLandmarks: null,
+  lastGuideSeenAt: 0,
+  lastGuideScore: 0,
   handPalmScale: 0,
   handStableFrames: 0,
   handMissingFrames: 0,
@@ -1239,7 +1242,10 @@ async function loadHandLandmarker({ forceReload = false } = {}) {
 
   state.handLoadPromise = (async () => {
     const { FilesetResolver, HandLandmarker } = await loadMediaPipeModule();
-    const confidence = Math.max(.50, currentRule().confidence);
+    // A closed fist naturally shortens finger reach. Keep the detector a little
+    // more tolerant so it can return landmarks, while the separate geometry
+    // and pinch gates continue to enforce strict drawing safety.
+    const confidence = Math.max(.46, currentRule().confidence - .08);
     const result = await createLocalHandLandmarker({
       FilesetResolver,
       HandLandmarker,
@@ -1379,6 +1385,9 @@ function resetHandGestureState() {
   state.handDrawing = false;
   state.handPoint = null;
   state.handRawPoint = null;
+  state.lastGuideLandmarks = null;
+  state.lastGuideSeenAt = 0;
+  state.lastGuideScore = 0;
   state.handPalmScale = 0;
   state.handStableFrames = 0;
   state.handMissingFrames = 0;
@@ -1643,6 +1652,44 @@ function clearHandCanvas() {
   handCtx.clearRect(0, 0, width, height);
 }
 
+// The guide is visual feedback only. It must not be coupled to the stricter
+// open-hand geometry gate used for pinch drawing: a closed fist has valid
+// landmarks but intentionally fails open-finger reach tests.
+const HAND_GUIDE_MIN_SCORE = .34;
+const HAND_GUIDE_MIN_SCALE = .020;
+const HAND_GUIDE_HOLD_MS = 260;
+
+function cacheHandGuide(points, geometry, now) {
+  if (!Array.isArray(points) || points.length < 21) return false;
+  const score = Number(geometry?.score);
+  const scale = Number(geometry?.scale);
+  if (!Number.isFinite(score) || score < HAND_GUIDE_MIN_SCORE) return false;
+  if (!Number.isFinite(scale) || scale < HAND_GUIDE_MIN_SCALE) return false;
+
+  // Copy numeric values because a MediaPipe result can be reused by the next
+  // synchronous inference call.
+  state.lastGuideLandmarks = points.map(point => ({
+    x: Number(point?.x) || 0,
+    y: Number(point?.y) || 0,
+    z: Number(point?.z) || 0
+  }));
+  state.lastGuideSeenAt = now;
+  state.lastGuideScore = score;
+  return true;
+}
+
+function drawHeldHandGuide(now) {
+  if (!state.settings.showHandGuide || !state.lastGuideLandmarks?.length) return false;
+  const elapsed = now - state.lastGuideSeenAt;
+  if (!Number.isFinite(elapsed) || elapsed < 0 || elapsed > HAND_GUIDE_HOLD_MS) return false;
+
+  // Covers a single detector miss caused by finger occlusion while avoiding a
+  // long-lived frozen guide when the hand actually leaves the camera.
+  const opacity = Math.max(.28, 1 - (elapsed / HAND_GUIDE_HOLD_MS) * .72);
+  drawHandSkeleton(state.lastGuideLandmarks, opacity);
+  return true;
+}
+
 function processGestureShortcut(landmarks, pinchRatio, now) {
   if (!state.settings.gestureShortcuts || state.handDrawing) return;
   const name = recognizeGestureShortcut(landmarks, pinchRatio);
@@ -1673,6 +1720,7 @@ function handFrame() {
     clearHandCanvas();
 
     if (!landmarks) {
+      drawHeldHandGuide(now);
       state.handMissingFrames += 1;
       state.pinchGate.observe({ usable: false, rule: currentRule() });
       state.pinchOnFrames = 0;
@@ -1693,6 +1741,8 @@ function handFrame() {
 
     const rule = currentRule();
     const geometry = readHandGeometry(landmarks, result);
+    const guideDetected = cacheHandGuide(landmarks, geometry, now);
+    if (state.settings.showHandGuide && guideDetected) drawHandSkeleton(landmarks);
     const candidate = handGeometryIsUsable(geometry, rule);
     const index = landmarks[8];
     const raw = { x: index.x, y: index.y, pressure: 1, time: now };
@@ -1753,8 +1803,6 @@ function handFrame() {
       updateCalibrationOverlay();
       toast(t("calibrationComplete", "Hand calibration completed"));
     }
-
-    if (state.settings.showHandGuide && assessment.usable) drawHandSkeleton(landmarks);
 
     const pinch = state.pinchGate.observe({
       pinchRatio: geometry.pinchRatio,
@@ -1832,12 +1880,13 @@ function handFrame() {
   }
 }
 
-function drawHandSkeleton(points) {
+function drawHandSkeleton(points, opacity = 1) {
   const { width, height } = canvasMetrics();
   handCtx.clearRect(0, 0, width, height);
   const map = point => normalizedToCanvasPoint(point);
   const links = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[0,9],[9,10],[10,11],[11,12],[0,13],[13,14],[14,15],[15,16],[0,17],[17,18],[18,19],[19,20],[5,9],[9,13],[13,17]];
   handCtx.save();
+  handCtx.globalAlpha = Math.max(.18, Math.min(1, Number(opacity) || 1));
   handCtx.lineWidth = 1.45;
   handCtx.strokeStyle = "rgba(118,203,255,.90)";
   handCtx.fillStyle = "rgba(105,224,190,.96)";

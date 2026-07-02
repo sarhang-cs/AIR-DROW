@@ -1,6 +1,6 @@
 {
-  "version": "5.2.1",
-  "buildId": "air-drow-v521-transparent-status-hud-fix",
+  "version": "5.2.3",
+  "buildId": "air-drow-v523-release-verification-recovery-fix",
   "policy": "All UI icons, fonts and the MediaPipe runtime are local. Before build, the official Google HandLandmarker task is downloaded once, checksum-verified and copied to public/vendor/models. No runtime hand-model download is permitted.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -29,5 +29,5 @@
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v5.2.1 removes the FPS, Online and CAM status backgrounds while retaining camera-safe readable overlay text."
+  "releaseStatus": "v5.2.3 removes the FPS, Online and CAM status backgrounds while retaining camera-safe readable overlay text."
 }

@@ -7,7 +7,7 @@ const required = [
   "web/index.html", "web/assets/css/app.css", "web/release.json", "web/sw.js", "web/manifest.webmanifest", "web/favicon.svg", "web/assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf",
   "web/assets/js/app.js", "web/assets/js/config/runtime.js", "web/assets/js/i18n/translations.js", "web/assets/js/ui/registry.js", "web/assets/js/core/project-store.js", "web/assets/js/core/release-manager.js", "web/assets/js/core/font-kit.js", "web/assets/js/core/loading-manager.js", "web/assets/js/core/performance-governor.js", "web/assets/js/core/reliability-center.js", "web/assets/js/features/hand-calibration.js", "web/assets/js/features/hand-tracking-engine.js", "web/assets/js/features/onboarding-flow.js", "web/assets/js/features/exporter.js", "web/assets/js/features/brush-lab.js", "web/assets/js/features/shape-engine.js", "web/assets/js/features/gesture-shortcuts.js", "web/assets/js/features/replay-engine.js", "web/assets/js/features/share-card.js", "web/assets/js/features/air-challenge.js", "web/assets/js/features/template-studio.js", "web/assets/js/features/ai-studio.js", "web/assets/js/workers/template-render.worker.js",
   "api/health.js", "api/ai/generate.js", ".env.example",
-  "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-code-cleanup.mjs", "scripts/verify-premium-visual-system.mjs", "scripts/verify-transparent-status-hud.mjs", "scripts/sync-toolbar-icons.mjs", "scripts/verify-toolbar-icon-bundle.mjs", "scripts/verify-update-runtime.mjs", "scripts/verify-smart-shape.mjs", "scripts/verify-workspace-navigation.mjs", "scripts/verify-loading-experience.mjs", "scripts/verify-performance-guard.mjs", "scripts/verify-hand-calibration.mjs", "scripts/verify-hand-tracking-runtime.mjs", "scripts/verify-export-save-onboarding.mjs", "scripts/verify-final-completion-pass.mjs", "web/assets/css/icon-system.css", "web/assets/icons/ICON_SYSTEM.md",
+  "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-transparent-status-hud.mjs", "scripts/verify-code-cleanup.mjs", "scripts/verify-premium-visual-system.mjs", "scripts/verify-fist-guide-continuity.mjs", "scripts/sync-toolbar-icons.mjs", "scripts/verify-toolbar-icon-bundle.mjs", "scripts/verify-update-runtime.mjs", "scripts/verify-smart-shape.mjs", "scripts/verify-workspace-navigation.mjs", "scripts/verify-loading-experience.mjs", "scripts/verify-performance-guard.mjs", "scripts/verify-hand-calibration.mjs", "scripts/verify-hand-tracking-runtime.mjs", "scripts/verify-export-save-onboarding.mjs", "scripts/verify-final-completion-pass.mjs", "web/assets/css/icon-system.css", "web/assets/icons/ICON_SYSTEM.md",
   "vercel.json", "package.json"
 ];
 const icons = ["brush", "eraser", "hand", "camera", "undo", "trash", "moon", "sun", "settings"];
@@ -53,6 +53,7 @@ if (!app.includes("createLoadingManager") || !html.includes('id="appBoot"')) thr
 if (!app.includes("createPerformanceGovernor") || !html.includes('id="canvasQualityStatus"')) throw new Error("Performance Guard is missing.");
 if (!app.includes("createHandCalibration") || !html.includes('id="handCalibrationOverlay"')) throw new Error("Hand Calibration is missing.");
 if (!app.includes("createHandStabilizer") || !html.includes('id="cameraHandSection"')) throw new Error("Hand Tracking Reliability is missing.");
+if (!app.includes("cacheHandGuide") || !app.includes("drawHeldHandGuide")) throw new Error("Closed-fist hand guide continuity is missing.");
 if (!app.includes("createReliabilityCenter") || !html.includes('id="recoveryNotice"') || !html.includes('id="quickStartOverlay"')) throw new Error("Polish & Reliability recovery UI is missing.");
 if (!app.includes("createOnboardingFlow") || !html.includes('id="exportStatus"')) throw new Error("Export, save and onboarding flow is missing.");
 if (html.includes("fonts.googleapis.com") || html.includes("fonts.gstatic.com")) throw new Error("External Google Fonts requests must not be shipped.");
@@ -68,7 +69,7 @@ if (!worker.includes("reliability-center.js")) throw new Error("Service worker m
 if (!aiFunction.includes("OPENAI_API_KEY") || !aiFunction.includes("/v1/images/edits")) throw new Error("Server-side AI image endpoint is incomplete.");
 if (!html.includes('id="updateBanner"')) throw new Error("Update banner is missing from index.html.");
 if (!html.includes('id="redoBtn"')) throw new Error("Redo control is missing from index.html.");
-if (!html.includes('icon-system.css?v=520')) throw new Error("Local icon system stylesheet is missing.");
+if (!html.includes('icon-system.css?v=522')) throw new Error("Local icon system stylesheet is missing.");
 if (!html.includes('id="aiStudioSection"') || !html.includes('id="creatorPackSection"')) throw new Error("AI Final Studio UI is missing from index.html.");
 if (!worker.includes("AIRDROW_SKIP_WAITING")) throw new Error("Service worker update message is missing.");
 

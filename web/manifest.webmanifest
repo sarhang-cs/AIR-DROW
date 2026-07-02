@@ -1,9 +1,9 @@
 {
-  "name": "AIR-DROW v5.2.1 — Transparent Status HUD Fix",
+  "name": "AIR-DROW v5.2.3 — Release Verification Recovery Fix",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v521",
+  "start_url": "./?build=v523",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
-  "description": "AIR-DROW: local drawing and hand tracking with a transparent live camera status HUD."
+  "description": "AIR-DROW: local drawing and hand tracking with closed-fist guide continuity."
 }

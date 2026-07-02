@@ -9,6 +9,7 @@ const bootstrap = read("web/assets/js/features/hand-engine-bootstrap.js");
 const tracking = read("web/assets/js/features/hand-tracking-engine.js");
 const runtime = read("web/assets/js/config/runtime.js");
 const worker = read("web/sw.js");
+const release = JSON.parse(read("web/release.json"));
 
 for (const marker of [
   "videoRect = ui.camera.getBoundingClientRect",
@@ -33,6 +34,6 @@ for (const marker of [
 for (const marker of ["catch up", "alpha = clamp(baseAlpha + movementBoost, .22, .90)"]) {
   if (!tracking.includes(marker)) throw new Error(`Low-latency stabilizer marker missing: ${marker}`);
 }
-if (!runtime.includes("model=v4-fbc2a300")) throw new Error("Hand model cache key was not rotated.");
-if (!worker.includes("air-drow-v521-transparent-status-hud-fix")) throw new Error("Service-worker cache namespace was not rotated.");
+if (!runtime.includes("model=v5-fbc2a300")) throw new Error("Hand model cache key was not rotated.");
+if (!worker.includes(release.buildId)) throw new Error("Service-worker cache namespace was not rotated.");
 console.log("AIR-DROW hand sync and GPU performance contract passed.");
