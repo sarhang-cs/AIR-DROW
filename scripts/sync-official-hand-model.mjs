@@ -40,7 +40,7 @@ async function writeManifest() {
     sha256: EXPECTED_SHA256,
     validation: "Exact byte length and SHA-256. No ZIP-header or archive-entry assumptions are made.",
     delivery: "Fetched once during npm run build, checksum-verified, then copied to public/vendor/models for local runtime use.",
-    networkPolicy: "No runtime hand-model download is allowed. The deployed app only reads /vendor/models/hand_landmarker.task?model=v3-fbc2a300.",
+    networkPolicy: "No runtime hand-model download is allowed. The deployed app only reads /vendor/models/hand_landmarker.task?model=v4-fbc2a300.",
     integrityPolicy: "Build fails unless the exact official task binary is present."
   };
   await mkdir(modelDirectory, { recursive: true });

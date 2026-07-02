@@ -1,19 +1,11 @@
-# AIR-DROW v5.1.1 — چارەسەری مۆدێلی دەست
+# AIR-DROW v5.2.0 — چاکسازیی یەکسانی دەست و خێرایی
 
-ئەم وەشانە هەڵەی Android ـی `NormalizationOptions metadata` چارەسەر دەکات. هۆکارەکە مۆدێلێکی legacy بوو کە پێکهاتەی فەرمی MediaPipe Tasks نەبوو.
+ئەم وەشانە هێڵی skeleton بە ئەندازەی ڕاستەقینەی وێنەی کامێرا و crop ـی `cover` یەکسان دەکات. هەروەها GPU ی MediaPipe یەکەم هەڵدەبژێردرێت و ئەگەر لەسەر ئامێرەکە کار نەکات، خۆکارانە دەگەڕێتەوە بۆ CPU.
 
-## بۆ deploy
-
+## Deploy
 ```bash
 npm install
 npm run build
 ```
 
-`npm run build` خۆکارانە مۆدێلی فەرمی Google ـی `hand_landmarker/float16/1` دادەبەزێنێت، بە SHA-256 پشکنینی دەکات، دواتر runtime ـە لۆکاڵەکان دروست دەکات و پێش deploy دڵنیایی دەکات. دوای deploy، مۆدێل و runtime ـەکە هەموویان لۆکاڵن.
-
-**گرنگ:** فولدەری `public/` بە تەنها deploy مەکە؛ بە Vercel build ـی ناو `vercel.json` deploy بکە تا مۆدێلی ڕاست دروست بکرێت.
-
-
-## Vercel Build Recovery Fix
-
-The app boot loader now repairs stale service-worker/cache entries automatically instead of leaving the studio at 7%.
+دوای push بۆ GitHub، Vercel خۆکارانە deploy دەکات.

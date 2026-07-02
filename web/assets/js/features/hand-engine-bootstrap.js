@@ -44,7 +44,8 @@ export async function createLocalHandLandmarker({
   wasmRoot,
   modelUrl,
   moduleUrl,
-  confidence
+  confidence,
+  preferredDelegate = "GPU"
 }) {
   // Report missing deployment assets before MediaPipe emits a generic wasm
   // error. This keeps a bad deploy distinguishable from a camera failure.
@@ -72,27 +73,40 @@ export async function createLocalHandLandmarker({
     throw describeFailure("wasm", cause);
   }
 
+  // Keep a persistent hand in the lightweight VIDEO tracker for longer. When
+  // this threshold is too high, a moving hand re-runs the heavier palm detector
+  // almost every frame and Android falls to single-digit FPS.
+  const trackingConfidence = Math.max(.38, Math.min(.46, Number(confidence || .56) - .12));
   const common = {
     runningMode: "VIDEO",
     numHands: 1,
     minHandDetectionConfidence: confidence,
-    minHandPresenceConfidence: confidence,
-    minTrackingConfidence: confidence
+    minHandPresenceConfidence: trackingConfidence,
+    minTrackingConfidence: trackingConfidence
   };
 
-  // URL + CPU is the primary Android path. The other two paths stay entirely
-  // local and cover WebViews that reject one specific model delivery method.
-  const attempts = [
-    { name: "local-url-cpu", options: { ...common, baseOptions: { modelAssetPath: modelUrl, delegate: "CPU" } } },
-    { name: "local-url-default", options: { ...common, baseOptions: { modelAssetPath: modelUrl } } },
-    { name: "local-buffer-cpu", options: { ...common, baseOptions: { modelAssetBuffer: modelBuffer, delegate: "CPU" } } }
+  // Prefer the MediaPipe GPU delegate on browsers that expose it. A fully
+  // local CPU path remains as the deterministic fallback for unsupported
+  // Android WebViews, so acceleration can never block camera drawing.
+  const gpuAttempts = [
+    { name: "local-url-gpu", delegate: "GPU", options: { ...common, baseOptions: { modelAssetPath: modelUrl, delegate: "GPU" } } },
+    { name: "local-buffer-gpu", delegate: "GPU", options: { ...common, baseOptions: { modelAssetBuffer: modelBuffer, delegate: "GPU" } } }
   ];
+  const cpuAttempts = [
+    { name: "local-url-cpu", delegate: "CPU", options: { ...common, baseOptions: { modelAssetPath: modelUrl, delegate: "CPU" } } },
+    { name: "local-buffer-cpu", delegate: "CPU", options: { ...common, baseOptions: { modelAssetBuffer: modelBuffer, delegate: "CPU" } } }
+  ];
+  // After a detection-time GPU failure the app explicitly retries in CPU mode.
+  // Do not re-attempt the same GPU graph in that recovery path.
+  const attempts = String(preferredDelegate).toUpperCase() === "CPU"
+    ? cpuAttempts
+    : [...gpuAttempts, ...cpuAttempts];
 
   const failures = [];
   for (const attempt of attempts) {
     try {
       const landmarker = await HandLandmarker.createFromOptions(vision, attempt.options);
-      return { landmarker, vision, strategy: attempt.name };
+      return { landmarker, vision, strategy: attempt.name, delegate: attempt.delegate };
     } catch (cause) {
       failures.push(`${attempt.name}: ${cause?.message || cause}`);
     }

@@ -1,10 +1,12 @@
-# AIR-DROW v5.1.1 — Vercel Build Recovery Fix
+# AIR-DROW v5.2.0 — Hand Sync & GPU Performance Fix
 
 ## Fixed
-- Removed the brittle build-time assertion that stopped Vercel deployments when a cache-header route was normalized or missing from an older checkout.
-- Retained the explicit Vercel `no-store` policy for application JavaScript, while keeping deployment validation focused on the runtime behavior that is actually required.
-- Rotated the build ID, service-worker cache namespace, boot-module query key, manifest start URL, and local release metadata so Android Chrome requests the repaired build instead of stale PWA entries.
-- Preserved the official, checksum-validated local MediaPipe HandLandmarker model and self-hosted runtime assets.
+- Projects every hand landmark through the **actual rendered camera rectangle** and `object-fit: cover` crop, so the guide follows the displayed hand instead of an assumed full-screen aspect ratio.
+- Mirrors landmarks exactly once when the camera preview is mirrored.
+- Prefers MediaPipe’s local **GPU delegate** and automatically falls back to CPU if the device/browser does not support GPU acceleration.
+- Keeps a detected hand in MediaPipe’s lightweight video tracker longer, reducing expensive full palm detections during continuous motion.
+- Requests a smaller 320×240 feed for normal mobile hand tracking and lowers it automatically when the measured inference rate is weak.
+- Reduces deliberate-motion filter lag while retaining jump rejection and pinch safety.
 
 ## Deploy
-Run `npm run build`; no direct deployment of `public/` is required. Push the repository to GitHub and Vercel will deploy automatically.
+Run `npm run build`, then push the repository. Vercel deploys automatically from GitHub.

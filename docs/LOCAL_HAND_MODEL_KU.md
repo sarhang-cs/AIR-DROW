@@ -1,6 +1,6 @@
-# مۆدێلی دەستی AIR-DROW — v5.1.1
+# مۆدێلی دەستی AIR-DROW — v5.2.0
 
-لە وەشانی `v5.1.1`، پڕۆژەکە مۆدێلی legacy ـی کۆن بەکارناهێنێت. ئەو مۆدێلە بە شێوەی دەستی لە پێکهاتەکانی MediaPipe Hands کۆکرابووەوە و لە Android Chrome هەڵەی `NormalizationOptions` ـی دروست دەکرد.
+لە وەشانی `v5.2.0`، پڕۆژەکە مۆدێلی legacy ـی کۆن بەکارناهێنێت. ئەو مۆدێلە بە شێوەی دەستی لە پێکهاتەکانی MediaPipe Hands کۆکرابووەوە و لە Android Chrome هەڵەی `NormalizationOptions` ـی دروست دەکرد.
 
 ## چارەسەرەکە
 
@@ -22,7 +22,7 @@ npm run model:sync
 لە کاتی بەکارهێنانی ئەپەکە، مۆدێل بە شێوەی local لەم شوێنەوە دەخوێندرێتەوە:
 
 ```text
-/vendor/models/hand_landmarker.task?model=v3-fbc2a300
+/vendor/models/hand_landmarker.task?model=v4-fbc2a300
 ```
 
 واتە تەنها کاتی build پەیوەندی ئینتەرنێت پێویستە؛ لە ناو browser ـدا مۆدێلەکە دووبارە لە دەرەوە دابەزێنرێت.

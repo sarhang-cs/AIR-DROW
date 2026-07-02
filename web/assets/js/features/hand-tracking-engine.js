@@ -96,9 +96,12 @@ export function createHandStabilizer() {
       return { point: filtered, rawJump, jumped: true, stable: false, accepted: false, alpha: 0 };
     }
 
-    const baseAlpha = clamp(1 - rule.smooth, .16, .68);
-    const movementBoost = clamp((rawJump - .025) * 1.35, 0, .22);
-    const alpha = clamp(baseAlpha + movementBoost, .16, .74);
+    // At low inference rates a cautious filter makes the visible guide trail
+    // behind the real hand. Preserve noise protection when still, then catch up
+    // quickly as deliberate motion grows.
+    const baseAlpha = clamp(1 - rule.smooth, .22, .74);
+    const movementBoost = clamp((rawJump - .018) * 1.85, 0, .30);
+    const alpha = clamp(baseAlpha + movementBoost, .22, .90);
     filtered = filtered
       ? { ...raw, x: filtered.x + (raw.x - filtered.x) * alpha, y: filtered.y + (raw.y - filtered.y) * alpha }
       : { ...raw };

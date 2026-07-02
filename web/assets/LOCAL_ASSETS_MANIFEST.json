@@ -1,6 +1,6 @@
 {
-  "version": "5.1.1",
-  "buildId": "air-drow-v511-vercel-build-recovery-fix",
+  "version": "5.2.0",
+  "buildId": "air-drow-v520-hand-sync-gpu-performance-fix",
   "policy": "All UI icons, fonts and the MediaPipe runtime are local. Before build, the official Google HandLandmarker task is downloaded once, checksum-verified and copied to public/vendor/models. No runtime hand-model download is permitted.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -22,12 +22,12 @@
   "assets/lottie/hand-detected-verify.json": "assets/lottie/hand-detected-verify.json",
   "assets/lottie/hand-missing-error.json": "assets/lottie/hand-missing-error.json",
   "assets/lottie/hand-problem-warning.json": "assets/lottie/hand-problem-warning.json",
-  "note": "Kurdish UI uses local Noto Kufi Arabic. Smart Shape 2.0, Workspace Navigator, Loading Experience, Performance Guard and Hand Calibration run locally in the browser.",
+  "note": "Kurdish UI uses local Noto Kufi Arabic. Smart Shape 2.0, Workspace Navigator, Loading Experience, Performance Guard, exact video-overlay Hand Calibration and GPU-first local hand tracking run locally in the browser.",
   "interfaceIconSystem": {
     "folder": "assets/icons",
     "editable": true,
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v5.1.1 adds a Vercel-safe bootstrap validation and stale service-worker cleanup so a failed module load cannot leave the local studio frozen at 7%."
+  "releaseStatus": "v5.2.0 adds rendered-video hand projection, GPU-first MediaPipe startup and Android-safe tracking performance recovery."
 }

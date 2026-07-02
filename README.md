@@ -1,16 +1,14 @@
-# AIR-DROW v5.1.1 — Vercel Build Recovery Fix
+# AIR-DROW v5.2.0 — Hand Sync & GPU Performance Fix
 
-This release fixes the Android hand-runtime failure caused by a legacy locally assembled HandLandmarker task bundle.
+AIR-DROW is a local-first drawing studio for touch, pen, camera and hand tracking.
+
+## Hand tracking improvements
+The camera guide now uses the browser’s real rendered video geometry, including cover cropping and mirror orientation. Hand tracking attempts MediaPipe GPU first and safely falls back to CPU when needed.
 
 ## Deploy
-
 ```bash
 npm install
 npm run build
 ```
 
-`npm run build` synchronizes Google's official `hand_landmarker/float16/1` model, validates its pinned SHA-256, builds the self-hosted MediaPipe assets, and verifies the deployment output. The deployed app keeps the runtime and task bundle local.
-
-## Important
-
-Do not deploy `public/` directly from this source archive. Deploy through the included Vercel build configuration so the verified task bundle is generated first.
+Push the repository to GitHub; the linked Vercel project deploys automatically.

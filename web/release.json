@@ -1,19 +1,18 @@
 {
-  "version": "5.1.1",
-  "buildId": "air-drow-v511-vercel-build-recovery-fix",
-  "releasedAt": "2026-07-02T16:00:00Z",
+  "version": "5.2.0",
+  "buildId": "air-drow-v520-hand-sync-gpu-performance-fix",
+  "releasedAt": "2026-07-02T17:35:00Z",
   "channel": "release",
   "updatePolicy": "user-controlled-save-before-apply",
   "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Vercel Build Recovery Fix: stale service-worker/cache responses can no longer strand the application at its initial 7% boot screen.",
+  "summary": "Hand Sync & GPU Performance Fix: exact camera-overlay projection, local GPU-first HandLandmarker, and Android tracking recovery.",
   "features": [
-    "Inline recoverable module bootstrap prevents a frozen 7% screen when a stale service worker returns an invalid JavaScript response",
-    "One automatic local cache and service-worker cleanup followed by a cache-busted retry",
-    "Visible manual Retry control if the second application bootstrap attempt still fails",
-    "Service worker no longer returns index.html as a fallback for JavaScript module requests",
-    "Optional MediaPipe/model pre-cache failures no longer abort service-worker installation",
-    "Fresh Vercel no-store caching policy for application JavaScript modules",
-    "Checksum-pinned official self-hosted MediaPipe HandLandmarker model retained"
+    "Hand guide projection reads the rendered video rectangle and cover crop instead of assuming the studio aspect ratio",
+    "Landmark mirror orientation is applied once and follows the displayed front-camera preview",
+    "Local MediaPipe GPU delegate is attempted first with deterministic CPU fallback",
+    "Lower video tracking thresholds reduce repeated full palm detection while the same hand remains visible",
+    "Normal mobile hand mode requests a lighter 320\u00d7240 capture stream and falls back there on weak measured inference",
+    "Low-latency adaptive stabilizer reduces perceived guide and drawing lag without removing jump or pinch safeguards"
   ]
 }

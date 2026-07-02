@@ -34,7 +34,7 @@ for (const oldArtifact of [
 ]) {
   if (existsSync(resolve(root, oldArtifact))) throw new Error(`Obsolete artifact must not remain: ${oldArtifact}`);
 }
-if (!html.includes('href="./assets/css/app.css?v=509"')) throw new Error("External application stylesheet is not linked.");
+if (!html.includes('href="./assets/css/app.css?v=520"')) throw new Error("External application stylesheet is not linked.");
 if (html.includes("<style>")) throw new Error("The application stylesheet must not remain embedded in index.html.");
 if (!app.includes('from "./config/runtime.js"') || !app.includes('from "./i18n/translations.js"') || !app.includes('from "./ui/registry.js"')) {
   throw new Error("App shell must use the modular config, translation and UI registry files.");

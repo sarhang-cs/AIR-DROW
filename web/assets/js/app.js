@@ -69,7 +69,7 @@ const state = {
   mediaPipeWasmRoot: null,
   handLoadPromise: null,
   handEngineStrategy: "",
-  handDelegate: "CPU",
+  handDelegate: "GPU",
   handEngineError: "",
   handLoop: 0,
   handDrawing: false,
@@ -134,6 +134,12 @@ const state = {
 
 function currentRule() {
   return PROFILE_RULES[state.settings.profile] || PROFILE_RULES.balanced;
+}
+
+function preferredHandDelegate() {
+  // GPU is attempted first by the local bootstrap. The CPU path is retained
+  // automatically when the browser does not expose a compatible GPU delegate.
+  return "GPU";
 }
 
 function isTouchLayout() {
@@ -746,15 +752,24 @@ function screenToWorld(point) {
 }
 
 function cameraContentRect() {
-  const { width, height } = canvasMetrics();
-  const videoWidth = ui.camera.videoWidth || width || 1;
-  const videoHeight = ui.camera.videoHeight || height || 1;
-  const scale = Math.max(width / videoWidth, height / videoHeight);
+  // The hand landmarks are normalised to the decoded camera frame, while the
+  // preview uses CSS `object-fit: cover`. Resolve the exact rendered video
+  // box first, then apply the identical cover crop to the overlay. Using the
+  // studio size alone causes a visible offset whenever Android changes the
+  // camera's delivered aspect ratio or browser viewport metrics.
+  const fallback = canvasMetrics();
+  const studioRect = ui.studio.getBoundingClientRect();
+  const videoRect = ui.camera.getBoundingClientRect();
+  const boxWidth = Math.max(1, videoRect.width || fallback.width || 1);
+  const boxHeight = Math.max(1, videoRect.height || fallback.height || 1);
+  const videoWidth = Math.max(1, ui.camera.videoWidth || fallback.width || 1);
+  const videoHeight = Math.max(1, ui.camera.videoHeight || fallback.height || 1);
+  const scale = Math.max(boxWidth / videoWidth, boxHeight / videoHeight);
   const drawWidth = videoWidth * scale;
   const drawHeight = videoHeight * scale;
   return {
-    x: (width - drawWidth) / 2,
-    y: (height - drawHeight) / 2,
+    x: (videoRect.left - studioRect.left) + (boxWidth - drawWidth) / 2,
+    y: (videoRect.top - studioRect.top) + (boxHeight - drawHeight) / 2,
     width: drawWidth,
     height: drawHeight
   };
@@ -762,10 +777,14 @@ function cameraContentRect() {
 
 function normalizedToCanvasPoint(point) {
   const rect = cameraContentRect();
-  const nx = state.settings.mirrorCamera ? (1 - point.x) : point.x;
+  const rawX = Math.max(0, Math.min(1, Number(point?.x) || 0));
+  const rawY = Math.max(0, Math.min(1, Number(point?.y) || 0));
+  // Camera mirroring is visual-only CSS. Mirror the landmark exactly once so
+  // its projected point remains on the user's displayed hand.
+  const nx = state.settings.mirrorCamera ? (1 - rawX) : rawX;
   return {
     x: rect.x + nx * rect.width,
-    y: rect.y + point.y * rect.height
+    y: rect.y + rawY * rect.height
   };
 }
 
@@ -1081,11 +1100,18 @@ async function startCamera() {
   setText(ui.handStatus, t("cameraStarting", "Opening camera"));
 
   const requestedWidth = Number(state.settings.cameraWidth) || 480;
+  const handSession = ["hand", "hand-eraser"].includes(state.mode);
+  // A 320×240 tracking feed is sufficient for the task's internal input size
+  // and cuts camera upload/scaling work substantially on Android. The Max
+  // profile preserves the creator-selected resolution for preview quality.
+  const trackingWidth = handSession && state.settings.performanceMode !== "max"
+    ? Math.min(requestedWidth, 320)
+    : requestedWidth;
   const videoConstraints = {
     facingMode: { ideal: "user" },
-    width: { ideal: requestedWidth },
-    height: { ideal: Math.round(requestedWidth * 0.75) },
-    frameRate: { ideal: Math.min(30, Number(state.settings.targetFps) || 24), max: 30 }
+    width: { ideal: trackingWidth, max: handSession && state.settings.performanceMode !== "max" ? 480 : requestedWidth },
+    height: { ideal: Math.round(trackingWidth * 0.75), max: handSession && state.settings.performanceMode !== "max" ? 360 : Math.round(requestedWidth * 0.75) },
+    frameRate: { ideal: handSession ? 24 : Math.min(30, Number(state.settings.targetFps) || 24), max: 30 }
   };
 
   try {
@@ -1220,10 +1246,11 @@ async function loadHandLandmarker({ forceReload = false } = {}) {
       wasmRoot: state.mediaPipeWasmRoot,
       modelUrl: HAND_MODEL,
       moduleUrl: MEDIAPIPE_MODULE_URLS[0],
-      confidence
+      confidence,
+      preferredDelegate: state.handDelegate
     });
     state.landmarker = result.landmarker;
-    state.handDelegate = result.strategy.includes("cpu") ? "CPU" : "DEFAULT";
+    state.handDelegate = result.delegate || (result.strategy.includes("cpu") ? "CPU" : "GPU");
     state.handEngineStrategy = result.strategy;
     state.handEngineError = "";
     return state.landmarker;
@@ -1391,9 +1418,9 @@ async function enableTrackingSafeCapture() {
   state.cameraPerformanceReduced = true;
   try {
     await track.applyConstraints({
-      width: { ideal: 480, max: 640 },
-      height: { ideal: 360, max: 480 },
-      frameRate: { ideal: 15, max: 24 }
+      width: { ideal: 320, max: 480 },
+      height: { ideal: 240, max: 360 },
+      frameRate: { ideal: 20, max: 24 }
     });
     toast(t("trackingOptimized", "Hand tracking was optimised for this phone"));
   } catch (error) {
@@ -1410,7 +1437,7 @@ function updateInferenceFps(now) {
     state.fps = state.inferenceFps;
     const configured = Math.max(12, Math.min(30, Number(state.settings.targetFps) || 24));
     state.effectiveTargetFps = effectiveTrackingFps({ configured, measured: state.inferenceFps });
-    if (state.inferenceFps <= 7) void enableTrackingSafeCapture();
+    if (state.inferenceFps <= 9) void enableTrackingSafeCapture();
     state.inferenceFrames = 0;
     state.inferenceFpsAt = now;
   }
