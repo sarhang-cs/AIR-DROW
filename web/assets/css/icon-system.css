@@ -1,0 +1,68 @@
+/*
+ * AIR-DROW local icon system.
+ * Each semantic class points to a replaceable local SVG. The existing toolbar
+ * source files remain unchanged in assets/icons/toolbar/.
+ */
+.app-icon {
+  --app-icon-size: 20px;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: var(--app-icon-size);
+  height: var(--app-icon-size);
+  color: currentColor;
+  background-color: currentColor;
+  -webkit-mask-image: var(--app-icon-source);
+  mask-image: var(--app-icon-source);
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.icon-air-drow-mark { --app-icon-source: url("../icons/brand/air-drow-mark.svg"); }
+.icon-close { --app-icon-source: url("../icons/actions/close.svg"); }
+.icon-clear { --app-icon-source: url("../icons/actions/clear.svg"); }
+.icon-redo { --app-icon-source: url("../icons/actions/redo.svg"); }
+.icon-reset { --app-icon-source: url("../icons/actions/reset.svg"); }
+.icon-workspace-draw { --app-icon-source: url("../icons/workspace/draw.svg"); }
+.icon-workspace-shape { --app-icon-source: url("../icons/workspace/shape.svg"); }
+.icon-workspace-create { --app-icon-source: url("../icons/workspace/create.svg"); }
+.icon-workspace-projects { --app-icon-source: url("../icons/workspace/projects.svg"); }
+.icon-workspace-settings { --app-icon-source: url("../icons/workspace/settings.svg"); }
+.icon-status-success { --app-icon-source: url("../icons/status/success.svg"); }
+.icon-status-missing { --app-icon-source: url("../icons/status/missing.svg"); }
+.icon-status-problem { --app-icon-source: url("../icons/status/problem.svg"); }
+.icon-creator-lab { --app-icon-source: url("../icons/settings/creator-lab.svg"); }
+.icon-project-gallery { --app-icon-source: url("../icons/settings/project-gallery.svg"); }
+.icon-viral-studio { --app-icon-source: url("../icons/settings/viral-studio.svg"); }
+.icon-creator-pack { --app-icon-source: url("../icons/settings/creator-pack.svg"); }
+.icon-ai-studio { --app-icon-source: url("../icons/settings/ai-studio.svg"); }
+.icon-camera-hand { --app-icon-source: url("../icons/settings/camera-hand.svg"); }
+.icon-appearance { --app-icon-source: url("../icons/settings/appearance.svg"); }
+.icon-display { --app-icon-source: url("../icons/settings/display.svg"); }
+.icon-info { --app-icon-source: url("../icons/settings/info.svg"); }
+.icon-system { --app-icon-source: url("../icons/settings/system.svg"); }
+.icon-about { --app-icon-source: url("../icons/settings/about.svg"); }
+.icon-backend { --app-icon-source: url("../icons/settings/backend.svg"); }
+
+.tool-button > .app-icon { --app-icon-size: 20px; }
+.workspace-dock-button > .app-icon,
+.workspace-tab > .app-icon { --app-icon-size: 18px; }
+.summary-icon > .app-icon { --app-icon-size: 16px; }
+.consent-close > .app-icon { --app-icon-size: 16px; }
+.clear-icon > .app-icon,
+.reset-icon > .app-icon { --app-icon-size: 22px; }
+.setting-action > .app-icon { --app-icon-size: 15px; }
+.hand-scan-status-icon > .app-icon { --app-icon-size: 22px; }
+.boot-logo > .app-icon {
+  --app-icon-size: 49px;
+  color: #07101b;
+  filter: drop-shadow(0 2px 1px rgba(255, 255, 255, .34));
+}
+
+@media (max-width: 520px) {
+  .tool-button > .app-icon { --app-icon-size: 18px; }
+  .workspace-dock-button > .app-icon { --app-icon-size: 16px; }
+}

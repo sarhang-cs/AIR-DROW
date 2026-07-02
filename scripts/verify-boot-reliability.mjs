@@ -1,0 +1,12 @@
+import { readFileSync } from "node:fs";
+const registry = readFileSync(new URL("../web/assets/js/ui/registry.js", import.meta.url), "utf8");
+const app = readFileSync(new URL("../web/assets/js/app.js", import.meta.url), "utf8");
+const html = readFileSync(new URL("../web/index.html", import.meta.url), "utf8");
+const css = readFileSync(new URL("../web/assets/css/app.css", import.meta.url), "utf8");
+if (!registry.includes("const $ = byId;")) throw new Error("UI registry local lookup alias is missing.");
+if (!app.includes("let ui = null;") || !app.includes("ui = collectUi();")) throw new Error("UI initialization must be deferred into boot.");
+if (!app.includes("function showFatalBootFailure")) throw new Error("Fatal boot failures require visible recovery.");
+if (!html.includes('id="bootRetryBtn"')) throw new Error("Boot retry control is missing.");
+if (!css.includes('.boot-retry')) throw new Error("Boot retry style is missing.");
+if (!html.includes('app.js?v=506')) throw new Error("Application entry cache key must be v506.");
+console.log("AIR-DROW boot reliability verified.");

@@ -1,0 +1,8 @@
+node_modules/
+public/
+.vercel/
+*.zip
+.env
+.air-drow-inline-check.mjs
+
+!.env.example

@@ -1,0 +1,33 @@
+{
+  "version": "5.0.6",
+  "buildId": "air-drow-v506-hand-runtime-loader-fix",
+  "policy": "All UI icons, fonts, the MediaPipe runtime and the AIR-DROW hand-model task bundle are local. No build-time or runtime hand-model download is permitted. Hand calibration and tracking health run locally unless the user explicitly sends a sketch to AI.",
+  "toolbarIconSystem": {
+    "folder": "assets/icons/toolbar",
+    "editable": true,
+    "method": "Build-time inline SVG bundle",
+    "files": [
+      "brush.svg",
+      "eraser.svg",
+      "hand.svg",
+      "camera.svg",
+      "undo.svg",
+      "redo.svg",
+      "trash.svg",
+      "moon.svg",
+      "sun.svg",
+      "settings.svg"
+    ]
+  },
+  "assets/lottie/hand-detected-verify.json": "assets/lottie/hand-detected-verify.json",
+  "assets/lottie/hand-missing-error.json": "assets/lottie/hand-missing-error.json",
+  "assets/lottie/hand-problem-warning.json": "assets/lottie/hand-problem-warning.json",
+  "note": "Kurdish UI uses local Noto Kufi Arabic. Smart Shape 2.0, Workspace Navigator, Loading Experience, Performance Guard and Hand Calibration run locally in the browser.",
+  "interfaceIconSystem": {
+    "folder": "assets/icons",
+    "editable": true,
+    "method": "Semantic CSS mask classes backed by local SVG assets",
+    "guide": "assets/icons/ICON_SYSTEM.md"
+  },
+  "releaseStatus": "v5.0.6 publishes the fully local MediaPipe bundle as JavaScript, normalizes the WASM base URL and shows the exact engine-start diagnostic if initialization fails."
+}

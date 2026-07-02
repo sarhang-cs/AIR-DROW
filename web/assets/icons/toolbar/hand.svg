@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="300 245 950 910" fill="none">
+  <title>Hand Scan Icon</title>
+  <desc>Transparent-background hand scanner icon, recreated as editable vector paths.</desc>
+  <defs>
+    <linearGradient id="orangeHand" x1="768" y1="325" x2="768" y2="793" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFAD37"/>
+      <stop offset="0.56" stop-color="#FEA72F"/>
+      <stop offset="1" stop-color="#F7A12D"/>
+    </linearGradient>
+    <linearGradient id="cyanScan" x1="768" y1="794" x2="768" y2="1092" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0BDFF3"/>
+      <stop offset="0.55" stop-color="#05D4EB"/>
+      <stop offset="1" stop-color="#02B8DF"/>
+    </linearGradient>
+    <linearGradient id="grayBase" x1="768" y1="843" x2="768" y2="1145" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3A454B"/>
+      <stop offset="1" stop-color="#313A3F"/>
+    </linearGradient>
+    <linearGradient id="grayFrame" x1="768" y1="255" x2="768" y2="428" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#849FAB"/>
+      <stop offset="1" stop-color="#738B97"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Top scanner-corner guides -->
+  <path d="M 1017 256 L 1018 305 L 1136 305 L 1139 308 L 1139 424 L 1143 427 L 1188 426 L 1190 424 L 1188 256 Z" fill="url(#grayFrame)"/>
+  <path d="M 528 255 L 359 255 L 357 257 L 357 425 L 402 427 L 407 425 L 407 307 L 409 305 L 527 305 L 529 304 Z" fill="url(#grayFrame)"/>
+
+  <!-- Hand, positioned behind the scanner -->
+  <path d="M 609 381 L 602 390 L 600 395 L 599 410 L 609 470 L 610 484 L 613 496 L 615 517 L 618 529 L 618 536 L 620 540 L 620 550 L 622 556 L 626 590 L 628 595 L 630 616 L 632 621 L 632 631 L 634 635 L 638 671 L 644 701 L 644 710 L 646 715 L 646 730 L 644 735 L 638 741 L 632 743 L 625 742 L 617 735 L 599 710 L 591 702 L 591 700 L 579 684 L 569 673 L 569 671 L 555 656 L 546 651 L 535 648 L 525 648 L 512 653 L 504 660 L 499 668 L 497 676 L 498 690 L 504 703 L 549 779 L 553 788 L 557 791 L 992 792 L 992 689 L 995 676 L 999 635 L 1002 623 L 1003 604 L 1005 599 L 1007 575 L 1009 568 L 1009 557 L 1011 552 L 1012 538 L 1015 526 L 1015 516 L 1017 511 L 1017 493 L 1014 486 L 1005 478 L 999 476 L 989 476 L 981 479 L 973 487 L 966 508 L 924 674 L 912 684 L 901 682 L 895 676 L 892 670 L 892 656 L 916 416 L 916 398 L 911 387 L 905 381 L 895 376 L 879 376 L 869 381 L 860 392 L 858 398 L 831 636 L 828 643 L 822 648 L 807 648 L 799 640 L 798 636 L 798 350 L 792 336 L 787 331 L 778 326 L 762 325 L 750 330 L 742 339 L 738 349 L 738 638 L 731 647 L 725 650 L 718 649 L 712 646 L 706 638 L 706 632 L 697 596 L 696 584 L 693 575 L 693 569 L 688 550 L 685 529 L 683 526 L 683 520 L 675 480 L 671 467 L 671 461 L 664 431 L 661 410 L 655 389 L 644 378 L 637 375 L 620 375 Z" fill="url(#orangeHand)"/>
+
+  <!-- Scanner panel -->
+  <rect x="306" y="842" width="935" height="303" rx="8" fill="url(#grayBase)"/>
+
+  <!-- Active scanner field -->
+  <path d="M 307 802 L 307 836 L 309 843 L 586 843 L 606 877 L 646 934 L 666 958 L 692 983 L 718 1001 L 742 1011 L 762 1015 L 800 1016 L 889 1015 L 906 1010 L 923 1001 L 932 994 L 954 970 L 963 956 L 974 933 L 986 894 L 991 863 L 991 845 L 993 843 L 1235 843 L 1238 842 L 1239 819 L 1238 799 L 1236 796 L 1231 794 L 314 794 L 309 797 Z" fill="url(#cyanScan)"/>
+  <path d="M 1188 919 L 1140 920 L 1140 1041 L 1138 1043 L 1018 1043 L 1019 1091 L 1188 1091 Z" fill="url(#cyanScan)"/>
+  <path d="M 358 919 L 357 1090 L 526 1091 L 526 1043 L 407 1043 L 405 1041 L 405 920 Z" fill="url(#cyanScan)"/>
+</svg>

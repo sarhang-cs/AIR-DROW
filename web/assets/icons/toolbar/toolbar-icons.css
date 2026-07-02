@@ -1,0 +1,18 @@
+/* AIR-DROW Final Icon Pack
+   Replace any SVG with the same filename, then run `npm run icons:sync`.
+   The app bundles these nine SVG files into index.html for reliable Android support. */
+
+.toolbar-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: visible;
+}
+
+/* hand.svg uses a cropped viewBox so its visible artwork matches the other toolbar icons. */
+.icon-hand svg,
+[data-toolbar-icon="hand"] svg {
+  transform-origin: center center;
+}

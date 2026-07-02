@@ -1,0 +1,21 @@
+{
+  "version": "5.0.6",
+  "buildId": "air-drow-v506-hand-runtime-loader-fix",
+  "releasedAt": "2026-07-02T12:35:00Z",
+  "channel": "release",
+  "updatePolicy": "user-controlled-save-before-apply",
+  "handEngine": "fully-local-js-bundle-no-trailing-slash-wasm-runtime",
+  "mediaPipePackageVersion": "0.10.35",
+  "summary": "Hand Runtime Loader Fix: local MediaPipe is served as JavaScript, uses a no-trailing-slash WASM base, and surfaces exact local task diagnostics when a browser blocks initialization.",
+  "features": [
+    "CPU-first local MediaPipe hand-engine initialization for reliable Android camera inference",
+    "Local model buffer initialization with same-file local URL fallback only",
+    "Separate camera and hand-engine recovery states with no stale camera error after a stream starts",
+    "Viewport-safe drawer grid with guaranteed independent touch scrolling",
+    "Stable header mark and close control placement in Kurdish and English",
+    "Dedicated chevron grid cell and reserved select-arrow spacing for RTL labels",
+    "Android-safe DOM switch controls with visible off and on states",
+    "Editable inline toolbar undo and redo icons",
+    "Bundled local hand model, local MediaPipe runtime and offline cache coverage"
+  ]
+}

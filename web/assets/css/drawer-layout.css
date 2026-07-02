@@ -1,0 +1,312 @@
+/*
+ * AIR-DROW interaction layout.
+ * This module owns the mobile drawer geometry, bilingual controls, no-overlap
+ * disclosures, complete DOM switches, and viewport-safe scrolling.
+ */
+:root {
+  --drawer-height-mobile: min(92dvh, 860px);
+  --drawer-header-height: 70px;
+  --drawer-tabs-height: 70px;
+  --drawer-scroll-safe-end: max(138px, calc(env(safe-area-inset-bottom) + 112px));
+  --toggle-width: 52px;
+  --toggle-height: 30px;
+  --toggle-pad: 3px;
+}
+
+.settings-drawer {
+  display: grid;
+  grid-template-rows: var(--drawer-header-height) var(--drawer-tabs-height) minmax(0, 1fr);
+  height: var(--drawer-height-mobile) !important;
+  min-height: 0;
+  max-height: var(--drawer-height-mobile) !important;
+  overflow: hidden !important;
+  isolation: isolate;
+}
+
+/* Header positions never reverse: mark stays left and close stays right. */
+.settings-header {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--drawer-header-height);
+  padding: 12px 16px;
+  direction: ltr;
+}
+.settings-title {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  direction: ltr;
+}
+.settings-mark { grid-column: 1; flex: 0 0 34px; margin: 0; }
+#workspaceTitle {
+  grid-column: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  unicode-bidi: plaintext;
+}
+html[dir="rtl"] #workspaceTitle { direction: rtl; text-align: right; }
+html[dir="ltr"] #workspaceTitle { direction: ltr; text-align: left; }
+.settings-header .close-button {
+  grid-column: 2;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  margin: 0 !important;
+  place-self: center end;
+}
+
+.workspace-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: stretch;
+  min-height: var(--drawer-tabs-height);
+  padding: 8px 10px 10px;
+  direction: ltr;
+  overflow: hidden;
+}
+.workspace-tab,
+.workspace-dock-button {
+  display: grid;
+  grid-template-rows: 20px minmax(18px, auto);
+  grid-template-columns: minmax(0, 1fr);
+  place-items: center;
+  align-content: center;
+  gap: 5px;
+  min-width: 0;
+  min-height: 50px;
+  direction: ltr;
+}
+.workspace-tab > .app-icon,
+.workspace-dock-button > .app-icon { grid-row: 1; grid-column: 1; }
+.workspace-label {
+  grid-row: 2;
+  grid-column: 1;
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.35;
+  unicode-bidi: plaintext;
+}
+html[dir="rtl"] .workspace-label { direction: rtl; }
+html[dir="ltr"] .workspace-label { direction: ltr; }
+
+.settings-scroll {
+  display: block !important;
+  min-height: 0;
+  height: auto !important;
+  max-height: none !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scroll-behavior: smooth;
+  scroll-padding-block: 18px var(--drawer-scroll-safe-end);
+  padding: 14px 14px var(--drawer-scroll-safe-end);
+}
+
+/* The chevron owns a real grid cell; it never shares space with a title. */
+.settings-section summary {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 28px;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 58px;
+  padding: 0 14px;
+  direction: ltr;
+}
+.settings-section summary::-webkit-details-marker { display: none; }
+.settings-section summary .summary-icon { grid-row: 1; grid-column: 1; margin: 0; }
+.settings-section summary > span:not(.summary-icon) {
+  grid-row: 1;
+  grid-column: 2;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  unicode-bidi: plaintext;
+}
+.settings-section summary::after {
+  content: "";
+  grid-row: 1;
+  grid-column: 3;
+  justify-self: center;
+  width: 9px;
+  height: 9px;
+  margin: 0;
+  border: solid var(--muted);
+  border-width: 0 2px 2px 0;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
+  transform: rotate(45deg) translateY(-2px);
+  transform-origin: 50% 50%;
+  transition: transform .18s ease;
+}
+.settings-section[open] summary::after { transform: rotate(225deg) translateY(-2px); }
+html[dir="rtl"] .settings-section summary {
+  grid-template-columns: 28px minmax(0, 1fr) 30px;
+  direction: rtl;
+}
+html[dir="rtl"] .settings-section summary .summary-icon { grid-column: 3; }
+html[dir="rtl"] .settings-section summary > span:not(.summary-icon) { grid-column: 2; direction: rtl; text-align: right; }
+html[dir="rtl"] .settings-section summary::after { grid-column: 1; }
+html[dir="ltr"] .settings-section summary > span:not(.summary-icon) { direction: ltr; text-align: left; }
+
+.setting-body { overflow: visible; }
+.setting-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 14px;
+  min-height: 56px;
+  padding-block: 5px;
+  direction: ltr;
+}
+.setting-line > span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  line-height: 1.65;
+  unicode-bidi: plaintext;
+}
+html[dir="rtl"] .setting-line > span:first-child { direction: rtl; text-align: right; }
+html[dir="ltr"] .setting-line > span:first-child { direction: ltr; text-align: left; }
+.setting-line > select,
+.setting-line > .toggle-control,
+.setting-line > input:not([type="checkbox"]),
+.setting-line > output { grid-column: 2; justify-self: end; }
+
+/* Android-safe switch: visual track is a real sibling, never an input pseudo-element. */
+.toggle-control {
+  position: relative;
+  direction: ltr;
+  display: inline-grid;
+  place-items: center;
+  width: var(--toggle-width);
+  height: var(--toggle-height);
+  min-width: var(--toggle-width);
+  min-height: var(--toggle-height);
+  margin: 0;
+  cursor: pointer;
+  isolation: isolate;
+}
+.toggle-control > input[type="checkbox"] {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+  cursor: pointer;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+}
+.toggle-visual {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius: 999px;
+  background: linear-gradient(145deg, #20243a, #111526);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--panel-2) 92%, #000 8%), color-mix(in srgb, var(--panel) 96%, #000 4%));
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.34), inset 0 1px 0 var(--glass-highlight), 0 3px 8px rgba(0,0,0,.12);
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.toggle-visual::after {
+  content: "";
+  position: absolute;
+  top: var(--toggle-pad);
+  left: var(--toggle-pad);
+  width: calc(var(--toggle-height) - (var(--toggle-pad) * 2));
+  height: calc(var(--toggle-height) - (var(--toggle-pad) * 2));
+  border: 1px solid rgba(255,255,255,.62);
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffffff, #d8e0ec);
+  box-shadow: 0 3px 8px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.9);
+  transform: translateX(0);
+  transition: transform .18s cubic-bezier(.2,.8,.2,1), background .18s ease;
+}
+.toggle-control > input[type="checkbox"]:checked + .toggle-visual {
+  border-color: color-mix(in srgb, var(--accent) 56%, transparent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 7px 17px var(--skin-shadow), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.toggle-control > input[type="checkbox"]:checked + .toggle-visual::after {
+  background: #fff;
+  transform: translateX(calc(var(--toggle-width) - var(--toggle-height)));
+}
+.toggle-control > input[type="checkbox"]:focus-visible + .toggle-visual { outline: 2px solid var(--accent); outline-offset: 3px; }
+.toggle-control > input[type="checkbox"]:disabled + .toggle-visual { opacity: .46; cursor: not-allowed; }
+
+/* Select chevrons are CSS geometry and reserve their own padding. */
+.setting-line select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: min(48vw, 218px);
+  min-width: 138px;
+  max-width: 100%;
+  min-height: 42px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%), linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+  background-size: 7px 7px, 7px 7px;
+  background-repeat: no-repeat;
+  unicode-bidi: plaintext;
+}
+html[dir="rtl"] .setting-line select {
+  direction: rtl;
+  text-align: right;
+  background-position: 17px 50%, 25px 50%;
+  padding-inline-start: 46px;
+  padding-inline-end: 13px;
+}
+html[dir="ltr"] .setting-line select {
+  direction: ltr;
+  text-align: left;
+  background-position: calc(100% - 17px) 50%, calc(100% - 25px) 50%;
+  padding-inline-end: 46px;
+  padding-inline-start: 13px;
+}
+
+/* Never let a dock, browser safe area or a last card hide the final controls. */
+.settings-section:last-of-type { margin-bottom: 0; }
+@media (max-width: 390px) {
+  :root { --drawer-height-mobile: min(93dvh, 820px); --drawer-scroll-safe-end: max(144px, calc(env(safe-area-inset-bottom) + 116px)); }
+  .settings-header { padding-inline: 13px; }
+  .workspace-tabs { padding-inline: 7px; gap: 4px; }
+  .workspace-tab { font-size: 8px; }
+  .settings-scroll { padding-inline: 10px; }
+  .setting-line { column-gap: 10px; }
+  .setting-line select { min-width: 126px; width: min(47vw, 184px); }
+}
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+  .settings-drawer { height: 100dvh; grid-template-rows: var(--drawer-header-height) var(--drawer-tabs-height) minmax(0,1fr); }
+  .settings-scroll { padding-bottom: 32px; }
+}
+:root.reduce-motion .settings-scroll { scroll-behavior: auto; }
+
+/* Toolbar history actions use editable inline SVGs, avoiding CSS-mask failures in Android Chrome. */
+#undoBtn .toolbar-icon,
+#redoBtn .toolbar-icon { display: inline-grid; place-items: center; width: 22px; height: 22px; }
+#undoBtn .toolbar-icon svg,
+#redoBtn .toolbar-icon svg { display: block; width: 22px; height: 22px; fill: none; stroke: currentColor; }
+#undoBtn:disabled,
+#redoBtn:disabled { opacity: .58; }

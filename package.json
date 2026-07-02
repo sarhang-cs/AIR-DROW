@@ -1,0 +1,42 @@
+{
+  "name": "air-drow",
+  "version": "5.0.6",
+  "private": true,
+  "description": "AIR-DROW v5.0.6: camera-frame-first fully local hand-engine startup reliability fix for Android.",
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "0.10.35"
+  },
+  "scripts": {
+    "icons:sync": "node scripts/sync-toolbar-icons.mjs",
+    "icons:verify": "node scripts/verify-toolbar-icon-bundle.mjs",
+    "preflight": "node scripts/preflight.mjs",
+    "check": "node scripts/validate-inline.mjs",
+    "build:static": "node scripts/build-selfhosted-mediapipe.mjs",
+    "build": "npm run icons:sync && npm run icons:verify && npm run updates:verify && npm run preflight && npm run completion:verify && npm run clean:verify && npm run visual:verify && npm run ui:verify && npm run check && npm run shape:verify && npm run workspace:verify && npm run loading:verify && npm run performance:verify && npm run calibration:verify && npm run hand:verify && npm run export:verify && npm run polish:verify && npm run final:verify && npm run model:verify && npm run boot:verify && npm run drawer:verify && npm run camera-ui:verify && npm run hand-start:verify && npm run verify:release && npm run hand-loader:verify && npm run build:static",
+    "updates:verify": "node scripts/verify-update-runtime.mjs",
+    "ui:verify": "node scripts/verify-ui-contract.mjs",
+    "shape:verify": "node scripts/verify-smart-shape.mjs",
+    "workspace:verify": "node scripts/verify-workspace-navigation.mjs",
+    "loading:verify": "node scripts/verify-loading-experience.mjs",
+    "performance:verify": "node scripts/verify-performance-guard.mjs",
+    "calibration:verify": "node scripts/verify-hand-calibration.mjs",
+    "polish:verify": "node scripts/verify-polish-reliability.mjs",
+    "final:verify": "node scripts/verify-final-stability.mjs",
+    "clean:verify": "node scripts/verify-code-cleanup.mjs",
+    "visual:verify": "node scripts/verify-premium-visual-system.mjs",
+    "hand:verify": "node scripts/verify-hand-tracking-runtime.mjs",
+    "export:verify": "node scripts/verify-export-save-onboarding.mjs",
+    "completion:verify": "node scripts/verify-final-completion-pass.mjs",
+    "verify:release": "node scripts/verify-final-release.mjs",
+    "model:verify": "node scripts/verify-local-hand-model.mjs",
+    "boot:verify": "node scripts/verify-boot-reliability.mjs",
+    "drawer:verify": "node scripts/verify-drawer-layout.mjs",
+    "camera-ui:verify": "node scripts/verify-hand-runtime-loader-fix.mjs",
+    "hand-start:verify": "node scripts/verify-hand-runtime-loader-fix.mjs",
+    "hand-loader:verify": "node scripts/verify-hand-runtime-loader-fix.mjs"
+  }
+}

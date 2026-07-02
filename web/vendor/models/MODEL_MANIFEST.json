@@ -1,0 +1,14 @@
+{
+  "format": "MediaPipe Task Model Bundle",
+  "runtime": "@mediapipe/tasks-vision@0.10.35",
+  "bundle": "hand_landmarker.task",
+  "bytes": 7820242,
+  "sha256": "168ca8a3f698e93e2caba5c5e8234c3443e56b2ea3ebacec205e4df33bc899da",
+  "contents": [
+    "hand_detector.tflite",
+    "hand_landmarks_detector.tflite"
+  ],
+  "delivery": "Bundled in AIR-DROW source and copied to public/vendor/models during static build.",
+  "networkPolicy": "No hand-model download is allowed at build time or application runtime.",
+  "sourceComponents": "Built from local MediaPipe Hands package components and verified as a local task ZIP bundle."
+}
