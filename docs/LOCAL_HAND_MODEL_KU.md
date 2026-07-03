@@ -28,7 +28,7 @@ npm run model:sync
 لە کاتی بەکارهێنانی ئەپەکە، مۆدێل بە شێوەی local لەم شوێنەوە دەخوێندرێتەوە:
 
 ```text
-/vendor/models/hand_landmarker.task?model=v6-fbc2a300
+/vendor/models/hand_landmarker.task?model=v620-hand-drawing
 ```
 
 واتە تەنها کاتی build پەیوەندی ئینتەرنێت پێویستە؛ لە ناو browser ـدا مۆدێلەکە دووبارە لە دەرەوە دابەزێنرێت.

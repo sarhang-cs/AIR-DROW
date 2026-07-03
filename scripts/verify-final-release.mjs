@@ -27,7 +27,7 @@ for (const file of [
   "termux/replace-with-final-release.sh", "termux/verify-final-release.sh",
   "web/vendor/models/README.md", "web/vendor/models/MODEL_MANIFEST.json",
   "web/vendor/models/hand_landmarker.task", "scripts/verify-local-hand-model.mjs",
-  "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-hand-sync-performance.mjs", "scripts/verify-transparent-status-hud.mjs", "scripts/verify-fist-guide-continuity.mjs"
+  "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-hand-sync-performance.mjs", "scripts/verify-phase3-hand-drawing.mjs", "scripts/verify-transparent-status-hud.mjs", "scripts/verify-fist-guide-continuity.mjs"
 ]) {
   if (!existsSync(resolve(root, file))) throw new Error(`Required final-release file is missing: ${file}`);
 }

@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v610-phase2-premium-ui";
+const BUILD_ID = "air-drow-v620-phase3-hand-drawing";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [

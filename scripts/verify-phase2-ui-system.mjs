@@ -13,7 +13,7 @@ const worker = read("web/sw.js");
 const i18n = read("web/assets/js/i18n/translations.js");
 
 if (!existsSync(resolve(root, "web/assets/css/phase2-ui.css"))) throw new Error("Phase 2 UI stylesheet is missing.");
-if (release.phase !== 2 || release.stage !== "premium-ui-mobile-rtl") throw new Error("Phase 2 release metadata is incomplete.");
+if (release.phase < 2) throw new Error("Phase 2 UI baseline is missing from this release.");
 for (const marker of [
   'id="themeChoices"', 'data-theme-mode="dark"', 'data-theme-mode="light"',
   'data-skin="violet"', 'data-skin="pink"', 'data-skin="sapphire"',

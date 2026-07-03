@@ -31,9 +31,9 @@ for (const marker of [
 ]) {
   if (!bootstrap.includes(marker)) throw new Error(`GPU acceleration fallback marker missing: ${marker}`);
 }
-for (const marker of ["catch up", "alpha = clamp(baseAlpha + movementBoost, .22, .90)"]) {
+for (const marker of ["catch up", "alpha = clamp(baseAlpha + movementBoost, .24, .92)"]) {
   if (!tracking.includes(marker)) throw new Error(`Low-latency stabilizer marker missing: ${marker}`);
 }
-if (!runtime.includes("model=v6-fbc2a300")) throw new Error("Hand model cache key was not rotated.");
+if (!runtime.includes("model=v620-hand-drawing")) throw new Error("Hand model cache key was not rotated.");
 if (!worker.includes(release.buildId)) throw new Error("Service-worker cache namespace was not rotated.");
 console.log("AIR-DROW hand sync and GPU performance contract passed.");

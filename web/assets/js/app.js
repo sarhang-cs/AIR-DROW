@@ -17,7 +17,7 @@ import { HAND_CALIBRATION_DEFAULT, createHandCalibration, mapHandPoint, normaliz
 import { createReliabilityCenter } from "./core/reliability-center.js";
 import { createBackupManager } from "./core/backup-manager.js";
 import { createFinalStability } from "./core/final-stability.js";
-import { createHandStabilizer, createPinchGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry } from "./features/hand-tracking-engine.js";
+import { createHandStabilizer, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
 import { createLocalHandLandmarker, primeLocalHandAssets } from "./features/hand-engine-bootstrap.js";
 import { APP_RELEASE as AIRDROW_RELEASE, HAND_MODEL, LEGACY_STORAGE_KEY, MEDIAPIPE_MODULE_URLS, MEDIAPIPE_WASM_URLS, OLD_MIRROR_KEY, PROFILE_RULES, QUICK_START_KEY, STORAGE_KEY, createDefaultSettings } from "./config/runtime.js";
 import { normalizeSkin } from "./config/appearance.js";
@@ -116,6 +116,9 @@ const state = {
   handGeometry: null,
   handStabilizer: createHandStabilizer(),
   pinchGate: createPinchGate(),
+  handContinuity: createStrokeContinuityGate(),
+  handPosture: { closedFist: false, foldedFingers: 0, tipReach: Infinity },
+  handContinuityState: "idle",
   handRejectedFrames: 0,
   handActionStartedAt: 0,
   effectiveTargetFps: 0,
@@ -880,16 +883,21 @@ function addStrokePoint(point, source) {
   const previous = state.currentStroke.points.at(-1) || raw;
   const smooth = Number(state.settings.smoothing) / 100;
   const distance = Math.hypot(raw.x - previous.x, raw.y - previous.y);
+  // Hand points are already filtered by the velocity-aware stabilizer. Applying
+  // the full UI smoothing value a second time caused visible lag, so hand ink
+  // uses a smaller adaptive follow filter while pointer drawing is unchanged.
+  const handSmooth = Math.max(.08, Math.min(.30, smooth * .48));
+  const follow = source === "hand" ? (1 - handSmooth) : (1 - smooth);
   // In hand mode, refuse an implausibly large landmark leap before it enters
   // the drawn history. This is separate from the detector-side jump gate.
   if (source === "hand" && distance > .16) return;
   const next = {
-    x: previous.x + (raw.x - previous.x) * (1 - smooth),
-    y: previous.y + (raw.y - previous.y) * (1 - smooth),
+    x: previous.x + (raw.x - previous.x) * follow,
+    y: previous.y + (raw.y - previous.y) * follow,
     pressure: raw.pressure,
     time: raw.time
   };
-  const minDistance = source === "hand" ? .003 : .001;
+  const minDistance = source === "hand" ? .002 : .001;
   if (Math.hypot(next.x - previous.x, next.y - previous.y) < minDistance) return;
   state.currentStroke.points.push(next);
   render();
@@ -932,6 +940,13 @@ function finishStroke() {
   }
   queueSave();
   render();
+}
+
+function finishHandStroke() {
+  state.handDrawing = false;
+  state.handContinuity.reset();
+  state.handContinuityState = "idle";
+  finishStroke();
 }
 
 function beginGesture() {
@@ -1406,6 +1421,9 @@ function resetHandGestureState() {
   state.handRejectedFrames = 0;
   state.handStabilizer.reset();
   state.pinchGate.reset();
+  state.handContinuity.reset();
+  state.handPosture = { closedFist: false, foldedFingers: 0, tipReach: Infinity };
+  state.handContinuityState = "idle";
   state.handActionStartedAt = 0;
   state.lastVideoTime = -1;
   state.inferenceFrames = 0;
@@ -1645,7 +1663,7 @@ function handleHandRuntimeFailure(error) {
 function stopHandLoop() {
   cancelAnimationFrame(state.handLoop);
   state.handLoop = 0;
-  if (state.handDrawing) finishStroke();
+  if (state.handDrawing) finishHandStroke();
   resetHandGestureState();
 }
 
@@ -1659,7 +1677,7 @@ function clearHandCanvas() {
 // landmarks but intentionally fails open-finger reach tests.
 const HAND_GUIDE_MIN_SCORE = .34;
 const HAND_GUIDE_MIN_SCALE = .020;
-const HAND_GUIDE_HOLD_MS = 260;
+const HAND_GUIDE_HOLD_MS = 560;
 
 function cacheHandGuide(points, geometry, now) {
   if (!Array.isArray(points) || points.length < 21) return false;
@@ -1704,6 +1722,35 @@ function processGestureShortcut(landmarks, pinchRatio, now) {
   if (action === "fist") { setMode(state.mode === "hand-eraser" ? "hand" : "eraser"); toast(t("shortcutEraser", "Eraser")); }
 }
 
+function holdOrFinishHandStroke({ now, rule, landmarksPresent, jumped = false, point = null, fist = false } = {}) {
+  if (!state.handDrawing) return { active: false, paused: false, expired: false };
+  const continuity = state.handContinuity.observe({
+    now,
+    usable: false,
+    landmarksPresent,
+    jumped,
+    point,
+    fist,
+    rule
+  });
+  if (continuity.paused) {
+    state.handContinuityState = fist ? "fist-hold" : "tracking-hold";
+    const heldPoint = continuity.point || state.handPoint;
+    if (heldPoint) setHandPoint(heldPoint, "hold");
+    const label = fist
+      ? t("gestureFistHold", "Closed fist detected — stroke held safely")
+      : t("gestureContinuing", "Tracking briefly lost — stroke held");
+    setGestureStatus("hold", label);
+    setText(ui.handStatus, label);
+    return continuity;
+  }
+  if (continuity.expired) {
+    state.handContinuityState = "finished";
+    finishHandStroke();
+  }
+  return continuity;
+}
+
 function handFrame() {
   if (!["hand", "hand-eraser"].includes(state.mode) || !state.stream || !state.landmarker) return;
   state.handLoop = requestAnimationFrame(handFrame);
@@ -1721,16 +1768,17 @@ function handFrame() {
     const landmarks = result?.landmarks?.[0];
     clearHandCanvas();
 
+    const rule = currentRule();
     if (!landmarks) {
       drawHeldHandGuide(now);
       state.handMissingFrames += 1;
-      state.pinchGate.observe({ usable: false, rule: currentRule() });
+      state.pinchGate.observe({ usable: false, rule });
       state.pinchOnFrames = 0;
       state.pinchOffFrames = 0;
-      setHandPoint(null);
+      const continuity = holdOrFinishHandStroke({ now, rule, landmarksPresent: false });
+      if (!continuity?.paused) setHandPoint(null);
       updateTrackingHealth({ score: 0, state: "searching", label: t("trackingSearching", "Looking for a hand…"), usable: false });
-      if (state.handDrawing && state.handMissingFrames >= currentRule().lostFrames) finishStroke();
-      if (state.handMissingFrames >= currentRule().lostFrames) {
+      if (!continuity?.paused && state.handMissingFrames >= rule.lostFrames) {
         setGestureStatus("lost", t("gestureLost", "Hand not found"));
         setText(ui.handStatus, t("handNotFound", "Hand not found"));
       }
@@ -1741,8 +1789,8 @@ function handFrame() {
       return;
     }
 
-    const rule = currentRule();
     const geometry = readHandGeometry(landmarks, result);
+    const posture = readHandPosture(landmarks, geometry);
     const guideDetected = cacheHandGuide(landmarks, geometry, now);
     if (state.settings.showHandGuide && guideDetected) drawHandSkeleton(landmarks);
     const candidate = handGeometryIsUsable(geometry, rule);
@@ -1753,6 +1801,7 @@ function handFrame() {
     state.handPalmScale = geometry?.scale || 0;
     state.handStableFrames = state.handStabilizer.snapshot().stableFrames;
     state.handGeometry = geometry;
+    state.handPosture = posture;
 
     const stablePosition = stabilised.stable;
     const assessment = trackingAssessment(geometry, stablePosition, stabilised.jumped);
@@ -1764,10 +1813,19 @@ function handFrame() {
       state.pinchGate.observe({ usable: false, rule });
       state.pinchOnFrames = 0;
       state.pinchOffFrames = 0;
-      if (state.handDrawing) finishStroke();
-      setHandPoint(null);
-      setGestureStatus("blocked", assessment.label);
-      setText(ui.handStatus, assessment.label);
+      const continuity = holdOrFinishHandStroke({
+        now,
+        rule,
+        landmarksPresent: true,
+        jumped: stabilised.jumped,
+        point: stabilised.point || state.handPoint,
+        fist: posture.closedFist
+      });
+      if (!continuity?.paused) {
+        setHandPoint(null);
+        setGestureStatus("blocked", assessment.label);
+        setText(ui.handStatus, assessment.label);
+      }
       updateInferenceFps(now);
       setText(ui.fpsStatus, state.inferenceFps || "—");
       updateLiveHud();
@@ -1826,8 +1884,20 @@ function handFrame() {
     }
 
     if (!assessment.usable && state.handDrawing) {
-      state.handDrawing = false;
-      finishStroke();
+      const continuity = holdOrFinishHandStroke({
+        now,
+        rule,
+        landmarksPresent: true,
+        jumped: stabilised.jumped,
+        point: state.handPoint,
+        fist: posture.closedFist
+      });
+      if (continuity.paused) {
+        updateInferenceFps(now);
+        setText(ui.fpsStatus, state.inferenceFps || "—");
+        updateLiveHud();
+        return;
+      }
       setGestureStatus("blocked", t("trackingBlocked", "Tracking is unstable — drawing paused"));
       setText(ui.handStatus, t("trackingBlocked", "Tracking is unstable — drawing paused"));
     }
@@ -1852,11 +1922,16 @@ function handFrame() {
       setHandPoint(state.handPoint, state.handDrawing ? "drawing" : (state.pinchOnFrames ? "hold" : "ready"));
       if (!state.handDrawing && pinch.started) {
         state.handDrawing = true;
+        state.handContinuity.begin(now, state.handPoint);
+        state.handContinuityState = "drawing";
         startStroke(state.handPoint, "hand");
       }
       if (state.handDrawing && releaseConfirmed) {
-        state.handDrawing = false;
-        finishStroke();
+        finishHandStroke();
+      }
+      if (state.handDrawing) {
+        state.handContinuity.observe({ now, usable: true, landmarksPresent: true, point: state.handPoint, rule });
+        state.handContinuityState = "drawing";
       }
       if (state.handDrawing) {
         addStrokePoint(state.handPoint, "hand");

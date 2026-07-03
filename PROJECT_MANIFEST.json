@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "6.1.0",
-  "buildId": "air-drow-v610-phase2-premium-ui",
-  "release": "Phase 2 — Premium UI, RTL and Mobile Layout",
+  "version": "6.2.0",
+  "buildId": "air-drow-v620-phase3-hand-drawing",
+  "release": "Phase 3 — Hand Tracking and Drawing Engine",
   "architecture": {
     "styles": [
       "web/assets/css/app.css",
@@ -27,9 +27,9 @@
     "Phase 5: final QA, release package, README, screenshots and Termux deployment procedure."
   ],
   "privacy": "Drawing data stays local unless the creator explicitly requests an export, share or AI generation.",
-  "stage": "phase-2-premium-ui-mobile-rtl",
+  "stage": "phase-3-hand-drawing-engine",
   "releaseGate": "npm run vercel:build confirms the local model, verifies UI source contracts, builds the self-hosted MediaPipe runtime and verifies generated deployment assets.",
   "notes": [
-    "v6.1.0 Phase 2 provides a clean premium UI system with full themes, explicit dark/light modes and a safe mobile workspace drawer."
+    "v6.2.0 Phase 3 adds velocity-aware hand tracking, lower-latency drawing, pinch stability and a bounded continuity guard for closed-fist or short occlusion transitions."
   ]
 }

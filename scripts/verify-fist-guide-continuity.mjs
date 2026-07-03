@@ -10,7 +10,7 @@ for (const marker of [
   "open-hand geometry gate",
   "HAND_GUIDE_MIN_SCORE = .34",
   "HAND_GUIDE_MIN_SCALE = .020",
-  "HAND_GUIDE_HOLD_MS = 260",
+  "HAND_GUIDE_HOLD_MS = 560",
   "function cacheHandGuide",
   "function drawHeldHandGuide",
   "state.lastGuideLandmarks = points.map",

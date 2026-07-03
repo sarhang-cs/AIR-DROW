@@ -1,27 +1,26 @@
 {
-  "version": "6.1.0",
-  "buildId": "air-drow-v610-phase2-premium-ui",
+  "version": "6.2.0",
+  "buildId": "air-drow-v620-phase3-hand-drawing",
   "releasedAt": "2026-07-03T00:00:00Z",
   "channel": "phase",
   "updatePolicy": "user-controlled-save-before-apply",
   "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Phase 2 release: mobile-first premium workspace layout, explicit dark/light mode controls, six full visual skins, durable RTL/LTR setting controls, safe-area drawer geometry and transparent live status overlays.",
+  "summary": "Phase 3 release: velocity-aware fingertip tracking, lower-latency hand ink, guarded pinch hysteresis, bounded closed-fist and occlusion stroke continuity, retained hand guide, and reliable camera-hand eraser behavior.",
   "features": [
-    "Top drawing controls remain reachable on narrow Android screens through a touch-safe horizontal toolbar rather than clipped or miniature controls.",
-    "The Settings workspace is a structured mobile bottom sheet and a contained desktop side workspace, with safe-area spacing and scroll-safe final controls.",
-    "Dark and Light mode can be selected explicitly in Settings; the top toolbar control remains a fast toggle.",
-    "Six complete premium interface skins remain local, reusable and visually distinct: Violet, Pink, Sapphire, Obsidian, Silver and Gold.",
-    "RTL/LTR-safe labels, select spacing, toggles, summary arrows and fixed header geometry are preserved without mirroring the AIR-DROW mark.",
-    "FPS, network and camera labels remain text-only overlays with no background card, blur or border."
+    "The drawing point uses a velocity-aware stabilizer with bounded prediction so fast intentional fingertip motion tracks more closely without accepting detector jumps.",
+    "Hand ink no longer receives the full UI smoothing twice; the second pass is reduced specifically for camera drawing to remove the laggy rubber-band effect.",
+    "Pinch drawing keeps a short bounded continuation through a closed fist, one-frame landmark loss, or temporary ambiguity; no new ink is added until tracking is safe again.",
+    "The closed-fist guide hold is extended to 560 ms, preserving visible hand feedback across normal finger occlusion without freezing after the hand leaves frame.",
+    "A tracked jump ends the active stroke immediately, while a camera-hand eraser remains pinch-gated and keeps its target aligned to calibrated hand coordinates."
   ],
-  "assetRevision": "610",
-  "phase": 2,
-  "stage": "premium-ui-mobile-rtl",
+  "assetRevision": "620",
+  "phase": 3,
+  "stage": "hand-drawing-engine",
   "buildPolicy": {
     "sourceModel": "web/vendor/models/hand_landmarker.task",
     "fallback": "npm run model:sync remains recovery-only; production clients use the verified local asset.",
-    "runtimeNetwork": "no remote MediaPipe module or model is loaded by the deployed browser",
+    "runtimeNetwork": "no remote MediaPipe module or model is loaded by the deployed browser; Phase 3 tracking and continuity run locally.",
     "install": "npm ci --no-audit --no-fund",
     "deploy": "npm run vercel:build"
   }

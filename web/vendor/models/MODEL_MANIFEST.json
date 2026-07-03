@@ -9,6 +9,6 @@
   "sha256": "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1",
   "validation": "Exact byte length and SHA-256. No ZIP-header or archive-entry assumptions are made.",
   "delivery": "Final release packages include this exact verified task asset. npm run model:sync is a controlled build-time fallback only when the source file is absent.",
-  "networkPolicy": "No runtime hand-model download is allowed. The deployed app only reads /vendor/models/hand_landmarker.task?model=v6-fbc2a300.",
+  "networkPolicy": "No runtime hand-model download is allowed. The deployed app only reads /vendor/models/hand_landmarker.task?model=v620-hand-drawing.",
   "integrityPolicy": "Build fails unless the exact official task binary is present."
 }

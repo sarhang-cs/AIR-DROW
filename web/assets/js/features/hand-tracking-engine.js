@@ -1,9 +1,11 @@
 /**
- * Deterministic hand-tracking primitives.
+ * AIR-DROW Phase 3 hand-tracking primitives.
  *
- * The MediaPipe task returns raw landmarks. This module keeps the acceptance,
- * stabilization and pinch state deterministic so the application shell can
- * remain focused on UI and drawing behavior.
+ * The browser receives raw MediaPipe landmarks. This module makes the
+ * detector-to-canvas path deterministic: it validates hand geometry,
+ * suppresses impossible jumps, uses a velocity-aware low-pass/prediction
+ * filter, applies pinch hysteresis, and safely holds an active stroke across
+ * short closed-fist / occlusion interruptions.
  */
 const clamp = (value, min, max) => Math.max(min, Math.min(max, Number(value) || 0));
 
@@ -49,6 +51,22 @@ export function readHandGeometry(landmarks, result) {
 }
 
 /**
+ * Classifies only the safe visual state needed by the continuity guard. It is
+ * deliberately not used to start drawing: a fist can hold a current stroke,
+ * but can never create a new one.
+ */
+export function readHandPosture(landmarks = [], geometry = null) {
+  if (!Array.isArray(landmarks) || landmarks.length < 21) return { closedFist: false, foldedFingers: 0, tipReach: Infinity };
+  const scale = Math.max(.025, Number(geometry?.scale) || normalizedPinch(landmarks).scale);
+  const wrist = landmarks[0];
+  const tips = [8, 12, 16, 20].map(index => landmarkDistance(landmarks[index], wrist) / scale);
+  const foldedFingers = tips.filter(distance => distance < 1.38).length;
+  const tipReach = tips.reduce((sum, distance) => sum + distance, 0) / Math.max(1, tips.length);
+  const closedFist = foldedFingers >= 3 && tipReach < 1.55 && Number(geometry?.fingerSpan ?? 0) < 1.58;
+  return { closedFist, foldedFingers, tipReach };
+}
+
+/**
  * Rejects ambiguous landmark sets before they can paint. The checks are broad
  * enough for normal hand rotation while rejecting tiny, collapsed and
  * face-like false positives that otherwise look like a pinch.
@@ -68,48 +86,78 @@ export function handGeometryIsUsable(geometry, rule) {
 }
 
 /**
- * Adaptive low-pass filter. Slow placement is heavily stabilized, while fast
- * intentional movement receives a larger alpha to avoid visible drawing lag.
+ * Velocity-aware adaptive low-pass filter.
+ *
+ * Slow placement is heavily damped to remove camera jitter. Intentional fast
+ * movement receives higher alpha and a bounded one-frame prediction so the
+ * ink tracks the index fingertip without the old laggy "rubber-band" feel.
  */
 export function createHandStabilizer() {
   let filtered = null;
   let previousRaw = null;
+  let velocity = { x: 0, y: 0 };
   let stableFrames = 0;
 
   function reset() {
     filtered = null;
     previousRaw = null;
+    velocity = { x: 0, y: 0 };
     stableFrames = 0;
   }
 
   function observe(raw, { scale = .05, rule, eligible = true } = {}) {
     if (!raw || !rule || !eligible) {
       stableFrames = 0;
-      return { point: filtered, rawJump: 0, jumped: false, stable: false, accepted: false, alpha: 0 };
+      return { point: filtered, predicted: filtered, rawJump: 0, jumped: false, stable: false, accepted: false, alpha: 0, velocity };
     }
 
+    const previousTime = Number(previousRaw?.time);
+    const sampleTime = Number(raw.time);
+    const dtMs = Number.isFinite(sampleTime) && Number.isFinite(previousTime)
+      ? clamp(sampleTime - previousTime, 12, 110)
+      : 33;
+    const dt = dtMs / 1000;
     const rawJump = previousRaw ? landmarkDistance(raw, previousRaw) / Math.max(.035, scale) : 0;
-    previousRaw = raw;
+    previousRaw = { ...raw };
     const jumped = rawJump > rule.maxJump;
     if (jumped) {
       stableFrames = 0;
-      return { point: filtered, rawJump, jumped: true, stable: false, accepted: false, alpha: 0 };
+      return { point: filtered, predicted: filtered, rawJump, jumped: true, stable: false, accepted: false, alpha: 0, velocity };
     }
 
-    // At low inference rates a cautious filter makes the visible guide trail
-    // behind the real hand. Preserve noise protection when still, then catch up
-    // quickly as deliberate motion grows.
-    const baseAlpha = clamp(1 - rule.smooth, .22, .74);
-    const movementBoost = clamp((rawJump - .018) * 1.85, 0, .30);
-    const alpha = clamp(baseAlpha + movementBoost, .22, .90);
-    filtered = filtered
-      ? { ...raw, x: filtered.x + (raw.x - filtered.x) * alpha, y: filtered.y + (raw.y - filtered.y) * alpha }
-      : { ...raw };
+    // At low inference rates, a cautious filter trails the hand. Preserve
+    // noise protection while still, then catch up strongly as the user moves.
+    const baseAlpha = clamp(1 - rule.smooth, .24, .76);
+    const movementBoost = clamp((rawJump - .016) * 2.25, 0, .34);
+    const alpha = clamp(baseAlpha + movementBoost, .24, .92);
+    const previousFiltered = filtered || raw;
+    filtered = {
+      ...raw,
+      x: previousFiltered.x + (raw.x - previousFiltered.x) * alpha,
+      y: previousFiltered.y + (raw.y - previousFiltered.y) * alpha
+    };
+
+    const instantVelocity = {
+      x: (filtered.x - previousFiltered.x) / dt,
+      y: (filtered.y - previousFiltered.y) / dt
+    };
+    const velocityBlend = clamp(.32 + movementBoost * .8, .32, .62);
+    velocity = {
+      x: velocity.x + (instantVelocity.x - velocity.x) * velocityBlend,
+      y: velocity.y + (instantVelocity.y - velocity.y) * velocityBlend
+    };
+
+    const lookAheadSeconds = clamp(.010 + rawJump * .020, .010, .024);
+    const maxLead = Math.max(.0028, scale * .18);
+    const leadX = clamp(velocity.x * lookAheadSeconds, -maxLead, maxLead);
+    const leadY = clamp(velocity.y * lookAheadSeconds, -maxLead, maxLead);
+    const predicted = { ...filtered, x: filtered.x + leadX, y: filtered.y + leadY, time: raw.time };
+
     stableFrames += 1;
-    return { point: filtered, rawJump, jumped: false, stable: stableFrames >= rule.stableFrames, accepted: true, alpha };
+    return { point: predicted, predicted, filtered, rawJump, jumped: false, stable: stableFrames >= rule.stableFrames, accepted: true, alpha, velocity };
   }
 
-  return { reset, observe, snapshot: () => ({ filtered, previousRaw, stableFrames }) };
+  return { reset, observe, snapshot: () => ({ filtered, previousRaw, velocity, stableFrames }) };
 }
 
 /**
@@ -156,6 +204,57 @@ export function createPinchGate() {
   }
 
   return { reset, observe, snapshot: () => ({ active, onFrames, offFrames }) };
+}
+
+/**
+ * Holds an already-started stroke through a short detector interruption. A
+ * closed fist receives a slightly longer visual hold, but no samples are
+ * added while tracking is ambiguous. This prevents a fist or one dropped
+ * frame from making live ink vanish, without allowing a stale point to paint.
+ */
+export function createStrokeContinuityGate() {
+  let active = false;
+  let lastUsableAt = 0;
+  let lastPoint = null;
+
+  function reset() {
+    active = false;
+    lastUsableAt = 0;
+    lastPoint = null;
+  }
+
+  function begin(now = 0, point = null) {
+    active = true;
+    lastUsableAt = Number(now) || 0;
+    lastPoint = point ? { ...point } : null;
+  }
+
+  function observe({ now = 0, usable = false, landmarksPresent = false, jumped = false, point = null, fist = false, rule } = {}) {
+    if (!active) return { active: false, paused: false, expired: false, resumed: false, point: lastPoint, elapsed: 0 };
+    const timestamp = Number(now) || 0;
+    if (usable && point && !jumped) {
+      const resumed = lastUsableAt > 0 && timestamp - lastUsableAt > 16;
+      lastUsableAt = timestamp;
+      lastPoint = { ...point };
+      return { active: true, paused: false, expired: false, resumed, point: lastPoint, elapsed: 0 };
+    }
+    if (jumped) {
+      const pointAtExit = lastPoint;
+      reset();
+      return { active: false, paused: false, expired: true, reason: "jump", point: pointAtExit, elapsed: Infinity };
+    }
+
+    const base = Math.max(220, Number(rule?.lostFrames || 4) * 60);
+    const holdMs = fist ? Math.max(560, base * 2) : (landmarksPresent ? Math.max(360, base * 1.45) : Math.max(260, base));
+    const elapsed = Math.max(0, timestamp - lastUsableAt);
+    if (elapsed <= holdMs) return { active: true, paused: true, expired: false, point: lastPoint, elapsed, holdMs, fist };
+
+    const pointAtExit = lastPoint;
+    reset();
+    return { active: false, paused: false, expired: true, reason: landmarksPresent ? "ambiguous" : "missing", point: pointAtExit, elapsed, holdMs, fist };
+  }
+
+  return { begin, observe, reset, snapshot: () => ({ active, lastUsableAt, lastPoint }) };
 }
 
 /**

@@ -12,7 +12,7 @@ The exact official download for this model release must be validated by **size +
 At runtime the browser reads only the locally deployed asset:
 
 ```text
-/vendor/models/hand_landmarker.task?model=v6-fbc2a300
+/vendor/models/hand_landmarker.task?model=v620-hand-drawing
 ```
 
 The browser does not download a third-party model. Network access is needed only during build/deploy to fetch and verify the official source asset.

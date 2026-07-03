@@ -1,9 +1,9 @@
 {
-  "name": "AIR-DROW v6.1.0 — Premium UI System",
+  "name": "AIR-DROW v6.2.0 — Hand Drawing Engine",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v610",
+  "start_url": "./?build=v620",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
-  "description": "AIR-DROW: local drawing and hand tracking with a premium mobile-first interface and local-first runtime delivery."
+  "description": "AIR-DROW: local drawing and Phase 3 velocity-aware hand tracking with stable pinch, calibrated fingertip mapping and offline local-first runtime delivery."
 }

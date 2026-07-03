@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# AIR-DROW v6.1.0 — Phase 2 safe source replacement helper for Termux.
+# AIR-DROW v6.2.0 — Phase 3 safe source replacement helper for Termux.
 # The Git repository metadata is retained; only the working tree is replaced.
 set -Eeuo pipefail
-RELEASE_VERSION="6.1.0"
+RELEASE_VERSION="6.2.0"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET_DIR="${AIR_DROW_TARGET_DIR:-$HOME/AIR-DROW-GITHUB}"
 STAMP="$(date +%Y%m%d-%H%M%S)"

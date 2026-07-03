@@ -1,0 +1,14 @@
+{
+  "version": "6.2.0",
+  "buildId": "air-drow-v620-phase3-hand-drawing",
+  "phase": 3,
+  "title": "Hand Tracking and Drawing Engine",
+  "delivery": [
+    "Velocity-aware stabilized fingertip mapping with bounded prediction for lower perceived latency.",
+    "Camera ink avoids applying the full smoothing setting twice, preserving smoothness without rubber-band lag.",
+    "Pinch hysteresis still requires safe geometry and stable frames before beginning a stroke.",
+    "Bounded continuity holds an active stroke through short closed-fist, occlusion, or detector-drop events without adding unsafe points.",
+    "Closed-fist guide feedback remains visible for 560 ms and camera-hand eraser remains aligned to calibrated coordinates."
+  ],
+  "qualityGate": "npm run vercel:build"
+}

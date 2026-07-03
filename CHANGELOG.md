@@ -1,3 +1,22 @@
+# AIR-DROW Changelog
+
+## v6.2.0 — Phase 3 hand-drawing engine
+
+### Build-integrity hotfix
+- Unified every local HandLandmarker cache key to `model=v620-hand-drawing`.
+- Fixed the Phase 3 source verifier, preload declaration, model manifest, and Kurdish release docs so the production build validates the same URL used by the app.
+- No runtime CDN hand model or MediaPipe runtime was introduced.
+
+# AIR-DROW v6.2.0 — Phase 3: Hand Tracking & Drawing Engine
+
+- Reworked fingertip tracking with a velocity-aware stabilizer and bounded prediction to reduce drawing lag without accepting detector jumps.
+- Reduced duplicate hand-side smoothing so camera ink follows intentional finger motion more closely while retaining noise protection.
+- Added a bounded stroke-continuity gate: a started stroke is safely held during a brief closed fist, one-frame occlusion or short detector loss; no new point is painted until tracking is usable again.
+- Extended closed-fist guide retention to 560 ms and kept a hard immediate stop for implausible landmark jumps.
+- Preserved pinch hysteresis, local calibration, local MediaPipe runtime and camera-hand eraser targeting.
+
+---
+
 # AIR-DROW v6.1.0 — Phase 2: Premium UI, RTL & Mobile Layout
 
 - Added a mobile-first premium UI layer with a safe-area Settings bottom sheet and a clean desktop side workspace.

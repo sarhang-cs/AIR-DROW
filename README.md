@@ -1,3 +1,9 @@
+# AIR-DROW v6.2.0 — Phase 3: Hand Tracking & Drawing Engine
+
+AIR-DROW Phase 3 refines the live hand-drawing path: velocity-aware fingertip tracking, lower-latency camera ink, stable pinch start/release behavior, a calibrated hand eraser, and bounded continuity through a brief closed fist or detector drop. A sudden detector jump still ends the active stroke immediately, so no bridge line is painted.
+
+---
+
 # AIR-DROW v6.1.0 — Phase 2: Premium UI, RTL & Mobile Layout
 
 AIR-DROW now ships with a premium mobile-first Settings workspace, explicit Dark/Light modes, six complete UI skins and robust RTL/LTR control geometry. The drawing engine and local-first MediaPipe runtime remain unchanged.

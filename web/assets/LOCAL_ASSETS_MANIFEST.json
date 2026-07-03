@@ -1,6 +1,6 @@
 {
-  "version": "6.1.0",
-  "buildId": "air-drow-v610-phase2-premium-ui",
+  "version": "6.2.0",
+  "buildId": "air-drow-v620-phase3-hand-drawing",
   "policy": "All browser runtime UI assets, MediaPipe modules, WASM files and the hand model are same-origin local assets. The exact official model must be packaged for final release; build-time synchronization is a controlled fallback only.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -29,6 +29,6 @@
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v6.1.0 Phase 2 delivers a premium mobile-first settings workspace, explicit dark/light controls, six complete visual skins, stable RTL/LTR controls and text-only FPS, Online and CAM overlays.",
-  "assetRevision": "610"
+  "releaseStatus": "v6.2.0 Phase 3 delivers velocity-aware fingertip tracking, stable pinch drawing, bounded closed-fist/occlusion continuity, lower-latency hand ink and a local camera-hand eraser target.",
+  "assetRevision": "620"
 }
