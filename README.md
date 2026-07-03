@@ -6,7 +6,7 @@
 
 ### Draw with touch, pen and hand
 
-**SARHANG IO · 2026 · 7.5.4 Calibration Reality & QA Edition**
+**SARHANG IO · 2026 · 7.5.5 Localization & Theme Final Edition**
 
 [![Private by default](https://img.shields.io/badge/Private-by%20default-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Touch, Pen & Hand](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
@@ -21,13 +21,14 @@
 
 This release is verified through the production gate below. The gate checks source integrity, the local hand model, generated MediaPipe deployment files, bilingual dictionaries, lazy camera asset loading, and release metadata. Camera behavior must still be tested on the target Android devices after deployment because browser camera permissions and GPU paths are device-specific.
 
-## What changed in 7.5.4
+## What changed in 7.5.5
 
-- **Startup freeze repaired:** the inline bootstrap had duplicate JavaScript declarations. On affected browsers that stopped the bootstrap before `app.js` could load, leaving the branded screen permanently at **7%**. This release keeps one declaration set only.
-- **Boot syntax gate:** production verification now parses the inline bootstrap as well as every JavaScript module. This exact startup failure cannot pass the release build again.
-- **Fresh release identity:** the build ID, asset query revision and PWA start URL changed to `v754`, forcing the browser to request the corrected startup files after deployment.
-- **Retained mobile reliability:** the hand model and MediaPipe runtime still load only after Camera is selected; they are not part of the first screen or initial install cache.
-- **Transactional Termux replacement:** the installer preserves `.git`, makes a backup, builds the corrected app, pushes only after verification, and restores the old project if a build fails.
+- **Complete runtime localization:** changing between Kurdî and English now re-renders dynamic readiness cards, hand-check results, calibration guidance, status labels and recovery text. A selected language no longer leaves inherited text from the previous language on screen.
+- **One dictionary contract:** Kurdish and English contain the same verified key set, including calibration and camera feedback. A missing translation cannot silently fall back to the opposite language.
+- **Six paired visual themes:** Violet, Pink, Sapphire, Obsidian, Silver and Gold each have separately tuned dark and light palettes, matching surfaces, accessible text and state colors.
+- **Icon contrast protection:** navigation, toolbar, scanner and status icons inherit contrast-safe theme tokens; active icons remain visible in both modes.
+- **Android interaction polish:** browser text selection, Copy/Share/Translate/Search callouts and blue tap highlights are blocked on studio UI while real fields remain editable.
+- **Transactional Termux replacement:** the installer preserves `.git`, makes a backup, validates the build, pushes only after verification, and restores the old project if a build fails.
 
 ## Ways to draw
 

@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 7.5.4 Calibration Reality & QA Edition.
+> This guide applies to AIR-DROW 7.5.5 Localization & Theme Final Edition.
 
 AIR-DROW is local-first.
 

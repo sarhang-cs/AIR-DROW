@@ -1,4 +1,4 @@
-# AIR-DROW v7.5.4 — Calibration Reality & QA
+# AIR-DROW v7.5.5 — Localization & Theme Final
 
 - Hand calibration now captures only when the hand is inside each highlighted target; a stable hand in one place cannot produce a fake 1/4 → 4/4 pass.
 - Completed calibration is persisted immediately in local browser storage and the current project, with serialized saves to prevent stale writes.
@@ -8,7 +8,7 @@
 
 # AIR-DROW Changelog
 
-## v7.5.4 — Calibration Reality & QA
+## v7.5.5 — Localization & Theme Final
 - Added the narrow `wasm-unsafe-eval` Content Security Policy allowance required by the self-hosted MediaPipe WebAssembly runtime.
 - Kept general JavaScript `unsafe-eval` disabled.
 - Moved Project Gallery loading out of normal Draw startup; it now loads when Projects is opened.
@@ -18,10 +18,10 @@
 
 # Changelog
 
-## 7.5.4 — Calibration Reality & QA Edition
+## 7.5.5 — Localization & Theme Final Edition
 
 - Fixed the startup screen remaining at **7%**: `web/index.html` had two identical `const BOOT_COPY`, `preferredBootLanguage`, `bootLanguage`, and `bootCopy` declarations in one inline script. The browser correctly raised a syntax error before the app module could start.
 - Rebuilt the inline bootstrap as one declaration-safe startup routine.
 - Added inline-script syntax parsing to `npm run check`; duplicated bootstrap declarations now fail the build before a ZIP can be released.
-- Bumped all release identifiers to `air-drow-v754-calibration-reality-qa` so the corrected startup script is fetched after deploy.
+- Bumped all release identifiers to `air-drow-v755-localization-theme-final` so the corrected startup script is fetched after deploy.
 - Retained lazy MediaPipe/model loading, generated `public/` output, and source-package cleanup from the previous production build.

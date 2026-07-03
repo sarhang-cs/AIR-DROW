@@ -1,22 +1,15 @@
-# AIR-DROW v7.5.4 — Calibration Reality & QA
+# AIR-DROW Release Notes
 
-- Hand calibration now captures only when the hand is inside each highlighted target; a stable hand in one place cannot produce a fake 1/4 → 4/4 pass.
-- Completed calibration is persisted immediately in local browser storage and the current project, with serialized saves to prevent stale writes.
-- Text selection, Copy, Search and Translate callouts are locked across onboarding, boot, recovery and every other studio overlay.
-- The MediaPipe sourcemap 404 is removed from deployment output; generated non-failure diagnostics are isolated without hiding genuine errors.
-- Network status and readiness checks use live same-origin probes instead of only navigator.onLine/API presence.
+## v7.5.5 — Localization & Theme Final
 
-## v7.5.4 — Calibration Reality & QA
+- Re-renders all dynamic UI immediately after language changes, including Hand drawing check, calibration guidance, device readiness, network state and recovery messages.
+- Verifies a matching Kurdish/English dictionary contract and prevents opposite-language fallback text.
+- Adds a paired dark/light theme matrix for Violet, Pink, Sapphire, Obsidian, Silver and Gold.
+- Adds contrast-safe icon tokens for toolbar, navigation, scanner, summary and status states.
+- Locks Android browser selection and Copy/Share/Translate/Search callouts across onboarding and every non-editable studio surface.
+- Keeps real text inputs editable and keeps scrolling/taps functional.
+- Preserves the real four-target calibration flow and persisted calibration result from v7.5.4.
 
-- Locks interface text selection, long-press browser callouts and Android blue tap highlights without blocking actual text-entry fields.
-- Replaces scanner status-mask icons with inline SVG marks so success, warning and problem states remain visible in Android Chromium.
-- Keeps a successful hand check on screen long enough to read, then exits with a polished completion animation.
+## Verification
 
-# AIR-DROW v7.5.4 — Calibration Reality & QA
-
-This update fixes two production issues reported from Android Chrome:
-
-- **Hand tracking:** the self-hosted MediaPipe runtime could not compile WebAssembly because the production Content Security Policy did not allow `wasm-unsafe-eval`. This release adds only the narrow WebAssembly allowance; general JavaScript `unsafe-eval` remains blocked.
-- **Project Gallery:** the gallery was being opened while the Draw workspace booted. It now loads only when Projects is opened. Local storage also has a non-destructive browser fallback if IndexedDB is unavailable, slow, or locked by another tab.
-
-No existing IndexedDB project is deleted by this recovery path.
+`npm run vercel:build` validates the local hand model, MediaPipe build output, bilingual keys, dynamic localization paths, paired themes, release identity and deploy-ready output.

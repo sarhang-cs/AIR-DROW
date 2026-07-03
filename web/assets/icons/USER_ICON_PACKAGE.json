@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "7.5.4",
-  "buildId": "air-drow-v754-calibration-reality-qa",
+  "version": "7.5.5",
+  "buildId": "air-drow-v755-localization-theme-final",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {
@@ -191,5 +191,5 @@
       "bytes": 502
     }
   ],
-  "release": "Calibration Reality & QA Edition"
+  "release": "Localization & Theme Final Edition"
 }

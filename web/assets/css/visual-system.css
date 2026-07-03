@@ -485,3 +485,103 @@ textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in
 .quick-start-dot { width:6px; height:6px; border-radius:99px; background:color-mix(in srgb,var(--muted) 44%,transparent); transition:width .2s ease,background-color .2s ease; }
 .quick-start-dot.is-active { width:20px; background:linear-gradient(90deg,var(--accent),var(--accent-2)); }
 :root.reduce-motion .quick-start-dot { transition:none; }
+
+
+/* ===== Localization & Theme Final: paired palette matrix =====
+   Each AIR-DROW skin owns distinct dark/light surfaces and icon contrast.
+   The matrix is token-only so all existing cards, controls and masks remain
+   driven by one visual system rather than a late layout patch. */
+:root[data-theme="dark"][data-skin="violet"] {
+  --bg:#090817; --bg-deep:#04030c; --panel:rgba(20,18,43,.74); --panel-2:rgba(31,27,58,.90); --panel-solid:#16142e;
+  --text:#f8f5ff; --muted:#b6afca; --line:rgba(225,216,255,.18); --line-soft:rgba(225,216,255,.09);
+  --accent:#d9c2ff; --accent-2:#8969ee; --accent-ink:#21103f; --accent-soft:rgba(188,147,255,.22); --accent-ring:rgba(203,172,255,.62); --skin-shadow:rgba(124,81,236,.35);
+  --theme-icon-ink:#e2d2ff; --theme-icon-muted:#c5b8de;
+}
+:root[data-theme="light"][data-skin="violet"] {
+  --bg:#f7f3ff; --bg-deep:#e9e2fb; --panel:rgba(255,255,255,.78); --panel-2:rgba(255,255,255,.94); --panel-solid:#ffffff;
+  --text:#2a174f; --muted:#67567f; --line:rgba(84,57,137,.17); --line-soft:rgba(84,57,137,.09);
+  --accent:#d6bcff; --accent-2:#8060df; --accent-ink:#29124c; --accent-soft:rgba(180,141,255,.20); --accent-ring:rgba(134,95,225,.40); --skin-shadow:rgba(112,78,202,.24);
+  --theme-icon-ink:#513097; --theme-icon-muted:#67518d;
+}
+:root[data-theme="dark"][data-skin="pink"] {
+  --bg:#170914; --bg-deep:#0b0409; --panel:rgba(47,18,42,.74); --panel-2:rgba(63,25,57,.91); --panel-solid:#331329;
+  --text:#fff5fb; --muted:#d4afc7; --line:rgba(255,214,240,.18); --line-soft:rgba(255,214,240,.09);
+  --accent:#ffc5e6; --accent-2:#e979b5; --accent-ink:#58142f; --accent-soft:rgba(255,157,211,.23); --accent-ring:rgba(255,183,224,.64); --skin-shadow:rgba(224,82,159,.34);
+  --theme-icon-ink:#ffd8ed; --theme-icon-muted:#e7b7d4;
+}
+:root[data-theme="light"][data-skin="pink"] {
+  --bg:#fff4fa; --bg-deep:#f9e1ee; --panel:rgba(255,255,255,.80); --panel-2:rgba(255,255,255,.95); --panel-solid:#ffffff;
+  --text:#501936; --muted:#85546c; --line:rgba(153,62,110,.17); --line-soft:rgba(153,62,110,.09);
+  --accent:#ffc7e7; --accent-2:#df72ab; --accent-ink:#571831; --accent-soft:rgba(255,164,214,.22); --accent-ring:rgba(220,102,163,.40); --skin-shadow:rgba(199,75,142,.22);
+  --theme-icon-ink:#a13b74; --theme-icon-muted:#98566f;
+}
+:root[data-theme="dark"][data-skin="sapphire"] {
+  --bg:#061321; --bg-deep:#02070f; --panel:rgba(10,34,59,.75); --panel-2:rgba(15,48,80,.91); --panel-solid:#0a2743;
+  --text:#effaff; --muted:#a6c8df; --line:rgba(197,235,255,.18); --line-soft:rgba(197,235,255,.09);
+  --accent:#94dcff; --accent-2:#3588ea; --accent-ink:#082c54; --accent-soft:rgba(94,186,255,.22); --accent-ring:rgba(117,205,255,.62); --skin-shadow:rgba(29,122,229,.34);
+  --theme-icon-ink:#b7eaff; --theme-icon-muted:#a4c9e4;
+}
+:root[data-theme="light"][data-skin="sapphire"] {
+  --bg:#f0f8ff; --bg-deep:#dcecfb; --panel:rgba(255,255,255,.80); --panel-2:rgba(255,255,255,.95); --panel-solid:#ffffff;
+  --text:#123a63; --muted:#597592; --line:rgba(35,104,164,.17); --line-soft:rgba(35,104,164,.09);
+  --accent:#9bdcff; --accent-2:#3c87e4; --accent-ink:#08345f; --accent-soft:rgba(98,190,255,.22); --accent-ring:rgba(65,145,230,.40); --skin-shadow:rgba(37,116,205,.22);
+  --theme-icon-ink:#1d67ab; --theme-icon-muted:#507da7;
+}
+:root[data-theme="dark"][data-skin="obsidian"] {
+  --bg:#0b0d13; --bg-deep:#04050a; --panel:rgba(25,28,39,.76); --panel-2:rgba(37,41,55,.92); --panel-solid:#191c27;
+  --text:#f4f6fc; --muted:#b7bdcb; --line:rgba(225,231,244,.17); --line-soft:rgba(225,231,244,.09);
+  --accent:#d9ddea; --accent-2:#687187; --accent-ink:#171b27; --accent-soft:rgba(205,214,234,.17); --accent-ring:rgba(214,221,241,.54); --skin-shadow:rgba(73,83,111,.35);
+  --theme-icon-ink:#e7ebf6; --theme-icon-muted:#c7cfdf;
+}
+:root[data-theme="light"][data-skin="obsidian"] {
+  --bg:#f5f6f9; --bg-deep:#e4e7ed; --panel:rgba(255,255,255,.82); --panel-2:rgba(255,255,255,.96); --panel-solid:#ffffff;
+  --text:#242a38; --muted:#616a7c; --line:rgba(60,70,91,.17); --line-soft:rgba(60,70,91,.09);
+  --accent:#dde2ed; --accent-2:#697287; --accent-ink:#1c2230; --accent-soft:rgba(185,195,215,.20); --accent-ring:rgba(93,105,133,.38); --skin-shadow:rgba(59,70,96,.20);
+  --theme-icon-ink:#49546b; --theme-icon-muted:#616b7c;
+}
+:root[data-theme="dark"][data-skin="silver"] {
+  --bg:#0d121c; --bg-deep:#050810; --panel:rgba(26,36,54,.76); --panel-2:rgba(38,51,74,.92); --panel-solid:#1b273a;
+  --text:#f5f8ff; --muted:#b7c2d7; --line:rgba(221,232,255,.17); --line-soft:rgba(221,232,255,.09);
+  --accent:#eef3ff; --accent-2:#9eaed1; --accent-ink:#24324a; --accent-soft:rgba(214,227,255,.19); --accent-ring:rgba(218,230,255,.56); --skin-shadow:rgba(111,133,181,.33);
+  --theme-icon-ink:#e9f1ff; --theme-icon-muted:#c7d5ed;
+}
+:root[data-theme="light"][data-skin="silver"] {
+  --bg:#f5f9ff; --bg-deep:#e2eafa; --panel:rgba(255,255,255,.83); --panel-2:rgba(255,255,255,.97); --panel-solid:#ffffff;
+  --text:#263753; --muted:#62728b; --line:rgba(58,83,122,.16); --line-soft:rgba(58,83,122,.08);
+  --accent:#f2f6ff; --accent-2:#8c9fc6; --accent-ink:#2d405f; --accent-soft:rgba(203,218,247,.26); --accent-ring:rgba(119,142,187,.38); --skin-shadow:rgba(93,119,170,.20);
+  --theme-icon-ink:#516b99; --theme-icon-muted:#677996;
+}
+:root[data-theme="dark"][data-skin="gold"] {
+  --bg:#171007; --bg-deep:#090603; --panel:rgba(50,34,14,.76); --panel-2:rgba(67,47,19,.92); --panel-solid:#35240f;
+  --text:#fff8eb; --muted:#dcc7a2; --line:rgba(255,232,190,.18); --line-soft:rgba(255,232,190,.09);
+  --accent:#ffe1a1; --accent-2:#bd8438; --accent-ink:#4b2d08; --accent-soft:rgba(255,201,104,.21); --accent-ring:rgba(255,219,146,.62); --skin-shadow:rgba(185,119,29,.34);
+  --theme-icon-ink:#ffe6b4; --theme-icon-muted:#e7cca2;
+}
+:root[data-theme="light"][data-skin="gold"] {
+  --bg:#fff8e9; --bg-deep:#f5e5c3; --panel:rgba(255,255,255,.82); --panel-2:rgba(255,255,255,.96); --panel-solid:#ffffff;
+  --text:#523711; --muted:#83663a; --line:rgba(147,100,31,.17); --line-soft:rgba(147,100,31,.09);
+  --accent:#ffe6ad; --accent-2:#ba8135; --accent-ink:#56350b; --accent-soft:rgba(255,207,116,.23); --accent-ring:rgba(185,126,46,.40); --skin-shadow:rgba(165,102,20,.22);
+  --theme-icon-ink:#9a651d; --theme-icon-muted:#84683c;
+}
+
+/* icon contrast contract: masked SVG icons always follow the active paired palette. */
+:root[data-theme] .toolbar .tool-button:not(.active):not(.camera-live):not(.theme-active),
+:root[data-theme] .workspace-dock-button:not(.is-active),
+:root[data-theme] .workspace-tab:not(.is-active),
+:root[data-theme] .close-button,
+:root[data-theme] .settings-section .summary-icon,
+:root[data-theme] .settings-section .summary-icon > .app-icon {
+  color: var(--theme-icon-ink) !important;
+}
+:root[data-theme] .workspace-tab:not(.is-active),
+:root[data-theme] .workspace-dock-button:not(.is-active) { color: var(--theme-icon-muted) !important; }
+:root[data-theme] .settings-section summary::after { border-color: var(--theme-icon-ink) !important; }
+:root[data-theme="light"] .tool-button.active,
+:root[data-theme="light"] .tool-button.camera-live,
+:root[data-theme="light"] .tool-button.theme-active,
+:root[data-theme="light"] .workspace-dock-button.is-active,
+:root[data-theme="light"] .workspace-tab.is-active,
+:root[data-theme="light"] .skin-choice.selected {
+  border-color: rgba(255,255,255,.72) !important;
+  box-shadow: 0 10px 24px var(--skin-shadow), inset 0 1px 0 rgba(255,255,255,.72) !important;
+}

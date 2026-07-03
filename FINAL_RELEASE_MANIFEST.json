@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Calibration Reality & QA Edition",
-  "version": "7.5.4",
-  "buildId": "air-drow-v754-calibration-reality-qa",
+  "name": "AIR-DROW Localization & Theme Final Edition",
+  "version": "7.5.5",
+  "buildId": "air-drow-v755-localization-theme-final",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -21,5 +21,7 @@
   ],
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v754-calibration-reality-qa.sh"
+  "installer": "termux/replace-with-v755-localization-theme-final.sh",
+  "release": "Localization & Theme Final Edition",
+  "assetRevision": "755"
 }

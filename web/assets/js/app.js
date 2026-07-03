@@ -28,6 +28,7 @@ import { I18N } from "./i18n/translations.js";
 import { collectUi, setText } from "./ui/registry.js";
 
 window.__AIRDROW_APP_MODULE_READY = true;
+document.documentElement.dataset.airdrowSelectionLock = "true";
 
 // Signal the inline bootstrap as soon as this module graph has evaluated.
 const defaults = createDefaultSettings();
@@ -742,7 +743,14 @@ function setShapeStatus(candidate, { snapped = false } = {}) {
 }
 
 function t(key, fallback = key) {
-  return I18N[state.settings.language]?.[key] || fallback;
+  const dictionary = I18N[state.settings.language === "en" ? "en" : "ku"] || I18N.ku;
+  const translated = dictionary[key];
+  if (typeof translated === "string" && translated.trim()) return translated;
+  // Never leak an English fallback into Kurdish mode (or an old Kurdish value
+  // into English mode). Missing product copy is a release error and is caught
+  // by the localization gate before deployment.
+  console.error(`Missing AIR-DROW translation key: ${key}`);
+  return dictionary.copyUnavailable || fallback || key;
 }
 
 function applyLanguage() {
@@ -797,7 +805,11 @@ function applyLanguage() {
   if (ui.cameraModePicker) ui.cameraModePicker.dataset.title = t("cameraModeTitle", "Choose camera mode");
   ui.languageChoices.forEach(button => button.classList.toggle("selected", button.dataset.language === language));
   setText(ui.fontStatus, language === "en" ? "System Sans" : "Noto Kufi Arabic");
+  // Dynamic cards keep their previous DOM until they are re-rendered. Repaint
+  // every local-status surface here so a language switch is truly global.
   deviceReadiness?.render();
+  finalLiveQa?.render();
+  void refreshStabilityStatus();
   setWorkspace(state.workspace, { resetPanels: false });
   updateLiveHud();
 }
@@ -3143,11 +3155,38 @@ function isEditableControlTarget(target) {
 
 function bindMobileInteractionGuards() {
   const belongsToStudioDocument = target => target instanceof Node && Boolean(document.body?.contains(target));
+  const clearStudioSelection = () => {
+    const selection = document.getSelection?.();
+    const anchor = selection?.anchorNode?.parentElement || selection?.anchorNode;
+    if (selection?.rangeCount && belongsToStudioDocument(anchor) && !isEditableControlTarget(anchor)) selection.removeAllRanges();
+  };
   const blockBrowserSelection = event => {
     if (belongsToStudioDocument(event.target) && !isEditableControlTarget(event.target)) event.preventDefault();
   };
+  // Android Chrome can start its own long-press selection before selectstart
+  // reaches the page. A tiny non-blocking selection clear loop runs only while
+  // a non-editable AIR-DROW surface is pressed; scrolling and normal clicks
+  // still work because no touchstart/pointerdown default is cancelled.
+  let selectionClearTimer = 0;
+  const stopClearLoop = () => {
+    if (selectionClearTimer) window.clearInterval(selectionClearTimer);
+    selectionClearTimer = 0;
+    clearStudioSelection();
+  };
+  const startClearLoop = event => {
+    if (!belongsToStudioDocument(event.target) || isEditableControlTarget(event.target)) return;
+    clearStudioSelection();
+    stopClearLoop();
+    selectionClearTimer = window.setInterval(clearStudioSelection, 48);
+  };
   /* The onboarding, recovery and boot overlays are siblings of #app, so the
      guard applies across the complete studio document, not just settings. */
+  document.querySelectorAll('body *:not(input):not(textarea):not(select):not([contenteditable="true"])').forEach(node => {
+    node.setAttribute("unselectable", "on");
+    node.style.setProperty("-webkit-user-select", "none", "important");
+    node.style.setProperty("user-select", "none", "important");
+    node.style.setProperty("-webkit-touch-callout", "none", "important");
+  });
   document.addEventListener("selectstart", blockBrowserSelection, { capture: true });
   document.addEventListener("dragstart", blockBrowserSelection, { capture: true });
   document.addEventListener("contextmenu", event => {
@@ -3156,13 +3195,10 @@ function bindMobileInteractionGuards() {
   document.addEventListener("copy", event => {
     if (belongsToStudioDocument(event.target) && !isEditableControlTarget(event.target)) event.preventDefault();
   }, { capture: true });
-  document.addEventListener("selectionchange", () => {
-    const selection = document.getSelection?.();
-    const anchor = selection?.anchorNode?.parentElement || selection?.anchorNode;
-    if (selection?.rangeCount && belongsToStudioDocument(anchor) && !isEditableControlTarget(anchor)) {
-      selection.removeAllRanges();
-    }
-  }, { passive: true });
+  document.addEventListener("pointerdown", startClearLoop, { capture: true, passive: true });
+  document.addEventListener("pointerup", stopClearLoop, { capture: true, passive: true });
+  document.addEventListener("pointercancel", stopClearLoop, { capture: true, passive: true });
+  document.addEventListener("selectionchange", clearStudioSelection, { passive: true });
 }
 
 function bindControls() {

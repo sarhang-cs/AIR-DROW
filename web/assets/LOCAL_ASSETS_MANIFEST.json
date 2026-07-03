@@ -1,6 +1,6 @@
 {
-  "version": "7.5.4",
-  "buildId": "air-drow-v754-calibration-reality-qa",
+  "version": "7.5.5",
+  "buildId": "air-drow-v755-localization-theme-final",
   "policy": "AIR-DROW uses local same-origin interface assets, MediaPipe modules, WASM files and the verified hand model. Your drawing session is private to this device unless you choose an export, share or optional AI action.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -30,6 +30,6 @@
     "guide": "assets/icons/ICON_SYSTEM.md",
     "packageManifest": "assets/icons/USER_ICON_PACKAGE.json"
   },
-  "releaseStatus": "v7.5.4 Calibration Reality & QA Edition: secure local MediaPipe WebAssembly, calm project-storage recovery and complete bilingual interface coverage are active across AIR-DROW.",
-  "assetRevision": "754"
+  "releaseStatus": "v7.5.5 Localization & Theme Final Edition: secure local MediaPipe WebAssembly, calm project-storage recovery and complete bilingual interface coverage are active across AIR-DROW.",
+  "assetRevision": "755"
 }

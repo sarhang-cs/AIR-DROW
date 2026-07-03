@@ -561,7 +561,12 @@ const ku = Object.freeze({
   "challengeSecondsInitial": "60 چرکە",
   "aiResultAlt": "دەرئەنجامی زیرەکی AIR-DROW",
   "handScanIconTitle": "ڕەمزی پشکنینی دەست",
-  "handScanIconDesc": "ڕەمزی پشکنینی دەست بە باکگراوندی شەفاف."
+  "handScanIconDesc": "ڕەمزی پشکنینی دەست بە باکگراوندی شەفاف.",
+  "calibrationAim": "دەستت بخەرە سەر تارگێتی دیاریکراو",
+  "calibrationSaved": "کالیبراسیۆن پاشەکەوت کرا و لەم وێبگەڕەدا چالاکە",
+  "calibrationInvalid": "کالیبراسیۆن پشتڕاست نەکرایەوە. دووبارە دەست پێ بکە و هەموو تارگێتەکان بگە.",
+  "networkChecking": "پەیوەندی پشکنین دەکرێت…",
+  "copyUnavailable": "دەق بەردەست نییە"
 });
 
 const en = Object.freeze({
@@ -1123,7 +1128,12 @@ const en = Object.freeze({
   "challengeSecondsInitial": "60s",
   "aiResultAlt": "AIR-DROW AI result",
   "handScanIconTitle": "Hand scan icon",
-  "handScanIconDesc": "Hand scan icon with a transparent background."
+  "handScanIconDesc": "Hand scan icon with a transparent background.",
+  "calibrationAim": "Move your hand onto the highlighted target",
+  "calibrationSaved": "Calibration was saved and is active in this browser",
+  "calibrationInvalid": "Calibration could not be verified. Start again and reach every target.",
+  "networkChecking": "Checking connection…",
+  "copyUnavailable": "Text unavailable"
 });
 
 export const I18N = Object.freeze({ ku, en });

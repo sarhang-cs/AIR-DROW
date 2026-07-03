@@ -1,6 +1,6 @@
 # ڕێنمایی بەکارهێنانی AIR-DROW
 
-> ئەم ڕێنماییە بۆ AIR-DROW 7.5.4 Calibration Reality & QA Edition ـە.
+> ئەم ڕێنماییە بۆ AIR-DROW 7.5.5 Localization & Theme Final Edition ـە.
 
 ## دەستپێکردن بە کێشان
 

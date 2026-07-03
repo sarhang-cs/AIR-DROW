@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.5.4",
-  "buildId": "air-drow-v754-calibration-reality-qa",
-  "release": "Calibration Reality & QA Edition",
+  "version": "7.5.5",
+  "buildId": "air-drow-v755-localization-theme-final",
+  "release": "Localization & Theme Final Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -16,6 +16,6 @@
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
-  "releaseGate": "npm run vercel:build validates final layout, bilingual coverage, local hand model, WebAssembly CSP compatibility, interaction selection lock, tap-highlight suppression, scanner-status icon rendering and generated production assets.",
+  "releaseGate": "npm run vercel:build validates bilingual markup and runtime coverage, dynamic language re-rendering, six paired theme palettes, icon contrast, selection guard, local hand model and generated production assets.",
   "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, and release information."
 }
