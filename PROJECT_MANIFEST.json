@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.5.6",
-  "buildId": "air-drow-v756-input-language-hand-startup",
-  "release": "Input, Language & Hand Startup Edition",
+  "version": "7.6.0",
+  "buildId": "air-drow-v760-final-clean-delivery",
+  "release": "Final Clean Delivery Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -12,11 +12,16 @@
     "Private on-device preferences"
   ],
   "languages": [
-    "Kurdî (Sorani)",
+    "Kurd\u00ee (Sorani)",
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
-  "releaseGate": "npm run vercel:build validates bilingual markup and runtime coverage, dynamic language re-rendering, six paired theme palettes, icon contrast, selection guard, local hand model and generated production assets.",
-  "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, and release information.",
-  "name": "AIR-DROW Input, Language & Hand Startup Edition"
+  "releaseGate": "npm run vercel:build validates source integrity, real local hand assets, bilingual markup and runtime coverage, theme tokens, screenshots, developer profile assets and generated production output.",
+  "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, release information and developer profile.",
+  "developer": {
+    "name": "Sarhang Salah",
+    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
+    "instagram": "https://www.instagram.com/sarhang.io/"
+  },
+  "name": "AIR-DROW Final Clean Delivery Edition"
 }

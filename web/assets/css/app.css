@@ -1813,7 +1813,7 @@ html[data-airdrow-selection-lock="true"] .boot-card {
 }
 
 
-/* v7.5.6 mobile text-entry contract: real text fields always win the first tap. */
+/* v7.6.0 mobile text-entry contract: real text fields always win the first tap. */
 .text-setting, .text-setting input, .ai-studio-section textarea, #apiUrlInput { pointer-events: auto !important; }
 .text-setting input, .ai-studio-section textarea, #apiUrlInput {
   min-height: 48px;

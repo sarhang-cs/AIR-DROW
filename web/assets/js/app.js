@@ -22,7 +22,7 @@ import { createDeviceReadiness } from "./features/device-readiness.js";
 import { createFinalLiveQa } from "./features/final-live-qa.js";
 import { createHandStabilizer, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
 import { createLocalHandLandmarker, primeLocalHandAssets } from "./features/hand-engine-bootstrap.js";
-import { APP_RELEASE as AIRDROW_RELEASE, HAND_MODEL, HAND_CALIBRATION_STORAGE_KEY, LEGACY_STORAGE_KEY, MEDIAPIPE_MODULE_URLS, MEDIAPIPE_WASM_URLS, OLD_MIRROR_KEY, PROFILE_RULES, QUICK_START_KEY, STORAGE_KEY, createDefaultSettings } from "./config/runtime.js";
+import { APP_RELEASE as AIRDROW_RELEASE, HAND_MODEL, HAND_CALIBRATION_STORAGE_KEY, LEGACY_HAND_CALIBRATION_STORAGE_KEYS, LEGACY_QUICK_START_KEYS, LEGACY_STORAGE_KEY, MEDIAPIPE_MODULE_URLS, MEDIAPIPE_WASM_URLS, OLD_MIRROR_KEY, PROFILE_RULES, QUICK_START_KEY, STORAGE_KEY, createDefaultSettings } from "./config/runtime.js";
 import { normalizeSkin } from "./config/appearance.js";
 import { I18N } from "./i18n/translations.js";
 import { collectUi, setText } from "./ui/registry.js";
@@ -220,6 +220,19 @@ function syncBodyScroll() {
   if (!blocked) presentDeferredUpdate();
 }
 
+function hasQuickStartCompleted() {
+  try {
+    if (localStorage.getItem(QUICK_START_KEY)) return true;
+    const legacyKey = LEGACY_QUICK_START_KEYS.find(key => localStorage.getItem(key));
+    if (!legacyKey) return false;
+    localStorage.setItem(QUICK_START_KEY, "1");
+    LEGACY_QUICK_START_KEYS.forEach(key => localStorage.removeItem(key));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function createOnboarding() {
   if (onboardingFlow || !ui.quickStart) return onboardingFlow;
   onboardingFlow = createOnboardingFlow({
@@ -240,7 +253,12 @@ function createOnboarding() {
 function openQuickStart({ remember = false } = {}) {
   const flow = createOnboarding();
   if (!flow) return;
-  if (remember) localStorage.removeItem(QUICK_START_KEY);
+  if (remember) {
+    try {
+      localStorage.removeItem(QUICK_START_KEY);
+      LEGACY_QUICK_START_KEYS.forEach(key => localStorage.removeItem(key));
+    } catch {}
+  }
   flow.open();
 }
 
@@ -1540,9 +1558,18 @@ function updateTrackingHealth(assessment) {
 
 function readStoredHandCalibration() {
   try {
-    const raw = JSON.parse(localStorage.getItem(HAND_CALIBRATION_STORAGE_KEY) || "null");
-    const calibration = normalizeHandCalibration(raw);
-    return calibration.enabled ? calibration : null;
+    const keys = [HAND_CALIBRATION_STORAGE_KEY, ...LEGACY_HAND_CALIBRATION_STORAGE_KEYS];
+    for (const key of keys) {
+      const raw = JSON.parse(localStorage.getItem(key) || "null");
+      const calibration = normalizeHandCalibration(raw);
+      if (!calibration.enabled) continue;
+      if (key !== HAND_CALIBRATION_STORAGE_KEY) {
+        localStorage.setItem(HAND_CALIBRATION_STORAGE_KEY, JSON.stringify(calibration));
+        LEGACY_HAND_CALIBRATION_STORAGE_KEYS.forEach(legacyKey => localStorage.removeItem(legacyKey));
+      }
+      return calibration;
+    }
+    return null;
   } catch {
     return null;
   }
@@ -3078,7 +3105,7 @@ function presentDeferredUpdate() {
 
 function showUpdateBanner(remote, apply) {
   pendingUpdate = { remote, apply };
-  if (!localStorage.getItem(QUICK_START_KEY) || hasBlockingOverlay()) return;
+  if (!hasQuickStartCompleted() || hasBlockingOverlay()) return;
   presentDeferredUpdate();
 }
 
@@ -3663,7 +3690,7 @@ async function boot() {
   if (isTouchLayout()) openSettings(false);
   else openSettings(true);
   await loadingManager.finishBoot({ label: t("bootReady", "Studio ready") });
-  if (!localStorage.getItem(QUICK_START_KEY)) setTimeout(() => openQuickStart(), 420);
+  if (!hasQuickStartCompleted()) setTimeout(() => openQuickStart(), 420);
 }
 
 function showFatalBootFailure(error) {

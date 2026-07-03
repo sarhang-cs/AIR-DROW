@@ -1,7 +1,7 @@
-AIR-DROW v7.5.6 — Input, Language & Hand Startup
+AIR-DROW v7.6.0 — Final Clean Delivery
 
-1. Download the complete ZIP to /sdcard/Download.
-2. Run the one-line Termux command provided with this release.
-3. The installer preserves .git, creates a timestamped backup, validates the production build, pushes only when checks pass, and restores the older source if a check fails.
+1. Put AIR-DROW_v7.6.0_FINAL_CLEAN_DELIVERY.zip in /sdcard/Download
+2. Run the one-line Termux command supplied with the release.
+3. The installer keeps .git, creates a rollback backup, installs exact dependencies, runs npm run vercel:build, then commits and pushes only after every verification passes.
 
-This release completes runtime language re-rendering, first-tap mobile text entry, global non-editable selection locking, honest local hand-engine loading guidance, calibration-success confirmation, and six paired dark/light theme palettes with icon contrast protection.
+The source package intentionally excludes node_modules and public. Vercel/Termux regenerate production output from web/ during the verified build.

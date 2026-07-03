@@ -1,6 +1,6 @@
 # ڕێنمایی بەکارهێنانی AIR-DROW
 
-> ئەم ڕێنماییە بۆ AIR-DROW 7.5.6 Input, Language & Hand Startup Edition ـە.
+> ئەم ڕێنماییە بۆ AIR-DROW 7.6.0 Final Clean Delivery Edition
 
 ## دەستپێکردن بە کێشان
 

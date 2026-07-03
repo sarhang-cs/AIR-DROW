@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 7.5.6 Input, Language & Hand Startup Edition.
+> This guide applies to AIR-DROW 7.6.0 Final Clean Delivery Edition
 
 ## Start a drawing
 

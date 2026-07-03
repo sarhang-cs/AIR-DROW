@@ -4,77 +4,87 @@
 
 # AIR-DROW
 
-### Draw with touch, pen and hand
+### A private drawing studio for touch, pen and hand
 
-**SARHANG IO · 2026 · 7.5.6 Input, Language & Hand Startup Edition**
+**Final Clean Delivery · 2026 · Created by Sarhang Salah**
 
-[![Private by default](https://img.shields.io/badge/Private-by%20default-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
-[![Touch, Pen & Hand](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
-[![PWA](https://img.shields.io/badge/Installable-PWA-2EA44F?style=for-the-badge)](#install-air-drow)
-[![Kurdî & English](https://img.shields.io/badge/Languages-Kurd%C3%AE%20%26%20English-F4B400?style=for-the-badge)](#language)
+[![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
+[![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
+[![Bilingual](https://img.shields.io/badge/Languages-Kurd%C3%AE%20%26%20English-F4B400?style=for-the-badge)](#language--themes)
+[![PWA](https://img.shields.io/badge/Installable-PWA-2EA44F?style=for-the-badge)](#install)
 
 </div>
 
 ---
 
-## Production verification
+## Screenshots
 
-This release is verified through the production gate below. The gate checks source integrity, the local hand model, generated MediaPipe deployment files, bilingual dictionaries, lazy camera asset loading, and release metadata. Camera behavior must still be tested on the target Android devices after deployment because browser camera permissions and GPU paths are device-specific.
+<table>
+  <tr>
+    <td width="50%" align="center"><img src="./docs/screenshots/air-drow-studio-en.png" alt="AIR-DROW drawing studio in English dark mode" width="100%" /><br /><sub>Drawing studio · English · Obsidian dark</sub></td>
+    <td width="50%" align="center"><img src="./docs/screenshots/air-drow-hand-en.png" alt="AIR-DROW hand tracking readiness in English dark mode" width="100%" /><br /><sub>Hand tracking readiness · English · Dark</sub></td>
+  </tr>
+</table>
 
-## What changed in 7.5.6
+## What AIR-DROW does
 
-- **Complete runtime localization:** changing between Kurdî and English now re-renders dynamic readiness cards, hand-check results, calibration guidance, status labels and recovery text. A selected language no longer leaves inherited text from the previous language on screen.
-- **One dictionary contract:** Kurdish and English contain the same verified key set, including calibration and camera feedback. A missing translation cannot silently fall back to the opposite language.
-- **Six paired visual themes:** Violet, Pink, Sapphire, Obsidian, Silver and Gold each have separately tuned dark and light palettes, matching surfaces, accessible text and state colors.
-- **Icon contrast protection:** navigation, toolbar, scanner and status icons inherit contrast-safe theme tokens; active icons remain visible in both modes.
-- **Android input & interaction polish:** real text fields request focus on the first tap; browser text selection, Copy/Share/Translate/Search callouts and blue tap highlights are blocked across every non-editable studio surface, including onboarding.
-- **Honest hand startup:** AIR-DROW waits while the local MediaPipe runtime and model load, then asks you to put a hand in view only after the engine is ready.
-- **Saved calibration confirmation:** successful four-target calibration confirms that it was saved, remains visible briefly, then closes with a calm exit animation.
-- **Transactional Termux replacement:** the installer preserves `.git`, makes a backup, validates the build, pushes only after verification, and restores the old project if a build fails.
+AIR-DROW is a responsive PWA drawing studio designed for touch, pen and optional hand drawing. It keeps projects, preferences, calibration and exports on the device by default. Hand tracking uses a verified local MediaPipe runtime and model; the camera is never opened until the person explicitly chooses it.
+
+- Draw with touch, pen, brush, eraser and shape assistance.
+- Open Camera only when you choose Hand drawing.
+- Save local projects, export artwork and make a local backup.
+- Switch the complete UI between **Kurdî (Sorani)** and **English**.
+- Choose from Violet, Pink, Sapphire, Obsidian, Silver and Gold—each with its own tuned dark and light palette.
 
 ## Ways to draw
 
-### Touch and pen
-Open AIR-DROW and start drawing immediately. Use the brush, choose a color, adjust the size, and undo or redo whenever you need.
+**Touch and pen.** Open AIR-DROW and draw immediately. Brush size, smoothing, color, pressure, undo and redo are available from the studio.
 
-### Hand drawing
-Select **Hand** or **Camera**, allow camera access when asked, then keep one hand visible. Bring your fingers close together and move to draw. AIR-DROW never opens the camera by itself; you always choose when the camera starts.
+**Hand drawing.** Open Camera, wait for the local hand engine to become ready, then place one hand in view. The app does not ask you to hold your hand up while the model is still loading. A four-target calibration is saved locally after a real successful check.
 
-### Shape assistance
-Turn on shape assistance when you want cleaner lines, circles, rectangles or triangles. You still control every stroke.
+**Shape assistance.** Use shape assistance for cleaner lines, circles, rectangles and triangles while keeping direct control of every stroke.
 
-## Privacy first
+## Privacy
 
-- Drawings, projects and preferences remain on your device by default.
-- Camera permission is requested only after you choose to open Camera.
-- Camera video is used for the live hand tool and is not saved by AIR-DROW.
-- The hand model and runtime are delivered with the app from the same origin; no third-party hand-model CDN is used.
-- App readiness and Hand drawing check run locally and do not send a report anywhere.
-- Optional AI creation is an explicit action. Keep `AIRDROW_AI_ENABLED` disabled unless you have configured a controlled server deployment.
+- Drawings, projects, preferences and calibration remain on the current device by default.
+- Camera permission is requested only after **Open Camera** is selected.
+- Camera frames are used for live hand tracking and are not saved.
+- The hand model and runtime are served from AIR-DROW itself—no third-party model CDN is used.
+- App checks run locally and do not send a report to an external service.
+- Optional AI creation stays disabled until you explicitly configure a controlled server deployment.
 
 Read the full [Privacy Guide](./docs/PRIVACY.md).
 
-## Install AIR-DROW
+## Language & themes
 
-| Device | How to install |
+Open **Settings → About App** to switch between Kurdî and English. Runtime cards, calibration guidance, camera messages and recovery notices are re-rendered immediately in the selected language.
+
+Open **Settings → Appearance** to choose dark or light mode and one of the six visual themes. Each palette has contrast-safe text, controls and icons for reliable visibility.
+
+## Developer
+
+**App created by Sarhang Salah**
+
+Instagram: [@sarhang.io](https://www.instagram.com/sarhang.io/) · Scan the QR code in **Settings → About App** to open the profile on a phone.
+
+## Install
+
+| Device | Install method |
 | --- | --- |
 | Android / Chromium browsers | Open the browser menu and choose **Install app** or **Add to Home screen** |
 | iPhone / iPad | Use **Share → Add to Home Screen** in Safari |
-| Desktop | Use the install icon in the address bar when your browser offers it |
+| Desktop | Use the install icon in the browser address bar when available |
 
-## Language
-Open **Settings → About App** and choose **Kurdî** or **English**. AIR-DROW keeps your language choice on the current device, including the boot recovery screen.
+## Build and deploy
 
-## Release verification
 ```bash
 npm ci --no-audit --no-fund
 npm run vercel:build
 ```
 
-The production gate verifies local model integrity, local MediaPipe output, source/build order, bilingual dictionaries, lazy camera loading, AI endpoint protections and release metadata.
+The production gate validates local hand-model integrity, generated MediaPipe runtime files, bilingual dictionaries, dynamic UI coverage, visual-theme contracts, developer profile assets, screenshot documentation and release metadata.
 
-## Termux replacement
-Use [`termux/TERMUX_INSTALL.txt`](./termux/TERMUX_INSTALL.txt). The installer preserves `.git`, makes a rollback backup, installs exact dependencies, verifies the production build, commits and pushes. If verification fails, it restores the previous project automatically.
+For Android/Termux replacement, use [`termux/TERMUX_INSTALL.txt`](./termux/TERMUX_INSTALL.txt). The installer keeps `.git`, makes a rollback backup, validates the production build, commits and pushes only after a successful gate.
 
 ---
-<div align="center">Made for ideas in motion · **AIR-DROW** · [Back to top](#top)</div>
+<div align="center">Made for ideas in motion · <strong>AIR-DROW</strong> · <a href="#top">Back to top</a></div>

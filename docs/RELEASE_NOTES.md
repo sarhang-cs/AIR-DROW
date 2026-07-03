@@ -1,22 +1,15 @@
-# AIR-DROW Release Notes
+# AIR-DROW — Release notes
 
-## v7.5.6 — Input, Language & Hand Startup
+## v7.6.0 · Final Clean Delivery
 
-- Re-renders all dynamic UI immediately after language changes, including Hand drawing check, calibration guidance, device readiness, network state and recovery messages.
-- Verifies a matching Kurdish/English dictionary contract and prevents opposite-language fallback text.
-- Adds a paired dark/light theme matrix for Violet, Pink, Sapphire, Obsidian, Silver and Gold.
-- Adds contrast-safe icon tokens for toolbar, navigation, scanner, summary and status states.
-- Locks Android browser selection and Copy/Share/Translate/Search callouts across onboarding and every non-editable studio surface.
-- Keeps real text inputs editable and keeps scrolling/taps functional.
-- Preserves the real four-target calibration flow and persisted calibration result from v7.5.4.
+This release finalizes the source package and GitHub presentation without changing the privacy-first behavior of the drawing studio.
 
-## Verification
+- **GitHub-ready README:** Includes two real screenshots from the app, a concise feature overview, build instructions and privacy summary.
+- **Developer profile:** Settings → About App now includes Sarhang Salah / سەرهەنگ سلاح plus a direct `@sarhang.io` Instagram profile link and scannable local QR code.
+- **Stable local state:** Existing onboarding and completed calibration state migrate into neutral persistent keys, avoiding a reset when future release IDs change.
+- **Clean release inventory:** Removed unused README concept artwork and synchronized every release, package, icon, asset and installer identifier to v7.6.0.
+- **Quality gates:** Production verification now covers screenshot documentation, the developer QR asset, bilingual dynamic UI, real hand-calibration behavior, theme contracts and local model integrity.
 
-`npm run vercel:build` validates the local hand model, MediaPipe build output, bilingual keys, dynamic localization paths, paired themes, release identity and deploy-ready output.
+## Device testing note
 
-## v7.5.6 — Input, Language & Hand Startup
-
-- Mobile text entry is first-tap focused.
-- Active runtime check content is language-safe.
-- The first local hand-engine load has honest wait/ready guidance.
-- Calibration completion now confirms saved state before exiting.
+Camera permission, GPU/WebGL behavior and hand detection still depend on the target browser and device. Test Camera & Hand on the intended Android phone after each production deployment.

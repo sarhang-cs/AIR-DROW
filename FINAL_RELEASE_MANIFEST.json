@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Input, Language & Hand Startup Edition",
-  "version": "7.5.6",
-  "buildId": "air-drow-v756-input-language-hand-startup",
+  "name": "AIR-DROW Final Clean Delivery Edition",
+  "version": "7.6.0",
+  "buildId": "air-drow-v760-final-clean-delivery",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -10,18 +10,26 @@
     "web/vendor/mediapipe/wasm/vision_wasm_module_internal.wasm",
     "web/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.wasm"
   ],
-  "delivery": "This complete interaction-and-hand-scan source package is ready for npm ci and npm run vercel:build. node_modules and public are intentionally excluded because the production output is regenerated from package-lock.json and web during build.",
+  "delivery": "This complete final source package is ready for npm ci and npm run vercel:build. node_modules and public are intentionally excluded because the production output is regenerated from package-lock.json and web during build.",
   "userDocs": [
     "README.md",
     "README_KU.md",
     "docs/USER_GUIDE.md",
     "docs/USER_GUIDE_KU.md",
     "docs/PRIVACY.md",
-    "docs/RELEASE_NOTES.md"
+    "docs/RELEASE_NOTES.md",
+    "docs/screenshots/air-drow-studio-en.png",
+    "docs/screenshots/air-drow-hand-en.png"
   ],
+  "developerProfile": {
+    "name": "Sarhang Salah",
+    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
+    "instagram": "https://www.instagram.com/sarhang.io/",
+    "qr": "web/assets/brand/instagram-sarhang-io-qr.svg"
+  },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v756-input-language-hand-startup.sh",
-  "release": "Input, Language & Hand Startup Edition",
-  "assetRevision": "756"
+  "installer": "termux/replace-with-v760-final-clean-delivery.sh",
+  "release": "Final Clean Delivery Edition",
+  "assetRevision": "760"
 }

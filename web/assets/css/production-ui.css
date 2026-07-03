@@ -1,5 +1,5 @@
 /* AIR-DROW production UI system
- * Consolidated in v7.5.6 so mobile layout, RTL/LTR behavior, brand treatment
+ * Consolidated in v7.6.0 so mobile layout, RTL/LTR behavior, brand treatment
  * and control fixes have one ordered source of truth. Keep structural styles
  * in app.css, visual-system.css, icon-system.css and drawer-layout.css.
  */
@@ -756,4 +756,71 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 @media (min-width: 680px) {
   .settings-scroll { padding-inline: 20px !important; }
   .settings-section .setting-body { padding-inline: 18px !important; }
+}
+
+
+/* Final developer profile: stable, high-contrast in every AIR-DROW palette. */
+.about-creator-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 126px;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+  padding: 13px;
+  border: 1px solid var(--ui-hairline);
+  border-radius: 17px;
+  background:
+    linear-gradient(132deg, color-mix(in srgb, var(--accent-soft) 66%, transparent), transparent 58%),
+    color-mix(in srgb, var(--panel-2) 82%, transparent);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+}
+.about-creator-copy { min-width: 0; display: grid; gap: 4px; }
+.about-creator-kicker { color: var(--muted); font-size: 10px; line-height: 1.45; }
+.about-creator-name { color: var(--text); font-size: 14px; line-height: 1.42; }
+.about-instagram-link {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  column-gap: 7px;
+  row-gap: 2px;
+  margin-top: 5px;
+  padding: 8px 9px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--line-soft));
+  border-radius: 12px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--panel-solid) 74%, transparent);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.about-instagram-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.about-instagram-link:hover { border-color: color-mix(in srgb, var(--accent) 58%, var(--line)); }
+.about-instagram-label { color: var(--muted); font-size: 10px; }
+.about-instagram-link b { color: var(--accent); font-size: 12px; }
+.about-instagram-note { grid-column: 1 / -1; color: var(--muted); font-size: 9px; line-height: 1.35; }
+.about-qr-link {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.about-qr-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 14px; }
+.about-qr-link img {
+  display: block;
+  width: 112px;
+  height: 112px;
+  padding: 7px;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line-soft));
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 7px 17px color-mix(in srgb, var(--skin-shadow) 24%, transparent);
+}
+@media (max-width: 390px) {
+  .about-creator-card { grid-template-columns: 1fr; }
+  .about-qr-link { justify-self: start; grid-template-columns: 62px 1fr; text-align: start; align-items: center; }
+  .about-qr-link img { width: 62px; height: 62px; padding: 4px; grid-row: 1 / span 2; }
 }
