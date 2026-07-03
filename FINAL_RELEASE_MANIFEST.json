@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Bootstrap Reliability Hotfix Edition",
-  "version": "7.5.1",
-  "buildId": "air-drow-v751-bootstrap-hotfix",
+  "name": "AIR-DROW Runtime & Storage Reliability Hotfix Edition",
+  "version": "7.5.2",
+  "buildId": "air-drow-v752-runtime-storage-hotfix",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -21,5 +21,5 @@
   ],
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. This release standardizes the AIR-DROW mark and improves contrast across dark and light themes.",
-  "installer": "termux/replace-with-v751-bootstrap-hotfix.sh"
+  "installer": "termux/replace-with-v752-runtime-storage-hotfix.sh"
 }

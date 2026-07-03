@@ -1,0 +1,28 @@
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const read = file => readFileSync(resolve(root, file), "utf8");
+const { I18N } = await import(resolve(root, "web/assets/js/i18n/translations.js"));
+const kuKeys = Object.keys(I18N.ku).sort();
+const enKeys = Object.keys(I18N.en).sort();
+if (JSON.stringify(kuKeys) !== JSON.stringify(enKeys)) throw new Error("Kurdish and English translation keys must remain identical.");
+if (!I18N.ku.galleryFallback || !I18N.en.galleryFallback) throw new Error("Gallery recovery mode must be localized.");
+const vercel = JSON.parse(read("vercel.json"));
+const securityGroup = vercel.headers.find(item => item.source === "/(.*)");
+const csp = securityGroup?.headers?.find(item => item.key === "Content-Security-Policy")?.value || "";
+if (!/script-src[^;]*'wasm-unsafe-eval'/.test(csp)) throw new Error("The Content Security Policy must allow WebAssembly compilation for the local MediaPipe runtime.");
+if (/script-src[^;]*'unsafe-eval'/.test(csp.replace(/'wasm-unsafe-eval'/g, ""))) throw new Error("The MediaPipe CSP exception must not allow general unsafe JavaScript eval.");
+const app = read("web/assets/js/app.js");
+const store = read("web/assets/js/core/project-store.js");
+if (!store.includes("FALLBACK_KEY") || !store.includes("getStorageState") || !store.includes("IndexedDB did not respond in time")) throw new Error("Project storage fallback and timeout recovery are incomplete.");
+if (!app.includes('if (workspace === "projects") void renderProjectGallery({ interactive: true });')) throw new Error("Project Gallery must load only when the Projects workspace opens.");
+if (/loadProject\(\)[\s\S]{0,2600}void renderProjectGallery\(\)/.test(app)) throw new Error("Project Gallery must not load during app startup.");
+const index = read("web/index.html");
+const worker = read("web/sw.js");
+const api = read("api/ai/generate.js");
+if (index.includes('modulepreload" href="./vendor/mediapipe') || index.includes('hand_landmarker.task?model=v620')) throw new Error("Large hand assets must not preload before camera consent.");
+if (worker.includes('"/vendor/models/hand_landmarker.task"') || worker.includes('"/vendor/mediapipe/vision_bundle.js"')) throw new Error("Camera runtime must be lazy-cached, not install-cached.");
+if (!api.includes("AIRDROW_AI_ALLOWED_ORIGINS") || !api.includes("Retry-After") || !api.includes("MAX_BODY_BYTES")) throw new Error("AI endpoint protection is incomplete.");
+console.log(`AIR-DROW runtime/storage integrity passed: ${kuKeys.length} bilingual keys, secure WASM CSP, lazy gallery and IndexedDB recovery.`);

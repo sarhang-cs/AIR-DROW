@@ -16,7 +16,7 @@ const productionUi = read("web/assets/css/production-ui.css");
 const model = resolve(root, "web/vendor/models/hand_landmarker.task");
 const runtimeBundle = resolve(root, "web/vendor/mediapipe/vision_bundle.js");
 const runtimeWasm = resolve(root, "web/vendor/mediapipe/wasm/vision_wasm_internal.wasm");
-for (const file of ["README.md", "README_KU.md", "CHANGELOG.md", "FINAL_RELEASE_MANIFEST.json", "docs/USER_GUIDE.md", "docs/USER_GUIDE_KU.md", "docs/PRIVACY.md", "docs/RELEASE_NOTES.md", "termux/replace-with-v751-bootstrap-hotfix.sh"]) if (!existsSync(resolve(root,file))) throw new Error(`Production release file is missing: ${file}`);
+for (const file of ["README.md", "README_KU.md", "CHANGELOG.md", "FINAL_RELEASE_MANIFEST.json", "docs/USER_GUIDE.md", "docs/USER_GUIDE_KU.md", "docs/PRIVACY.md", "docs/RELEASE_NOTES.md", "termux/replace-with-v752-runtime-storage-hotfix.sh"]) if (!existsSync(resolve(root,file))) throw new Error(`Production release file is missing: ${file}`);
 if (release.version !== pkg.version || release.version !== project.version || release.version !== assets.version) throw new Error("Version metadata is not synchronized.");
 if (release.buildId !== project.buildId || release.buildId !== assets.buildId) throw new Error("Build metadata is not synchronized.");
 if (!runtime.includes(`version: "${release.version}"`) || !runtime.includes(`buildId: "${release.buildId}"`)) throw new Error("Runtime release metadata is inconsistent.");

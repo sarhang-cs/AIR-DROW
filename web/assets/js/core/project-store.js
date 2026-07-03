@@ -5,21 +5,112 @@ const CURRENT_PROJECT_KEY = "current-project";
 const GALLERY_PREFIX = "gallery-";
 const BACKUP_SCHEMA = "air-drow-backup";
 const BACKUP_VERSION = 1;
+const FALLBACK_KEY = "air-drow.project-store.recovery.v1";
+const OPEN_TIMEOUT_MS = 8000;
+
+let storageMode = "indexeddb";
+let lastStorageError = "";
+let memoryFallback = [];
+
+function storageError(error) {
+  return String(error?.message || error || "Browser project storage is unavailable");
+}
+
+function markFallback(error) {
+  storageMode = "localstorage";
+  lastStorageError = storageError(error);
+}
+
+function clone(value) {
+  try { return structuredClone(value); } catch { return JSON.parse(JSON.stringify(value)); }
+}
+
+function fallbackRecords() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(FALLBACK_KEY) || "[]");
+    if (Array.isArray(parsed)) {
+      memoryFallback = parsed.filter(record => record && typeof record.id === "string");
+      return clone(memoryFallback);
+    }
+  } catch {}
+  return clone(memoryFallback);
+}
+
+function writeFallback(records) {
+  const next = records.filter(record => record && typeof record.id === "string");
+  memoryFallback = clone(next);
+  try {
+    localStorage.setItem(FALLBACK_KEY, JSON.stringify(next));
+    return true;
+  } catch (error) {
+    throw new Error(`Browser recovery storage is unavailable: ${storageError(error)}`);
+  }
+}
+
+function updateFallbackRecord(record) {
+  const records = fallbackRecords();
+  const index = records.findIndex(item => item.id === record.id);
+  if (index >= 0) records[index] = clone(record);
+  else records.push(clone(record));
+  writeFallback(records);
+  return record;
+}
+
+function deleteFallbackRecord(id) {
+  writeFallback(fallbackRecords().filter(record => record.id !== id));
+}
 
 function openDatabase() {
   return new Promise((resolve, reject) => {
-    if (!("indexedDB" in globalThis)) return reject(new Error("IndexedDB is unavailable"));
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
-    request.onupgradeneeded = () => {
-      const db = request.result;
-      const store = db.objectStoreNames.contains(STORE_NAME)
-        ? request.transaction.objectStore(STORE_NAME)
-        : db.createObjectStore(STORE_NAME, { keyPath: "id" });
-      if (!store.indexNames.contains("recordType")) store.createIndex("recordType", "recordType", { unique: false });
-      if (!store.indexNames.contains("savedAt")) store.createIndex("savedAt", "savedAt", { unique: false });
+    if (!("indexedDB" in globalThis)) {
+      reject(new Error("IndexedDB is unavailable"));
+      return;
+    }
+
+    let settled = false;
+    const finish = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      callback(value);
     };
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error || new Error("Could not open IndexedDB"));
+    const fail = error => finish(reject, error instanceof Error ? error : new Error(storageError(error)));
+    const timeout = setTimeout(() => fail(new Error("IndexedDB did not respond in time")), OPEN_TIMEOUT_MS);
+
+    let request;
+    try {
+      request = indexedDB.open(DB_NAME, DB_VERSION);
+    } catch (error) {
+      fail(error);
+      return;
+    }
+
+    request.onupgradeneeded = () => {
+      try {
+        const db = request.result;
+        const transaction = request.transaction;
+        if (!transaction) throw new Error("IndexedDB upgrade transaction is unavailable");
+        const store = db.objectStoreNames.contains(STORE_NAME)
+          ? transaction.objectStore(STORE_NAME)
+          : db.createObjectStore(STORE_NAME, { keyPath: "id" });
+        if (!store.indexNames.contains("recordType")) store.createIndex("recordType", "recordType", { unique: false });
+        if (!store.indexNames.contains("savedAt")) store.createIndex("savedAt", "savedAt", { unique: false });
+      } catch (error) {
+        try { request.transaction?.abort(); } catch {}
+        fail(error);
+      }
+    };
+    request.onblocked = () => fail(new Error("IndexedDB is locked by another AIR-DROW tab"));
+    request.onerror = () => fail(request.error || new Error("Could not open IndexedDB"));
+    request.onsuccess = () => {
+      const db = request.result;
+      db.onversionchange = () => db.close();
+      if (settled) {
+        db.close();
+        return;
+      }
+      finish(resolve, db);
+    };
   });
 }
 
@@ -27,15 +118,71 @@ async function withStore(mode, run) {
   const db = await openDatabase();
   try {
     return await new Promise((resolve, reject) => {
-      const transaction = db.transaction(STORE_NAME, mode);
-      const store = transaction.objectStore(STORE_NAME);
-      const request = run(store);
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error || new Error("IndexedDB request failed"));
-      transaction.onerror = () => reject(transaction.error || new Error("IndexedDB transaction failed"));
+      let settled = false;
+      const finish = (callback, value) => {
+        if (settled) return;
+        settled = true;
+        callback(value);
+      };
+      let transaction;
+      let request;
+      try {
+        transaction = db.transaction(STORE_NAME, mode);
+        const store = transaction.objectStore(STORE_NAME);
+        request = run(store);
+      } catch (error) {
+        finish(reject, error);
+        return;
+      }
+      request.onsuccess = () => finish(resolve, request.result);
+      request.onerror = () => finish(reject, request.error || new Error("IndexedDB request failed"));
+      transaction.onabort = () => finish(reject, transaction.error || new Error("IndexedDB transaction was aborted"));
+      transaction.onerror = () => finish(reject, transaction.error || new Error("IndexedDB transaction failed"));
     });
   } finally {
     db.close();
+  }
+}
+
+async function getAllRecords() {
+  if (storageMode === "localstorage") return fallbackRecords();
+  try {
+    const records = await withStore("readonly", store => store.getAll());
+    return Array.isArray(records) ? records : [];
+  } catch (error) {
+    markFallback(error);
+    return fallbackRecords();
+  }
+}
+
+async function getRecord(id) {
+  if (storageMode === "localstorage") return fallbackRecords().find(record => record.id === id) || null;
+  try {
+    return await withStore("readonly", store => store.get(id));
+  } catch (error) {
+    markFallback(error);
+    return fallbackRecords().find(record => record.id === id) || null;
+  }
+}
+
+async function putRecord(record) {
+  if (storageMode === "localstorage") return updateFallbackRecord(record);
+  try {
+    await withStore("readwrite", store => store.put(record));
+    return record;
+  } catch (error) {
+    markFallback(error);
+    return updateFallbackRecord(record);
+  }
+}
+
+async function removeRecord(id) {
+  if (storageMode === "localstorage") return deleteFallbackRecord(id);
+  try {
+    await withStore("readwrite", store => store.delete(id));
+  } catch (error) {
+    markFallback(error);
+    deleteFallbackRecord(id);
   }
 }
 
@@ -87,7 +234,7 @@ function byteSize(value) {
 
 export const projectStore = {
   async loadCurrent() {
-    const record = await withStore("readonly", store => store.get(CURRENT_PROJECT_KEY));
+    const record = await getRecord(CURRENT_PROJECT_KEY);
     return record?.project || null;
   },
 
@@ -99,19 +246,19 @@ export const projectStore = {
       savedAt: new Date().toISOString(),
       project
     };
-    await withStore("readwrite", store => store.put(record));
+    await putRecord(record);
     return record;
   },
 
   async clearCurrent() {
-    await withStore("readwrite", store => store.delete(CURRENT_PROJECT_KEY));
+    await removeRecord(CURRENT_PROJECT_KEY);
   },
 
   async saveGalleryProject({ id, name, project, thumbnail = "" } = {}) {
     if (!validProject(project)) throw new Error("Project data is required");
     const now = new Date().toISOString();
     const recordId = id?.startsWith(GALLERY_PREFIX) ? id : idForGallery();
-    const existing = id ? await withStore("readonly", store => store.get(recordId)) : null;
+    const existing = id ? await getRecord(recordId) : null;
     const record = {
       id: recordId,
       recordType: "gallery",
@@ -122,12 +269,12 @@ export const projectStore = {
       strokeCount: Array.isArray(project.strokes) ? project.strokes.length : 0,
       project
     };
-    await withStore("readwrite", store => store.put(record));
+    await putRecord(record);
     return galleryView(record);
   },
 
   async listGalleryProjects() {
-    const all = await withStore("readonly", store => store.getAll());
+    const all = await getAllRecords();
     return all
       .filter(record => record?.recordType === "gallery" || String(record?.id || "").startsWith(GALLERY_PREFIX))
       .sort((a, b) => String(b.savedAt || "").localeCompare(String(a.savedAt || "")))
@@ -136,17 +283,17 @@ export const projectStore = {
 
   async loadGalleryProject(id) {
     if (!id) return null;
-    const record = await withStore("readonly", store => store.get(id));
+    const record = await getRecord(id);
     return record?.project || null;
   },
 
   async deleteGalleryProject(id) {
     if (!String(id || "").startsWith(GALLERY_PREFIX)) throw new Error("Invalid gallery project id");
-    await withStore("readwrite", store => store.delete(id));
+    await removeRecord(id);
   },
 
   async createBackupArchive({ appVersion = "", title = "AIR-DROW" } = {}) {
-    const records = await withStore("readonly", store => store.getAll());
+    const records = await getAllRecords();
     const archive = {
       schema: BACKUP_SCHEMA,
       version: BACKUP_VERSION,
@@ -202,7 +349,7 @@ export const projectStore = {
   },
 
   async getHealth() {
-    const records = await withStore("readonly", store => store.getAll());
+    const records = await getAllRecords();
     const valid = archiveRecords(records);
     let usage = 0;
     let quota = 0;
@@ -216,7 +363,13 @@ export const projectStore = {
       galleryProjects: valid.filter(record => record.recordType === "gallery").length,
       recordBytes: byteSize(valid),
       usage,
-      quota
+      quota,
+      mode: storageMode,
+      fallback: storageMode === "localstorage"
     };
+  },
+
+  getStorageState() {
+    return { mode: storageMode, fallback: storageMode === "localstorage", error: lastStorageError };
   }
 };

@@ -1,19 +1,23 @@
 #!/usr/bin/env bash
-# AIR-DROW v7.5.1 — Bootstrap Reliability Hotfix Edition
-# Transactional full replacement: preserve only .git, verify/build, then push.
+# AIR-DROW v7.5.2 — Runtime & Storage Reliability Hotfix Edition
+# Transactional replacement: preserve .git, verify/build before push, then restore the old source if validation fails.
 set -Eeuo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="7.5.1"
+VERSION="7.5.2"
 REPO="${1:-$HOME/AIR-DROW-GITHUB}"
 BACKUP="${REPO}.backup-${VERSION//./-}-$(date +%Y%m%d-%H%M%S)"
 RESTORE_REQUIRED=0
 restore_previous() {
-  set +e; [ "${RESTORE_REQUIRED:-0}" -eq 1 ] || return 0; [ -d "$BACKUP" ] || return 0
-  echo ""; echo "Build did not finish. Restoring the previous AIR-DROW…"
+  set +e
+  [ "${RESTORE_REQUIRED:-0}" -eq 1 ] || return 0
+  [ -d "$BACKUP" ] || return 0
+  echo ""
+  echo "Validation did not finish. Restoring the previous AIR-DROW source…"
   shopt -s dotglob nullglob
   for item in "$REPO"/*; do [ "$(basename "$item")" = ".git" ] && continue; rm -rf -- "$item"; done
   for item in "$BACKUP"/*; do mv -- "$item" "$REPO/"; done
-  RESTORE_REQUIRED=0; echo "Previous AIR-DROW restored safely."
+  RESTORE_REQUIRED=0
+  echo "Previous AIR-DROW source restored safely."
 }
 on_error() { code=$?; restore_previous || true; exit "$code"; }
 trap on_error ERR
@@ -26,15 +30,24 @@ VERSION_FOUND="$(node -e 'const fs=require("fs"); console.log(JSON.parse(fs.read
 [ -s "$SOURCE/web/vendor/models/hand_landmarker.task" ] || { echo "The local hand model is missing."; exit 1; }
 [ -s "$SOURCE/web/vendor/mediapipe/vision_bundle.js" ] || { echo "The local hand runtime is missing."; exit 1; }
 [ -f "$SOURCE/web/assets/css/production-ui.css" ] || { echo "The production UI stylesheet is missing."; exit 1; }
-echo "Creating a safe backup…"; mkdir -p "$BACKUP"; shopt -s dotglob nullglob
+echo "Creating a safe backup…"
+mkdir -p "$BACKUP"
+shopt -s dotglob nullglob
 for item in "$REPO"/*; do [ "$(basename "$item")" = ".git" ] && continue; mv -- "$item" "$BACKUP/"; done
 RESTORE_REQUIRED=1
-echo "Replacing old AIR-DROW project files with v$VERSION…"; cp -a "$SOURCE"/. "$REPO"/
+echo "Replacing old AIR-DROW project files with v$VERSION…"
+cp -a "$SOURCE"/. "$REPO"/
 [ -d "$REPO/.git" ] || { echo "Git metadata was not preserved."; restore_previous; exit 1; }
-cd "$REPO"; echo "Installing exact dependencies…"; npm_config_loglevel=error npm ci --no-audit --no-fund
-echo "Building and verifying AIR-DROW v$VERSION…"; npm run vercel:build
-RESTORE_REQUIRED=0; git add -A
-if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.5.1 bootstrap hotfix"; fi
-BRANCH="$(git branch --show-current 2>/dev/null || true)"; [ -n "$BRANCH" ] || BRANCH="main"
-git push origin "HEAD:$BRANCH"; rm -rf "$BACKUP"
+cd "$REPO"
+echo "Installing exact dependencies…"
+npm_config_loglevel=error npm ci --no-audit --no-fund
+echo "Building and verifying AIR-DROW v$VERSION…"
+npm run vercel:build
+RESTORE_REQUIRED=0
+git add -A
+if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.5.2 runtime and storage hotfix"; fi
+BRANCH="$(git branch --show-current 2>/dev/null || true)"
+[ -n "$BRANCH" ] || BRANCH="main"
+git push origin "HEAD:$BRANCH"
+rm -rf "$BACKUP"
 printf '\n========================================\nDONE ✅ AIR-DROW v%s was verified and pushed.\nVercel can now deploy the branch.\n========================================\n' "$VERSION"

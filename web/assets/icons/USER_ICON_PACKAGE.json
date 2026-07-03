@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "7.5.1",
-  "buildId": "air-drow-v751-bootstrap-hotfix",
+  "version": "7.5.2",
+  "buildId": "air-drow-v752-runtime-storage-hotfix",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {
@@ -191,5 +191,5 @@
       "bytes": 502
     }
   ],
-  "release": "Bootstrap Reliability Hotfix Edition"
+  "release": "Runtime & Storage Reliability Hotfix Edition"
 }

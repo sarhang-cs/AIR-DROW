@@ -1,7 +1,7 @@
-AIR-DROW v7.5.1 — one-command safe replacement
+AIR-DROW v7.5.2 — Runtime & Storage Reliability Hotfix
 
-Download AIR-DROW_v7.5.1_BOOTSTRAP_HOTFIX.zip to /sdcard/Download, then paste this into Termux. Change only REPO if your old GitHub project is in a different folder:
+1. Download the complete ZIP to /sdcard/Download.
+2. Run the one-line Termux command provided with this release.
+3. The installer preserves .git, creates a timestamped backup, validates the production build, pushes only when checks pass, and restores the older source if a check fails.
 
-REPO="$HOME/AIR-DROW-GITHUB"; ZIP="/sdcard/Download/AIR-DROW_v7.5.1_BOOTSTRAP_HOTFIX.zip"; pkg update -y && pkg install -y nodejs-lts git unzip && rm -rf "$HOME/AIR-DROW-V751" && mkdir -p "$HOME/AIR-DROW-V751" && unzip -q "$ZIP" -d "$HOME/AIR-DROW-V751" && bash "$HOME/AIR-DROW-V751/AIR-DROW-v7.5.1-BOOTSTRAP-HOTFIX/termux/replace-with-v751-bootstrap-hotfix.sh" "$REPO"
-
-This backs up all old project files except .git, installs exact dependencies, builds, verifies, commits and pushes. If verification fails, it restores the old project automatically.
+This release fixes the local MediaPipe WebAssembly CSP failure and prevents Project Gallery alerts from appearing during normal Draw startup.

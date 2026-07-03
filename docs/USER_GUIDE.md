@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 7.5.1 Bootstrap Reliability Hotfix Edition.
+> This guide applies to AIR-DROW 7.5.2 Runtime & Storage Reliability Hotfix Edition.
 
 ## Start a drawing
 

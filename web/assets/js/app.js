@@ -146,6 +146,8 @@ const state = {
   trackingHealth: 0,
   calibrationPending: false,
   viewportRefreshFrame: 0,
+  galleryLoadPromise: null,
+  galleryFailureShown: false,
   shortcutGate: createShortcutGate()
 };
 
@@ -450,8 +452,8 @@ async function loadProject() {
   if (ui.projectName) ui.projectName.value = state.projectTitle;
   applySettings();
   render();
-  void renderProjectGallery();
 }
+
 
 function serializeProject() {
   return {
@@ -586,13 +588,6 @@ async function restoreBackupArchive(file) {
     if (result.restoredCurrent) await loadProject();
     else await renderProjectGallery();
     await refreshStabilityStatus();
-  const runDeviceReadiness = () => { void deviceReadiness?.run({ silent: true }); };
-  if ("requestIdleCallback" in window) {
-    window.requestIdleCallback(runDeviceReadiness, { timeout: 2600 });
-  } else {
-    setTimeout(runDeviceReadiness, 900);
-  }
-  // Camera & Hand Check stays quiet until the person chooses to test the camera.
     loadingManager?.endTask("backup");
     const detail = result.restoredGallery ? ` · ${result.restoredGallery}` : "";
     setText(ui.backupStatus, `${t("backupRestored", "Backup restored")}${detail}`);
@@ -748,7 +743,7 @@ function applyLanguage() {
   updateModeButtons();
   updateHandCalibrationStatus();
   updatePerformanceStatus();
-  if (ui.galleryStatus) void renderProjectGallery();
+  if (ui.galleryStatus && state.workspace === "projects") void renderProjectGallery({ interactive: false });
   if (ui.cameraModePicker) ui.cameraModePicker.dataset.title = t("cameraModeTitle", "Choose camera mode");
   ui.languageChoices.forEach(button => button.classList.toggle("selected", button.dataset.language === language));
   setText(ui.fontStatus, language === "en" ? "System Sans" : "Noto Kufi Arabic");
@@ -2275,46 +2270,64 @@ function makeGalleryAction(label, action, id, danger = false) {
   return button;
 }
 
-async function renderProjectGallery() {
+async function renderProjectGallery({ interactive = false } = {}) {
   if (!ui.galleryList) return;
-  loadingManager?.beginTask("gallery", { label: t("galleryLoading", "Loading gallery…"), progress: 28, global: false });
-  loadingManager?.showGallerySkeleton();
-  try {
-    const projects = await projectStore.listGalleryProjects();
-    loadingManager?.updateTask("gallery", { progress: 76 });
-    ui.galleryList.replaceChildren();
-    if (!projects.length) {
+  if (state.galleryLoadPromise) return state.galleryLoadPromise;
+
+  const run = async () => {
+    loadingManager?.beginTask("gallery", { label: t("galleryLoading", "Loading gallery…"), progress: 28, global: false });
+    loadingManager?.showGallerySkeleton();
+    try {
+      const projects = await projectStore.listGalleryProjects();
+      loadingManager?.updateTask("gallery", { progress: 76 });
+      ui.galleryList.replaceChildren();
+      if (!projects.length) {
+        const empty = document.createElement("p");
+        empty.className = "gallery-empty";
+        empty.textContent = t("noProjects", "No saved gallery projects yet");
+        ui.galleryList.append(empty);
+      } else {
+        for (const project of projects) {
+          const card = document.createElement("article"); card.className = "gallery-card";
+          if (project.thumbnail) {
+            const image = document.createElement("img");
+            image.className = "gallery-thumb"; image.alt = ""; image.src = project.thumbnail;
+            image.loading = "lazy"; image.width = 112; image.height = 104; image.decoding = "async";
+            card.append(image);
+          }
+          const meta = document.createElement("div"); meta.className = "gallery-meta";
+          const title = document.createElement("b"); title.textContent = project.name; meta.append(title);
+          const small = document.createElement("small"); small.textContent = `${project.strokeCount} ${t("drawing", "strokes")} · ${localDate(project.savedAt)}`; meta.append(small);
+          const actions = document.createElement("div"); actions.className = "gallery-actions";
+          actions.append(makeGalleryAction("Open", "load", project.id), makeGalleryAction("Delete", "delete", project.id, true));
+          card.append(meta, actions); ui.galleryList.append(card);
+        }
+      }
+      const storage = projectStore.getStorageState?.();
+      if (ui.galleryStatus) {
+        const count = t("galleryCount", "{count} projects").replace("{count}", String(projects.length));
+        setText(ui.galleryStatus, storage?.fallback ? `${count} · ${t("galleryFallback", "Recovery storage active")}` : count);
+      }
+      state.galleryFailureShown = false;
+    } catch (error) {
+      console.warn("Gallery could not load", error);
+      ui.galleryList.replaceChildren();
       const empty = document.createElement("p");
       empty.className = "gallery-empty";
-      empty.textContent = t("noProjects", "No saved gallery projects yet");
+      empty.textContent = t("galleryUnavailable", "Gallery unavailable");
       ui.galleryList.append(empty);
-      if (ui.galleryStatus) setText(ui.galleryStatus, t("galleryCount", "{count} projects").replace("{count}", "0"));
-      return;
-    }
-    for (const project of projects) {
-      const card = document.createElement("article"); card.className = "gallery-card";
-      if (project.thumbnail) {
-        const image = document.createElement("img");
-        image.className = "gallery-thumb"; image.alt = ""; image.src = project.thumbnail;
-        image.loading = "lazy"; image.width = 112; image.height = 104; image.decoding = "async";
-        card.append(image);
+      if (ui.galleryStatus) setText(ui.galleryStatus, t("galleryUnavailable", "Gallery unavailable"));
+      if (interactive && !state.galleryFailureShown) {
+        state.galleryFailureShown = true;
+        toast(t("galleryFailureTitle", "Gallery could not open"));
       }
-      const meta = document.createElement("div"); meta.className = "gallery-meta";
-      const title = document.createElement("b"); title.textContent = project.name; meta.append(title);
-      const small = document.createElement("small"); small.textContent = `${project.strokeCount} ${t("drawing", "strokes")} · ${localDate(project.savedAt)}`; meta.append(small);
-      const actions = document.createElement("div"); actions.className = "gallery-actions";
-      actions.append(makeGalleryAction("Open", "load", project.id), makeGalleryAction("Delete", "delete", project.id, true));
-      card.append(meta, actions); ui.galleryList.append(card);
+    } finally {
+      loadingManager?.endTask("gallery");
     }
-    if (ui.galleryStatus) setText(ui.galleryStatus, t("galleryCount", "{count} projects").replace("{count}", String(projects.length)));
-  } catch (error) {
-    console.warn("Gallery could not load", error);
-    showRecovery({ kind: "storage", icon: "!", title: t("galleryFailureTitle", "Gallery could not open"), body: t("galleryFailureBody", "Your local projects remain safe. Try loading the gallery again."), actionLabel: t("galleryTryAgain", "Retry gallery"), action: () => renderProjectGallery() });
-    ui.galleryList.replaceChildren();
-    if (ui.galleryStatus) setText(ui.galleryStatus, t("galleryUnavailable", "Gallery unavailable"));
-  } finally {
-    loadingManager?.endTask("gallery");
-  }
+  };
+
+  state.galleryLoadPromise = run().finally(() => { state.galleryLoadPromise = null; });
+  return state.galleryLoadPromise;
 }
 
 async function saveProjectToGallery() {
@@ -2342,7 +2355,7 @@ async function loadGalleryProject(id) {
     applySettings(); updateHistoryControls(); render();
     await saveProject({ quiet: true });
     toast("Project opened");
-  } catch (error) { console.error(error); toast(t("galleryFailureTitle", "Gallery could not open")); showRecovery({ kind: "storage", icon: "!", title: t("galleryFailureTitle", "Gallery could not open"), body: t("galleryFailureBody", "Your local projects remain safe. Try loading the gallery again."), actionLabel: t("galleryTryAgain", "Retry gallery"), action: () => renderProjectGallery() }); }
+  } catch (error) { console.error(error); toast(t("galleryFailureTitle", "Gallery could not open")); }
 }
 
 async function importProjectFile(file) {
@@ -2941,6 +2954,7 @@ function openSettings(forceOpen = true, workspace = null) {
 function openWorkspace(workspace) {
   setWorkspace(workspace);
   openSettings(true);
+  if (workspace === "projects") void renderProjectGallery({ interactive: true });
 }
 
 function applyControlChanges() {
