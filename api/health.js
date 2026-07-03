@@ -5,7 +5,7 @@ export default function handler(req, res) {
   const configured = process.env.AIRDROW_AI_ENABLED === "true" && Boolean(process.env.OPENAI_API_KEY);
   return res.status(200).json({
     ok: true,
-    version: "6.2.0",
+    version: "6.3.0",
     provider: "OpenAI GPT Image",
     aiConfigured: configured,
     enabled: configured,

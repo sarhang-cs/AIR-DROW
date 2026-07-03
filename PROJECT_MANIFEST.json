@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "6.2.0",
-  "buildId": "air-drow-v620-phase3-hand-drawing",
-  "release": "Phase 3 — Hand Tracking and Drawing Engine",
+  "version": "6.3.0",
+  "buildId": "air-drow-v630-phase4-project-safety",
+  "release": "Phase 4 \u2014 Project Safety, Export and Onboarding Polish",
   "architecture": {
     "styles": [
       "web/assets/css/app.css",
@@ -20,16 +20,16 @@
     "iconSystem": "web/assets/icons/ICON_SYSTEM.md"
   },
   "scope": [
-    "Phase 1: foundation hardening — deterministic install/build, Vercel deployment contract, canonical metadata, cache discipline and local-first runtime policy.",
+    "Phase 1: foundation hardening \u2014 deterministic install/build, Vercel deployment contract, canonical metadata, cache discipline and local-first runtime policy.",
     "Phase 2: premium visual system, RTL layouts, themes and mobile drawer refinement.",
     "Phase 3: hand tracking reliability, pinch stability, drawing smoothness, camera isolation and fist continuity.",
     "Phase 4: export, save, update, offline recovery, onboarding and privacy polish.",
     "Phase 5: final QA, release package, README, screenshots and Termux deployment procedure."
   ],
   "privacy": "Drawing data stays local unless the creator explicitly requests an export, share or AI generation.",
-  "stage": "phase-3-hand-drawing-engine",
+  "stage": "phase-4-project-safety-and-polish",
   "releaseGate": "npm run vercel:build confirms the local model, verifies UI source contracts, builds the self-hosted MediaPipe runtime and verifies generated deployment assets.",
   "notes": [
-    "v6.2.0 Phase 3 adds velocity-aware hand tracking, lower-latency drawing, pinch stability and a bounded continuity guard for closed-fist or short occlusion transitions."
+    "v6.3.0 Phase 4 adds a bounded recovery journal, lifecycle-safe save flushing, resilient output fallback, update-save enforcement and touch-first onboarding."
   ]
 }

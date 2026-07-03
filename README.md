@@ -1,3 +1,9 @@
+# AIR-DROW v6.3.0 — Phase 4: Project Safety, Export & Onboarding Polish
+
+AIR-DROW now protects the latest valid local project with a bounded same-tab recovery journal, flushes saves as the app backgrounds or closes, saves before every export and before user-controlled updates, and provides a WebP-to-PNG fallback for incompatible mobile browsers. Backup delivery is safer on Android and the first-use flow supports swipe, keyboard navigation and focus restoration.
+
+---
+
 # AIR-DROW v6.2.0 — Phase 3: Hand Tracking & Drawing Engine
 
 AIR-DROW Phase 3 refines the live hand-drawing path: velocity-aware fingertip tracking, lower-latency camera ink, stable pinch start/release behavior, a calibrated hand eraser, and bounded continuity through a brief closed fist or detector drop. A sudden detector jump still ends the active stroke immediately, so no bridge line is painted.

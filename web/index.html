@@ -6,17 +6,17 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW Export, Save & Onboarding — local-first drawing, reliable files and guided first use." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=620" />
-  <meta name="air-drow-build" content="air-drow-v620-phase3-hand-drawing" />
-  <meta name="air-drow-icon-pack" content="phase3-hand-drawing-v620" />
+  <link rel="manifest" href="./manifest.webmanifest?v=630" />
+  <meta name="air-drow-build" content="air-drow-v630-phase4-project-safety" />
+  <meta name="air-drow-icon-pack" content="phase4-project-safety-v630" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=620" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=630" />
   <link rel="modulepreload" href="./vendor/mediapipe/vision_bundle.js" />
   <link rel="preload" as="fetch" href="./vendor/models/hand_landmarker.task?model=v620-hand-drawing" crossorigin="anonymous" />
   <link rel="preload" as="fetch" href="./vendor/mediapipe/wasm/vision_wasm_internal.wasm" crossorigin="anonymous" />
-  <title>AIR-DROW v6.2.0 — Hand Drawing Engine</title>
+  <title>AIR-DROW v6.3.0 — Hand Drawing Engine</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
       font-family: "Noto Kufi Arabic";
@@ -26,11 +26,11 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=620" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=620" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=620" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=620" />
-    <link rel="stylesheet" href="./assets/css/phase2-ui.css?v=620" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=630" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=630" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=630" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=630" />
+    <link rel="stylesheet" href="./assets/css/phase2-ui.css?v=630" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
@@ -636,7 +636,7 @@
             </div>
             <div class="about-grid">
               <div><span data-i18n="developer">گەشەپێدەر</span><b>SARHANG IO</b></div>
-              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b class="numeric-value">v6.2.0</b></div>
+              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b class="numeric-value">v6.3.0</b></div>
               <div><span data-i18n="uiFont">فۆنتی UI</span><b id="fontStatus">Noto / System</b></div>
               <div><span data-i18n="release">Release</span><b data-i18n="releaseCameraUiComplete">Export, Save & Onboarding</b></div>
             </div>
@@ -687,7 +687,7 @@
       recovery path because the application module never evaluated.
     */
     (() => {
-      const BUILD_ID = "air-drow-v620-phase3-hand-drawing";
+      const BUILD_ID = "air-drow-v630-phase4-project-safety";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

@@ -1,0 +1,15 @@
+{
+  "version": "6.3.0",
+  "buildId": "air-drow-v630-phase4-project-safety",
+  "phase": 4,
+  "title": "Project Safety, Export, Update and Onboarding Polish",
+  "delivery": [
+    "A bounded session recovery journal captures the newest valid project before the debounced IndexedDB save completes.",
+    "A lifecycle flush is called on hidden, pagehide and beforeunload transitions; a journal is restored only when newer than the persisted project.",
+    "Every export saves the active project first and WebP safely falls back to PNG on browsers that cannot encode WebP.",
+    "Backup download URLs remain alive for Android delayed download handling and updates refuse to navigate if the save result is unsuccessful.",
+    "Onboarding supports touch swipe, keyboard navigation and focus restoration while preserving the existing premium RTL UI."
+  ],
+  "privacy": "Recovery journals are session-scoped, size-bounded and local. AIR-DROW never uploads drawing data unless the creator explicitly uses a sharing or AI action.",
+  "qualityGate": "npm run vercel:build"
+}

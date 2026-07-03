@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v620-phase3-hand-drawing";
+const BUILD_ID = "air-drow-v630-phase4-project-safety";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [
@@ -25,6 +25,7 @@ const APP_SHELL = [
   "/assets/js/features/onboarding-flow.js",
   "/assets/js/core/reliability-center.js",
   "/assets/js/core/backup-manager.js",
+  "/assets/js/core/persistence-guard.js",
   "/assets/js/core/final-stability.js",
   "/assets/js/app.js",
   "/assets/js/core/project-store.js",

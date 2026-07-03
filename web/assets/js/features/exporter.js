@@ -151,27 +151,43 @@ export function createExporter({ getProject, getCanvasSize, drawStroke, getBackg
     const dimensions = dimensionsFor(preset, getCanvasSize?.());
     return buildPdfBlob({ project: projectSnapshot(), dimensions, background: getBackground?.() || "#07101b", transparent });
   }
+  async function encodeRaster({ format = "png", preset = "current", transparent = false } = {}) {
+    const requested = OUTPUTS[format] || OUTPUTS.png;
+    const canvas = buildCanvas({ preset, transparent });
+    try {
+      const blob = await canvasToBlob(canvas, requested.mime, .95);
+      return { blob, format: requested.extension, fallback: false };
+    } catch (error) {
+      // Older Android webviews sometimes expose the WebP option but refuse to
+      // encode it. Exporting a PNG is safer than making the creator retry.
+      if (requested.extension !== "webp") throw error;
+      const blob = await canvasToBlob(canvas, OUTPUTS.png.mime, .95);
+      return { blob, format: "png", fallback: true };
+    }
+  }
+
   async function exportFile({ format = "png", preset = "current", transparent = false, filenameBase = "air-drow" } = {}) {
     const base = safeFileBase(filenameBase);
     if (format === "airdrow") {
       const project = { ...projectSnapshot(), exportedAt: new Date().toISOString(), format: "airdrow-project" };
       const blob = new Blob([`${JSON.stringify(project, null, 2)}\n`], { type: "application/json;charset=utf-8" });
-      const filename = `${base}.airdrow`; downloadBlob(blob, filename); return { blob, filename, format };
+      const filename = `${base}.airdrow`; downloadBlob(blob, filename); return { blob, filename, format, fallback: false };
     }
-    if (format === "svg") { const blob = new Blob([buildSvg({ preset, transparent })], { type: "image/svg+xml;charset=utf-8" }); const filename = `${base}.svg`; downloadBlob(blob, filename); return { blob, filename, format }; }
-    if (format === "pdf") { const blob = buildPdf({ preset, transparent }); const filename = `${base}.pdf`; downloadBlob(blob, filename); return { blob, filename, format }; }
-    const output = OUTPUTS[format] || OUTPUTS.png;
-    const blob = await canvasToBlob(buildCanvas({ preset, transparent }), output.mime, .95);
-    const extension = blob.type === output.mime ? output.extension : "png";
-    const filename = `${base}.${extension}`; downloadBlob(blob, filename); return { blob, filename, format: extension };
+    if (format === "svg") { const blob = new Blob([buildSvg({ preset, transparent })], { type: "image/svg+xml;charset=utf-8" }); const filename = `${base}.svg`; downloadBlob(blob, filename); return { blob, filename, format, fallback: false }; }
+    if (format === "pdf") { const blob = buildPdf({ preset, transparent }); const filename = `${base}.pdf`; downloadBlob(blob, filename); return { blob, filename, format, fallback: false }; }
+    const encoded = await encodeRaster({ format, preset, transparent });
+    const filename = `${base}.${encoded.format}`; downloadBlob(encoded.blob, filename);
+    return { blob: encoded.blob, filename, format: encoded.format, fallback: encoded.fallback };
   }
   async function shareFile({ preset = "story", transparent = false, filenameBase = "air-drow" } = {}) {
-    const blob = await canvasToBlob(buildCanvas({ preset, transparent }), "image/png", .95);
-    const file = new File([blob], `${safeFileBase(filenameBase)}.png`, { type: "image/png" });
-    const payload = { title: "AIR-DROW", text: "Created in AIR-DROW", files: [file] };
-    const canShare = typeof navigator.share === "function" && (typeof navigator.canShare !== "function" || navigator.canShare(payload));
-    if (canShare) { await navigator.share(payload); return { shared: true, downloaded: false, filename: file.name }; }
-    downloadBlob(blob, file.name); return { shared: false, downloaded: true, filename: file.name };
+    const encoded = await encodeRaster({ format: "png", preset, transparent });
+    const filename = `${safeFileBase(filenameBase)}.png`;
+    let file = null;
+    try { file = new File([encoded.blob], filename, { type: "image/png" }); } catch {}
+    const payload = file ? { title: "AIR-DROW", text: "Created in AIR-DROW", files: [file] } : null;
+    const canShare = Boolean(payload && typeof navigator.share === "function" && (typeof navigator.canShare !== "function" || navigator.canShare(payload)));
+    if (canShare) { await navigator.share(payload); return { shared: true, downloaded: false, filename }; }
+    downloadBlob(encoded.blob, filename); return { shared: false, downloaded: true, filename };
   }
-  return { exportFile, shareFile, buildSvg, buildPdf, buildCanvas, buildThumbnail };
+  return { exportFile, shareFile, buildSvg, buildPdf, buildCanvas, buildThumbnail, encodeRaster };
 }

@@ -16,6 +16,7 @@ import { createPerformanceGovernor } from "./core/performance-governor.js";
 import { HAND_CALIBRATION_DEFAULT, createHandCalibration, mapHandPoint, normalizeHandCalibration } from "./features/hand-calibration.js";
 import { createReliabilityCenter } from "./core/reliability-center.js";
 import { createBackupManager } from "./core/backup-manager.js";
+import { createPersistenceGuard } from "./core/persistence-guard.js";
 import { createFinalStability } from "./core/final-stability.js";
 import { createHandStabilizer, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
 import { createLocalHandLandmarker, primeLocalHandAssets } from "./features/hand-engine-bootstrap.js";
@@ -40,6 +41,7 @@ let reliabilityCenter = null;
 let loadingManager = null;
 let performanceGovernor = null;
 let backupManager = null;
+let persistenceGuard = null;
 let finalStability = null;
 let releaseManager = null;
 let exporter = null;
@@ -78,6 +80,9 @@ const state = {
   lastFpsAt: 0,
   fps: 0,
   saveTimer: 0,
+  saveInFlight: null,
+  lastSavedAt: "",
+  pendingRecoveryJournal: false,
   cameraStarting: false,
   consentPendingMode: null,
   erasingGesture: false,
@@ -380,28 +385,54 @@ async function readOldIndexedProject() {
 
 async function loadProject() {
   let candidate = null;
+  let candidateSavedAt = "";
   let migrated = false;
-  try { candidate = projectFromStorage(await projectStore.loadCurrent()); } catch {}
+  let recoveredJournal = false;
+
+  const choose = (raw, { migratedSource = false } = {}) => {
+    const normalized = projectFromStorage(raw);
+    if (!normalized) return false;
+    const rawSavedAt = typeof raw?.savedAt === "string" ? raw.savedAt : "";
+    candidate = normalized;
+    candidateSavedAt = rawSavedAt;
+    migrated = migrated || migratedSource;
+    return true;
+  };
+
+  try { choose(await projectStore.loadCurrent()); } catch {}
   if (!candidate) {
-    try { candidate = projectFromStorage(JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY) || "null")); migrated = Boolean(candidate); } catch {}
+    try { choose(JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY) || "null"), { migratedSource: true }); } catch {}
   }
   if (!candidate) {
     try {
       const oldMirror = JSON.parse(localStorage.getItem(OLD_MIRROR_KEY) || "null");
-      candidate = projectFromStorage(oldMirror?.project || oldMirror);
-      migrated = Boolean(candidate);
+      choose(oldMirror?.project || oldMirror, { migratedSource: true });
     } catch {}
   }
-  if (!candidate) { candidate = projectFromStorage(await readOldIndexedProject()); migrated = Boolean(candidate); }
+  if (!candidate) { choose(await readOldIndexedProject(), { migratedSource: true }); }
+
+  // The journal is only used when it is newer than the persisted project. It
+  // covers a renderer restart or a background-tab eviction during a save.
+  const journal = persistenceGuard?.recoverIfNewer(candidateSavedAt);
+  if (journal?.project && choose(journal.project)) {
+    recoveredJournal = true;
+    state.pendingRecoveryJournal = true;
+  }
 
   if (candidate) {
     state.strokes = candidate.strokes;
     state.settings = { ...defaults, ...candidate.settings };
     state.view = { x: 0, y: 0, scale: 1, ...candidate.view };
     state.projectTitle = candidate.title || "Untitled";
-    setText(ui.saveStatus, migrated ? t("storageMigrated", "Migrated") : t("storageRecovered", "Recovered"));
-    if (migrated) void projectStore.saveCurrent(serializeProject());
-  } else { setText(ui.saveStatus, t("storageReady", "Ready")); }
+    state.lastSavedAt = candidateSavedAt || "";
+    const savedState = recoveredJournal
+      ? t("storageJournalRecovered", "Recovered a protected draft")
+      : migrated ? t("storageMigrated", "Migrated") : t("storageRecovered", "Recovered");
+    setText(ui.saveStatus, savedState);
+    if (migrated || recoveredJournal) void saveProject({ quiet: true, reason: recoveredJournal ? "journal-recovery" : "migration" });
+  } else {
+    setText(ui.saveStatus, t("storageReady", "Ready"));
+  }
 
   state.settings.skin = normalizeSkin(state.settings.skin);
   if (!["ku", "en"].includes(state.settings.language)) state.settings.language = "ku";
@@ -428,24 +459,58 @@ function serializeProject() {
   };
 }
 
-async function saveProject({ quiet = false } = {}) {
-  const snapshot = serializeProject();
+function savedTimeLabel(value) {
+  const time = Date.parse(value || "");
+  if (!Number.isFinite(time)) return t("storageSaved", "Saved");
   try {
-    await projectStore.saveCurrent(snapshot);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: snapshot.version, savedAt: snapshot.savedAt, storage: "indexeddb" }));
-    setText(ui.saveStatus, t("storageSaved", "Saved"));
-    if (!quiet) toast(t("savedLocally", "Saved locally"));
-  } catch (error) {
+    const locale = state.settings.language === "ku" ? "ku-IQ" : "en-US";
+    return `${t("storageSaved", "Saved")} · ${new Date(time).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}`;
+  } catch { return t("storageSaved", "Saved"); }
+}
+
+function captureRecoveryJournal(snapshot = serializeProject()) {
+  const result = persistenceGuard?.capture(snapshot);
+  state.pendingRecoveryJournal = Boolean(result?.stored);
+  return result;
+}
+
+async function saveProject({ quiet = false, reason = "manual" } = {}) {
+  const snapshot = serializeProject();
+  captureRecoveryJournal(snapshot);
+  const commit = async () => {
     try {
-      localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(snapshot));
-      setText(ui.saveStatus, t("storageBackup", "Local backup"));
-      if (!quiet) toast(t("storageFallback", "IndexedDB is unavailable — local backup used"));
-    } catch {
-      setText(ui.saveStatus, t("storageFull", "Storage is full"));
-      showRecovery({ kind: "storage", icon: "!", title: t("storageRecoveryTitle", "Saving is limited"), body: t("storageFullBody", "Browser storage is full. Export your project and free up browser storage."), actionLabel: t("storageOpenSettings", "Open settings"), action: () => openWorkspace("settings") });
-      if (!quiet) toast(t("storageFull", "Storage is full"));
+      await projectStore.saveCurrent(snapshot);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: snapshot.version, savedAt: snapshot.savedAt, storage: "indexeddb", reason }));
+      persistenceGuard?.clear({ ifOlderThan: snapshot.savedAt });
+      state.pendingRecoveryJournal = false;
+      state.lastSavedAt = snapshot.savedAt;
+      setText(ui.saveStatus, savedTimeLabel(snapshot.savedAt));
+      if (!quiet) toast(t("savedLocally", "Saved locally"));
+      return { saved: true, storage: "indexeddb" };
+    } catch (error) {
+      try {
+        localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(snapshot));
+        state.lastSavedAt = snapshot.savedAt;
+        setText(ui.saveStatus, t("storageBackup", "Local backup"));
+        if (!quiet) toast(t("storageFallback", "IndexedDB is unavailable — local backup used"));
+        return { saved: true, storage: "localStorage" };
+      } catch {
+        setText(ui.saveStatus, t("storageFull", "Storage is full"));
+        showRecovery({ kind: "storage", icon: "!", title: t("storageRecoveryTitle", "Saving is limited"), body: t("storageFullBody", "Browser storage is full. Export your project and free up browser storage."), actionLabel: t("storageOpenSettings", "Open settings"), action: () => openWorkspace("settings") });
+        if (!quiet) toast(t("storageFull", "Storage is full"));
+        return { saved: false, storage: "none" };
+      }
     }
-  }
+  };
+  state.saveInFlight = commit();
+  try { return await state.saveInFlight; }
+  finally { state.saveInFlight = null; }
+}
+
+async function flushProjectSave({ reason = "lifecycle" } = {}) {
+  clearTimeout(state.saveTimer);
+  captureRecoveryJournal();
+  return saveProject({ quiet: true, reason });
 }
 
 function bytesLabel(value) {
@@ -533,8 +598,10 @@ async function restoreBackupArchive(file) {
 }
 
 function queueSave() {
+  captureRecoveryJournal();
+  setText(ui.saveStatus, t("storageSaving", "Saving…"));
   clearTimeout(state.saveTimer);
-  state.saveTimer = setTimeout(() => { void saveProject({ quiet: true }); }, 350);
+  state.saveTimer = setTimeout(() => { void saveProject({ quiet: true, reason: "autosave" }); }, 350);
 }
 
 function syncSettingsUI() {
@@ -2498,7 +2565,8 @@ function setExportStatus(message, stateName = "ready") {
 async function prepareProjectOutput() {
   finishStroke();
   projectNameFromInput();
-  await saveProject({ quiet: true });
+  const saved = await flushProjectSave({ reason: "export" });
+  if (!saved?.saved) throw new Error("Project could not be saved before export");
 }
 
 function setExportBusy(busy, message = "", { progress = 14, indeterminate = false } = {}) {
@@ -2520,8 +2588,11 @@ async function exportCurrent() {
     const result = await ensureExporter().exportFile({ format, preset: ui.exportPreset.value, transparent: ui.exportTransparent.checked, filenameBase: state.projectTitle || `air-drow-${Date.now()}` });
     const label = exportFormatLabel(result.format || format);
     loadingManager?.updateTask("export", { label: t("exportFinalizing", "Finalizing output…"), progress: 100 });
-    setExportStatus(t("exportDone", "{format} is ready: {name}").replace("{format}", label).replace("{name}", result.filename), "success");
-    toast(t("exportDoneShort", "{format} exported").replace("{format}", label));
+    const message = result.fallback
+      ? t("exportFallbackPng", "WebP is unavailable here, so a PNG was exported: {name}").replace("{name}", result.filename)
+      : t("exportDone", "{format} is ready: {name}").replace("{format}", label).replace("{name}", result.filename);
+    setExportStatus(message, "success");
+    toast(result.fallback ? t("exportFallbackPngShort", "PNG exported for compatibility") : t("exportDoneShort", "{format} exported").replace("{format}", label));
   } catch (error) {
     console.error(error);
     const message = t("exportFailed", "Export failed");
@@ -2694,7 +2765,16 @@ function presentDeferredUpdate() {
     ui.updateApply.disabled = true;
     ui.updateDismiss.disabled = true;
     setText(ui.updateApply, t("updateSaving", "Saving…"));
-    await apply();
+    try {
+      await apply();
+    } catch (error) {
+      console.warn("AIR-DROW update was not applied", error);
+      ui.updateApply.disabled = false;
+      ui.updateDismiss.disabled = false;
+      setText(ui.updateApply, t("updateApply", "Save & update"));
+      setText(ui.updateLabel, t("updateFailed", "The update was not applied. Your project is still saved safely."));
+      showRecovery({ kind: "update", icon: "!", title: t("updateFailedTitle", "Update needs attention"), body: t("updateFailed", "The update was not applied. Your project is still saved safely."), actionLabel: t("updateTryAgain", "Try update again"), action: () => presentDeferredUpdate() });
+    }
   };
 }
 
@@ -3043,10 +3123,11 @@ function bindControls() {
     releaseManager?.check();
   });
   window.addEventListener("offline", () => applyNetworkState());
-  window.addEventListener("pagehide", () => { void saveProject({ quiet: true }); });
+  window.addEventListener("pagehide", () => { void flushProjectSave({ reason: "pagehide" }); });
+  window.addEventListener("beforeunload", () => { captureRecoveryJournal(); });
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
-      void saveProject({ quiet: true });
+      void flushProjectSave({ reason: "hidden" });
       return;
     }
     if (performanceGovernor?.refreshEnvironment()) resizeCanvas();
@@ -3103,6 +3184,7 @@ async function boot() {
   loadingManager = createLoadingManager();
   performanceGovernor = createPerformanceGovernor({ mode: state.settings.performanceMode });
   backupManager = createBackupManager({ projectStore, appVersion: AIRDROW_RELEASE.version });
+  persistenceGuard = createPersistenceGuard();
   finalStability = createFinalStability({ projectStore, release: AIRDROW_RELEASE });
   loadingManager.setBoot({ progress: 8, label: t("bootPreparing", "Preparing studio…") });
   updateLayoutClass();
@@ -3121,7 +3203,7 @@ async function boot() {
   applyNetworkState();
   releaseManager = createReleaseManager({
     release: AIRDROW_RELEASE,
-    beforeApply: () => saveProject({ quiet: true }),
+    beforeApply: () => flushProjectSave({ reason: "update" }),
     onUpdateAvailable: showUpdateBanner,
     onError: (message, error) => console.warn(message, error)
   });

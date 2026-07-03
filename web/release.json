@@ -1,27 +1,30 @@
 {
-  "version": "6.2.0",
-  "buildId": "air-drow-v620-phase3-hand-drawing",
+  "version": "6.3.0",
+  "buildId": "air-drow-v630-phase4-project-safety",
   "releasedAt": "2026-07-03T00:00:00Z",
   "channel": "phase",
   "updatePolicy": "user-controlled-save-before-apply",
   "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Phase 3 release: velocity-aware fingertip tracking, lower-latency hand ink, guarded pinch hysteresis, bounded closed-fist and occlusion stroke continuity, retained hand guide, and reliable camera-hand eraser behavior.",
+  "summary": "Phase 4 release: protected project recovery journal, lifecycle-safe local saves, WebP-to-PNG export fallback, Android-safe backup delivery, save-before-update enforcement and touch-first onboarding polish.",
   "features": [
-    "The drawing point uses a velocity-aware stabilizer with bounded prediction so fast intentional fingertip motion tracks more closely without accepting detector jumps.",
-    "Hand ink no longer receives the full UI smoothing twice; the second pass is reduced specifically for camera drawing to remove the laggy rubber-band effect.",
-    "Pinch drawing keeps a short bounded continuation through a closed fist, one-frame landmark loss, or temporary ambiguity; no new ink is added until tracking is safe again.",
-    "The closed-fist guide hold is extended to 560 ms, preserving visible hand feedback across normal finger occlusion without freezing after the hand leaves frame.",
-    "A tracked jump ends the active stroke immediately, while a camera-hand eraser remains pinch-gated and keeps its target aligned to calibrated hand coordinates."
+    "A bounded same-tab recovery journal protects the newest drawing state during refresh, renderer restart, background-tab eviction or a save interruption; it is restored only when newer than the persisted project.",
+    "Autosave now captures a protected draft immediately, flushes on page lifecycle transitions and reports a timestamped successful local save after IndexedDB commits.",
+    "Export saves the current project before output and falls back from unsupported WebP encoding to a valid PNG rather than failing the creator workflow.",
+    "Backup downloads retain their object URL long enough for delayed Android browser downloads, while update application checks that the project save completed before navigation.",
+    "Onboarding restores focus and accepts keyboard or horizontal touch navigation without changing the premium RTL/mobile visual system."
   ],
-  "assetRevision": "620",
-  "phase": 3,
-  "stage": "hand-drawing-engine",
+  "assetRevision": "630",
+  "phase": 4,
+  "stage": "project-safety-and-polish",
   "buildPolicy": {
     "sourceModel": "web/vendor/models/hand_landmarker.task",
     "fallback": "npm run model:sync remains recovery-only; production clients use the verified local asset.",
     "runtimeNetwork": "no remote MediaPipe module or model is loaded by the deployed browser; Phase 3 tracking and continuity run locally.",
     "install": "npm ci --no-audit --no-fund",
-    "deploy": "npm run vercel:build"
+    "deploy": "npm run vercel:build",
+    "projectSafety": "Recovery journaling is session-scoped and bounded. It never uploads drawing data and is cleared after a verified local persistence commit.",
+    "export": "Exports save the current project first. Unsupported WebP encoding falls back to a PNG file locally.",
+    "updates": "Applying a release requires a completed local save before service-worker promotion or cache-busted navigation."
   }
 }

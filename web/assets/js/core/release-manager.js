@@ -43,10 +43,11 @@ export function createReleaseManager({ release, onUpdateAvailable, beforeApply, 
   }
 
   async function apply() {
-    if (applying) return;
+    if (applying) return false;
     applying = true;
     try {
-      await beforeApply?.();
+      const saved = await beforeApply?.();
+      if (saved && saved.saved === false) throw new Error("The current project was not saved before the update.");
       const targetBuild = pendingRelease?.buildId || release.buildId;
       sessionStorage.setItem(`air-drow-apply-release:${targetBuild}`, "1");
       const activeRegistration = registration || await navigator.serviceWorker?.getRegistration();
@@ -62,9 +63,11 @@ export function createReleaseManager({ release, onUpdateAvailable, beforeApply, 
         url.searchParams.set("fresh", Date.now().toString());
         location.replace(url.toString());
       }, 160);
+      return true;
     } catch (error) {
       applying = false;
       onError("AIR-DROW update could not be applied", error);
+      throw error;
     }
   }
 

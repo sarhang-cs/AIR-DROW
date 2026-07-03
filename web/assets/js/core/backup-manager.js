@@ -23,7 +23,8 @@ function triggerDownload(blob, name) {
   document.body.append(link);
   link.click();
   link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1200);
+  // Android downloads can start after the current navigation task; keep the URL alive long enough.
+  window.setTimeout(() => URL.revokeObjectURL(url), 20_000);
 }
 
 export function createBackupManager({ projectStore, appVersion = "4.0.0" } = {}) {

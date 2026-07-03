@@ -21,13 +21,13 @@ const hudVerifier = read("scripts/verify-transparent-status-hud.mjs");
 const fistGuideVerifier = read("scripts/verify-fist-guide-continuity.mjs");
 
 for (const file of [
-  "README.md", "README_KU.md", "CHANGELOG.md", "docs/CODEBASE_KU.md",
-  "docs/DEPLOYMENT_KU.md", "docs/ASSET_REQUIREMENTS_KU.md", "docs/LOCAL_HAND_MODEL_KU.md",
+  "README.md", "README_KU.md", "CHANGELOG.md", "PHASE_4_PROJECT_SAFETY_MANIFEST.json", "PHASE_4_QA_REPORT.md",
+  "docs/CODEBASE_KU.md", "docs/DEPLOYMENT_KU.md", "docs/ASSET_REQUIREMENTS_KU.md", "docs/LOCAL_HAND_MODEL_KU.md", "docs/PHASE_4_PROJECT_SAFETY_KU.md",
   "docs/RELEASE_CHECKLIST_KU.md", "docs/TERMUX_FINAL_REPLACE_KU.md",
   "termux/replace-with-final-release.sh", "termux/verify-final-release.sh",
   "web/vendor/models/README.md", "web/vendor/models/MODEL_MANIFEST.json",
   "web/vendor/models/hand_landmarker.task", "scripts/verify-local-hand-model.mjs",
-  "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-hand-sync-performance.mjs", "scripts/verify-phase3-hand-drawing.mjs", "scripts/verify-transparent-status-hud.mjs", "scripts/verify-fist-guide-continuity.mjs"
+  "web/assets/js/core/persistence-guard.js", "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-hand-sync-performance.mjs", "scripts/verify-phase3-hand-drawing.mjs", "scripts/verify-phase4-project-safety.mjs", "scripts/verify-transparent-status-hud.mjs", "scripts/verify-fist-guide-continuity.mjs"
 ]) {
   if (!existsSync(resolve(root, file))) throw new Error(`Required final-release file is missing: ${file}`);
 }

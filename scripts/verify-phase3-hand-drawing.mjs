@@ -12,7 +12,7 @@ const worker = read("web/sw.js");
 const release = JSON.parse(read("web/release.json"));
 
 if (!existsSync(resolve(root, "web/assets/js/features/hand-tracking-engine.js"))) throw new Error("Phase 3 tracking engine is missing.");
-if (release.phase !== 3 || release.stage !== "hand-drawing-engine") throw new Error("Phase 3 release metadata is incomplete.");
+if (release.phase < 3) throw new Error("Phase 3 hand-drawing baseline is missing from this release.");
 for (const marker of [
   "createStrokeContinuityGate",
   "readHandPosture",

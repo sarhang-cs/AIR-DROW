@@ -9,8 +9,8 @@ const manager = readFileSync(resolve(root, "web/assets/js/core/release-manager.j
 const worker = readFileSync(resolve(root, "web/sw.js"), "utf8");
 const release = JSON.parse(readFileSync(resolve(root, "web/release.json"), "utf8"));
 
-const requiredApp = ["createReleaseManager", "showUpdateBanner", "beforeApply: () => saveProject"];
-const requiredManager = ["30 * 60 * 1000", "AIRDROW_SKIP_WAITING", "onUpdateAvailable", "location.replace"];
+const requiredApp = ["createReleaseManager", "showUpdateBanner", "beforeApply: () => flushProjectSave"];
+const requiredManager = ["30 * 60 * 1000", "AIRDROW_SKIP_WAITING", "onUpdateAvailable", "location.replace", "throw error"];
 const requiredWorker = [`const BUILD_ID = "${release.buildId}"`, "AIRDROW_SKIP_WAITING", "AIRDROW_PURGE_RELEASE_CACHE", "cache: \"no-store\""];
 for (const marker of requiredApp) if (!app.includes(marker)) throw new Error(`Release application marker missing: ${marker}`);
 if (!runtime.includes(`buildId: "${release.buildId}"`)) throw new Error("Release build ID is missing from runtime configuration.");

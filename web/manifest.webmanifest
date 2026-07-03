@@ -1,9 +1,9 @@
 {
-  "name": "AIR-DROW v6.2.0 — Hand Drawing Engine",
+  "name": "AIR-DROW v6.3.0 \u2014 Project Safety & Export",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v620",
+  "start_url": "./?build=v630",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
-  "description": "AIR-DROW: local drawing and Phase 3 velocity-aware hand tracking with stable pinch, calibrated fingertip mapping and offline local-first runtime delivery."
+  "description": "AIR-DROW: local drawing with protected recovery, safe exports, offline local-first persistence and reliable controlled updates."
 }

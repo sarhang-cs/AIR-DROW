@@ -1,5 +1,12 @@
 # AIR-DROW Changelog
 
+## v6.3.0 — Phase 4 project safety, export and onboarding polish
+
+- Added a bounded session recovery journal so the newest valid drawing can recover after a refresh, renderer interruption or background-tab eviction before IndexedDB finishes committing.
+- Autosave now captures a protected draft immediately, flushes on lifecycle transitions and only clears the journal after a verified local persistence commit.
+- Made every export save first and added WebP-to-PNG compatibility fallback for browsers that cannot encode WebP.
+- Extended Android backup download URL lifetime, made release application fail-safe when a save cannot complete, and hardened onboarding for swipe, keyboard and focus restoration.
+
 ## v6.2.0 — Phase 3 hand-drawing engine
 
 ### Build-integrity hotfix
