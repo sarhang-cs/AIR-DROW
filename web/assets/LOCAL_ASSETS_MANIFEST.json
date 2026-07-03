@@ -1,6 +1,6 @@
 {
-  "version": "7.2.0",
-  "buildId": "air-drow-v720-ui-clarity",
+  "version": "7.2.1",
+  "buildId": "air-drow-v721-user-icon-edition",
   "policy": "AIR-DROW uses local same-origin interface assets, MediaPipe modules, WASM files and the verified hand model. Your drawing session is private to this device unless you choose an export, share or optional AI action.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -26,9 +26,10 @@
   "interfaceIconSystem": {
     "folder": "assets/icons",
     "editable": true,
-    "method": "Semantic CSS mask classes backed by local SVG assets",
-    "guide": "assets/icons/ICON_SYSTEM.md"
+    "method": "Semantic CSS mask classes backed by the complete local user icon pack",
+    "guide": "assets/icons/ICON_SYSTEM.md",
+    "packageManifest": "assets/icons/USER_ICON_PACKAGE.json"
   },
-  "releaseStatus": "v7.2.0 UI Clarity Edition: readable controls, calmer surfaces and friendly app feedback.",
-  "assetRevision": "720"
+  "releaseStatus": "v7.2.1 User Icon Edition: your complete local icon pack is active across AIR-DROW.",
+  "assetRevision": "721"
 }

@@ -1,22 +1,22 @@
 {
-  "version": "7.2.0",
-  "buildId": "air-drow-v720-ui-clarity",
+  "version": "7.2.1",
+  "buildId": "air-drow-v721-user-icon-edition",
   "releasedAt": "2026-07-03T00:00:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW UI Clarity Edition: a calmer, more readable drawing studio for touch, pen and hand drawing.",
+  "summary": "AIR-DROW User Icon Edition: your complete local icon pack is installed across the drawing workspace, settings and status UI.",
   "features": [
     "Draw with touch, pen or an optional camera-powered hand tool.",
-    "Use one clear button system, calmer panels and readable controls on mobile.",
+    "Use the complete locally installed AIR-DROW icon pack across the workspace and settings.",
     "Save projects, make backups, and export artwork from the same workspace.",
     "Use a local hand model and self-hosted runtime for private hand tracking.",
     "Choose language, appearance, drawing tools and camera preferences from Settings."
   ],
-  "assetRevision": "720",
+  "assetRevision": "721",
   "phase": 8,
-  "stage": "ui-clarity-release",
+  "stage": "user-icon-edition",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",

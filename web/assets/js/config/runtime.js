@@ -15,8 +15,8 @@ export const MEDIAPIPE_MODULE_URLS = [new URL("../../../vendor/mediapipe/vision_
 export const MEDIAPIPE_WASM_URLS = [new URL("../../../vendor/mediapipe/wasm", import.meta.url).href];
 export const HAND_MODEL = new URL("../../../vendor/models/hand_landmarker.task?model=v620-hand-drawing", import.meta.url).href;
 
-export const APP_RELEASE = Object.freeze({ version: "7.2.0", buildId: "air-drow-v720-ui-clarity" });
-export const QUICK_START_KEY = "air-drow.v720.quick-start.complete";
+export const APP_RELEASE = Object.freeze({ version: "7.2.1", buildId: "air-drow-v721-user-icon-edition" });
+export const QUICK_START_KEY = "air-drow.v721.quick-start.complete";
 
 export const PROFILE_RULES = Object.freeze({
   sensitive: Object.freeze({ start: .39, stop: .54, smooth: .34, confidence: .50, enterFrames: 2, exitFrames: 2, stableFrames: 3, maxJump: .58, lostFrames: 3, minPalm: .030, minIndexReach: .30, minThumbReach: .09, maxTipDepth: 1.85, minIndexAngle: 16, minPalmAspect: .36, maxPalmAspect: 4.6, minFingerSpan: .32, minWristReach: .48 }),

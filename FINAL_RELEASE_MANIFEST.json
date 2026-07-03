@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW UI Clarity Edition",
-  "version": "7.2.0",
-  "buildId": "air-drow-v720-ui-clarity",
+  "name": "AIR-DROW User Icon Edition",
+  "version": "7.2.1",
+  "buildId": "air-drow-v721-user-icon-edition",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -19,5 +19,7 @@
     "docs/USER_GUIDE.md",
     "docs/USER_GUIDE_KU.md",
     "docs/PRIVACY.md"
-  ]
+  ],
+  "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
+  "iconReplacement": "The previous icon tree was removed and replaced with the complete local user icon package."
 }

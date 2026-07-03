@@ -1,0 +1,194 @@
+{
+  "package": "AIR-DROW User Icon Edition",
+  "source": "web.zip / web/assets/icons",
+  "version": "7.2.1",
+  "buildId": "air-drow-v721-user-icon-edition",
+  "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
+  "files": [
+    {
+      "path": "ICON_SYSTEM.md",
+      "sha256": "a4814007fa9dcf61d2216b08dd75e640d5aff023ab17cf5ac89bb08df203b447",
+      "bytes": 700
+    },
+    {
+      "path": "actions/clear.svg",
+      "sha256": "7fe9d9e4de124766977446faa64a2f7ab3ef23505024c6291d25d487ca143169",
+      "bytes": 288
+    },
+    {
+      "path": "actions/close.svg",
+      "sha256": "0b89c42477d56bb32b841a15756458217462116cb54eae5a441da509c5b3b3ed",
+      "bytes": 199
+    },
+    {
+      "path": "actions/redo.svg",
+      "sha256": "4348269a49d256fa030e4633d0ea875c5575334bd4246e92a203eb5724c1e07f",
+      "bytes": 356
+    },
+    {
+      "path": "actions/reset.svg",
+      "sha256": "fe45b764236dd7fd784afecb33f6d07e3d5ab6fd959ec4310f72682724fab1c3",
+      "bytes": 324
+    },
+    {
+      "path": "brand/air-drow-mark.svg",
+      "sha256": "c808d94c60ae90ad7da3e22597072d16bebeddb598f27cee80d0447808ce072a",
+      "bytes": 396
+    },
+    {
+      "path": "settings/about.svg",
+      "sha256": "7f4dae9fd0dafa112c90852e5635db42ef2621f6892ed7466e2cb0cd76eac579",
+      "bytes": 305
+    },
+    {
+      "path": "settings/ai-studio.svg",
+      "sha256": "336bc5a03ddb0d938185eee180e10670473b3eb7c4363b8526392a5fd440ec26",
+      "bytes": 582
+    },
+    {
+      "path": "settings/appearance.svg",
+      "sha256": "8b47699c0f4f5da59fa5ec8e3025c6de818685bfa7d14dd1d01fba57b20f7cca",
+      "bytes": 580
+    },
+    {
+      "path": "settings/backend.svg",
+      "sha256": "13450fe60e5a1e6d3ad1ae2cbf84839442b50895a359d77175530b42ba89f3d7",
+      "bytes": 313
+    },
+    {
+      "path": "settings/camera-hand.svg",
+      "sha256": "548b8780dd27936020d0d47fc42e7170c0ede1837dfbfc9a68546c80495b58e9",
+      "bytes": 2366
+    },
+    {
+      "path": "settings/creator-lab.svg",
+      "sha256": "319cdfe6ed4dddb81425663eb248cde12a84a09aee810f6614b450ce418b0928",
+      "bytes": 412
+    },
+    {
+      "path": "settings/creator-pack.svg",
+      "sha256": "99ecc71f2f88a03a21fefbabf399663fb6b491d7363836ebbdd063a3a426a4fa",
+      "bytes": 575
+    },
+    {
+      "path": "settings/display.svg",
+      "sha256": "699b3a80c43f9eb5fafae97750dc5dcb011bdb8a2aaed088cfca3348ce9c29fe",
+      "bytes": 391
+    },
+    {
+      "path": "settings/info.svg",
+      "sha256": "a5aa07046182f0b5028defc2557c936b612bffd45328f92c5e0e903210f41d6c",
+      "bytes": 373
+    },
+    {
+      "path": "settings/project-gallery.svg",
+      "sha256": "a2bccd28c8018f57856d130606778991015301ac17bde6a9ca01c42a978dd962",
+      "bytes": 371
+    },
+    {
+      "path": "settings/system.svg",
+      "sha256": "86b7968904e7a17b2265a2bffe74a1bd5ec92e20f0a2e9f26dfcd9eabcd51d29",
+      "bytes": 494
+    },
+    {
+      "path": "settings/viral-studio.svg",
+      "sha256": "952a23283009926c0e9163bcaae582ef4acdf7daa45fe1d3abcafc0304c7fa8b",
+      "bytes": 440
+    },
+    {
+      "path": "status/missing.svg",
+      "sha256": "62b4c8f1a8a79da7fb89a3e5513020cc87b9c8c1310b32474041fef2ad42bbf1",
+      "bytes": 344
+    },
+    {
+      "path": "status/problem.svg",
+      "sha256": "dced410589d46f7b2be2d3a301c0feea08d0f0aea3b1134ce4d34f5779633b6f",
+      "bytes": 376
+    },
+    {
+      "path": "status/success.svg",
+      "sha256": "e44ca8a3d1f9bbdbecf946f8090b917c3bca06003095e08f583a92d852f3036d",
+      "bytes": 352
+    },
+    {
+      "path": "toolbar/brush.svg",
+      "sha256": "ef9290c03f9e1525fbecbd31087d349699764a93cb50f3266515b4d9928a11eb",
+      "bytes": 559
+    },
+    {
+      "path": "toolbar/camera.svg",
+      "sha256": "d68e97dbe15b7c9978d3eb3be3bd12133725fe599c7dcbe274f42bf2d2a4540e",
+      "bytes": 515
+    },
+    {
+      "path": "toolbar/eraser.svg",
+      "sha256": "28dd59eb2599caeee04234414ace09699fd5824f39ebf91058e91543ca079ffe",
+      "bytes": 402
+    },
+    {
+      "path": "toolbar/hand.svg",
+      "sha256": "04e798de0fda9b6889c76b3a8c5791501b72e18166068fc7fcdfd042c81ae910",
+      "bytes": 3587
+    },
+    {
+      "path": "toolbar/moon.svg",
+      "sha256": "7db77f0a8d6f935f2d09fd195bd8222ede3d2bc2be71b4033719391434c91565",
+      "bytes": 353
+    },
+    {
+      "path": "toolbar/redo.svg",
+      "sha256": "c306d5f2f0b65a6a80da254124010dfdd1ad76324c523b1b5a94c24c628e40e7",
+      "bytes": 286
+    },
+    {
+      "path": "toolbar/settings.svg",
+      "sha256": "8f0372b40047da7adac6ecab6491aab3e018a1b132a993605b3cc5b08fe83ae6",
+      "bytes": 609
+    },
+    {
+      "path": "toolbar/sun.svg",
+      "sha256": "6b58bfe434a45b95b4dca82bd86f2cb73995afbbd2d5be2784eca916a3db6bb0",
+      "bytes": 310
+    },
+    {
+      "path": "toolbar/toolbar-icons.css",
+      "sha256": "07fb0aa9a67521b57a5f149963fd11ee343ef27f3e22616b26345ac1c16bc276",
+      "bytes": 504
+    },
+    {
+      "path": "toolbar/trash.svg",
+      "sha256": "d553ab58f1d5e01ee1701f41d9e5a689fce7d3d1890ebc5185e001052e88c15b",
+      "bytes": 354
+    },
+    {
+      "path": "toolbar/undo.svg",
+      "sha256": "eda46be23370caa7764d7fd3db8a7d83c771a45004cddb03f0db53c0f92bea3f",
+      "bytes": 327
+    },
+    {
+      "path": "workspace/create.svg",
+      "sha256": "125773799be82fd553a616bb21662d050b947419121449795862dc56bdbfad97",
+      "bytes": 511
+    },
+    {
+      "path": "workspace/draw.svg",
+      "sha256": "b6bd631a72a5037bbd8f804e65da9bf4b5ff79eb71762ec488da47287cf0a68f",
+      "bytes": 404
+    },
+    {
+      "path": "workspace/projects.svg",
+      "sha256": "77340cb8f5a9f3bf863e97918540ba8620de0ca9e271b024c8074b7dbec04631",
+      "bytes": 428
+    },
+    {
+      "path": "workspace/settings.svg",
+      "sha256": "8f0372b40047da7adac6ecab6491aab3e018a1b132a993605b3cc5b08fe83ae6",
+      "bytes": 609
+    },
+    {
+      "path": "workspace/shape.svg",
+      "sha256": "3205411f8b1fec6b5d6bc6a6774c7d6f30977fad4d80e7d11c571f810e31c698",
+      "bytes": 502
+    }
+  ]
+}

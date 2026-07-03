@@ -6,7 +6,7 @@
 
 ### Draw with touch, pen and hand
 
-**SARHANG IO · 2026 · v7.2.0**
+**SARHANG IO · 2026 · v7.2.1**
 
 <img src="./web/assets/readme/air-drow-cover.svg" alt="AIR-DROW artwork" width="100%" />
 
@@ -114,15 +114,11 @@ Open **Settings → About App** and choose **Kurdî** or **English**. AIR-DROW k
 
 This release package includes the AIR-DROW source, the verified local hand model, self-hosted hand runtime files, local fonts, icons, documentation and the production build configuration. `node_modules` is intentionally not included because it is recreated exactly from `package-lock.json` during installation.
 
-## Release notes — v7.2.0
+## Release notes — v7.2.1
 
-- Cleaned the mobile button system so selected actions and primary actions are always easy to read.
-- Removed constant decorative glow and reduced dense card-within-card styling.
-- Unified all on/off controls and dropdown arrows for a consistent Android experience.
-- Kept camera status subtle, separate from the selected drawing tool.
-- Made app and hand-drawing helpers friendlier, shorter and quieter before Camera is opened.
-- Kept AI feedback inside AI Studio and removed technical billing, key, deployment and server messages from the app interface.
-
+- Installed the complete local icon package supplied for AIR-DROW.
+- Replaced the previous icon assets in workspace, settings, actions, statuses and branding.
+- The complete package includes the icon files, local hand model, MediaPipe runtime, fonts and app source.
 ## Need help?
 
 Use **Settings → About App** to run App readiness, then open Camera and use Hand drawing check when you want help confirming hand drawing. For step-by-step guidance, read the [User Guide](./docs/USER_GUIDE.md) or [ڕێنمایی بەکارهێنان](./docs/USER_GUIDE_KU.md).

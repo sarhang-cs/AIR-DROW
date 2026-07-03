@@ -1,6 +1,6 @@
 # AIR-DROW Complete Package
 
-This package contains the complete **AIR-DROW v7.2.0 UI Clarity Edition**.
+This package contains the complete **AIR-DROW v7.2.1 User Icon Edition**.
 
 It includes the full app source, the local hand-drawing model, MediaPipe runtime files, fonts, icons, the ready-to-deploy app output, and user guides in Kurdish and English.
 
@@ -22,3 +22,8 @@ The full local hand model and runtime are included, so hand drawing does not nee
 Use the included `termux/replace-with-ui-clarity.sh` installer through the one-copy Termux command provided with the release. It keeps the GitHub connection, creates a backup first, checks the full app before pushing, and restores the previous project if the check cannot finish.
 
 `node_modules` is not included because it is recreated from the locked package list during installation.
+
+
+## User icon package
+
+This complete package contains the full icon tree supplied in `web.zip`. The previous icon tree was removed before it was installed. `web/assets/icons/USER_ICON_PACKAGE.json` records every imported icon file and its SHA-256 integrity value.

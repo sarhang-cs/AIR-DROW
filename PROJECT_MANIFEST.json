@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.2.0",
-  "buildId": "air-drow-v720-ui-clarity",
-  "release": "UI Clarity Edition",
+  "version": "7.2.1",
+  "buildId": "air-drow-v721-user-icon-edition",
+  "release": "User Icon Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
