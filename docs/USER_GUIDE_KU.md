@@ -1,6 +1,6 @@
 # ڕێنمایی بەکارهێنانی AIR-DROW
 
-> ئەم ڕێنماییە بۆ AIR-DROW 7.4.0 Final Layout & Localization Edition ـە.
+> ئەم ڕێنماییە بۆ AIR-DROW 7.5.0 Production Clean & Mobile Reliability Edition ـە.
 
 ## دەستپێکردن بە کێشان
 

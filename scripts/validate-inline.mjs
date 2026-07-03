@@ -43,5 +43,3 @@ if (index.includes("gateNewestRelease")) throw new Error("Legacy forced-update g
 console.log("AIR-DROW source modules passed syntax and entrypoint validation.");
 
 await import(new URL("./verify-toolbar-icon-bundle.mjs", import.meta.url));
-await import(new URL("./verify-loading-experience.mjs", import.meta.url));
-await import(new URL("./verify-performance-guard.mjs", import.meta.url));

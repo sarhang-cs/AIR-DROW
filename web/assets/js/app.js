@@ -703,6 +703,7 @@ function t(key, fallback = key) {
 function applyLanguage() {
   const language = state.settings.language === "en" ? "en" : "ku";
   state.settings.language = language;
+  try { localStorage.setItem("air-drow.language", language); } catch {}
   const root = document.documentElement;
   root.lang = language;
   root.dir = language === "en" ? "ltr" : "rtl";

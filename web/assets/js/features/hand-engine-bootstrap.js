@@ -19,7 +19,7 @@ function describeFailure(stage, cause) {
 async function fetchRequired(url, label, { minimumBytes = 1 } = {}) {
   let response;
   try {
-    response = await fetch(url, { cache: "no-store", credentials: "same-origin" });
+    response = await fetch(url, { cache: "force-cache", credentials: "same-origin" });
   } catch (cause) {
     throw describeFailure("asset", new Error(`${label} could not be reached: ${cause?.message || cause}`));
   }
@@ -30,7 +30,7 @@ async function fetchRequired(url, label, { minimumBytes = 1 } = {}) {
 }
 
 export async function primeLocalHandAssets({ modelUrl, moduleUrl }) {
-  // Priming only verifies/cache-warms local responses. It never creates a
+  // Priming runs only after the person explicitly chooses Camera and cache-warms local responses. It never creates a
   // MediaPipe task before the user has selected the camera mode.
   await Promise.all([
     fetchRequired(moduleUrl, "Local hand runtime", { minimumBytes: 32_000 }),

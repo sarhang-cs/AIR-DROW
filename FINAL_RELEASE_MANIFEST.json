@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Final Layout & Localization Edition",
-  "version": "7.4.0",
-  "buildId": "air-drow-v740-final-layout-localization",
+  "name": "AIR-DROW Production Clean & Mobile Reliability Edition",
+  "version": "7.5.0",
+  "buildId": "air-drow-v750-production-clean",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -23,5 +23,5 @@
   ],
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. This release standardizes the AIR-DROW mark and improves contrast across dark and light themes.",
-  "installer": "termux/replace-with-final-layout-localization.sh"
+  "installer": "termux/replace-with-v750-production-clean.sh"
 }

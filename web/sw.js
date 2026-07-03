@@ -1,91 +1,23 @@
-const BUILD_ID = "air-drow-v740-final-layout-localization";
+const BUILD_ID = "air-drow-v750-production-clean";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
+
+/* Only the light application shell is installed up front. The 7.8 MB hand
+ * model and MediaPipe WASM are intentionally excluded: they are requested
+ * only after the person opens Camera, then cached on demand. This keeps first
+ * load and install practical on low-memory Android phones. */
 const APP_SHELL = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
-  "/release.json",
+  "/favicon.svg",
   "/assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf",
+  "/assets/icons/toolbar/toolbar-icons.css",
   "/assets/css/app.css",
   "/assets/css/visual-system.css",
-  "/assets/icons/actions/clear.svg",
-  "/assets/icons/actions/close.svg",
-  "/assets/icons/actions/redo.svg",
-  "/assets/icons/actions/reset.svg",
-  "/assets/icons/brand/air-drow-mark.svg",
-  "/assets/icons/settings/about.svg",
-  "/assets/icons/settings/ai-studio.svg",
-  "/assets/icons/settings/appearance.svg",
-  "/assets/icons/settings/backend.svg",
-  "/assets/icons/settings/camera-hand.svg",
-  "/assets/icons/settings/creator-lab.svg",
-  "/assets/icons/settings/creator-pack.svg",
-  "/assets/icons/settings/display.svg",
-  "/assets/icons/settings/info.svg",
-  "/assets/icons/settings/project-gallery.svg",
-  "/assets/icons/settings/system.svg",
-  "/assets/icons/settings/viral-studio.svg",
-  "/assets/icons/status/missing.svg",
-  "/assets/icons/status/problem.svg",
-  "/assets/icons/status/success.svg",
-  "/assets/icons/toolbar/brush.svg",
-  "/assets/icons/toolbar/camera.svg",
-  "/assets/icons/toolbar/eraser.svg",
-  "/assets/icons/toolbar/hand.svg",
-  "/assets/icons/toolbar/moon.svg",
-  "/assets/icons/toolbar/redo.svg",
-  "/assets/icons/toolbar/settings.svg",
-  "/assets/icons/toolbar/sun.svg",
-  "/assets/icons/toolbar/trash.svg",
-  "/assets/icons/toolbar/undo.svg",
-  "/assets/icons/workspace/create.svg",
-  "/assets/icons/workspace/draw.svg",
-  "/assets/icons/workspace/projects.svg",
-  "/assets/icons/workspace/settings.svg",
-  "/assets/icons/workspace/shape.svg",
-  "/assets/css/drawer-layout.css",
-  "/assets/css/phase2-ui.css",
-  "/assets/css/ui-clarity.css",
-  "/assets/css/final-layout-localization.css",
   "/assets/css/icon-system.css",
-  "/assets/js/config/runtime.js",
-  "/assets/js/config/appearance.js",
-  "/assets/js/i18n/translations.js",
-  "/assets/js/ui/registry.js",
-  "/assets/js/core/loading-manager.js",
-  "/assets/js/core/performance-governor.js",
-  "/assets/js/features/hand-calibration.js",
-  "/assets/js/features/hand-tracking-engine.js",
-  "/assets/js/features/hand-engine-bootstrap.js",
-  "/assets/js/features/onboarding-flow.js",
-  "/assets/js/core/reliability-center.js",
-  "/assets/js/core/backup-manager.js",
-  "/assets/js/core/persistence-guard.js",
-  "/assets/js/core/final-stability.js",
-  "/assets/js/features/device-readiness.js",
-  "/assets/js/features/final-live-qa.js",
-  "/assets/js/app.js",
-  "/assets/js/core/project-store.js",
-  "/assets/js/core/release-manager.js",
-  "/assets/js/core/font-kit.js",
-  "/assets/js/features/exporter.js",
-  "/assets/js/features/brush-lab.js",
-  "/assets/js/features/shape-engine.js",
-  "/assets/js/features/gesture-shortcuts.js",
-  "/assets/js/features/replay-engine.js",
-  "/assets/js/features/share-card.js",
-  "/assets/js/features/air-challenge.js",
-  "/assets/js/features/template-studio.js",
-  "/assets/js/features/ai-studio.js",
-  "/vendor/models/hand_landmarker.task",
-  "/vendor/mediapipe/vision_bundle.js",
-  "/vendor/mediapipe/wasm/vision_wasm_internal.js",
-  "/vendor/mediapipe/wasm/vision_wasm_internal.wasm",
-  "/vendor/mediapipe/wasm/vision_wasm_module_internal.js",
-  "/vendor/mediapipe/wasm/vision_wasm_module_internal.wasm",
-  "/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.js",
-  "/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.wasm"
+  "/assets/css/drawer-layout.css",
+  "/assets/css/production-ui.css"
 ];
 
 async function clearAirDrawCaches({ keepCurrent = false } = {}) {
@@ -101,11 +33,11 @@ async function announce(type = "AIRDROW_RELEASE_ACTIVE") {
   clients.forEach(client => client.postMessage({ type, buildId: BUILD_ID }));
 }
 
-async function networkFresh(request, fallbackPath) {
+async function networkFirst(request, fallbackPath) {
   const cache = await caches.open(STATIC_CACHE);
   try {
     const response = await fetch(new Request(request, { cache: "no-store" }));
-    if (response?.ok) cache.put(request, response.clone());
+    if (response?.ok) await cache.put(request, response.clone());
     return response;
   } catch (error) {
     const cached = await cache.match(request);
@@ -115,21 +47,24 @@ async function networkFresh(request, fallbackPath) {
   }
 }
 
-async function staleWhileRevalidate(request) {
+async function cacheFirstOnDemand(request, event) {
   const cache = await caches.open(STATIC_CACHE);
   const cached = await cache.match(request);
-  const network = fetch(new Request(request, { cache: "no-store" })).then(response => {
-    if (response?.ok) cache.put(request, response.clone());
+  const refresh = fetch(request).then(async response => {
+    if (response?.ok) await cache.put(request, response.clone());
     return response;
-  });
-  return cached || network;
+  }).catch(() => null);
+  if (cached) {
+    event.waitUntil(refresh);
+    return cached;
+  }
+  const response = await refresh;
+  if (response) return response;
+  throw new Error(`AIR-DROW asset is unavailable: ${new URL(request.url).pathname}`);
 }
 
 self.addEventListener("install", event => {
-  // Do not call skipWaiting here: the app shows a user-controlled update banner.
-  // A failed optional vendor/model pre-cache must never prevent the worker from
-  // installing. The app can fetch that asset on demand, while the shell stays
-  // recoverable on constrained Android connections.
+  /* Do not skipWaiting: AIR-DROW displays a user-controlled update banner. */
   event.waitUntil((async () => {
     const cache = await caches.open(STATIC_CACHE);
     await Promise.all(APP_SHELL.map(async asset => {
@@ -137,7 +72,7 @@ self.addEventListener("install", event => {
         const response = await fetch(new Request(asset, { cache: "no-store" }));
         if (response?.ok) await cache.put(asset, response.clone());
       } catch (error) {
-        console.warn("AIR-DROW optional pre-cache skipped", asset, error);
+        console.warn("AIR-DROW core shell asset skipped", asset, error);
       }
     }));
   })());
@@ -168,20 +103,19 @@ self.addEventListener("message", event => {
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
-  if (url.origin !== self.location.origin) return;
+  if (url.origin !== self.location.origin || url.pathname.startsWith("/api/")) return;
 
-  const freshPaths = ["/", "/index.html", "/release.json", "/sw.js", "/manifest.webmanifest"];
   const isNavigation = event.request.mode === "navigate";
-  const isFresh = isNavigation || freshPaths.includes(url.pathname) || url.pathname.startsWith("/assets/js/") || url.pathname.startsWith("/assets/icons/toolbar/");
-
-  if (isFresh) {
-    // Never return index.html as a fallback for JavaScript modules. An HTML
-    // response for app.js causes a silent module MIME failure and leaves the
-    // branded boot shell at its initial 7% state.
-    event.respondWith(networkFresh(event.request, isNavigation ? "/index.html" : undefined));
+  const isMutable = isNavigation || ["/", "/index.html", "/release.json", "/sw.js", "/manifest.webmanifest"].includes(url.pathname) || url.pathname.startsWith("/assets/js/");
+  if (isMutable) {
+    /* Never use index.html as a fallback for a JavaScript module. */
+    event.respondWith(networkFirst(event.request, isNavigation ? "/index.html" : undefined));
     return;
   }
+
+  /* MediaPipe, the hand model, fonts, icons and images are cached only after
+   * they are actually needed. No camera asset is part of the install payload. */
   if (url.pathname.startsWith("/vendor/") || url.pathname.startsWith("/assets/")) {
-    event.respondWith(staleWhileRevalidate(event.request));
+    event.respondWith(cacheFirstOnDemand(event.request, event));
   }
 });

@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 7.4.0 Final Layout & Localization Edition.
+> This guide applies to AIR-DROW 7.5.0 Production Clean & Mobile Reliability Edition.
 
 ## Start a drawing
 

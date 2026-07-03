@@ -9,7 +9,7 @@ const manifestPath = resolve(iconRoot, "USER_ICON_PACKAGE.json");
 if (!existsSync(manifestPath)) throw new Error("Local icon package manifest is missing.");
 
 const pack = JSON.parse(readFileSync(manifestPath, "utf8"));
-if (pack.version !== "7.4.0" || pack.buildId !== "air-drow-v740-final-layout-localization") {
+if (pack.version !== "7.5.0" || pack.buildId !== "air-drow-v750-production-clean") {
   throw new Error("Local icon package metadata is inconsistent.");
 }
 if (!Array.isArray(pack.files) || pack.files.length < 30) {
@@ -33,8 +33,7 @@ for (const path of required) {
 }
 
 const worker = readFileSync(resolve(root, "web/sw.js"), "utf8");
-for (const asset of pack.files.filter(item => item.path.endsWith(".svg"))) {
-  const cachedPath = `/assets/icons/${asset.path}`;
-  if (!worker.includes(`"${cachedPath}"`)) throw new Error(`Imported icon is not in the offline app shell: ${asset.path}`);
+if (!worker.includes('url.pathname.startsWith("/assets/")') || !worker.includes("cacheFirstOnDemand")) {
+  throw new Error("Local icons must remain available through the on-demand runtime cache.");
 }
 console.log(`AIR-DROW local icon package verified: ${pack.files.length} local files.`);

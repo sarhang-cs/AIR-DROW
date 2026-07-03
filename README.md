@@ -6,91 +6,52 @@
 
 ### Draw with touch, pen and hand
 
-**SARHANG IO · 2026 · 7.4.0 Final Layout & Localization Edition**
-
-<img src="./web/assets/readme/air-drow-cover.svg" alt="AIR-DROW artwork" width="100%" />
-
-<br />
-
-<img src="./web/assets/readme/air-drow-workspace.svg" alt="AIR-DROW workspace highlights" width="100%" />
-
-<br />
+**SARHANG IO · 2026 · 7.5.0 Production Clean & Mobile Reliability Edition**
 
 [![Private by default](https://img.shields.io/badge/Private-by%20default-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Touch, Pen & Hand](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
 [![PWA](https://img.shields.io/badge/Installable-PWA-2EA44F?style=for-the-badge)](#install-air-drow)
 [![Kurdî & English](https://img.shields.io/badge/Languages-Kurd%C3%AE%20%26%20English-F4B400?style=for-the-badge)](#language)
 
-[Official project on GitHub](https://github.com/sarhang-cs/AIR-DROW)
-
 </div>
 
 ---
 
-## Welcome to AIR-DROW
+## Production verification
 
-**Final Layout & Localization Edition** standardizes the AIR-DROW logo, refines Settings alignment, completes the Kurdî/English interface, and improves light-mode icon contrast without changing the local-first privacy model.
+This release is verified through the production gate below. The gate checks source integrity, the local hand model, generated MediaPipe deployment files, bilingual dictionaries, lazy camera asset loading, and release metadata. Camera behavior must still be tested on the target Android devices after deployment because browser camera permissions and GPU paths are device-specific.
 
-**AIR-DROW** is a private drawing studio made for ideas that start anywhere. Draw directly with your finger or pen, then choose the optional camera tool when you want to draw in the air with your hand. Save projects, create a backup, export artwork, and keep your creative space in one place.
+## What changed in 7.5.0
 
-AIR-DROW is designed for **mobile, tablet and desktop**. It works in **Kurdî (Sorani)** and **English**, and it keeps your drawing experience simple: create first, adjust settings only when you need them.
-
-## At a glance
-
-| Create | Keep | Share |
-| --- | --- | --- |
-| Draw with touch, pen, brush, eraser and smart shapes | Save projects locally, recover a recent draft and download a backup | Export artwork and use your device’s sharing options |
-| Use optional hand drawing after you open Camera | Your preferences stay on the current device | Create posters, story cards, replays and templates |
+- **Mobile-first startup:** the hand model and MediaPipe WASM are no longer downloaded or cached at app install. They load only after Camera is explicitly selected.
+- **Clean source package:** generated `public/` deployment output is excluded from Git and this ZIP. Vercel recreates it during the verified build.
+- **One production UI layer:** late CSS patches are consolidated into `production-ui.css`; structural and visual styles remain separated by responsibility.
+- **Complete bilingual recovery copy:** Kurdish camera-stop feedback and drawing-area copy are translated; bootstrap recovery respects the saved language.
+- **Safer optional AI endpoint:** origin allow-list support, payload limiting, smaller request budget, no-store response headers and retry guidance are included. AI remains disabled unless the server environment explicitly enables it.
 
 ## Ways to draw
 
 ### Touch and pen
-
 Open AIR-DROW and start drawing immediately. Use the brush, choose a color, adjust the size, and undo or redo whenever you need.
 
 ### Hand drawing
-
 Select **Hand** or **Camera**, allow camera access when asked, then keep one hand visible. Bring your fingers close together and move to draw. AIR-DROW never opens the camera by itself; you always choose when the camera starts.
 
 ### Shape assistance
-
 Turn on shape assistance when you want cleaner lines, circles, rectangles or triangles. You still control every stroke.
 
-## Save, export and share
-
-- **Save projects** to keep work in the current browser.
-- **Backup** before moving to another phone, tablet or browser.
-- **Export** artwork in the available formats from the Export section.
-- **Share** through your device when sharing is supported.
-- **Create packs** for posters, logos, story formats and print-ready ideas.
-
-Your current project is saved before an export is created. When a format is not available on a browser, AIR-DROW offers a compatible local alternative instead of losing your work.
-
 ## Privacy first
-
-AIR-DROW is designed to keep creative work close to you.
 
 - Drawings, projects and preferences remain on your device by default.
 - Camera permission is requested only after you choose to open Camera.
 - Camera video is used for the live hand tool and is not saved by AIR-DROW.
-- The hand model and runtime are delivered with the app, so the browser does not need to fetch a hand model while you draw.
+- The hand model and runtime are delivered with the app from the same origin; no third-party hand-model CDN is used.
 - App readiness and Hand drawing check run locally and do not send a report anywhere.
-- Optional AI creation is always an explicit action. Only the sketch you choose for that action is sent to the configured AI service.
+- Optional AI creation is an explicit action. Keep `AIRDROW_AI_ENABLED` disabled unless you have configured a controlled server deployment.
 
 Read the full [Privacy Guide](./docs/PRIVACY.md).
 
-## App readiness and Hand drawing check
-
-In **Settings → About App**, AIR-DROW includes two simple helpers:
-
-- **App readiness** confirms that the app, local drawing tools and saved data area are ready. It never opens the camera.
-- **Hand drawing check** helps after you have opened Camera yourself. It shows whether camera and hand drawing are ready to use.
-
-These checks are made for everyday use. They are not required before you start drawing.
-
 ## Install AIR-DROW
-
-AIR-DROW can be installed like an app.
 
 | Device | How to install |
 | --- | --- |
@@ -98,37 +59,19 @@ AIR-DROW can be installed like an app.
 | iPhone / iPad | Use **Share → Add to Home Screen** in Safari |
 | Desktop | Use the install icon in the address bar when your browser offers it |
 
-After your first successful visit, core app files can remain available when your connection is limited. Camera and optional AI tools still depend on the permissions and services you choose.
-
 ## Language
+Open **Settings → About App** and choose **Kurdî** or **English**. AIR-DROW keeps your language choice on the current device, including the boot recovery screen.
 
-Open **Settings → About App** and choose **Kurdî** or **English**. AIR-DROW keeps your language choice on the current device.
+## Release verification
+```bash
+npm ci --no-audit --no-fund
+npm run vercel:build
+```
 
-## Helpful tips
+The production gate verifies local model integrity, local MediaPipe output, source/build order, bilingual dictionaries, lazy camera loading, AI endpoint protections and release metadata.
 
-- Use a well-lit space for hand drawing.
-- Keep your hand fully inside the camera frame.
-- Use **Balanced** hand settings first, then choose **Stable** when you want steadier movement.
-- Save or download a backup before changing phones or clearing browser data.
-- For the smoothest experience, close heavy apps and browser tabs before using Camera.
-
-## What is included in this complete package
-
-This release package includes the AIR-DROW source, the verified local hand model, self-hosted hand runtime files, local fonts, icons, documentation and the production build configuration. `node_modules` is intentionally not included because it is recreated exactly from `package-lock.json` during installation.
-
-## Release notes — 7.4.0
-
-- Installed the complete local icon package supplied for AIR-DROW.
-- Replaced the previous icon assets in workspace, settings, actions, statuses and branding.
-- The complete package includes the icon files, local hand model, MediaPipe runtime, fonts and app source.
-## Need help?
-
-Use **Settings → About App** to run App readiness, then open Camera and use Hand drawing check when you want help confirming hand drawing. For step-by-step guidance, read the [User Guide](./docs/USER_GUIDE.md) or [ڕێنمایی بەکارهێنان](./docs/USER_GUIDE_KU.md).
+## Termux replacement
+Use [`termux/TERMUX_INSTALL.txt`](./termux/TERMUX_INSTALL.txt). The installer preserves `.git`, makes a rollback backup, installs exact dependencies, verifies the production build, commits and pushes. If verification fails, it restores the previous project automatically.
 
 ---
-
-<div align="center">
-
-Made for ideas in motion · **AIR-DROW** · [Back to top](#top)
-
-</div>
+<div align="center">Made for ideas in motion · **AIR-DROW** · [Back to top](#top)</div>

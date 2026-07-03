@@ -1,5 +1,6 @@
 const WINDOW_MS = 60_000;
-const REQUEST_LIMIT = 3;
+const REQUEST_LIMIT = 2;
+const MAX_BODY_BYTES = 4_800_000;
 const requestLog = new Map();
 const PRESETS = {
   poster: "a premium editorial poster composition with strong hierarchy, polished lighting, refined typography space and a social-ready 4:5 composition",
@@ -11,6 +12,21 @@ const SIZES = new Set(["1024x1024", "1024x1536", "1536x1024"]);
 
 function clientKey(req) {
   return String(req.headers["x-forwarded-for"] || req.socket?.remoteAddress || "anonymous").split(",")[0].trim().slice(0, 120);
+}
+
+function allowedOrigins() {
+  return String(process.env.AIRDROW_AI_ALLOWED_ORIGINS || "")
+    .split(",").map(value => value.trim()).filter(Boolean);
+}
+
+function requestOrigin(req) {
+  const source = String(req.headers.origin || req.headers.referer || "").trim();
+  try { return source ? new URL(source).origin : ""; } catch { return ""; }
+}
+
+function originAllowed(req) {
+  const origins = allowedOrigins();
+  return !origins.length || origins.includes(requestOrigin(req));
 }
 
 function rateLimited(req) {
@@ -51,18 +67,28 @@ function promptFor({ preset, direction, projectTitle, creatorName }) {
   ].filter(Boolean).join(" ");
 }
 
-function json(res, status, body) {
-  res.status(status).setHeader("Cache-Control", "no-store, max-age=0").json(body);
+function json(res, status, body, headers = {}) {
+  res.status(status);
+  res.setHeader("Cache-Control", "no-store, max-age=0");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  for (const [key, value] of Object.entries(headers)) res.setHeader(key, value);
+  res.json(body);
 }
 
 export const config = { maxDuration: 60 };
 
 export default async function handler(req, res) {
-  if (req.method !== "POST") return json(res, 405, { ok: false, message: "Method not allowed" });
+  if (req.method !== "POST") return json(res, 405, { ok: false, message: "Method not allowed" }, { Allow: "POST" });
   if (process.env.AIRDROW_AI_ENABLED !== "true" || !process.env.OPENAI_API_KEY) {
     return json(res, 503, { ok: false, message: "AI creation is unavailable right now. Please try again later." });
   }
-  if (rateLimited(req)) return json(res, 429, { ok: false, message: "AI creation is busy right now. Please try again in a moment." });
+  if (!originAllowed(req)) return json(res, 403, { ok: false, message: "This AI service is not enabled for this site." });
+  if (Number(req.headers["content-length"] || 0) > MAX_BODY_BYTES) {
+    return json(res, 413, { ok: false, message: "Reference image is too large." });
+  }
+  if (rateLimited(req)) {
+    return json(res, 429, { ok: false, message: "AI creation is busy right now. Please try again in a moment." }, { "Retry-After": "60" });
+  }
 
   try {
     const body = req.body && typeof req.body === "object" ? req.body : {};
@@ -88,7 +114,6 @@ export default async function handler(req, res) {
       const code = response.status || 502;
       return json(res, code >= 400 && code < 600 ? code : 502, { ok: false, message: "AI creation could not be completed. Please try again later." });
     }
-
     return json(res, 200, {
       ok: true,
       provider: "AI Studio",
@@ -96,8 +121,7 @@ export default async function handler(req, res) {
       image: `data:image/png;base64,${payload.data[0].b64_json}`,
       revisedPrompt: payload.data[0].revised_prompt || ""
     });
-  } catch (error) {
-    console.error("AIR-DROW AI generation error", error);
+  } catch {
     return json(res, 500, { ok: false, message: "AI creation could not be completed. Please try again later." });
   }
 }

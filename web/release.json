@@ -1,12 +1,12 @@
 {
-  "version": "7.4.0",
-  "buildId": "air-drow-v740-final-layout-localization",
+  "version": "7.5.0",
+  "buildId": "air-drow-v750-production-clean",
   "releasedAt": "2026-07-03T19:30:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Final Layout & Localization Edition: consistent AIR-DROW branding, refined settings alignment, full Kurdish/English interface coverage, improved light-mode icon contrast, and a cleaned release structure.",
+  "summary": "AIR-DROW Production Clean & Mobile Reliability Edition: consistent AIR-DROW branding, refined settings alignment, full Kurdish/English interface coverage, improved light-mode icon contrast, and a cleaned release structure.",
   "features": [
     "Draw with touch, pen or an optional camera-powered hand tool.",
     "Use one AIR-DROW mark across boot, settings and About App.",
@@ -14,9 +14,9 @@
     "Use refined settings spacing, card hierarchy, responsive RTL/LTR alignment and higher-contrast light-mode icons.",
     "Keep projects, backups and optional hand tools private on this device by default."
   ],
-  "assetRevision": "740",
+  "assetRevision": "750",
   "phase": 10,
-  "stage": "final-layout-localization",
+  "stage": "production-clean",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",

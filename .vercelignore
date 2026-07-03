@@ -1,8 +1,7 @@
 node_modules/
 public/
-.git/
 .vercel/
 *.zip
 .env
 .air-drow-inline-check.mjs
-.DS_Store
+!.env.example
