@@ -1,41 +1,21 @@
 {
   "project": "AIR-DROW",
-  "version": "7.0.0",
-  "buildId": "air-drow-v700-phase7-final-live-qa",
-  "release": "Phase 7 — Final Live QA & Master Release",
-  "architecture": {
-    "styles": [
-      "web/assets/css/app.css",
-      "web/assets/css/visual-system.css",
-      "web/assets/css/icon-system.css",
-      "web/assets/css/drawer-layout.css",
-      "web/assets/css/phase2-ui.css"
-    ],
-    "runtime": [
-      "web/assets/js/config/runtime.js",
-      "web/assets/js/config/appearance.js",
-      "web/assets/js/features/device-readiness.js",
-      "web/assets/js/features/final-live-qa.js"
-    ],
-    "translations": "web/assets/js/i18n/translations.js",
-    "uiRegistry": "web/assets/js/ui/registry.js",
-    "iconSystem": "web/assets/icons/ICON_SYSTEM.md"
-  },
-  "scope": [
-    "Phase 1: foundation hardening — deterministic install/build, Vercel deployment contract, canonical metadata, cache discipline and local-first runtime policy.",
-    "Phase 2: premium visual system, RTL layouts, themes and mobile drawer refinement.",
-    "Phase 3: hand tracking reliability, pinch stability, drawing smoothness, camera isolation and fist continuity.",
-    "Phase 4: export, save, update, offline recovery, onboarding and privacy polish.",
-    "Phase 5: final release identity, documentation, QA manifest, source-package verification and Termux/Vercel delivery procedure.",
-    "Phase 6: privacy-preserving device-readiness diagnostics for secure context, camera API support, local hand model availability, storage, PWA, graphics and network state.",
-    "Phase 7: final live QA, passive camera/hand-state reporting, master release documents and deterministic delivery verification."
+  "version": "7.1.0",
+  "buildId": "air-drow-v710-global-user-edition",
+  "release": "Global User Edition",
+  "experience": [
+    "Touch drawing",
+    "Pen drawing",
+    "Optional hand drawing",
+    "Local projects",
+    "Safe exports",
+    "Private on-device preferences"
   ],
-  "privacy": "Drawing data stays local unless the creator explicitly requests an export, share or AI generation.",
-  "stage": "phase-7-final-live-qa-and-master-release",
-  "releaseGate": "npm run vercel:build confirms the verified local model, all Phase 1–7 source contracts, self-hosted MediaPipe output and final release metadata before deployment.",
-  "notes": [
-    "v6.5.0 Phase 6 adds a real browser capability report that never requests camera permission and never sends device diagnostics off-device.",
-    "The deployed browser remains local-first: hand model and MediaPipe runtime stay same-origin assets.",
-    "v7.0.0 Phase 7 adds Final Live QA: passive, local reporting of canvas, save, active camera, hand engine and recent detection state without permission prompts or telemetry."
-  ]
+  "languages": [
+    "Kurdî (Sorani)",
+    "English"
+  ],
+  "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
+  "releaseGate": "npm run vercel:build validates the local hand model, source integrity and generated production assets.",
+  "support": "Use Settings > About App for App Check or Camera & Hand Check when a feature needs attention."
 }

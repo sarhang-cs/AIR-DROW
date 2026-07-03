@@ -1,94 +1,17 @@
-# Changelog
+# AIR-DROW v7.1.0 — Global User Edition
 
-## v7.0.0 — Final Live QA & Master Release
-- Added passive local Final Live QA for release, canvas, project, camera, hand-engine and hand-detection state.
-- Added Phase 7 source verifier, PWA cache contract and master Termux delivery script.
-- No camera permission is requested by Final Live QA; live camera verification remains creator-initiated.
+## What changed
 
-# AIR-DROW v6.5.0 — Phase 6: Device Readiness & Runtime Diagnostics
+- Cleaned the final project structure and removed legacy phase delivery files from the main package.
+- Replaced technical, developer-style app labels with friendly everyday language.
+- Simplified the About App area into a clear introduction, version, privacy message, App Check and Camera & Hand Check.
+- Removed visible build IDs and internal release labels from the app interface.
+- Updated the English and Kurdish README files and added user guides.
+- Included the verified local hand model and self-hosted MediaPipe runtime files in the complete project package.
+- Kept touch, pen, hand drawing, projects, backups, exports, PWA updates and optional AI features intact.
 
-- Added a non-invasive Device Readiness panel in Settings → About.
-- Reports real secure-context, camera-API, same-origin model, storage, PWA, graphics and network status.
-- Never opens the camera, requests permission, enumerates devices or uploads diagnostics.
-- Added `phase6:verify`, a Phase 6 manifest, QA report and Kurdish implementation guide.
+## Release identity
 
-# AIR-DROW v6.4.0 — Phase 5: Release Readiness & Documentation
-
-## Added
-- Added a canonical in-app release identity: Settings > About now shows the runtime version and exact build ID.
-- Added `phase5:verify`, `PHASE_5_RELEASE_MANIFEST.json`, Phase 5 QA report and Kurdish release/delivery documentation.
-
-## Changed
-- Synchronized version `6.4.0`, build ID `air-drow-v640-phase5-release-readiness` and asset revision `640` across package metadata, release descriptor, service worker, PWA manifest, health endpoint and local-asset manifest.
-- Replaced the long historical README front page with a current-release overview and build/deploy instructions.
-
-## Preserved
-- Phase 1–4 UI, hand tracking, local persistence, exports, updates and privacy behavior are unchanged.
-
----
-
-# AIR-DROW Changelog
-
-## v6.3.0 — Phase 4 project safety, export and onboarding polish
-
-- Added a bounded session recovery journal so the newest valid drawing can recover after a refresh, renderer interruption or background-tab eviction before IndexedDB finishes committing.
-- Autosave now captures a protected draft immediately, flushes on lifecycle transitions and only clears the journal after a verified local persistence commit.
-- Made every export save first and added WebP-to-PNG compatibility fallback for browsers that cannot encode WebP.
-- Extended Android backup download URL lifetime, made release application fail-safe when a save cannot complete, and hardened onboarding for swipe, keyboard and focus restoration.
-
-## v6.2.0 — Phase 3 hand-drawing engine
-
-### Build-integrity hotfix
-- Unified every local HandLandmarker cache key to `model=v620-hand-drawing`.
-- Fixed the Phase 3 source verifier, preload declaration, model manifest, and Kurdish release docs so the production build validates the same URL used by the app.
-- No runtime CDN hand model or MediaPipe runtime was introduced.
-
-# AIR-DROW v6.2.0 — Phase 3: Hand Tracking & Drawing Engine
-
-- Reworked fingertip tracking with a velocity-aware stabilizer and bounded prediction to reduce drawing lag without accepting detector jumps.
-- Reduced duplicate hand-side smoothing so camera ink follows intentional finger motion more closely while retaining noise protection.
-- Added a bounded stroke-continuity gate: a started stroke is safely held during a brief closed fist, one-frame occlusion or short detector loss; no new point is painted until tracking is usable again.
-- Extended closed-fist guide retention to 560 ms and kept a hard immediate stop for implausible landmark jumps.
-- Preserved pinch hysteresis, local calibration, local MediaPipe runtime and camera-hand eraser targeting.
-
----
-
-# AIR-DROW v6.1.0 — Phase 2: Premium UI, RTL & Mobile Layout
-
-- Added a mobile-first premium UI layer with a safe-area Settings bottom sheet and a clean desktop side workspace.
-- Added explicit Dark / Light selection in Settings while preserving the top toolbar quick-toggle.
-- Refined all six complete interface skins: Violet, Pink, Sapphire, Obsidian, Silver and Gold.
-- Hardened RTL/LTR layout for labels, select arrows, toggles, drawer title and section summaries.
-- Made narrow-screen toolbar controls horizontally reachable instead of clipped or reduced to tiny buttons.
-- Preserved text-only FPS, Online and CAM overlays with no background card, border or blur.
-
----
-
-# AIR-DROW v6.0.2 — Phase 1: Foundation Hardening
-
-- Added canonical Phase 1 release metadata (`version`, `buildId`, `assetRevision`, `phase`) and synchronized it across runtime, service worker, manifests, health endpoint and verifiers.
-- Changed Vercel installation to deterministic `npm ci --no-audit --no-fund`.
-- Added explicit `vercel:build`, `model:ensure`, `model:verify`, `verify:all` and `foundation:verify` gates.
-- Strengthened generated MediaPipe runtime validation for JS/WASM variants and the local model output.
-- Hardened build-time model fallback retries; browser runtime remains strictly same-origin local.
-
----
-
-# AIR-DROW v5.2.3 — Fist Guide Continuity Fix
-
-## Fixed
-- The visible hand skeleton is now independent from the stricter open-hand eligibility gate used for safe pinch drawing.
-- A confidently detected closed fist keeps its landmark links and nodes visible instead of hiding the guide.
-- A bounded 260 ms guide hold covers a brief detector miss caused by finger occlusion or fast closing motion.
-- Closed-fist tolerance is applied only to detection; drawing, pinch, stability and jump protection remain unchanged.
-- The transparent `FPS`, `Online` and `CAM` status overlays remain text-only with no background, border or blur surface.
-
-## Deploy
-Run `npm run build`, commit the source, and push to GitHub. The linked Vercel project deploys automatically.
-
-## v5.2.3 — Release Verification Recovery Fix
-
-- Fixed a packaging defect where the final-release checker accidentally read the closed-fist verifier twice instead of validating the transparent status-HUD contract.
-- The dedicated transparent HUD verifier is now wired into source checks, Termux replacement checks, and final-release validation.
-- No drawing, camera, hand-tracking, or gesture behavior was removed or weakened.
-
+- Version: `7.1.0`
+- Build: `air-drow-v710-global-user-edition`
+- Channel: stable

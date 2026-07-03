@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+<title id="title">AIR-DROW artwork</title><desc id="desc">A luminous AIR-DROW drawing studio artwork.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#080a21"/><stop offset=".48" stop-color="#2a1763"/><stop offset="1" stop-color="#071d3d"/></linearGradient>
+  <radialGradient id="orb" cx=".7" cy=".28" r=".56"><stop stop-color="#8e67ff" stop-opacity=".78"/><stop offset="1" stop-color="#8e67ff" stop-opacity="0"/></radialGradient>
+  <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff" stop-opacity=".20"/><stop offset="1" stop-color="#ffffff" stop-opacity=".05"/></linearGradient>
+  <filter id="shadow"><feGaussianBlur stdDeviation="20"/></filter>
+</defs>
+<rect width="1600" height="900" fill="url(#bg)"/><rect width="1600" height="900" fill="url(#orb)"/>
+<g opacity=".45" filter="url(#shadow)"><circle cx="1300" cy="160" r="150" fill="#8f6bff"/><circle cx="1290" cy="690" r="220" fill="#00d9ff"/><circle cx="260" cy="750" r="180" fill="#ff68d2"/></g>
+<g transform="translate(115 145)"><rect width="1370" height="610" rx="44" fill="url(#glass)" stroke="#fff" stroke-opacity=".25"/>
+<rect x="40" y="42" width="1290" height="526" rx="32" fill="#070b1c" fill-opacity=".64" stroke="#fff" stroke-opacity=".16"/>
+<g transform="translate(94 98)"><rect width="112" height="112" rx="32" fill="#a77aff"/><path d="M35 78 78 35l20 20-43 43-24 6z" fill="none" stroke="#fff" stroke-width="9" stroke-linejoin="round"/><path d="m70 43 20 20" stroke="#fff" stroke-width="9" stroke-linecap="round"/></g>
+<text x="245" y="155" fill="#fff" font-family="Arial, sans-serif" font-size="64" font-weight="700" letter-spacing="5">AIR-DROW</text>
+<text x="250" y="205" fill="#dcd8ff" font-family="Arial, sans-serif" font-size="27" letter-spacing="1">DRAW WITH TOUCH • PEN • HAND</text>
+<rect x="92" y="255" width="850" height="255" rx="28" fill="#0a0e25" stroke="#fff" stroke-opacity=".16"/>
+<path d="M150 425c75-138 175 65 265-37 80-90 150-14 222-83 67-65 130 83 240-33" fill="none" stroke="#8d71ff" stroke-width="18" stroke-linecap="round"/>
+<path d="M156 452c92-49 132 56 218 5 94-56 160 22 239-26 72-45 150 19 257-9" fill="none" stroke="#38d9ff" stroke-width="10" stroke-linecap="round" stroke-dasharray="6 22"/>
+<circle cx="862" cy="371" r="18" fill="#fff"/><circle cx="862" cy="371" r="45" fill="#fff" fill-opacity=".15"/>
+<g transform="translate(992 258)"><rect width="292" height="255" rx="28" fill="#111637" stroke="#fff" stroke-opacity=".15"/>
+<text x="30" y="50" fill="#fff" font-family="Arial, sans-serif" font-size="22" font-weight="700">CREATE YOUR WAY</text>
+<g fill="#dcd8ff" font-family="Arial, sans-serif" font-size="18"><text x="34" y="100">• Touch &amp; pen drawing</text><text x="34" y="138">• Optional hand drawing</text><text x="34" y="176">• Save and export locally</text><text x="34" y="214">• Kurdish &amp; English</text></g></g>
+</g>
+<text x="120" y="835" fill="#e7e3ff" font-family="Arial, sans-serif" font-size="22" letter-spacing="2">PRIVATE BY DEFAULT · MADE FOR MOBILE, TABLET &amp; DESKTOP</text>
+</svg>

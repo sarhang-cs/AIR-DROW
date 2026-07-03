@@ -1,37 +1,33 @@
 {
-  "version": "7.0.0",
-  "buildId": "air-drow-v700-phase7-final-live-qa",
+  "version": "7.1.0",
+  "buildId": "air-drow-v710-global-user-edition",
   "releasedAt": "2026-07-03T00:00:00Z",
-  "channel": "release",
-  "updatePolicy": "user-controlled-save-before-apply",
-  "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
+  "channel": "stable",
+  "updatePolicy": "save-before-apply",
+  "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Phase 7 master release: a truthful local final-QA panel combines static release checks with live camera and hand-engine state only after the creator starts the camera.",
+  "summary": "AIR-DROW Global User Edition: a polished local-first drawing studio for touch, pen and hand drawing.",
   "features": [
-    "Settings > About now includes a real Device Readiness panel that checks secure context, camera API availability, local hand-model reachability, local storage, PWA control, graphics capability and network state.",
-    "The readiness check never opens the camera, never enumerates cameras, and never transmits device information. It only reads local browser capabilities and same-origin AIR-DROW assets.",
-    "A compact diagnostic report can be copied locally for troubleshooting. The report contains capability labels only; it contains no camera image, drawing content, personal identity or remote telemetry.",
-    "The Phase 6 source verifier keeps the readiness UI, translations, service-worker asset list and canonical release metadata aligned before deployment.",
-    "Settings > About includes Final Live QA. It reports release identity, canvas readiness, save safety, and — only when already active — camera, hand-engine and recent hand-detection state.",
-    "Final Live QA never calls getUserMedia(), never requests permission, never enumerates hardware and never transmits any diagnostic data. Camera verification stays creator-initiated via the existing Camera button.",
-    "The final release source verifier keeps the live-QA UI, translations, PWA cache list, build metadata, release documents and static delivery contract aligned before deployment."
+    "Draw with touch, pen or an optional camera-powered hand tool.",
+    "Save projects, make backups, and export artwork from the same workspace.",
+    "Use a local hand model and self-hosted runtime for private hand tracking.",
+    "Choose language, appearance, drawing tools and camera preferences from Settings.",
+    "Use the friendly App Check and Camera & Hand Check panels when you want help confirming that features are ready."
   ],
-  "assetRevision": "700",
+  "assetRevision": "710",
   "phase": 7,
-  "stage": "final-live-qa-and-master-release",
+  "stage": "global-user-experience-release",
+  "privacy": {
+    "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
+    "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",
+    "handTracking": "The deployed app uses the local same-origin hand model and runtime. It does not download a hand model while you draw.",
+    "checks": "App Check and Camera & Hand Check only read local browser and app state. They do not open the camera themselves or send a report anywhere."
+  },
   "buildPolicy": {
     "sourceModel": "web/vendor/models/hand_landmarker.task",
-    "fallback": "npm run model:sync remains recovery-only; production clients use the verified local asset.",
-    "runtimeNetwork": "no remote MediaPipe module or model is loaded by the deployed browser; Phase 3 tracking and continuity run locally.",
     "install": "npm ci --no-audit --no-fund",
     "deploy": "npm run vercel:build",
-    "projectSafety": "Recovery journaling is session-scoped and bounded. It never uploads drawing data and is cleared after a verified local persistence commit.",
-    "export": "Exports save the current project first. Unsupported WebP encoding falls back to a PNG file locally.",
-    "updates": "Applying a release requires a completed local save before service-worker promotion or cache-busted navigation.",
-    "releaseReadiness": "Phase 6 validates the device-readiness module, UI markers, translation coverage, same-origin model probe and PWA cache contract before static build runs.",
-    "delivery": "Use npm run vercel:build locally or in CI. The deployment uses self-hosted MediaPipe runtime and the verified same-origin hand model only.",
-    "deviceReadiness": "The in-app Device Readiness panel performs only non-invasive browser capability checks. It never calls getUserMedia(), never prompts for camera permission, never enumerates devices and never uploads diagnostic data.",
-    "finalLiveQa": "The Final Live QA panel performs local passive runtime checks only. It does not open the camera or send telemetry. Camera/hand rows become ready only after the creator independently opens the camera and a current hand detection exists.",
-    "masterRelease": "Use npm run vercel:build for deterministic static output. The source ZIP excludes the large official model; the Termux installer preserves the previously verified same-origin model before building."
+    "runtimeNetwork": "The deployed browser loads the hand runtime and hand model from the same AIR-DROW site.",
+    "delivery": "The complete source package includes the verified hand model. The production build validates the local model before publishing."
   }
 }

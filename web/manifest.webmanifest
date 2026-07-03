@@ -1,9 +1,9 @@
 {
-  "name": "AIR-DROW v7.0.0 — Final Master Release",
+  "name": "AIR-DROW — Draw with Touch, Pen & Hand",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v650",
+  "start_url": "./?build=v710",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
-  "description": "AIR-DROW: local-first drawing for touch, pen and hand tracking with protected recovery, safe exports, self-hosted MediaPipe, controlled updates and privacy-preserving device readiness diagnostics."
+  "description": "A private drawing studio for touch, pen and optional hand drawing. Save projects, export artwork and create on your device."
 }

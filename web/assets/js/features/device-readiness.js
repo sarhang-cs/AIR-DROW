@@ -129,7 +129,7 @@ export function createDeviceReadiness({ status, score, list, getCopy, release })
   }
 
   function report() {
-    const header = `AIR-DROW v${release?.version || ""} · ${release?.buildId || ""}`.trim();
+    const header = `AIR-DROW · ${copy("appCheckReportTitle", "App Check")} · v${release?.version || ""}`.trim();
     const body = lastResults.map(item => `${label(item.key)}: ${stateLabel(item.state)}${item.detail ? ` (${item.detail})` : ""}`).join("\n");
     return `${header}\n${body}`.trim();
   }

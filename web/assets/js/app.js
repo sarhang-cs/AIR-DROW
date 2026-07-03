@@ -3183,7 +3183,6 @@ window.addEventListener("unhandledrejection", event => {
 
 function syncReleaseIdentity() {
   setText(ui?.appVersionValue, `v${AIRDROW_RELEASE.version}`);
-  setText(ui?.appBuildId, AIRDROW_RELEASE.buildId);
 }
 
 async function loadLocalAssetManifest() {

@@ -1,0 +1,23 @@
+{
+  "name": "AIR-DROW Global User Edition",
+  "version": "7.1.0",
+  "buildId": "air-drow-v710-global-user-edition",
+  "completePackage": true,
+  "includedRuntimeAssets": [
+    "web/vendor/models/hand_landmarker.task",
+    "web/vendor/mediapipe/vision_bundle.js",
+    "web/vendor/mediapipe/wasm/vision_wasm_internal.wasm",
+    "web/vendor/mediapipe/wasm/vision_wasm_module_internal.wasm",
+    "web/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.wasm",
+    "public/vendor/mediapipe/vision_bundle.js",
+    "public/vendor/models/hand_landmarker.task"
+  ],
+  "delivery": "This source package is ready for npm ci and npm run vercel:build. node_modules is intentionally excluded because it is reproduced from package-lock.json.",
+  "userDocs": [
+    "README.md",
+    "README_KU.md",
+    "docs/USER_GUIDE.md",
+    "docs/USER_GUIDE_KU.md",
+    "docs/PRIVACY.md"
+  ]
+}

@@ -1,5 +1,5 @@
 /**
- * AIR-DROW Final Live QA
+ * AIR-DROW Camera & Hand Check
  *
  * Passive local state report for the master release. This module does not call
  * getUserMedia(), does not enumerate devices and does not transmit telemetry.
@@ -77,7 +77,7 @@ export function createFinalLiveQa({ status, score, list, getCopy, release, getRu
   }
 
   function report() {
-    const header = `AIR-DROW Final Live QA · v${release?.version || ""} · ${release?.buildId || ""}`.trim();
+    const header = `AIR-DROW · ${copy("cameraHandCheckReportTitle", "Camera & Hand Check")} · v${release?.version || ""}`.trim();
     const body = lastResults.map(item => `${label(item.key)}: ${stateLabel(copy, item.state)}${item.detail ? ` (${item.detail})` : ""}`).join("\n");
     const footer = copy("finalLiveQaReportPrivacy", "Passive local report — no camera was opened and no data was transmitted by this check.");
     return `${header}\n${body}\n${footer}`.trim();

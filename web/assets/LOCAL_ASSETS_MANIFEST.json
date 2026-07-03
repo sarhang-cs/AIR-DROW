@@ -1,7 +1,7 @@
 {
-  "version": "7.0.0",
-  "buildId": "air-drow-v700-phase7-final-live-qa",
-  "policy": "All browser runtime UI assets, MediaPipe modules, WASM files and the hand model are same-origin local assets. The exact official model must be packaged for final release; build-time synchronization is a controlled fallback only.",
+  "version": "7.1.0",
+  "buildId": "air-drow-v710-global-user-edition",
+  "policy": "AIR-DROW uses local same-origin interface assets, MediaPipe modules, WASM files and the verified hand model. Your drawing session is private to this device unless you choose an export, share or optional AI action.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
     "editable": true,
@@ -22,13 +22,13 @@
   "assets/lottie/hand-detected-verify.json": "assets/lottie/hand-detected-verify.json",
   "assets/lottie/hand-missing-error.json": "assets/lottie/hand-missing-error.json",
   "assets/lottie/hand-problem-warning.json": "assets/lottie/hand-problem-warning.json",
-  "note": "Kurdish UI uses local Noto Kufi Arabic. Smart Shape, Workspace Navigator, Loading Experience, Performance Guard, exact video-overlay Hand Calibration, GPU-first local hand tracking and Device Readiness diagnostics run locally in the browser.",
+  "note": "Kurdish UI uses local Noto Kufi Arabic. Drawing, hand tracking, projects, backups, exports, App Check and Camera & Hand Check work locally in the browser.",
   "interfaceIconSystem": {
     "folder": "assets/icons",
     "editable": true,
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v7.0.0 Phase 7 master release adds passive Final Live QA reporting for canvas, save state, active camera, hand engine and recent detection without camera prompts or telemetry.",
-  "assetRevision": "700"
+  "releaseStatus": "v7.1.0 Global User Edition: refined user-facing copy, clean app information, friendly checks and complete local runtime assets.",
+  "assetRevision": "710"
 }

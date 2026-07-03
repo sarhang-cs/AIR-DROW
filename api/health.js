@@ -5,8 +5,8 @@ export default function handler(req, res) {
   const configured = process.env.AIRDROW_AI_ENABLED === "true" && Boolean(process.env.OPENAI_API_KEY);
   return res.status(200).json({
     ok: true,
-    version: "7.0.0",
-    provider: "OpenAI GPT Image",
+    version: "7.1.0",
+    provider: "AIR-DROW optional AI",
     aiConfigured: configured,
     enabled: configured,
     privacy: "The browser sends only the explicit AI reference image when generation is requested. Camera video is never sent by AIR-DROW."

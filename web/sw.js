@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v700-phase7-final-live-qa";
+const BUILD_ID = "air-drow-v710-global-user-edition";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [
