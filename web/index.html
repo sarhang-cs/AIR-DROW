@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW is a private drawing studio for touch, pen and optional hand drawing. Create, save and export from one place." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=730" />
-  <meta name="air-drow-build" content="air-drow-v730-final-polish" />
-  <meta name="air-drow-icon-pack" content="final-polish-v730" />
+  <link rel="manifest" href="./manifest.webmanifest?v=740" />
+  <meta name="air-drow-build" content="air-drow-v740-final-layout-localization" />
+  <meta name="air-drow-icon-pack" content="final-layout-localization-v740" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=730" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=740" />
   <link rel="modulepreload" href="./vendor/mediapipe/vision_bundle.js" />
   <link rel="preload" as="fetch" href="./vendor/models/hand_landmarker.task?model=v620-hand-drawing" crossorigin="anonymous" />
   <link rel="preload" as="fetch" href="./vendor/mediapipe/wasm/vision_wasm_internal.wasm" crossorigin="anonymous" />
@@ -26,17 +26,18 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=730" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=730" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=730" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=730" />
-    <link rel="stylesheet" href="./assets/css/phase2-ui.css?v=730" />
-    <link rel="stylesheet" href="./assets/css/ui-clarity.css?v=730" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=740" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=740" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=740" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=740" />
+    <link rel="stylesheet" href="./assets/css/phase2-ui.css?v=740" />
+    <link rel="stylesheet" href="./assets/css/ui-clarity.css?v=740" />
+    <link rel="stylesheet" href="./assets/css/final-layout-localization.css?v=740" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
     <div class="boot-card">
-      <div class="boot-logo" aria-hidden="true"><span class="boot-orbit"></span><span class="app-icon icon-air-drow-mark" aria-hidden="true"></span></div>
+      <div class="boot-logo brand-badge" aria-hidden="true"><span class="boot-orbit"></span><span class="app-icon icon-air-drow-mark" aria-hidden="true"></span></div>
       <h1>AIR-DROW</h1>
       <p id="bootLabel" data-i18n="bootPreparing">ستۆدیۆ ئامادە دەکرێت…</p>
       <div class="boot-progress" aria-hidden="true"><i id="bootProgressFill" style="--progress: 7%"></i></div>
@@ -140,7 +141,7 @@
 
       <div id="liveHud" class="live-hud" aria-live="polite">
         <span id="liveFps">FPS —</span>
-        <span><i class="network-mark" aria-hidden="true"></i><b id="liveNetwork">Online</b></span>
+        <span><i class="network-mark" aria-hidden="true"></i><b id="liveNetwork" data-i18n="online">ئۆنلاین</b></span>
       </div>
       <div id="cameraIndicator" class="camera-indicator" hidden aria-live="polite">CAM</div>
       <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -156,7 +157,7 @@
         <button id="cameraCloseBtn" class="consent-close" type="button" aria-label="Close camera choices" data-i18n-aria-label="ariaCloseCameraChoices">
           <span class="app-icon icon-close" aria-hidden="true"></span>
         </button>
-        <div class="camera-mode-picker" id="cameraModePicker" data-title="شێوازی کامێرا هەڵبژێرە">
+        <div class="camera-mode-picker" id="cameraModePicker" data-title="شێوازی کامێرا هەڵبژێرە" data-i18n-data-title="cameraModeTitle">
           <button type="button" class="camera-mode-option selected" data-camera-view="board">
             <strong data-i18n="handBoard">دەست + بۆرد</strong>
             <small data-i18n="handBoardSub">تەنها ناساندنی دەست و بۆرد</small>
@@ -183,8 +184,8 @@
           </div>
         </div>
         <div class="hand-scan-reticle" aria-hidden="true"></div>
-        <div id="handScanLabel" class="hand-scan-label">دەستت بخەرە ناو چوارچێوە</div>
-        <div id="handScanHint" class="hand-scan-hint">کامێرا و ئینجینی دەست ئامادە دەبن…</div>
+        <div id="handScanLabel" class="hand-scan-label" data-i18n="scanFrame">دەستت بخەرە ناو چوارچێوە</div>
+        <div id="handScanHint" class="hand-scan-hint" data-i18n="scanWarming">کامێرا و ئینجینی دەست ئامادە دەبن…</div>
         <div class="hand-scan-progress" aria-hidden="true"><i></i></div>
       </div>
     </div>
@@ -237,7 +238,7 @@
     <section id="aiResultModal" class="ai-result-modal" role="dialog" aria-modal="true" aria-labelledby="aiResultTitle" hidden>
       <div class="ai-result-panel">
         <header class="ai-result-head"><b id="aiResultTitle" data-i18n="aiResult">AI result</b><button id="closeAiResultBtn" class="close-button" type="button" aria-label="Close AI result" data-i18n-aria-label="ariaCloseAiResult"><span class="app-icon icon-close" aria-hidden="true"></span></button></header>
-        <img id="aiResultImage" class="ai-result-image" alt="AIR-DROW AI result" />
+        <img id="aiResultImage" class="ai-result-image" alt="AIR-DROW AI result" data-i18n-alt="aiResultAlt" />
         <p id="aiResultMeta" class="ai-result-meta"></p>
         <div class="ai-result-actions"><button id="downloadAiResultBtn" type="button" class="setting-action ai-generate" data-i18n="downloadAi">داگرتنی وێنە</button><button id="shareAiResultBtn" type="button" class="setting-action" data-i18n="shareAi">بڵاوکردنەوەی وێنە</button></div>
       </div>
@@ -249,8 +250,8 @@
     <aside id="settingsDrawer" class="settings-drawer" data-workspace="draw" aria-label="Studio workspaces" data-i18n-aria-label="ariaStudioWorkspaces" aria-hidden="true">
       <header class="settings-header">
         <div class="settings-title">
-          <span class="settings-mark" aria-label="AIR-DROW premium mark" data-i18n-aria-label="ariaPremiumMark"></span>
-          <span id="workspaceTitle">Studio</span>
+          <span class="settings-mark brand-badge" aria-label="AIR-DROW premium mark" data-i18n-aria-label="ariaPremiumMark"><span class="app-icon icon-air-drow-mark" aria-hidden="true"></span></span>
+          <span id="workspaceTitle" data-i18n="workspaceDraw">کێشان</span>
         </div>
         <button id="closeSettingsBtn" class="close-button" type="button" aria-label="Close studio" data-i18n-aria-label="ariaCloseStudio">
           <span class="app-icon icon-close" aria-hidden="true"></span>
@@ -303,15 +304,15 @@
               <output id="eraserSizeOut">24</output>
               <input id="eraserSize" type="range" min="10" max="80" value="24" />
             </label>
-            <p class="small-status">لە شێوازی پاککەرەوەدا، دەست لەسەر هێڵێک بدە بۆ سڕینەوەی تەواوی ئەو هێڵە.</p>
+            <p class="small-status" data-i18n="eraserHint">لە شێوازی پاککەرەوەدا، دەست لەسەر هێڵێک بدە بۆ سڕینەوەی تەواوی ئەو هێڵە.</p>
             <div class="export-lab" aria-label="Export studio" data-i18n-aria-label="ariaExportStudio">
-              <label class="setting-line"><span>Export</span><select id="exportFormat"><option value="png">PNG</option><option value="webp">WebP</option><option value="svg">SVG Vector</option><option value="pdf">PDF Vector</option><option value="airdrow">AIR-DROW Project</option></select></label>
-              <label class="setting-line"><span>Canvas</span><select id="exportPreset"><option value="current">Current canvas</option><option value="square">Square 1:1</option><option value="story">Story 9:16</option><option value="widescreen">Widescreen 16:9</option></select></label>
-              <label class="setting-line"><span>Transparent</span><span class="toggle-control"><input id="exportTransparent" type="checkbox" /><span class="toggle-visual" aria-hidden="true"></span></span></label>
+              <label class="setting-line"><span data-i18n="exportLabel">دەرکردن</span><select id="exportFormat"><option value="png" data-i18n="exportFormatPng">PNG</option><option value="webp" data-i18n="exportFormatWebp">WebP</option><option value="svg" data-i18n="exportFormatSvg">SVG ڤێکتۆر</option><option value="pdf" data-i18n="exportFormatPdf">PDF ڤێکتۆر</option><option value="airdrow" data-i18n="exportFormatProject">پڕۆژەی AIR-DROW</option></select></label>
+              <label class="setting-line"><span data-i18n="exportCanvas">بۆرد</span><select id="exportPreset"><option value="current" data-i18n="exportCanvasCurrent">بۆردی ئێستا</option><option value="square" data-i18n="exportCanvasSquare">چوارگۆشە 1:1</option><option value="story" data-i18n="exportCanvasStory">ستۆری 9:16</option><option value="widescreen" data-i18n="exportCanvasWidescreen">پانۆرە 16:9</option></select></label>
+              <label class="setting-line"><span data-i18n="exportTransparent">باگراوەندی شەفاف</span><span class="toggle-control"><input id="exportTransparent" type="checkbox" /><span class="toggle-visual" aria-hidden="true"></span></span></label>
             </div>
             <div class="compact-actions export-actions">
-              <button id="exportBtn" type="button" class="setting-action">Export</button>
-              <button id="shareBtn" type="button" class="setting-action">Share</button>
+              <button id="exportBtn" type="button" class="setting-action" data-i18n="export">دەرکردن</button>
+              <button id="shareBtn" type="button" class="setting-action" data-i18n="share">بڵاوکردنەوە</button>
               <button id="saveBtn" type="button" class="setting-action" data-i18n="save">پاشەکەوت</button>
               <button id="resetViewBtn" type="button" class="setting-action" data-i18n="reset">ڕێکخستنەوە</button>
             </div>
@@ -334,7 +335,7 @@
             <div class="shape-precision-card" aria-label="Smart Shape Precision" data-i18n-aria-label="ariaShapePrecision">
               <div class="shape-precision-title">
                 <span class="shape-precision-dot" aria-hidden="true"></span>
-                <strong>Smart Shape 2.0</strong>
+                <strong data-i18n="smartShapeTitle">شێوەی زیرەک</strong>
               </div>
               <label class="setting-line"><span data-i18n="shapeAssist">Air-to-Shape خۆکار</span><span class="toggle-control"><input id="shapeAssistToggle" type="checkbox" checked /><span class="toggle-visual" aria-hidden="true"></span></span></label>
               <label class="setting-line"><span data-i18n="shapeSnapMode">شێوازی گۆڕین</span><select id="shapeSnapMode"><option value="auto" data-i18n="shapeSnapAuto">خۆکار — تەنها دڵنیایی بەرز</option><option value="suggest" data-i18n="shapeSnapSuggest">پێشنیار — خۆکار ناگۆڕێت</option></select></label>
@@ -342,7 +343,7 @@
               <label class="range-row shape-confidence-row"><span data-i18n="shapeConfidence">دڵنیایی پێویست</span><output id="shapeConfidenceOut">86%</output><input id="shapeConfidence" type="range" min="78" max="96" value="86" /></label>
               <p class="small-status shape-hint" data-i18n="shapeHint">تەنها کاتێک گۆڕانکاری دەکرێت کە هێڵەکە بە دڵنیایی بگونجێت؛ ڕەنگ و ستایلی فڕچەکەت هەر دەپارێزرێت.</p>
               <div class="compact-actions creator-actions"><button id="snapLastShapeBtn" type="button" class="setting-action" data-i18n="shapeApplySuggestion">پێشنیاری دوا هێڵ جێبەجێ بکە</button></div>
-              <p class="small-status creator-status"><span>Shape</span><b id="shapeStatus" data-i18n="shapeReady">ئامادە</b></p>
+              <p class="small-status creator-status"><span data-i18n="shapeStatusLabel">دۆخی شێوە</span><b id="shapeStatus" data-i18n="shapeReady">ئامادە</b></p>
             </div>
           </div>
         </details>
@@ -357,7 +358,7 @@
             <label class="text-setting"><span data-i18n="projectName">ناوی پڕۆژە</span><input id="projectName" type="text" maxlength="72" autocomplete="off" placeholder="My AIR-DROW" data-i18n-placeholder="placeholderProjectName" /></label>
             <div class="compact-actions gallery-top-actions"><button id="saveGalleryBtn" type="button" class="setting-action" data-i18n="saveToGallery">زیادکردن بۆ گالەری</button><button id="importProjectBtn" type="button" class="setting-action" data-i18n="importProject">هاوردەی .airdrow</button></div>
             <input id="importProjectInput" type="file" accept=".airdrow,application/json" hidden />
-            <p id="galleryStatus" class="small-status">0 projects</p>
+            <p id="galleryStatus" class="small-status" data-i18n="galleryCountZero">0 پڕۆژە</p>
             <div id="galleryList" class="gallery-list" aria-live="polite"></div>
             <div id="galleryProgress" class="task-progress" data-progress-task="gallery" hidden aria-live="polite"><span class="task-progress-label" data-progress-label data-i18n="galleryLoading">گالەری بار دەکرێت…</span><b class="task-progress-percent" data-progress-percent>0%</b><span class="task-progress-track"><i data-progress-fill style="--progress: 0%"></i></span></div>
           </div>
@@ -373,7 +374,7 @@
               <span class="challenge-kicker" data-i18n="dailyChallenge">چالاکی ڕۆژانە</span>
               <b id="challengeName">…</b>
               <p id="challengePrompt">…</p>
-              <div class="challenge-stats"><span id="challengeTimer">60s</span><b id="challengeBest">Best 0/100</b></div>
+              <div class="challenge-stats"><span id="challengeTimer" data-i18n="challengeSecondsInitial">60 چرکە</span><b id="challengeBest" data-i18n="challengeBestInitial">باشترین 0/100</b></div>
             </div>
             <div class="viral-grid">
               <button id="startChallengeBtn" type="button" class="setting-action primary-viral" data-i18n="challengeStart">دەستپێکردنی چالاکی</button>
@@ -406,7 +407,7 @@
           <div class="setting-body">
             <label class="text-setting"><span data-i18n="creatorName">ناوی داهێنەر</span><input id="creatorNameInput" type="text" maxlength="72" autocomplete="off" placeholder="Your creator name" data-i18n-placeholder="placeholderCreatorName" /></label>
             <label class="text-setting"><span data-i18n="creatorTagline">وشەی ناساندن</span><input id="creatorTaglineInput" type="text" maxlength="96" autocomplete="off" placeholder="Drawn in the air" data-i18n-placeholder="placeholderCreatorTagline" /></label>
-            <label class="setting-line"><span data-i18n="templatePack">Template pack</span><select id="templatePackSelect"><option value="poster">Poster 4:5</option><option value="hoodie">Hoodie Print</option><option value="story">Story 9:16</option><option value="logo">Logo Sheet</option></select></label>
+            <label class="setting-line"><span data-i18n="templatePack">پەکیجی template</span><select id="templatePackSelect"><option value="poster" data-i18n="templatePoster45">پۆستەر 4:5</option><option value="hoodie" data-i18n="templateHoodie">چاپی هودی</option><option value="story" data-i18n="templateStory">ستۆری 9:16</option><option value="logo" data-i18n="templateLogoSheet">پەڕەی لۆگۆ</option></select></label>
             <div class="creator-pack-grid">
               <button id="exportTemplateBtn" type="button" class="setting-action creator-pack-primary" data-i18n="exportTemplate">دروستکردنی Template</button>
               <button id="shareTemplateBtn" type="button" class="setting-action" data-i18n="shareTemplate">بڵاوکردنەوەی Template</button>
@@ -421,8 +422,8 @@
             <span data-i18n="aiStudio">AI Studio</span>
           </summary>
           <div class="setting-body">
-            <label class="setting-line"><span data-i18n="aiPreset">AI output</span><select id="aiPresetSelect"><option value="poster">Poster</option><option value="logo">Logo</option><option value="hoodie">Hoodie mockup</option><option value="colorize">Colorize sketch</option></select></label>
-            <label class="setting-line"><span data-i18n="aiSize">Output size</span><select id="aiSizeSelect"><option value="1024x1024">Square 1:1</option><option value="1024x1536">Story 2:3</option><option value="1536x1024">Landscape 3:2</option></select></label>
+            <label class="setting-line"><span data-i18n="aiPreset">دەرئەنجامی AI</span><select id="aiPresetSelect"><option value="poster" data-i18n="aiOutputPoster">پۆستەر</option><option value="logo" data-i18n="aiOutputLogo">لۆگۆ</option><option value="hoodie" data-i18n="aiOutputHoodie">مۆکئەپ هودی</option><option value="colorize" data-i18n="aiOutputColorize">ڕەنگکردنی سکێچ</option></select></label>
+            <label class="setting-line"><span data-i18n="aiSize">قەبارەی دەرئەنجام</span><select id="aiSizeSelect"><option value="1024x1024" data-i18n="aiSizeSquare">چوارگۆشە 1:1</option><option value="1024x1536" data-i18n="aiSizeStory">ستۆری 2:3</option><option value="1536x1024" data-i18n="aiSizeLandscape">پانۆرە 3:2</option></select></label>
             <label class="text-setting"><span data-i18n="aiDirection">Creative direction</span><textarea id="aiDirectionInput" maxlength="280" data-i18n-placeholder="aiDirectionPlaceholder" placeholder="e.g. luxury black-and-gold editorial poster, no text" data-i18n-placeholder="aiDirectionPlaceholder"></textarea></label>
             <div class="ai-grid">
               <button id="checkAiBtn" type="button" class="setting-action" data-i18n="checkAi">AI status</button>
@@ -450,7 +451,7 @@
               </select>
             </label>
             <label class="setting-line">
-              <span>FPS</span>
+              <span data-i18n="fps">FPS</span>
               <select id="trackingFps">
                 <option value="15">15</option>
                 <option value="24" selected>24</option>
@@ -468,9 +469,9 @@
             <label class="setting-line">
               <span data-i18n="resolution">ڕزۆلووشن</span>
               <select id="cameraResolution">
-                <option value="480" selected>480p</option>
-                <option value="640">640p</option>
-                <option value="960">960p</option>
+                <option value="480" selected data-i18n="resolution480">480p</option>
+                <option value="640" data-i18n="resolution640">640p</option>
+                <option value="960" data-i18n="resolution960">960p</option>
               </select>
             </label>
             <label class="setting-line">
@@ -496,10 +497,10 @@
             <p class="hand-gesture-help" data-camera-runtime data-i18n="shortcutsHint"> پاشەکەوت ·  Undo ·  Export ·  پاککەرەوە</p>
             <div id="handGestureStatus" class="hand-quality" data-camera-runtime data-state="ready">
               <span data-i18n="gestureState">دۆخی جوڵە</span>
-              <b id="gestureStatusValue">Ready</b>
+              <b id="gestureStatusValue" data-i18n="ready">ئامادە</b>
             </div>
             <div class="hand-calibration-card" data-camera-runtime>
-              <div class="hand-calibration-head"><strong data-i18n="handCalibration">کالیبراسیۆنی دەست</strong><span id="handCalibrationStatus" class="hand-calibration-status">کالیبراسیۆنی بنەڕەت بەکار دەهێنرێت</span></div>
+              <div class="hand-calibration-head"><strong data-i18n="handCalibration">کالیبراسیۆنی دەست</strong><span id="handCalibrationStatus" class="hand-calibration-status" data-i18n="calibrationDefault">کالیبراسیۆنی بنەڕەت بەکار دەهێنرێت</span></div>
               <p class="hand-calibration-status" data-i18n="handCalibrationHint">شوێنی کێشانی دەستت بەپێی ئامێرەکەت ڕێکبخە؛ زانیاریەکە تەنها لەم browser ـەدا دەمێنێت.</p>
               <div class="hand-tracking-meter"><span id="handTrackingHealth" class="hand-tracking-meter-label" data-state="searching" data-i18n="trackingSearching">دەست دەگەڕێت…</span><span class="hand-tracking-meter-track" aria-hidden="true"><i id="handTrackingMeterFill" style="--tracking-health:0%"></i></span></div>
               <div class="calibration-actions"><button id="calibrateHandBtn" type="button" class="setting-action" data-i18n="calibrateHand">کالیبراسیۆنی شوێنی کێشان</button><button id="resetHandCalibrationBtn" type="button" class="setting-action" data-i18n="resetHandCalibration" disabled>ڕیسێتی کالیبراسیۆن</button></div>
@@ -547,7 +548,7 @@
             </label>
             <label class="setting-line">
               <span data-i18n="screenClass">جۆری شاشە</span>
-              <output id="layoutOut">Mobile</output>
+              <output id="layoutOut" data-i18n="mobile">مۆبایل</output>
             </label>
             <label class="setting-line">
               <span data-i18n="reduceMotion">کەمکردنەوەی جوڵە</span>
@@ -556,7 +557,7 @@
 
             <label class="setting-line">
               <span data-i18n="performanceMode">Performance mode</span>
-              <select id="performanceMode"><option value="auto">Auto</option><option value="battery">Battery saver</option><option value="balanced">Balanced</option><option value="max">Maximum</option></select>
+              <select id="performanceMode"><option value="auto" data-i18n="performanceAutoOption">خۆکار</option><option value="battery" data-i18n="performanceBatteryOption">پاشەکەوتی باتری</option><option value="balanced" data-i18n="performanceBalancedOption">هاوسەنگ</option><option value="max" data-i18n="performanceMaximumOption">زۆرترین</option></select>
             </label>
             <p id="performanceStatus" class="performance-status" data-i18n="performanceAuto">Auto selects a safe target for this device.</p>
 
@@ -569,12 +570,12 @@
             <span data-i18n="info">زانیاری</span>
           </summary>
           <div class="setting-body info-grid">
-            <div><span data-i18n="mode">Mode</span><b id="modeStatus">Manual</b></div>
+            <div><span data-i18n="mode">Mode</span><b id="modeStatus" data-i18n="manual">دەستی</b></div>
             <div><span data-i18n="pointer">Pointer</span><b id="pointerStatus">—</b></div>
-            <div><span data-i18n="hand">Hand</span><b id="handStatus">Off</b></div>
+            <div><span data-i18n="hand">Hand</span><b id="handStatus" data-i18n="off">ناچالاک</b></div>
             <div><span data-i18n="fps">FPS</span><b id="fpsStatus">0</b></div>
-            <div><span data-i18n="storage">Storage</span><b id="saveStatus">Ready</b></div>
-            <div><span data-i18n="network">Network</span><b id="networkStatus">Online</b></div>
+            <div><span data-i18n="storage">Storage</span><b id="saveStatus" data-i18n="ready">ئامادە</b></div>
+            <div><span data-i18n="network">Network</span><b id="networkStatus" data-i18n="online">ئۆنلاین</b></div>
             <div><span data-i18n="canvasQuality">Canvas quality</span><b id="canvasQualityStatus">—</b></div>
           </div>
         </details>
@@ -627,7 +628,7 @@
           <div class="setting-body">
             <div class="about-hero">
               <div class="about-head">
-                <span class="about-orb" aria-hidden="true"><span class="app-icon icon-air-drow-mark" aria-hidden="true"></span></span>
+                <span class="about-orb brand-badge" aria-hidden="true"><span class="app-icon icon-air-drow-mark" aria-hidden="true"></span></span>
                 <div>
                   <h3 class="about-title">AIR-DROW</h3>
                   <p class="about-sub"><span class="mixed-inline" data-i18n="aboutSubtitle">تەچ • دەست • کامێرا</span></p>
@@ -636,7 +637,7 @@
               <p class="about-summary" data-i18n="aboutSummary">بۆ کێشان بە تەچ، قەڵەم و ناساندنی دەست دروستکراوە؛ data و کێشانەکانت بە شێوەی local لە browser پارێزراون.</p>
             </div>
             <div class="about-grid about-grid-clean">
-              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v7.3.0</b></div>
+              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v7.4.0</b></div>
               <div><span data-i18n="aboutMadeFor">بۆ چی دروستکراوە؟</span><b data-i18n="aboutMadeForValue">تەچ • قەڵەم • دەست</b></div>
               <div><span data-i18n="aboutPrivacy">تایبەتمەندی</span><b data-i18n="aboutPrivacyValue">داتاکەت لەسەر ئامێرەکەت دەمێنێت</b></div>
             </div>
@@ -673,8 +674,8 @@
               <p class="device-readiness-privacy" data-i18n="finalLiveQaPrivacy">ئەم پشکنینە کامێرا ناکاتەوە و ڕێگەپێدان داوا ناکات. بۆ پشکنینی دەست، خۆت کامێرا بکەرەوە پاشان دووبارە پشکنین بکە.</p>
             </section>
             <div id="languageChoices" class="language-switch">
-              <button type="button" class="language-choice selected" data-language="ku">کوردی</button>
-              <button type="button" class="language-choice" data-language="en">English</button>
+              <button type="button" class="language-choice selected" data-language="ku" data-i18n="languageKurdish">کوردی</button>
+              <button type="button" class="language-choice" data-language="en" data-i18n="languageEnglish">ئینگلیزی</button>
             </div>
           </div>
         </details>
@@ -719,7 +720,7 @@
       recovery path because the application module never evaluated.
     */
     (() => {
-      const BUILD_ID = "air-drow-v730-final-polish";
+      const BUILD_ID = "air-drow-v740-final-layout-localization";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

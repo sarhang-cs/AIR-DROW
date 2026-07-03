@@ -728,6 +728,14 @@ function applyLanguage() {
     const key = node.dataset.i18nTitle;
     node.setAttribute("title", t(key, node.getAttribute("title") || ""));
   });
+  document.querySelectorAll("[data-i18n-data-title]").forEach(node => {
+    const key = node.dataset.i18nDataTitle;
+    node.dataset.title = t(key, node.dataset.title || "");
+  });
+  document.querySelectorAll("[data-i18n-alt]").forEach(node => {
+    const key = node.dataset.i18nAlt;
+    node.setAttribute("alt", t(key, node.getAttribute("alt") || ""));
+  });
   document.title = language === "ku" ? "AIR-DROW — ستۆدیۆی کێشان" : "AIR-DROW — Drawing Studio";
   onboardingFlow?.render();
   if (language === "ku") {
@@ -736,7 +744,11 @@ function applyLanguage() {
     root.classList.remove("kufi-ready");
   }
   if (challengeSession) renderChallengeStatus();
-  if (ui.cameraModePicker) ui.cameraModePicker.dataset.title = state.settings.language === "en" ? "Choose camera mode" : "شێوازی کامێرا هەڵبژێرە";
+  updateModeButtons();
+  updateHandCalibrationStatus();
+  updatePerformanceStatus();
+  if (ui.galleryStatus) void renderProjectGallery();
+  if (ui.cameraModePicker) ui.cameraModePicker.dataset.title = t("cameraModeTitle", "Choose camera mode");
   ui.languageChoices.forEach(button => button.classList.toggle("selected", button.dataset.language === language));
   setText(ui.fontStatus, language === "en" ? "System Sans" : "Noto Kufi Arabic");
   deviceReadiness?.render();
@@ -2275,7 +2287,7 @@ async function renderProjectGallery() {
       empty.className = "gallery-empty";
       empty.textContent = t("noProjects", "No saved gallery projects yet");
       ui.galleryList.append(empty);
-      if (ui.galleryStatus) setText(ui.galleryStatus, "0 projects");
+      if (ui.galleryStatus) setText(ui.galleryStatus, t("galleryCount", "{count} projects").replace("{count}", "0"));
       return;
     }
     for (const project of projects) {
@@ -2293,12 +2305,12 @@ async function renderProjectGallery() {
       actions.append(makeGalleryAction("Open", "load", project.id), makeGalleryAction("Delete", "delete", project.id, true));
       card.append(meta, actions); ui.galleryList.append(card);
     }
-    if (ui.galleryStatus) setText(ui.galleryStatus, `${projects.length} projects`);
+    if (ui.galleryStatus) setText(ui.galleryStatus, t("galleryCount", "{count} projects").replace("{count}", String(projects.length)));
   } catch (error) {
     console.warn("Gallery could not load", error);
     showRecovery({ kind: "storage", icon: "!", title: t("galleryFailureTitle", "Gallery could not open"), body: t("galleryFailureBody", "Your local projects remain safe. Try loading the gallery again."), actionLabel: t("galleryTryAgain", "Retry gallery"), action: () => renderProjectGallery() });
     ui.galleryList.replaceChildren();
-    if (ui.galleryStatus) setText(ui.galleryStatus, "Gallery unavailable");
+    if (ui.galleryStatus) setText(ui.galleryStatus, t("galleryUnavailable", "Gallery unavailable"));
   } finally {
     loadingManager?.endTask("gallery");
   }
@@ -2474,8 +2486,9 @@ async function createCreatorTemplate(share = false) {
       sourceCanvas: templateSourceCanvas(),
       template: state.settings.templatePack,
       title: state.projectTitle || "AIR-DROW",
-      creator: state.settings.creatorName || "AIR-DROW Creator",
-      tagline: state.settings.creatorTagline || "",
+      creator: state.settings.creatorName || t("templateCreatorDefault", "AIR-DROW Creator"),
+      tagline: state.settings.creatorTagline || t("templateTaglineDefault", "Drawn in the air"),
+      labels: { creatorPack: t("templateShareTitle", "AIR-DROW Creator Pack"), defaultTagline: t("templateTaglineDefault", "Drawn in the air") },
       background: getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || "#080913",
       accent: getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#9be7ff",
       language: state.settings.language
@@ -2768,7 +2781,7 @@ function renderChallengeStatus() {
   const record = challengeSession.record;
   setText(ui.challengeName, copy.title);
   setText(ui.challengePrompt, copy.hint);
-  setText(ui.challengeTimer, `${String(challengeSession.secondsLeft()).padStart(2, "0")}s`);
+  setText(ui.challengeTimer, t("challengeSeconds", "{seconds}s").replace("{seconds}", String(challengeSession.secondsLeft()).padStart(2, "0")));
   setText(ui.challengeBest, `${t("challengeBest", "Best")} ${record.best || 0}/100`);
   if (ui.challengeScore) ui.challengeScore.disabled = state.replayBusy || !record.startedAt || challengeSession.secondsLeft() <= 0;
 }
@@ -2785,7 +2798,7 @@ function scoreDailyChallenge() {
   if (!challengeSession) return;
   const record = challengeSession.record;
   const candidate = state.strokes.slice(record.strokeStart).at(-1);
-  const result = challengeSession.score(candidate);
+  const result = challengeSession.score(candidate, state.settings.language);
   if (!result.ok) { toast(t("challengeNeedStroke", result.message || "Draw a new stroke first")); renderChallengeStatus(); return; }
   const label = result.score >= 85 ? t("challengeLegend", "Legendary") : result.score >= 60 ? t("challengeGreat", "Great") : t("challengeTryAgain", "Try again");
   setText(ui.viralStatus, `${label}: ${result.score}/100 · ${result.reason}`);

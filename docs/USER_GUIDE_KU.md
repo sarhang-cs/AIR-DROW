@@ -1,6 +1,6 @@
 # ڕێنمایی بەکارهێنانی AIR-DROW
 
-> ئەم ڕێنماییە بۆ AIR-DROW v7.3.0 Final Polish Edition ـە.
+> ئەم ڕێنماییە بۆ AIR-DROW 7.4.0 Final Layout & Localization Edition ـە.
 
 ## دەستپێکردن بە کێشان
 

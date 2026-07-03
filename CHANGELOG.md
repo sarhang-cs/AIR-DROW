@@ -1,15 +1,15 @@
-# AIR-DROW v7.3.0 — Final Polish Edition
+# AIR-DROW v7.4.0 — Final Layout & Localization Edition
 
-## Final polish for the released app
+## Final layout and language pass
 
-- Improved the hand scan startup flow so the user sees a clearer ready/success moment before the scan overlay closes.
-- Improved hand calibration completion so the final step stays visible briefly instead of disappearing abruptly.
-- Refined the bottom workspace navigation icon sizing for better visual balance on mobile.
-- Refined the About App hero badge to use the AIR-DROW mark more clearly.
-- Updated release metadata, README files, privacy notes and Termux replacement instructions for the final packaged release.
+- Standardized the AIR-DROW logo across boot, Settings, About App and PWA metadata.
+- Rebuilt Settings spacing and alignment rules for mobile, RTL and LTR layouts.
+- Completed localizable labels for export, creator tools, project gallery, performance modes, camera mode and daily challenge feedback.
+- Improved light-mode Settings icon contrast and section chevrons.
+- Added `final-layout-localization.css`, a final release verifier, clean release notes and a full safe replacement installer.
 
 ## Release identity
 
-- Version: `7.3.0`
-- Build: `air-drow-v730-final-polish`
+- Version: `7.4.0`
+- Build: `air-drow-v740-final-layout-localization`
 - Channel: stable

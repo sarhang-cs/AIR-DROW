@@ -1,8 +1,8 @@
 {
   "name": "air-drow",
-  "version": "7.3.0",
+  "version": "7.4.0",
   "private": true,
-  "description": "AIR-DROW Final Polish Edition — a private drawing studio for touch, pen and optional hand drawing.",
+  "description": "AIR-DROW Final Layout & Localization Edition — a private drawing studio for touch, pen and optional hand drawing.",
   "type": "module",
   "dependencies": {
     "@mediapipe/tasks-vision": "0.10.35"
@@ -12,19 +12,20 @@
     "icons:verify": "node scripts/verify-toolbar-icon-bundle.mjs",
     "preflight": "node scripts/preflight.mjs",
     "check": "node scripts/validate-inline.mjs",
-    "user-release:verify": "node scripts/verify-user-release.mjs",
     "model:verify": "node scripts/verify-local-hand-model.mjs",
     "model:sync": "node scripts/sync-official-hand-model.mjs",
     "build:static": "node scripts/build-selfhosted-mediapipe.mjs",
     "hand-loader:verify": "node scripts/verify-hand-runtime-loader-fix.mjs",
     "deploy-build:verify": "node scripts/verify-deployment-build-order.mjs",
-    "verify:source": "npm run icons:sync && npm run icons:verify && npm run icons:user:verify && npm run preflight && npm run check && npm run model:verify && npm run user-release:verify && npm run ui-clarity:verify",
+    "verify:source": "npm run icons:sync && npm run icons:verify && npm run icons:local:verify && npm run preflight && npm run check && npm run model:verify && npm run release:verify && npm run ui-clarity:verify && npm run layout:verify",
     "verify:deploy-output": "npm run hand-loader:verify && npm run deploy-build:verify",
     "build": "npm run verify:source && npm run build:static && npm run verify:deploy-output",
     "vercel:build": "npm run model:verify && npm run build",
     "verify:all": "npm run vercel:build",
     "ui-clarity:verify": "node scripts/verify-ui-clarity.mjs",
-    "icons:user:verify": "node scripts/verify-user-icon-edition.mjs"
+    "layout:verify": "node scripts/verify-final-layout-localization.mjs",
+    "release:verify": "node scripts/verify-final-release.mjs",
+    "icons:local:verify": "node scripts/verify-local-icon-package.mjs"
   },
   "engines": {
     "node": "24.x"

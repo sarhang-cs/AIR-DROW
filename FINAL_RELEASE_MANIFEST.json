@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Final Polish Edition",
-  "version": "7.3.0",
-  "buildId": "air-drow-v730-final-polish",
+  "name": "AIR-DROW Final Layout & Localization Edition",
+  "version": "7.4.0",
+  "buildId": "air-drow-v740-final-layout-localization",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -12,14 +12,16 @@
     "public/vendor/mediapipe/vision_bundle.js",
     "public/vendor/models/hand_landmarker.task"
   ],
-  "delivery": "This complete final-polish source package is ready for npm ci and npm run vercel:build. node_modules is intentionally excluded because it is reproduced from package-lock.json.",
+  "delivery": "This complete final-layout and localization source package is ready for npm ci and npm run vercel:build. node_modules is intentionally excluded because it is reproduced from package-lock.json.",
   "userDocs": [
     "README.md",
     "README_KU.md",
     "docs/USER_GUIDE.md",
     "docs/USER_GUIDE_KU.md",
-    "docs/PRIVACY.md"
+    "docs/PRIVACY.md",
+    "docs/RELEASE_NOTES.md"
   ],
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
-  "iconReplacement": "The complete local icon package remains installed, and the final polish release refines navigation, onboarding, and hand calibration feedback."
+  "iconReplacement": "The complete local icon package remains installed. This release standardizes the AIR-DROW mark and improves contrast across dark and light themes.",
+  "installer": "termux/replace-with-final-layout-localization.sh"
 }

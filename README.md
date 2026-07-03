@@ -6,7 +6,7 @@
 
 ### Draw with touch, pen and hand
 
-**SARHANG IO · 2026 · v7.3.0 Final Polish Edition**
+**SARHANG IO · 2026 · 7.4.0 Final Layout & Localization Edition**
 
 <img src="./web/assets/readme/air-drow-cover.svg" alt="AIR-DROW artwork" width="100%" />
 
@@ -29,7 +29,7 @@
 
 ## Welcome to AIR-DROW
 
-**This final-polish release** refines the hand scan flow, hand calibration completion feedback, navigation icon sizing, and release documents while keeping the full local icon pack and local hand runtime intact.
+**Final Layout & Localization Edition** standardizes the AIR-DROW logo, refines Settings alignment, completes the Kurdî/English interface, and improves light-mode icon contrast without changing the local-first privacy model.
 
 **AIR-DROW** is a private drawing studio made for ideas that start anywhere. Draw directly with your finger or pen, then choose the optional camera tool when you want to draw in the air with your hand. Save projects, create a backup, export artwork, and keep your creative space in one place.
 
@@ -116,7 +116,7 @@ Open **Settings → About App** and choose **Kurdî** or **English**. AIR-DROW k
 
 This release package includes the AIR-DROW source, the verified local hand model, self-hosted hand runtime files, local fonts, icons, documentation and the production build configuration. `node_modules` is intentionally not included because it is recreated exactly from `package-lock.json` during installation.
 
-## Release notes — v7.3.0
+## Release notes — 7.4.0
 
 - Installed the complete local icon package supplied for AIR-DROW.
 - Replaced the previous icon assets in workspace, settings, actions, statuses and branding.

@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v730-final-polish";
+const BUILD_ID = "air-drow-v740-final-layout-localization";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [
@@ -47,6 +47,7 @@ const APP_SHELL = [
   "/assets/css/drawer-layout.css",
   "/assets/css/phase2-ui.css",
   "/assets/css/ui-clarity.css",
+  "/assets/css/final-layout-localization.css",
   "/assets/css/icon-system.css",
   "/assets/js/config/runtime.js",
   "/assets/js/config/appearance.js",

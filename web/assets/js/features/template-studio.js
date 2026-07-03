@@ -37,7 +37,7 @@ function drawRoundedRect(ctx, x, y, width, height, radius) {
   ctx.roundRect(x, y, width, height, radius);
 }
 
-function drawFallbackTemplate({ sourceCanvas, template, title, creator, tagline, background, accent, language }) {
+function drawFallbackTemplate({ sourceCanvas, template, title, creator, tagline, background, accent, language, labels = {} }) {
   const normalized = normalizeTemplate(template);
   const { width, height } = outputFor(normalized);
   const canvas = document.createElement("canvas");
@@ -67,7 +67,7 @@ function drawFallbackTemplate({ sourceCanvas, template, title, creator, tagline,
   ctx.textAlign = useKurdish ? "right" : "left";
   ctx.fillText((creator || "AIR-DROW CREATOR").slice(0, 32), useKurdish ? width - 68 : 68, 76);
   ctx.textAlign = useKurdish ? "left" : "right";
-  ctx.fillText("AIR-DROW / CREATOR PACK", useKurdish ? 68 : width - 68, 76);
+  ctx.fillText(labels.creatorPack || "AIR-DROW / CREATOR PACK", useKurdish ? 68 : width - 68, 76);
 
   if (normalized === "hoodie") {
     ctx.fillStyle = "#11131d";
@@ -100,7 +100,7 @@ function drawFallbackTemplate({ sourceCanvas, template, title, creator, tagline,
     ctx.fillText((title || "AIR-DROW").slice(0, 28).toUpperCase(), width / 2, normalized === "story" ? 1450 : 1120);
     ctx.fillStyle = "rgba(255,255,255,.7)";
     ctx.font = canvasFont(500, 28, useKurdish);
-    const line = (tagline || (normalized === "logo" ? "AIR-DROW MARK" : "DRAWN IN THE AIR")).slice(0, 72);
+    const line = (tagline || (normalized === "logo" ? "AIR-DROW MARK" : (labels.defaultTagline || "DRAWN IN THE AIR"))).slice(0, 72);
     ctx.fillText(line, width / 2, normalized === "story" ? 1515 : 1175);
   }
   return canvas;

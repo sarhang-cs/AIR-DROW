@@ -1,9 +1,18 @@
 {
   "name": "AIR-DROW — Draw with Touch, Pen & Hand",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v730",
+  "start_url": "./?build=v740",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
-  "description": "A private drawing studio for touch, pen and optional hand drawing. Save projects, export artwork and create on your device."
+  "description": "A private drawing studio for touch, pen and optional hand drawing. Save projects, export artwork and create on your device.",
+  "version": "7.4.0",
+  "icons": [
+    {
+      "src": "./assets/icons/brand/air-drow-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
 }

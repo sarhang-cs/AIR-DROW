@@ -1,22 +1,22 @@
 {
-  "version": "7.3.0",
-  "buildId": "air-drow-v730-final-polish",
-  "releasedAt": "2026-07-03T12:00:00Z",
+  "version": "7.4.0",
+  "buildId": "air-drow-v740-final-layout-localization",
+  "releasedAt": "2026-07-03T19:30:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Final Polish Edition: final release polish for navigation, onboarding, hand scan feedback, calibration clarity, and release documents.",
+  "summary": "AIR-DROW Final Layout & Localization Edition: consistent AIR-DROW branding, refined settings alignment, full Kurdish/English interface coverage, improved light-mode icon contrast, and a cleaned release structure.",
   "features": [
     "Draw with touch, pen or an optional camera-powered hand tool.",
-    "See clearer hand scan feedback with a visible ready state before the overlay closes.",
-    "Finish hand calibration with a clear completion state instead of an abrupt close.",
-    "Use the complete local AIR-DROW icon pack with refined bottom navigation sizing.",
-    "Read updated release guides, privacy notes and Termux replacement steps."
+    "Use one AIR-DROW mark across boot, settings and About App.",
+    "Read the complete interface in Kurdî (Sorani) or English, including export, creator and performance controls.",
+    "Use refined settings spacing, card hierarchy, responsive RTL/LTR alignment and higher-contrast light-mode icons.",
+    "Keep projects, backups and optional hand tools private on this device by default."
   ],
-  "assetRevision": "730",
-  "phase": 9,
-  "stage": "final-polish",
+  "assetRevision": "740",
+  "phase": 10,
+  "stage": "final-layout-localization",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",

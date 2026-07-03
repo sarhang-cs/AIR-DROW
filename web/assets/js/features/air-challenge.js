@@ -30,9 +30,9 @@ function turning(points) {
   }
   return { total, sharp };
 }
-function scoreStroke(id, stroke) {
+function scoreStroke(id, stroke, language = "ku") {
   const points = stroke?.points || [];
-  if (points.length < 4) return { score: 0, reason: "Need a longer stroke" };
+  if (points.length < 4) return { score: 0, reason: language === "ku" ? "هێڵێکی درێژتر بکێشە" : "Draw a longer stroke" };
   const box = bounds(points), diagonal = Math.hypot(box.width, box.height), close = 1 - clamp(distance(points[0], points.at(-1)) / Math.max(.0001, diagonal), 0, 1);
   const ratio = Math.min(box.width, box.height) / Math.max(box.width, box.height);
   const turns = turning(points);
@@ -46,7 +46,7 @@ function scoreStroke(id, stroke) {
   if (id === "star") score = 34 * close + 38 * clamp(turns.sharp / 5, 0, 1) + 28 * clamp(points.length / 18, 0, 1);
   if (id === "lightning") score = 50 * clamp(turns.sharp / 3, 0, 1) + 25 * clamp(box.height / box.width, 0, 1) + 25 * clamp(points.length / 10, 0, 1);
   if (id === "spiral") score = 42 * clamp(turns.total / (Math.PI * 4), 0, 1) + 34 * clamp(points.length / 32, 0, 1) + 24 * clamp((1 - close) * 1.3, 0, 1);
-  return { score: Math.round(clamp(score, 0, 100)), reason: close > .72 ? "Clean finish" : "Keep the motion smooth" };
+  return { score: Math.round(clamp(score, 0, 100)), reason: close > .72 ? (language === "ku" ? "کۆتایی پاک" : "Clean finish") : (language === "ku" ? "جوڵەکە بە نرمی بەردەوام بکە" : "Keep the motion smooth") };
 }
 function readStore() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") || {}; } catch { return {}; } }
 function saveStore(value) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(value)); } catch {} }
@@ -65,10 +65,10 @@ export function createDailyChallengeSession() {
     get record() { return { ...record }; },
     start(strokeStart = 0) { record.startedAt = Date.now(); record.strokeStart = Number(strokeStart) || 0; record.attempts += 1; persist(); return { ...record }; },
     secondsLeft() { if (!record.startedAt) return 60; return clamp(60 - Math.floor((Date.now() - record.startedAt) / 1000), 0, 60); },
-    score(stroke) {
-      if (!record.startedAt) return { ok: false, message: "Start the challenge first" };
-      if (this.secondsLeft() <= 0) return { ok: false, message: "Time is up — start again" };
-      const result = scoreStroke(challenge.id, stroke);
+    score(stroke, language = "ku") {
+      if (!record.startedAt) return { ok: false, message: language === "ku" ? "سەرەتا چالاکییەکە دەست پێبکە" : "Start the challenge first" };
+      if (this.secondsLeft() <= 0) return { ok: false, message: language === "ku" ? "کات تەواو بوو — دوبارە دەست پێبکە" : "Time is up — start again" };
+      const result = scoreStroke(challenge.id, stroke, language);
       record.lastScore = result.score; record.best = Math.max(record.best || 0, result.score); record.completed = record.completed || result.score >= 60; persist();
       return { ok: true, ...result, best: record.best, completed: record.completed };
     }

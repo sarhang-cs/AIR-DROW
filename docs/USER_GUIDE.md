@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW v7.3.0 Final Polish Edition.
+> This guide applies to AIR-DROW 7.4.0 Final Layout & Localization Edition.
 
 ## Start a drawing
 

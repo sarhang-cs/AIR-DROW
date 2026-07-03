@@ -6,14 +6,14 @@ import { fileURLToPath } from "node:url";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const iconRoot = resolve(root, "web/assets/icons");
 const manifestPath = resolve(iconRoot, "USER_ICON_PACKAGE.json");
-if (!existsSync(manifestPath)) throw new Error("User icon package manifest is missing.");
+if (!existsSync(manifestPath)) throw new Error("Local icon package manifest is missing.");
 
 const pack = JSON.parse(readFileSync(manifestPath, "utf8"));
-if (pack.version !== "7.3.0" || pack.buildId !== "air-drow-v730-final-polish") {
-  throw new Error("User icon package metadata is inconsistent.");
+if (pack.version !== "7.4.0" || pack.buildId !== "air-drow-v740-final-layout-localization") {
+  throw new Error("Local icon package metadata is inconsistent.");
 }
 if (!Array.isArray(pack.files) || pack.files.length < 30) {
-  throw new Error("The complete user icon package is incomplete.");
+  throw new Error("The complete local icon package is incomplete.");
 }
 for (const asset of pack.files) {
   const file = resolve(iconRoot, asset.path);
@@ -37,4 +37,4 @@ for (const asset of pack.files.filter(item => item.path.endsWith(".svg"))) {
   const cachedPath = `/assets/icons/${asset.path}`;
   if (!worker.includes(`"${cachedPath}"`)) throw new Error(`Imported icon is not in the offline app shell: ${asset.path}`);
 }
-console.log(`AIR-DROW user icon package verified: ${pack.files.length} local files.`);
+console.log(`AIR-DROW local icon package verified: ${pack.files.length} local files.`);
