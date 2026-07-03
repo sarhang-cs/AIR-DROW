@@ -98,6 +98,8 @@ const state = {
   handScanHideTimer: 0,
   handScanStatusVisual: "idle",
   handScanHasDetected: false,
+  handScanReadyTimer: 0,
+  calibrationOverlayTimer: 0,
   handStartPromise: null,
   handWarmTimer: 0,
   handWarmed: false,
@@ -1279,6 +1281,8 @@ function stopCamera() {
   if (handCalibration?.current?.().active) cancelHandCalibration({ quiet: true });
   clearHandCanvas();
   state.erasingGesture = false;
+  clearTimeout(state.handScanReadyTimer);
+  state.handScanReadyTimer = 0;
   setText(ui.handStatus, t("ready", "Ready"));
   setText(ui.fpsStatus, "0");
   updateLiveHud();
@@ -1419,8 +1423,15 @@ function updateHandCalibrationStatus() {
 function updateCalibrationOverlay(event = handCalibration?.current?.()) {
   if (!ui.calibrationOverlay) return;
   const active = Boolean(event?.active);
-  ui.calibrationOverlay.hidden = !active;
-  if (!active) return;
+  if (!active) {
+    if (ui.calibrationOverlay.dataset.state !== "complete") {
+      ui.calibrationOverlay.hidden = true;
+      ui.calibrationOverlay.dataset.state = "idle";
+    }
+    return;
+  }
+  ui.calibrationOverlay.hidden = false;
+  ui.calibrationOverlay.dataset.state = "active";
   const target = event.target;
   if (target && ui.calibrationTarget) {
     ui.calibrationTarget.style.setProperty("--target-x", `${Math.round(target.x * 100)}%`);
@@ -1431,6 +1442,21 @@ function updateCalibrationOverlay(event = handCalibration?.current?.()) {
   const hint = event.status === "holding" ? t("calibrationHold", "Hold your hand steady…") : t("calibrationStart", "Move your hand to the target and hold it steady");
   setText(ui.calibrationHint, hint);
   if (ui.calibrationMeterFill) ui.calibrationMeterFill.style.setProperty("--calibration-progress", `${Math.round((event.progress || 0) * 100)}%`);
+}
+
+function showCalibrationCompleteOverlay() {
+  if (!ui.calibrationOverlay) return;
+  clearTimeout(state.calibrationOverlayTimer);
+  ui.calibrationOverlay.hidden = false;
+  ui.calibrationOverlay.dataset.state = "complete";
+  setText(ui.calibrationTitle, t("calibrationComplete", "Hand calibration completed"));
+  setText(ui.calibrationStep, "4/4 ✓");
+  setText(ui.calibrationHint, t("calibrationReadyHint", "Everything is ready for hand drawing"));
+  if (ui.calibrationMeterFill) ui.calibrationMeterFill.style.setProperty("--calibration-progress", "100%");
+  state.calibrationOverlayTimer = setTimeout(() => {
+    ui.calibrationOverlay.hidden = true;
+    ui.calibrationOverlay.dataset.state = "idle";
+  }, 1200);
 }
 
 async function startHandCalibration() {
@@ -1511,6 +1537,8 @@ function resetHandGestureState() {
   state.inferenceFps = 0;
   state.effectiveTargetFps = 0;
   state.erasingGesture = false;
+  clearTimeout(state.handScanReadyTimer);
+  state.handScanReadyTimer = 0;
   setHandPoint(null);
   setGestureStatus("ready", t("gestureReady", "Ready"));
 }
@@ -1604,9 +1632,10 @@ function setHandScanStage(stage, label, hint) {
   clearTimeout(state.handScanHideTimer);
   ui.handScan.classList.remove("is-hiding");
   ui.handScan.dataset.stage = stage;
+  ui.handScan.dataset.state = "active";
   if (label) setText(ui.handScanLabel, label);
   if (hint !== undefined) setText(ui.handScanHint, hint);
-  if (stage === "found") setHandScanVisual("success");
+  if (stage === "found" || stage === "ready") setHandScanVisual("success");
   else if (stage === "missing") setHandScanVisual("missing");
   else if (stage === "problem") setHandScanVisual("problem");
   else setHandScanVisual("idle");
@@ -1614,13 +1643,24 @@ function setHandScanStage(stage, label, hint) {
 
 function hideHandScan(delay = 180) {
   clearTimeout(state.handScanHideTimer);
+  clearTimeout(state.handScanReadyTimer);
   ui.handScan.classList.add("is-hiding");
   state.handScanHideTimer = setTimeout(() => {
     ui.handScan.hidden = true;
     ui.handScan.classList.remove("is-hiding");
     ui.handScan.dataset.stage = "warm";
+    ui.handScan.dataset.state = "idle";
     setHandScanVisual("idle");
   }, delay);
+}
+
+function showHandScanReady() {
+  clearTimeout(state.handScanReadyTimer);
+  setHandScanStage("found", t("scanFound", "Hand found"), t("gestureArm", "Open hand detected — pinch is armed"));
+  state.handScanReadyTimer = setTimeout(() => {
+    setHandScanStage("ready", t("trackingStable", "Stable and ready"), t("gestureArm", "Open hand detected — pinch is armed"));
+    hideHandScan(1400);
+  }, 760);
 }
 
 async function waitForCameraFrame(timeoutMs = 1800) {
@@ -1940,7 +1980,7 @@ function handFrame() {
       state.calibrationPending = false;
       updateHandCalibrationStatus();
       queueSave();
-      updateCalibrationOverlay();
+      showCalibrationCompleteOverlay();
       toast(t("calibrationComplete", "Hand calibration completed"));
     }
 
@@ -1959,8 +1999,7 @@ function handFrame() {
 
     if (!state.handScanHasDetected && stableHand) {
       state.handScanHasDetected = true;
-      setHandScanStage("found", t("scanFound", "Hand found"), t("gestureArm", "Open hand detected — pinch is armed"));
-      hideHandScan(3000);
+      showHandScanReady();
     }
 
     if (!assessment.usable && state.handDrawing) {

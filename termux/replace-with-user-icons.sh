@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AIR-DROW User Icon Edition — complete safe replacement.
+# AIR-DROW Final Polish Edition — complete safe replacement.
 # Usage: bash termux/replace-with-user-icons.sh "$HOME/AIR-DROW-GITHUB"
 set -Eeuo pipefail
 
@@ -36,10 +36,10 @@ trap on_error ERR
 [ -d "$REPO/.git" ] || { echo "GitHub repo was not found: $REPO"; exit 1; }
 [ -f "$SOURCE/package.json" ] || { echo "AIR-DROW source is incomplete."; exit 1; }
 VERSION="$(node -e 'const fs=require("fs"); console.log(JSON.parse(fs.readFileSync(process.argv[1],"utf8")).version)' "$SOURCE/package.json")"
-[ "$VERSION" = "7.2.1" ] || { echo "Expected AIR-DROW v7.2.1, found v$VERSION"; exit 1; }
+[ "$VERSION" = "7.3.0" ] || { echo "Expected AIR-DROW v7.3.0, found v$VERSION"; exit 1; }
 [ -s "$SOURCE/web/vendor/models/hand_landmarker.task" ] || { echo "The local hand model is missing from this package."; exit 1; }
 [ -s "$SOURCE/web/vendor/mediapipe/vision_bundle.js" ] || { echo "The local hand runtime is missing from this package."; exit 1; }
-[ -f "$SOURCE/web/assets/icons/USER_ICON_PACKAGE.json" ] || { echo "The complete user icon package is missing."; exit 1; }
+[ -f "$SOURCE/web/assets/icons/USER_ICON_PACKAGE.json" ] || { echo "The complete local icon package is missing."; exit 1; }
 
 echo "Creating a temporary backup…"
 mkdir -p "$BACKUP"
@@ -50,7 +50,7 @@ for item in "$REPO"/*; do
 done
 RESTORE_REQUIRED=1
 
-echo "Removing the previous icon system and copying AIR-DROW v7.2.1…"
+echo "Removing the previous icon system and copying AIR-DROW v7.3.0…"
 # The old project was moved out above. Only .git remains; this package replaces every project file.
 cp -a "$SOURCE"/. "$REPO"/
 [ -d "$REPO/.git" ] || { echo "Git metadata was not preserved."; restore_previous; exit 1; }
@@ -59,7 +59,7 @@ cd "$REPO"
 echo "Installing app files…"
 npm_config_loglevel=error npm ci --no-audit --no-fund
 
-echo "Checking the complete release and imported icon package…"
+echo "Checking the complete final-polish release…"
 npm run vercel:build
 
 # The new project is valid at this point. Keep it installed even if GitHub is temporarily unreachable.
@@ -67,7 +67,7 @@ RESTORE_REQUIRED=0
 
 git add -A
 if ! git diff --cached --quiet; then
-  git commit -m "AIR-DROW v7.2.1 user icon package replacement"
+  git commit -m "AIR-DROW v7.3.0 final polish replacement"
 fi
 BRANCH="$(git branch --show-current 2>/dev/null || true)"
 [ -n "$BRANCH" ] || BRANCH="main"
@@ -83,5 +83,5 @@ fi
 rm -rf "$BACKUP"
 echo ""
 echo "DONE ✅"
-echo "AIR-DROW v7.2.1 with your complete icon package was checked and pushed to GitHub."
+echo "AIR-DROW v7.3.0 with the final polished release was checked and pushed to GitHub."
 echo "The previous project files were deleted after the successful build."

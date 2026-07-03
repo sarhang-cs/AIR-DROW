@@ -30,7 +30,7 @@ if (release.buildId !== project.buildId || release.buildId !== assets.buildId) t
 if (!runtime.includes(`version: "${release.version}"`) || !runtime.includes(`buildId: "${release.buildId}"`)) throw new Error("Runtime release metadata is inconsistent.");
 if (!worker.includes(`const BUILD_ID = "${release.buildId}"`)) throw new Error("Service-worker release metadata is inconsistent.");
 if (!index.includes(`content="${release.buildId}"`) || !index.includes(`v${release.version}`)) throw new Error("Index release metadata is inconsistent.");
-if (!manifest.name.includes("AIR-DROW") || !manifest.start_url.includes("v721")) throw new Error("Install manifest is incomplete.");
+if (!manifest.name.includes("AIR-DROW") || !manifest.start_url.includes("v730")) throw new Error("Install manifest is incomplete.");
 if (!existsSync(model) || statSync(model).size !== 7_819_105) throw new Error("Complete local hand model is missing.");
 if (!existsSync(runtimeBundle) || statSync(runtimeBundle).size < 100_000 || !existsSync(runtimeWasm) || statSync(runtimeWasm).size < 100_000) throw new Error("Complete local hand runtime is missing.");
 if (!index.includes('id="runDeviceReadinessBtn"') || !index.includes('id="runFinalLiveQaBtn"')) throw new Error("Friendly app-check controls are missing.");
@@ -40,4 +40,4 @@ for (const marker of ['"deviceReadinessTitle": "App readiness"', '"finalLiveQaTi
 for (const forbidden of ['>Developer<', '>Build ID<', 'Final Master Release', 'Final live QA']) {
   if (index.includes(forbidden)) throw new Error(`Developer-facing UI copy remains in index.html: ${forbidden}`);
 }
-console.log(`AIR-DROW user-release check passed: v${release.version}`);
+console.log(`AIR-DROW final-polish release check passed: v${release.version}`);

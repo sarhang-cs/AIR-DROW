@@ -1,6 +1,6 @@
 # AIR-DROW Complete Package
 
-This package contains the complete **AIR-DROW v7.2.1 User Icon Edition**.
+This package contains the complete **AIR-DROW v7.3.0 User Icon Edition**.
 
 It includes the full app source, the local hand-drawing model, MediaPipe runtime files, fonts, icons, the ready-to-deploy app output, and user guides in Kurdish and English.
 

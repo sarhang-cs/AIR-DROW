@@ -49,7 +49,7 @@
 
 .tool-button > .app-icon { --app-icon-size: 20px; }
 .workspace-dock-button > .app-icon,
-.workspace-tab > .app-icon { --app-icon-size: 18px; }
+.workspace-tab > .app-icon { --app-icon-size: 20px; }
 .summary-icon > .app-icon { --app-icon-size: 16px; }
 .consent-close > .app-icon { --app-icon-size: 16px; }
 .clear-icon > .app-icon,
@@ -64,5 +64,8 @@
 
 @media (max-width: 520px) {
   .tool-button > .app-icon { --app-icon-size: 18px; }
-  .workspace-dock-button > .app-icon { --app-icon-size: 16px; }
+  .workspace-dock-button > .app-icon { --app-icon-size: 18px; }
 }
+
+.about-orb > .app-icon { --app-icon-size: 20px; color: #07101b; }
+.settings-mark > .app-icon { --app-icon-size: 18px; }

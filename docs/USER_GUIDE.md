@@ -1,5 +1,7 @@
 # AIR-DROW User Guide
 
+> This guide applies to AIR-DROW v7.3.0 Final Polish Edition.
+
 ## Start a drawing
 
 1. Open AIR-DROW.

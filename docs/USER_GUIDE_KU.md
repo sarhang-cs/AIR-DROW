@@ -1,5 +1,7 @@
 # ڕێنمایی بەکارهێنانی AIR-DROW
 
+> ئەم ڕێنماییە بۆ AIR-DROW v7.3.0 Final Polish Edition ـە.
+
 ## دەستپێکردن بە کێشان
 
 1. AIR-DROW بکەرەوە.

@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW User Icon Edition",
   "source": "web.zip / web/assets/icons",
-  "version": "7.2.1",
-  "buildId": "air-drow-v721-user-icon-edition",
+  "version": "7.3.0",
+  "buildId": "air-drow-v730-final-polish",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {

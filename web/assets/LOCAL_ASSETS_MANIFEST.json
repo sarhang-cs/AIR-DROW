@@ -1,6 +1,6 @@
 {
-  "version": "7.2.1",
-  "buildId": "air-drow-v721-user-icon-edition",
+  "version": "7.3.0",
+  "buildId": "air-drow-v730-final-polish",
   "policy": "AIR-DROW uses local same-origin interface assets, MediaPipe modules, WASM files and the verified hand model. Your drawing session is private to this device unless you choose an export, share or optional AI action.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -30,6 +30,6 @@
     "guide": "assets/icons/ICON_SYSTEM.md",
     "packageManifest": "assets/icons/USER_ICON_PACKAGE.json"
   },
-  "releaseStatus": "v7.2.1 User Icon Edition: your complete local icon pack is active across AIR-DROW.",
+  "releaseStatus": "v7.3.0 User Icon Edition: your complete local icon pack is active across AIR-DROW.",
   "assetRevision": "721"
 }

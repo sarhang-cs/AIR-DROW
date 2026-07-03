@@ -690,6 +690,7 @@ html[dir="ltr"] .camera-mode-option { align-items: flex-start; text-align: left;
 .hand-scan[data-stage="camera"] { --scan-core: #5c97ff; --scan-core-2: #82d1ff; --scan-progress: 48%; }
 .hand-scan[data-stage="detect"] { --scan-core: #4d8fff; --scan-core-2: #79d5ff; --scan-progress: 76%; }
 .hand-scan[data-stage="found"] { --scan-core: #67a8ff; --scan-core-2: #93dcff; --scan-progress: 100%; }
+.hand-scan[data-stage="ready"] { --scan-core: #6fd2a0; --scan-core-2: #9ee7bf; --scan-progress: 100%; }
 .hand-scan[data-stage="missing"] { --scan-core: #7aa8ff; --scan-core-2: #aad8ff; --scan-progress: 32%; }
 .hand-scan[data-stage="problem"] { --scan-core: #ffd160; --scan-core-2: #ffe69d; --scan-progress: 22%; }
 .hand-scan.is-hiding { opacity: 0; transform: translate(-50%, -50%) scale(.97); }
@@ -762,7 +763,8 @@ html[dir="ltr"] .camera-mode-option { align-items: flex-start; text-align: left;
   animation-delay: .24s;
 }
 .hand-scan[data-stage="detect"] .hand-scan-reticle { animation: handScanBreath .82s ease-in-out infinite; }
-.hand-scan[data-stage="found"] .hand-scan-reticle {
+.hand-scan[data-stage="found"] .hand-scan-reticle,
+.hand-scan[data-stage="ready"] .hand-scan-reticle {
   border-color: #78e8bd;
   box-shadow: 0 0 0 6px rgba(120,232,189,.12), 0 0 28px rgba(120,232,189,.44), inset 0 0 20px rgba(120,232,189,.15);
 }
@@ -831,7 +833,9 @@ html[dir="ltr"] .camera-mode-option { align-items: flex-start; text-align: left;
 .hand-scan-status[data-visual="missing"] .hand-scan-status-icon.missing,
 .hand-scan-status[data-visual="problem"] .hand-scan-status-icon.problem { animation: handScanStatusFloat 1.15s ease-in-out infinite; }
 .hand-scan[data-stage="found"] .hand-scan-reticle::before,
-.hand-scan[data-stage="found"] .hand-scan-reticle::after { animation-duration: .64s; }
+.hand-scan[data-stage="found"] .hand-scan-reticle::after,
+.hand-scan[data-stage="ready"] .hand-scan-reticle::before,
+.hand-scan[data-stage="ready"] .hand-scan-reticle::after { animation-duration: .64s; }
 .hand-scan[data-stage="missing"] .hand-scan-reticle::before,
 .hand-scan[data-stage="problem"] .hand-scan-reticle::before { animation-duration: 1.35s; opacity: .5; }
 .hand-scan[data-stage="problem"] .hand-scan-progress i {
@@ -1178,7 +1182,7 @@ html[dir="rtl"] .skin-choice::before { right: 10px; left: auto; }
 .about-hero::after { content: ""; position: absolute; width: 92px; height: 92px; top: -30px; left: -20px; border-radius: 50%; background: radial-gradient(circle, var(--accent-soft), transparent 68%); }
 html[dir="rtl"] .about-hero::after { right: -20px; left: auto; }
 .about-head { display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; }
-.about-orb { position: relative; width: 38px; height: 38px; border-radius: 13px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 8px 18px var(--skin-shadow); }
+.about-orb { position: relative; width: 42px; height: 42px; display:grid; place-items:center; border-radius: 14px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 8px 18px var(--skin-shadow); }
 .about-orb::before, .about-orb::after { content: ""; position: absolute; inset: 8px; border: 1.5px solid var(--accent-ink); border-radius: 50%; animation: airDrawOrbit 3s linear infinite; }
 .about-orb::after { inset: 14px; animation-duration: 1.8s; animation-direction: reverse; }
 .about-title { margin: 0; font-size: 14px; letter-spacing: .02em; direction: ltr; text-align: start; }
@@ -1729,3 +1733,7 @@ html[lang="ku"] .mixed-inline, html[lang="ku"] .inline-code, .numeric-value { di
 /* Phase 7 final live QA: passive state reporting, no camera action. */
 .final-live-qa-card { border-color: color-mix(in srgb, var(--accent) 34%, var(--line)); }
 .device-readiness-list li[data-state="pending"] b { color: var(--warning, #c98f2a); }
+
+.hand-calibration-overlay[data-state="complete"] .hand-calibration-sheet { border-color: color-mix(in srgb, #8fe2b1 40%, var(--line)); box-shadow: 0 18px 54px rgba(0,0,0,.38), inset 0 0 0 1px rgba(143,226,177,.16); }
+.hand-calibration-overlay[data-state="complete"] .hand-calibration-progress i { --calibration-progress: 100% !important; }
+.workspace-label { font-size: 10px; }

@@ -1,15 +1,15 @@
-# AIR-DROW v7.2.1 — User Icon Edition
+# AIR-DROW v7.3.0 — Final Polish Edition
 
-## Your complete icon package is installed
+## Final polish for the released app
 
-- Removed the previous `web/assets/icons` tree before installing the complete icon folder supplied in `web.zip`.
-- Replaced the AIR-DROW brand mark, workspace, settings, status, action and toolbar icon assets with the supplied local SVG files.
-- Added `USER_ICON_PACKAGE.json` with the exact file list and SHA-256 integrity records for the imported icon set.
-- Included every imported SVG in the service-worker offline shell so the new icons are immediately available in the installed app.
-- Kept the drawing engine, local hand model, MediaPipe runtime, projects, exports and all existing AIR-DROW features intact.
+- Improved the hand scan startup flow so the user sees a clearer ready/success moment before the scan overlay closes.
+- Improved hand calibration completion so the final step stays visible briefly instead of disappearing abruptly.
+- Refined the bottom workspace navigation icon sizing for better visual balance on mobile.
+- Refined the About App hero badge to use the AIR-DROW mark more clearly.
+- Updated release metadata, README files, privacy notes and Termux replacement instructions for the final packaged release.
 
 ## Release identity
 
-- Version: `7.2.1`
-- Build: `air-drow-v721-user-icon-edition`
+- Version: `7.3.0`
+- Build: `air-drow-v730-final-polish`
 - Channel: stable

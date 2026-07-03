@@ -1,5 +1,7 @@
 # AIR-DROW Privacy Guide
 
+> This guide applies to AIR-DROW v7.3.0 Final Polish Edition.
+
 AIR-DROW is local-first.
 
 - Your drawings, saved projects and settings remain in the current browser by default.

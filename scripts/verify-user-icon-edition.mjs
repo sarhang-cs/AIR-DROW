@@ -9,7 +9,7 @@ const manifestPath = resolve(iconRoot, "USER_ICON_PACKAGE.json");
 if (!existsSync(manifestPath)) throw new Error("User icon package manifest is missing.");
 
 const pack = JSON.parse(readFileSync(manifestPath, "utf8"));
-if (pack.version !== "7.2.1" || pack.buildId !== "air-drow-v721-user-icon-edition") {
+if (pack.version !== "7.3.0" || pack.buildId !== "air-drow-v730-final-polish") {
   throw new Error("User icon package metadata is inconsistent.");
 }
 if (!Array.isArray(pack.files) || pack.files.length < 30) {

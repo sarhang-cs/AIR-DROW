@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW User Icon Edition",
-  "version": "7.2.1",
-  "buildId": "air-drow-v721-user-icon-edition",
+  "name": "AIR-DROW Final Polish Edition",
+  "version": "7.3.0",
+  "buildId": "air-drow-v730-final-polish",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -12,7 +12,7 @@
     "public/vendor/mediapipe/vision_bundle.js",
     "public/vendor/models/hand_landmarker.task"
   ],
-  "delivery": "This source package is ready for npm ci and npm run vercel:build. node_modules is intentionally excluded because it is reproduced from package-lock.json.",
+  "delivery": "This complete final-polish source package is ready for npm ci and npm run vercel:build. node_modules is intentionally excluded because it is reproduced from package-lock.json.",
   "userDocs": [
     "README.md",
     "README_KU.md",
@@ -21,5 +21,5 @@
     "docs/PRIVACY.md"
   ],
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
-  "iconReplacement": "The previous icon tree was removed and replaced with the complete local user icon package."
+  "iconReplacement": "The complete local icon package remains installed, and the final polish release refines navigation, onboarding, and hand calibration feedback."
 }

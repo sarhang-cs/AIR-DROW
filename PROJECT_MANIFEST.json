@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.2.1",
-  "buildId": "air-drow-v721-user-icon-edition",
-  "release": "User Icon Edition",
+  "version": "7.3.0",
+  "buildId": "air-drow-v730-final-polish",
+  "release": "Final Polish Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -16,6 +16,6 @@
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
-  "releaseGate": "npm run vercel:build validates the local hand model, source integrity and generated production assets.",
-  "support": "Use Settings > About App when you want to check app readiness or hand drawing."
+  "releaseGate": "npm run vercel:build validates the final-polish release, local hand model, source integrity and generated production assets.",
+  "support": "Use Settings > About App to check app readiness, hand drawing readiness, and the final polished release info."
 }
