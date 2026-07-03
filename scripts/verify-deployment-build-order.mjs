@@ -22,4 +22,6 @@ for (const rel of [
   const file = resolve(root, rel);
   if (!existsSync(file) || statSync(file).size < 1024) throw new Error(`Deploy output asset missing: ${rel}`);
 }
-console.log("AIR-DROW deployment build order and generated runtime assets verified.");
+const visionBundle = readFileSync(resolve(root, "public/vendor/mediapipe/vision_bundle.js"), "utf8");
+if (/sourceMappingURL=/u.test(visionBundle)) throw new Error("Production MediaPipe bundle still contains a stale source-map directive.");
+console.log("AIR-DROW deployment build order, generated runtime assets and source-map cleanup verified.");

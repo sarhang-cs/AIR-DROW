@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, rmSync, statSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, rmSync, statSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -27,7 +27,14 @@ cpSync(source, output, { recursive: true });
 mkdirSync(vendorRoot, { recursive: true });
 // Keep the package source intact but publish it as .js. Some strict Android
 // deployments serve .mjs with a non-JS MIME type, while .js is unambiguous.
-copyRequired(resolve(packageRoot, "vision_bundle.mjs"), resolve(vendorRoot, "vision_bundle.js"));
+const outputVisionBundle = resolve(vendorRoot, "vision_bundle.js");
+copyRequired(resolve(packageRoot, "vision_bundle.mjs"), outputVisionBundle);
+// The upstream .mjs bundle references a map that is not part of the package
+// distribution. Strip only that sourcemap trailer so production DevTools never
+// creates a false 404 warning for vision_bundle_mjs.js.map.
+const visionBundle = readFileSync(outputVisionBundle, "utf8").replace(/\n?\/\/# sourceMappingURL=[^\r\n]+\s*$/u, "\n");
+if (/sourceMappingURL=/u.test(visionBundle)) throw new Error("Could not remove stale MediaPipe sourcemap directive.");
+writeFileSync(outputVisionBundle, visionBundle, "utf8");
 copyRequired(resolve(packageRoot, "wasm"), resolve(vendorRoot, "wasm"));
 mkdirSync(modelRoot, { recursive: true });
 copyRequired(sourceModel, outputModel);

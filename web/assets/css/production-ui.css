@@ -1,5 +1,5 @@
 /* AIR-DROW production UI system
- * Consolidated in v7.5.3 so mobile layout, RTL/LTR behavior, brand treatment
+ * Consolidated in v7.5.4 so mobile layout, RTL/LTR behavior, brand treatment
  * and control fixes have one ordered source of truth. Keep structural styles
  * in app.css, visual-system.css, icon-system.css and drawer-layout.css.
  */
@@ -598,7 +598,7 @@ html[dir="rtl"] .setting-line select { background-position: 12px 50% !important;
 }
 
 /* ===== Brand consistency and bilingual layout ===== */
-/* AIR-DROW Interaction & Hand Scan Polish Edition
+/* AIR-DROW Calibration Reality & QA Edition
    Last style layer: unified brand mark, bilingual alignment, calm card rhythm,
    and high-contrast controls for the light theme. */
 

@@ -21,23 +21,29 @@
 /* Mobile interaction contract: AIR-DROW is a native-feeling drawing studio, so
    Android text-selection callouts and browser tap flashes must never attach to
    controls, cards or labels. Real text-entry fields remain editable below. */
-*, *::before, *::after { -webkit-tap-highlight-color: transparent; }
+*, *::before, *::after {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-drag: none;
+}
 html, body { width: 100%; min-height: 100%; margin: 0; background: var(--bg); color: var(--text); -webkit-touch-callout: none; }
 body { overflow: hidden; }
 button, input, select, textarea { font: inherit; }
-.app, .app * {
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
+/* #quickStartOverlay, recovery and boot layers are outside .app. Lock the
+   complete AIR-DROW document so Android cannot show Copy/Search/Translate
+   menus on any studio label, card, toolbar, status or onboarding text. */
+body, body * {
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
 }
 /* Preserve ordinary text editing only where a person can enter real values. */
-.app input:not([type="range"]):not([type="checkbox"]):not([type="color"]),
-.app textarea,
-.app select,
-.app [contenteditable="true"] {
-  -webkit-user-select: text;
-  user-select: text;
-  -webkit-touch-callout: default;
+input:not([type="range"]):not([type="checkbox"]):not([type="color"]),
+textarea,
+select,
+[contenteditable="true"] {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  -webkit-touch-callout: default !important;
 }
 button, summary, label, [role="button"], [data-workspace-nav], [data-camera-view],
 .setting-action, .tool-button, .workspace-tab, .workspace-dock-button,

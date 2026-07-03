@@ -1,22 +1,23 @@
 {
-  "version": "7.5.3",
-  "buildId": "air-drow-v753-interaction-scan-polish",
+  "version": "7.5.4",
+  "buildId": "air-drow-v754-calibration-reality-qa",
   "releasedAt": "2026-07-03T22:30:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Interaction & Hand Scan Polish Edition: locks Android long-press selection and tap flashes, makes scanner status marks reliable, and keeps successful hand checks visible before a calm exit animation.",
+  "summary": "AIR-DROW Calibration Reality & QA Edition: four-point hand calibration now captures only the requested targets, persists immediately across projects, and uses real browser probes for network and local readiness states.",
   "features": [
-    "Disables Android text selection, long-press Copy/Search callouts and blue tap-highlight flashes across the drawing interface while preserving real text-entry fields.",
-    "Uses inline vector status marks for verified, warning and problem scanner states so Android Chromium cannot lose stroked mask icons.",
-    "Shows the explicit Hand check passed confirmation before the scanner fades away with a calm completion animation.",
-    "Retains secure WebAssembly support for local MediaPipe, lazy hand-runtime caching and quiet local-project recovery.",
-    "Retains Kurdish (Sorani) and English interface support with responsive RTL/LTR layout."
+    "Locks Android text selection, long-press Copy/Search/Translate callouts and blue tap-highlight flashes across onboarding, overlays and the studio while preserving real editable fields.",
+    "Uses target-confirmed four-point hand calibration: off-target or unstable hands cannot advance the sequence, and malformed geometry exits safely instead of repeating.",
+    "Saves a completed calibration immediately to dedicated local browser storage and to the active project through serialized writes, then applies it to every hand-drawing session.",
+    "Uses same-origin reachability, storage write/read and local runtime checks instead of optimistic ready or online labels.",
+    "Removes the stale upstream MediaPipe source-map directive from production output so DevTools no longer requests a missing .map file.",
+    "Keeps the explicit Hand check passed confirmation visible before the scanner fades away with a calm completion animation, with reliable inline vector warning and verified marks."
   ],
-  "assetRevision": "753",
+  "assetRevision": "754",
   "phase": 10,
-  "stage": "interaction-scan-polish",
+  "stage": "calibration-reality-qa",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",

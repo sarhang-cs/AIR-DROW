@@ -1,6 +1,7 @@
 /* AIR-DROW Hand Calibration & Confidence Guard
-   Keeps all calibration data local. The session records four stable index-tip
-   positions and turns that safe drawing area into the full canvas range. */
+   Calibration records four *different*, target-confirmed index-tip positions.
+   The mapping remains local to this browser and is only enabled after the
+   complete rectangle passes geometric validation. */
 
 const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, Number(value) || 0));
 const average = values => values.reduce((sum, value) => sum + value, 0) / Math.max(1, values.length);
@@ -57,7 +58,12 @@ const TARGETS = Object.freeze([
   { id: "bottom-left", x: 0.15, y: 0.80 }
 ]);
 
-export function createHandCalibration({ holdMs = 620, maxJitter = 0.028 } = {}) {
+function targetDistance(point, target) {
+  if (!point || !target) return Infinity;
+  return Math.hypot(Number(point.x || 0) - Number(target.x || 0), Number(point.y || 0) - Number(target.y || 0));
+}
+
+export function createHandCalibration({ holdMs = 620, maxJitter = 0.028, targetRadius = 0.135 } = {}) {
   let session = null;
 
   function current() {
@@ -128,8 +134,12 @@ export function createHandCalibration({ holdMs = 620, maxJitter = 0.028 } = {}) 
     });
 
     if (!calibration.enabled) {
-      clearHold("invalid");
-      return { ...current(), active: true, type: "invalid" };
+      // Never leave a malformed 4/4 session active: it would trap the person
+      // in a loop. Surface a clean failure and require an explicit retry.
+      session.active = false;
+      session.status = "invalid";
+      session.progress = 0;
+      return { ...current(), type: "invalid" };
     }
 
     session.active = false;
@@ -146,6 +156,15 @@ export function createHandCalibration({ holdMs = 620, maxJitter = 0.028 } = {}) 
     }
 
     const sample = toDisplayPoint(point, { mirror });
+    const target = TARGETS[session.index];
+    const distance = targetDistance(sample, target);
+    if (distance > targetRadius) {
+      // The old flow captured four copies of one stable hand position. This
+      // target gate is what makes calibration real instead of synthetic.
+      clearHold("aim");
+      return { ...current(), type: "aim", targetDistance: distance };
+    }
+
     if (!session.holdStartedAt) session.holdStartedAt = now;
     session.samples.push(sample);
     if (session.samples.length > 18) session.samples.shift();
@@ -153,13 +172,13 @@ export function createHandCalibration({ holdMs = 620, maxJitter = 0.028 } = {}) 
     const jitter = sampleJitter(session.samples);
     if (jitter > maxJitter) {
       clearHold("steady");
-      return { ...current(), type: "unstable" };
+      return { ...current(), type: "unstable", targetDistance: distance };
     }
 
     const elapsed = now - session.holdStartedAt;
     session.status = "holding";
     session.progress = clamp(elapsed / holdMs);
-    if (elapsed < holdMs || session.samples.length < 5) return { ...current(), type: "progress" };
+    if (elapsed < holdMs || session.samples.length < 5) return { ...current(), type: "progress", targetDistance: distance };
 
     const captured = {
       x: average(session.samples.map(item => item.x)),
@@ -173,7 +192,7 @@ export function createHandCalibration({ holdMs = 620, maxJitter = 0.028 } = {}) 
 
     if (session.index >= TARGETS.length) return finish();
     session.status = "captured";
-    return { ...current(), type: "captured" };
+    return { ...current(), type: "captured", targetDistance: distance };
   }
 
   return { start, cancel, current, observe, reset: () => { session = null; return current(); } };

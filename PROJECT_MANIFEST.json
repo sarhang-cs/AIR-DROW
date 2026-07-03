@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.5.3",
-  "buildId": "air-drow-v753-interaction-scan-polish",
-  "release": "Interaction & Hand Scan Polish Edition",
+  "version": "7.5.4",
+  "buildId": "air-drow-v754-calibration-reality-qa",
+  "release": "Calibration Reality & QA Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",

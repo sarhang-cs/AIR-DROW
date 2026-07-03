@@ -7,7 +7,7 @@ const required = [
   "web/index.html", "web/assets/css/app.css", "web/assets/css/visual-system.css", "web/assets/css/icon-system.css", "web/assets/css/drawer-layout.css", "web/assets/css/production-ui.css", "web/release.json", "web/sw.js", "web/manifest.webmanifest", "web/favicon.svg", "web/assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf",
   "web/assets/js/app.js", "web/assets/js/config/runtime.js", "web/assets/js/i18n/translations.js", "web/assets/js/ui/registry.js", "web/assets/js/core/project-store.js", "web/assets/js/core/release-manager.js", "web/assets/js/core/font-kit.js", "web/assets/js/core/loading-manager.js", "web/assets/js/core/performance-governor.js", "web/assets/js/core/reliability-center.js", "web/assets/js/core/persistence-guard.js",
   "web/assets/js/features/device-readiness.js", "web/assets/js/features/final-live-qa.js", "web/assets/js/features/hand-calibration.js", "web/assets/js/features/hand-tracking-engine.js", "web/assets/js/features/hand-engine-bootstrap.js", "web/assets/js/features/onboarding-flow.js", "web/assets/js/features/exporter.js", "web/assets/js/features/ai-studio.js",
-  "web/vendor/models/hand_landmarker.task", "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-final-release.mjs", "scripts/verify-interaction-scan-polish.mjs", "scripts/verify-local-hand-model.mjs", "scripts/verify-hand-runtime-loader-fix.mjs", "scripts/verify-deployment-build-order.mjs", "scripts/sync-toolbar-icons.mjs", "scripts/verify-toolbar-icon-bundle.mjs", "api/health.js", "api/ai/generate.js", ".env.example", "vercel.json", "package.json"
+  "web/vendor/models/hand_landmarker.task", "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-final-release.mjs", "scripts/verify-calibration-reality-qa.mjs", "scripts/verify-local-hand-model.mjs", "scripts/verify-hand-runtime-loader-fix.mjs", "scripts/verify-deployment-build-order.mjs", "scripts/sync-toolbar-icons.mjs", "scripts/verify-toolbar-icon-bundle.mjs", "api/health.js", "api/ai/generate.js", ".env.example", "vercel.json", "package.json"
 ];
 const icons = ["brush", "eraser", "hand", "camera", "undo", "redo", "trash", "moon", "sun", "settings"];
 const missing = [...required, ...icons.map(name => `web/assets/icons/toolbar/${name}.svg`)].filter(file => !existsSync(resolve(root, file)));
@@ -23,10 +23,11 @@ if (vercel.outputDirectory !== "public" || vercel.installCommand !== "npm ci --n
 if (!pkg.dependencies?.["@mediapipe/tasks-vision"]) throw new Error("Hand drawing dependency is missing.");
 if (pkg.engines?.node !== ">=22 <25") throw new Error("Node engine must support Vercel and Termux.");
 if (pkg.version !== release.version || !release.buildId || !release.assetRevision) throw new Error("Release metadata is incomplete.");
-if (!manifest.name.includes("AIR-DROW") || !manifest.start_url.includes("v753")) throw new Error("Install manifest is missing the current release.");
-if (!html.includes('production-ui.css?v=753')) throw new Error("Consolidated production stylesheet is not linked.");
+if (!manifest.name.includes("AIR-DROW") || !manifest.start_url.includes("v754")) throw new Error("Install manifest is missing the current release.");
+if (!html.includes('production-ui.css?v=754')) throw new Error("Consolidated production stylesheet is not linked.");
 for (const obsolete of ["phase2-ui.css", "ui-clarity.css", "final-layout-localization.css", "bootstrap-hotfix.css"]) if (html.includes(obsolete) || worker.includes(obsolete)) throw new Error(`Obsolete stylesheet reference remains: ${obsolete}`);
 if (worker.includes('"/vendor/models/hand_landmarker.task"')) throw new Error("The hand model must not be in the install shell.");
 if (!worker.includes("cacheFirstOnDemand") || !worker.includes("production-ui.css")) throw new Error("Lazy runtime cache policy is incomplete.");
+if (!read("scripts/build-selfhosted-mediapipe.mjs").includes("stale MediaPipe sourcemap")) throw new Error("MediaPipe sourcemap cleanup is missing.");
 if (statSync(resolve(root, "web/vendor/models/hand_landmarker.task")).size !== 7_819_105) throw new Error("Complete local hand model is missing.");
 console.log(`AIR-DROW production preflight passed: v${release.version}`);

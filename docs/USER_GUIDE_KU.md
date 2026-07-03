@@ -1,6 +1,6 @@
 # ڕێنمایی بەکارهێنانی AIR-DROW
 
-> ئەم ڕێنماییە بۆ AIR-DROW 7.5.3 Interaction & Hand Scan Polish Edition ـە.
+> ئەم ڕێنماییە بۆ AIR-DROW 7.5.4 Calibration Reality & QA Edition ـە.
 
 ## دەستپێکردن بە کێشان
 

@@ -31,30 +31,47 @@ async function checkLocalModel() {
     const response = await withTimeout(fetch(url, { method: "HEAD", cache: "no-store" }), null);
     return response?.ok ? { state: "ready", detail: "" } : { state: "limited", detail: "" };
   } catch {
-    // A previously installed offline copy still makes hand drawing available.
-    return { state: "ready", detail: "" };
+    return { state: "limited", detail: "" };
   }
 }
 
 async function checkStorage() {
+  const probeKey = `air-drow-storage-probe-${Date.now()}`;
   try {
+    localStorage.setItem(probeKey, "1");
+    const roundTrip = localStorage.getItem(probeKey) === "1";
+    localStorage.removeItem(probeKey);
+    if (!roundTrip) return { state: "limited", detail: "" };
     const estimate = await navigator.storage?.estimate?.();
     const usage = Number(estimate?.usage || 0);
     const quota = Number(estimate?.quota || 0);
     const nearlyFull = quota > 0 && usage / quota >= .88;
     return { state: nearlyFull ? "limited" : "ready", detail: "" };
   } catch {
-    // Browser-managed storage is normal and should not be presented as a fault.
-    return { state: "ready", detail: "" };
+    return { state: "limited", detail: "" };
   }
 }
 
-function checkPwa() {
-  return "serviceWorker" in navigator ? { state: "ready", detail: "" } : { state: "limited", detail: "" };
+async function checkPwa() {
+  if (!("serviceWorker" in navigator)) return { state: "limited", detail: "" };
+  try {
+    const registration = await withTimeout(navigator.serviceWorker.getRegistration(), null);
+    return registration ? { state: "ready", detail: "" } : { state: "limited", detail: "" };
+  } catch {
+    return { state: "limited", detail: "" };
+  }
 }
 
-function checkNetwork() {
-  return navigator.onLine ? { state: "ready", detail: "" } : { state: "limited", detail: "" };
+async function checkNetwork() {
+  if (!navigator.onLine) return { state: "limited", detail: "" };
+  try {
+    const url = new URL("../../../release.json", import.meta.url);
+    url.searchParams.set("probe", Date.now().toString());
+    const response = await withTimeout(fetch(url, { method: "HEAD", cache: "no-store", credentials: "same-origin" }), null);
+    return response?.ok ? { state: "ready", detail: "" } : { state: "limited", detail: "" };
+  } catch {
+    return { state: "limited", detail: "" };
+  }
 }
 
 export function createDeviceReadiness({ status, score, list, getCopy, release }) {
@@ -100,7 +117,7 @@ export function createDeviceReadiness({ status, score, list, getCopy, release })
       ? { state: "ready", detail: "" }
       : { state: "limited", detail: "" };
     const core = await Promise.all([
-      checkLocalModel(), checkStorage(), Promise.resolve(checkPwa()), Promise.resolve(tryGraphics()), Promise.resolve(checkNetwork())
+      checkLocalModel(), checkStorage(), checkPwa(), Promise.resolve(tryGraphics()), checkNetwork()
     ]);
     lastResults = [
       { key: "Secure", ...secure },

@@ -1,8 +1,8 @@
 {
   "name": "air-drow",
-  "version": "7.5.3",
+  "version": "7.5.4",
   "private": true,
-  "description": "AIR-DROW Interaction & Hand Scan Polish Edition — a private drawing studio for touch, pen and optional hand drawing.",
+  "description": "AIR-DROW Calibration Reality & QA Edition — a private drawing studio for touch, pen and optional hand drawing.",
   "type": "module",
   "dependencies": {
     "@mediapipe/tasks-vision": "0.10.35"
@@ -24,7 +24,7 @@
     "verify:all": "npm run vercel:build",
     "release:verify": "node scripts/verify-final-release.mjs",
     "icons:local:verify": "node scripts/verify-local-icon-package.mjs",
-    "production:verify": "node scripts/verify-interaction-scan-polish.mjs"
+    "production:verify": "node scripts/verify-calibration-reality-qa.mjs"
   },
   "engines": {
     "node": ">=22 <25"

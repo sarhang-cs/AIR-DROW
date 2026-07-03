@@ -22,7 +22,7 @@ import { createDeviceReadiness } from "./features/device-readiness.js";
 import { createFinalLiveQa } from "./features/final-live-qa.js";
 import { createHandStabilizer, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
 import { createLocalHandLandmarker, primeLocalHandAssets } from "./features/hand-engine-bootstrap.js";
-import { APP_RELEASE as AIRDROW_RELEASE, HAND_MODEL, LEGACY_STORAGE_KEY, MEDIAPIPE_MODULE_URLS, MEDIAPIPE_WASM_URLS, OLD_MIRROR_KEY, PROFILE_RULES, QUICK_START_KEY, STORAGE_KEY, createDefaultSettings } from "./config/runtime.js";
+import { APP_RELEASE as AIRDROW_RELEASE, HAND_MODEL, HAND_CALIBRATION_STORAGE_KEY, LEGACY_STORAGE_KEY, MEDIAPIPE_MODULE_URLS, MEDIAPIPE_WASM_URLS, OLD_MIRROR_KEY, PROFILE_RULES, QUICK_START_KEY, STORAGE_KEY, createDefaultSettings } from "./config/runtime.js";
 import { normalizeSkin } from "./config/appearance.js";
 import { I18N } from "./i18n/translations.js";
 import { collectUi, setText } from "./ui/registry.js";
@@ -85,6 +85,7 @@ const state = {
   fps: 0,
   saveTimer: 0,
   saveInFlight: null,
+  saveQueue: Promise.resolve(),
   lastSavedAt: "",
   pendingRecoveryJournal: false,
   cameraStarting: false,
@@ -148,6 +149,8 @@ const state = {
   viewportRefreshFrame: 0,
   galleryLoadPromise: null,
   galleryFailureShown: false,
+  networkState: "checking",
+  networkProbeInFlight: null,
   shortcutGate: createShortcutGate()
 };
 
@@ -304,22 +307,64 @@ function reportExportFailure(retry) {
   showRecovery({ kind: "export", icon: "↓", title: t("exportRecoveryTitle", "Export was not completed"), body: t("exportRecoveryBody", "Your drawing is still saved locally. Try again or choose another format."), actionLabel: t("exportTryAgain", "Try again"), action: retry });
 }
 
+function networkIsOnline() {
+  return state.networkState === "online";
+}
+
+function networkLabel() {
+  if (state.networkState === "checking") return t("networkChecking", "Checking connection…");
+  return networkIsOnline() ? t("online", "Online") : t("offline", "Offline");
+}
+
 function applyNetworkState({ announce = false } = {}) {
-  const online = navigator.onLine;
-  setText(ui.networkStatus, online ? t("online", "Online") : t("offline", "Offline"));
-  document.documentElement.classList.toggle("is-offline", !online);
+  const online = networkIsOnline();
+  const checking = state.networkState === "checking";
+  setText(ui.networkStatus, networkLabel());
+  document.documentElement.classList.toggle("is-offline", !online && !checking);
   [ui.checkAi, ui.generateAi].filter(Boolean).forEach(button => {
-    button.dataset.networkState = online ? "online" : "offline";
+    button.dataset.networkState = checking ? "checking" : online ? "online" : "offline";
     button.setAttribute("aria-disabled", String(!online));
   });
-  if (!online) {
+  if (!online && !checking) {
     if (!state.aiBusy) setText(ui.aiStatus, t("aiOffline", "AI needs an internet connection. Your local drawing is still safe."));
     showRecovery({ kind: "offline", icon: "⌁", title: t("offlineTitle", "You are offline"), body: t("offlineBody", "Drawing, projects and local exports still work. AI and online sharing will return when the connection does."), actionLabel: t("offlineContinue", "Keep drawing"), action: () => hideRecovery("offline") });
-  } else {
+  } else if (online) {
     hideRecovery("offline");
     if (announce) toast(t("onlineRestored", "Connection restored"));
   }
   updateLiveHud();
+}
+
+async function refreshNetworkState({ announce = false } = {}) {
+  if (state.networkProbeInFlight) return state.networkProbeInFlight;
+  const previous = state.networkState;
+  const run = async () => {
+    if (!navigator.onLine) {
+      state.networkState = "offline";
+      applyNetworkState();
+      return false;
+    }
+    state.networkState = "checking";
+    applyNetworkState();
+    let controller = null;
+    let timeout = 0;
+    try {
+      controller = typeof AbortController === "function" ? new AbortController() : null;
+      timeout = window.setTimeout(() => controller?.abort(), 3800);
+      const endpoint = new URL("../../../release.json", import.meta.url);
+      endpoint.searchParams.set("network", Date.now().toString());
+      const response = await fetch(endpoint, { method: "HEAD", cache: "no-store", credentials: "same-origin", signal: controller?.signal });
+      state.networkState = response.ok ? "online" : "offline";
+    } catch {
+      state.networkState = "offline";
+    } finally {
+      clearTimeout(timeout);
+    }
+    applyNetworkState({ announce: announce && previous !== "online" && state.networkState === "online" });
+    return networkIsOnline();
+  };
+  state.networkProbeInFlight = run().finally(() => { state.networkProbeInFlight = null; });
+  return state.networkProbeInFlight;
 }
 
 function scheduleViewportRefresh() {
@@ -448,6 +493,7 @@ async function loadProject() {
   if (!["dark", "light"].includes(state.settings.theme)) state.settings.theme = "dark";
   if (typeof state.settings.warmHandEngine !== "boolean") state.settings.warmHandEngine = true;
   if (typeof state.settings.safePinch !== "boolean") state.settings.safePinch = true;
+  hydrateHandCalibration();
   syncSettingsUI();
   if (ui.projectName) ui.projectName.value = state.projectTitle;
   applySettings();
@@ -511,9 +557,13 @@ async function saveProject({ quiet = false, reason = "manual" } = {}) {
       }
     }
   };
-  state.saveInFlight = commit();
-  try { return await state.saveInFlight; }
-  finally { state.saveInFlight = null; }
+  // Writes are serialized. A slow IndexedDB transaction from a previous
+  // autosave can therefore never overwrite a newer calibration/settings state.
+  const queued = state.saveQueue.catch(() => {}).then(commit);
+  state.saveQueue = queued.catch(() => {});
+  state.saveInFlight = queued;
+  try { return await queued; }
+  finally { if (state.saveInFlight === queued) state.saveInFlight = null; }
 }
 
 async function flushProjectSave({ reason = "lifecycle" } = {}) {
@@ -802,9 +852,9 @@ function updateLiveHud() {
   const fps = handMode && state.inferenceFps ? state.inferenceFps : state.uiFps;
   setText(ui.liveFps, `${t("fps", "FPS")} ${fps || "—"}`);
   ui.liveHud.dataset.source = handMode && state.inferenceFps ? "ai" : "screen";
-  const online = navigator.onLine;
-  setText(ui.liveNetwork, online ? t("online", "Online") : t("offline", "Offline"));
-  ui.liveHud.classList.toggle("offline", !online);
+  const online = networkIsOnline();
+  setText(ui.liveNetwork, networkLabel());
+  ui.liveHud.classList.toggle("offline", !online && state.networkState !== "checking");
 }
 
 function applySettings() {
@@ -1421,11 +1471,44 @@ function updateTrackingHealth(assessment) {
   if (ui.handTrackingMeterFill) ui.handTrackingMeterFill.style.setProperty("--tracking-health", `${Math.max(0, Math.min(100, assessment?.score || 0))}%`);
 }
 
+function readStoredHandCalibration() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(HAND_CALIBRATION_STORAGE_KEY) || "null");
+    const calibration = normalizeHandCalibration(raw);
+    return calibration.enabled ? calibration : null;
+  } catch {
+    return null;
+  }
+}
+
+function persistHandCalibration(calibration) {
+  const safe = normalizeHandCalibration(calibration);
+  try {
+    if (safe.enabled) localStorage.setItem(HAND_CALIBRATION_STORAGE_KEY, JSON.stringify(safe));
+    else localStorage.removeItem(HAND_CALIBRATION_STORAGE_KEY);
+  } catch {
+    // Project persistence below still protects the setting when localStorage is restricted.
+  }
+  return safe;
+}
+
+function hydrateHandCalibration() {
+  const projectCalibration = normalizeHandCalibration(state.settings.handCalibration);
+  const storedCalibration = readStoredHandCalibration();
+  if (storedCalibration && (!projectCalibration.enabled || storedCalibration.updatedAt >= projectCalibration.updatedAt)) {
+    state.settings.handCalibration = storedCalibration;
+  } else {
+    state.settings.handCalibration = projectCalibration;
+    if (projectCalibration.enabled) persistHandCalibration(projectCalibration);
+  }
+}
+
 function updateHandCalibrationStatus() {
   if (!ui.handCalibrationStatus) return;
   const calibration = normalizeHandCalibration(state.settings.handCalibration);
   setText(ui.handCalibrationStatus, calibration.enabled ? t("calibrationReady", "Hand calibration is ready") : t("calibrationDefault", "Default hand mapping is active"));
   if (ui.resetHandCalibration) ui.resetHandCalibration.disabled = !calibration.enabled;
+  if (ui.calibrateHand) ui.calibrateHand.disabled = Boolean(handCalibration?.current?.().active);
 }
 
 function updateCalibrationOverlay(event = handCalibration?.current?.()) {
@@ -1447,8 +1530,15 @@ function updateCalibrationOverlay(event = handCalibration?.current?.()) {
   }
   setText(ui.calibrationTitle, t("handCalibration", "Hand calibration"));
   setText(ui.calibrationStep, `${t("calibrationStep", "Step")} ${Math.min((event.index || 0) + 1, event.total || 4)}/${event.total || 4}`);
-  const hint = event.status === "holding" ? t("calibrationHold", "Hold your hand steady…") : t("calibrationStart", "Move your hand to the target and hold it steady");
+  const hint = event.status === "holding"
+    ? t("calibrationHold", "Hold your hand steady…")
+    : event.status === "aim"
+      ? t("calibrationAim", "Move your hand onto the highlighted target")
+      : event.status === "steady"
+        ? t("calibrationWaiting", "Place your hand steadily in frame")
+        : t("calibrationStart", "Move your hand to the target and hold it steady");
   setText(ui.calibrationHint, hint);
+  if (ui.calibrateHand) ui.calibrateHand.disabled = true;
   if (ui.calibrationMeterFill) ui.calibrationMeterFill.style.setProperty("--calibration-progress", `${Math.round((event.progress || 0) * 100)}%`);
 }
 
@@ -1459,15 +1549,17 @@ function showCalibrationCompleteOverlay() {
   ui.calibrationOverlay.dataset.state = "complete";
   setText(ui.calibrationTitle, t("calibrationComplete", "Hand calibration completed"));
   setText(ui.calibrationStep, "4/4 ✓");
-  setText(ui.calibrationHint, t("calibrationReadyHint", "Everything is ready for hand drawing"));
+  setText(ui.calibrationHint, t("calibrationSaved", "Calibration was saved and is active everywhere in this browser"));
   if (ui.calibrationMeterFill) ui.calibrationMeterFill.style.setProperty("--calibration-progress", "100%");
+  if (ui.calibrateHand) ui.calibrateHand.disabled = false;
   state.calibrationOverlayTimer = setTimeout(() => {
     ui.calibrationOverlay.hidden = true;
     ui.calibrationOverlay.dataset.state = "idle";
-  }, 1200);
+  }, 1850);
 }
 
 async function startHandCalibration() {
+  if (handCalibration?.current?.().active) return;
   finishStroke();
   state.calibrationPending = true;
   const session = handCalibration.start();
@@ -1489,11 +1581,13 @@ function cancelHandCalibration({ quiet = false } = {}) {
   state.calibrationPending = false;
   handCalibration.cancel();
   updateCalibrationOverlay();
+  updateHandCalibrationStatus();
   if (!quiet) toast(t("calibrationCancelled", "Calibration cancelled"));
 }
 
 function resetHandCalibration() {
   state.settings.handCalibration = { ...HAND_CALIBRATION_DEFAULT };
+  persistHandCalibration(state.settings.handCalibration);
   updateHandCalibrationStatus();
   queueSave();
   toast(t("calibrationResetDone", "Calibration reset to default"));
@@ -1765,6 +1859,27 @@ async function startHandTracker({ forceReload = false } = {}) {
   }
 }
 
+function isExpectedMediaPipeDiagnostic(args = []) {
+  const text = args.map(value => String(value || "")).join(" ");
+  return /OpenGL error checking is disabled|Using NORM_RECT without IMAGE_DIMENSIONS/.test(text);
+}
+
+function detectHandLandmarks(now) {
+  // MediaPipe emits these two internal diagnostic lines from its generated
+  // WASM graph on Chromium even when a frame is valid. They are not failures;
+  // isolate only those exact strings so genuine runtime warnings remain visible.
+  const originalWarn = console.warn;
+  console.warn = (...args) => {
+    if (isExpectedMediaPipeDiagnostic(args)) return;
+    originalWarn(...args);
+  };
+  try {
+    return state.landmarker.detectForVideo(ui.camera, now);
+  } finally {
+    console.warn = originalWarn;
+  }
+}
+
 function handleHandRuntimeFailure(error) {
   console.warn("Hand detection frame failed.", error);
   stopHandLoop();
@@ -1897,7 +2012,7 @@ function handFrame() {
   state.lastDetection = now;
 
   try {
-    const result = state.landmarker.detectForVideo(ui.camera, now);
+    const result = detectHandLandmarks(now);
     const landmarks = result?.landmarks?.[0];
     clearHandCanvas();
 
@@ -1989,12 +2104,20 @@ function handFrame() {
       return;
     }
     if (calibrationEvent?.type === "complete") {
-      state.settings.handCalibration = calibrationEvent.calibration;
+      state.settings.handCalibration = persistHandCalibration(calibrationEvent.calibration);
       state.calibrationPending = false;
       updateHandCalibrationStatus();
-      queueSave();
+      // Persist both independently and in the current project immediately.
+      // This is intentionally not a delayed autosave because calibration is a
+      // device-wide mapping, not disposable UI state.
+      void saveProject({ quiet: true, reason: "hand-calibration" });
       showCalibrationCompleteOverlay();
       toast(t("calibrationComplete", "Hand calibration completed"));
+    } else if (calibrationEvent?.type === "invalid") {
+      state.calibrationPending = false;
+      updateCalibrationOverlay();
+      updateHandCalibrationStatus();
+      toast(t("calibrationInvalid", "Calibration could not be verified. Start again and reach each target."));
     }
 
     const pinch = state.pinchGate.observe({
@@ -2547,7 +2670,7 @@ function closeAiResult() {
 }
 
 async function checkAiStudio() {
-  if (!navigator.onLine) { reportAiFailure(new Error("offline")); return null; }
+  if (!(await refreshNetworkState())) { reportAiFailure(new Error("offline")); return null; }
   setAiBusy(true, t("aiChecking", "Checking AI Studio…"));
   try {
     const health = await ensureAiStudio().health();
@@ -2569,7 +2692,7 @@ async function checkAiStudio() {
 }
 
 async function generateAiArtwork() {
-  if (!navigator.onLine) { reportAiFailure(new Error("offline")); return; }
+  if (!(await refreshNetworkState())) { reportAiFailure(new Error("offline")); return; }
   if (!state.strokes.length) return toast(t("viralNeedDrawing", "Draw something first"));
   if (state.aiBusy) return;
   try {
@@ -3019,18 +3142,27 @@ function isEditableControlTarget(target) {
 }
 
 function bindMobileInteractionGuards() {
-  const belongsToApp = target => target instanceof Node && Boolean(ui?.app?.contains(target));
+  const belongsToStudioDocument = target => target instanceof Node && Boolean(document.body?.contains(target));
   const blockBrowserSelection = event => {
-    if (belongsToApp(event.target) && !isEditableControlTarget(event.target)) event.preventDefault();
+    if (belongsToStudioDocument(event.target) && !isEditableControlTarget(event.target)) event.preventDefault();
   };
-  /* Prevent Android long-press from selecting interface labels, displaying
-     Copy/Search callouts, or applying the browser's blue press rectangle.
-     Text-entry controls intentionally remain native and editable. */
+  /* The onboarding, recovery and boot overlays are siblings of #app, so the
+     guard applies across the complete studio document, not just settings. */
   document.addEventListener("selectstart", blockBrowserSelection, { capture: true });
   document.addEventListener("dragstart", blockBrowserSelection, { capture: true });
   document.addEventListener("contextmenu", event => {
-    if (belongsToApp(event.target) && !isEditableControlTarget(event.target)) event.preventDefault();
+    if (belongsToStudioDocument(event.target) && !isEditableControlTarget(event.target)) event.preventDefault();
   }, { capture: true });
+  document.addEventListener("copy", event => {
+    if (belongsToStudioDocument(event.target) && !isEditableControlTarget(event.target)) event.preventDefault();
+  }, { capture: true });
+  document.addEventListener("selectionchange", () => {
+    const selection = document.getSelection?.();
+    const anchor = selection?.anchorNode?.parentElement || selection?.anchorNode;
+    if (selection?.rangeCount && belongsToStudioDocument(anchor) && !isEditableControlTarget(anchor)) {
+      selection.removeAllRanges();
+    }
+  }, { passive: true });
 }
 
 function bindControls() {
@@ -3231,10 +3363,13 @@ function bindControls() {
   window.visualViewport?.addEventListener("resize", scheduleViewportRefresh, { passive: true });
   window.addEventListener("orientationchange", scheduleViewportRefresh, { passive: true });
   window.addEventListener("online", () => {
-    applyNetworkState({ announce: true });
+    void refreshNetworkState({ announce: true });
     releaseManager?.check();
   });
-  window.addEventListener("offline", () => applyNetworkState());
+  window.addEventListener("offline", () => {
+    state.networkState = "offline";
+    applyNetworkState();
+  });
   window.addEventListener("pagehide", () => { void flushProjectSave({ reason: "pagehide" }); });
   window.addEventListener("beforeunload", () => { captureRecoveryJournal(); });
   document.addEventListener("visibilitychange", () => {
@@ -3344,6 +3479,7 @@ async function boot() {
   clearInterval(state.challengeTimer);
   state.challengeTimer = setInterval(renderChallengeStatus, 500);
   applyNetworkState();
+  void refreshNetworkState();
   releaseManager = createReleaseManager({
     release: AIRDROW_RELEASE,
     beforeApply: () => flushProjectSave({ reason: "update" }),

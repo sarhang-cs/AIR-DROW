@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 7.5.3 Interaction & Hand Scan Polish Edition.
+> This guide applies to AIR-DROW 7.5.4 Calibration Reality & QA Edition.
 
 ## Start a drawing
 
