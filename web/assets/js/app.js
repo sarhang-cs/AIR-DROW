@@ -389,7 +389,28 @@ async function refreshNetworkState({ announce = false } = {}) {
   return state.networkProbeInFlight;
 }
 
+function isTextEntryActive() {
+  const active = document.activeElement;
+  return Boolean(active?.matches?.('input:not([type="range"]):not([type="checkbox"]):not([type="color"]):not([type="file"]), textarea, select, [contenteditable="true"]'));
+}
+
+function hasTextEntryIntent() {
+  return isTextEntryActive() || Number(state.textEntryIntentUntil || 0) > performance.now();
+}
+
+function syncEditorViewport() {
+  const height = Math.max(1, Math.round(window.visualViewport?.height || window.innerHeight || 0));
+  document.documentElement.style.setProperty("--airdrow-editor-viewport-height", `${height}px`);
+}
+
 function scheduleViewportRefresh() {
+  // Opening the Android keyboard triggers visualViewport.resize. Rebuilding the
+  // canvas/drawer at that exact moment can blur a real text field and hide the
+  // keyboard. During text entry only update the drawer's available height.
+  if (hasTextEntryIntent()) {
+    syncEditorViewport();
+    return;
+  }
   if (state.viewportRefreshFrame) return;
   state.viewportRefreshFrame = requestAnimationFrame(() => {
     state.viewportRefreshFrame = 0;
@@ -2334,20 +2355,33 @@ function drawHandSkeleton(points, opacity = 1) {
   const links = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[0,9],[9,10],[10,11],[11,12],[0,13],[13,14],[14,15],[15,16],[0,17],[17,18],[18,19],[19,20],[5,9],[9,13],[13,17]];
   handCtx.save();
   handCtx.globalAlpha = Math.max(.18, Math.min(1, Number(opacity) || 1));
-  handCtx.lineWidth = 1.45;
-  handCtx.strokeStyle = "rgba(118,203,255,.90)";
-  handCtx.fillStyle = "rgba(105,224,190,.96)";
-  for (const [a, b] of links) {
-    const pa = map(points[a]), pb = map(points[b]);
+  const paintLinks = (pairs, color, width = 1.45) => {
+    handCtx.strokeStyle = color;
+    handCtx.lineWidth = width;
+    for (const [a, b] of pairs) {
+      const pa = map(points[a]), pb = map(points[b]);
+      handCtx.beginPath();
+      handCtx.moveTo(pa.x, pa.y);
+      handCtx.lineTo(pb.x, pb.y);
+      handCtx.stroke();
+    }
+  };
+  paintLinks(links.filter(([a,b]) => ![1,2,3,4,5,6,7,8].includes(a) && ![1,2,3,4,5,6,7,8].includes(b)), "rgba(118,203,255,.70)");
+  paintLinks([[0,1],[1,2],[2,3],[3,4]], "rgba(255,202,116,.98)", 1.75);
+  paintLinks([[0,5],[5,6],[6,7],[7,8]], "rgba(117,231,255,.98)", 1.85);
+  const thumb = map(points[4]);
+  const index = map(points[8]);
+  handCtx.save();
+  handCtx.setLineDash([3, 3]);
+  handCtx.lineWidth = 1.15;
+  handCtx.strokeStyle = "rgba(255,255,255,.62)";
+  handCtx.beginPath(); handCtx.moveTo(thumb.x, thumb.y); handCtx.lineTo(index.x, index.y); handCtx.stroke();
+  handCtx.restore();
+  for (let joint = 0; joint < points.length; joint += 1) {
+    const p = map(points[joint]);
     handCtx.beginPath();
-    handCtx.moveTo(pa.x, pa.y);
-    handCtx.lineTo(pb.x, pb.y);
-    handCtx.stroke();
-  }
-  for (const point of points) {
-    const p = map(point);
-    handCtx.beginPath();
-    handCtx.arc(p.x, p.y, 2.2, 0, Math.PI * 2);
+    handCtx.fillStyle = joint === 4 ? "rgba(255,202,116,1)" : joint === 8 ? "rgba(117,231,255,1)" : "rgba(105,224,190,.88)";
+    handCtx.arc(p.x, p.y, joint === 4 || joint === 8 ? 3.25 : 2.05, 0, Math.PI * 2);
     handCtx.fill();
   }
   handCtx.restore();
@@ -3252,13 +3286,17 @@ async function checkApi() {
 }
 
 function isEditableControlTarget(target) {
-  if (!(target instanceof Element)) return false;
-  return Boolean(target.closest('input:not([type="range"]):not([type="checkbox"]):not([type="color"]), textarea, select, [contenteditable="true"]'));
+  const element = target instanceof Element ? target : target?.parentElement;
+  if (!(element instanceof Element)) return false;
+  return Boolean(element.closest('input:not([type="range"]):not([type="checkbox"]):not([type="color"]):not([type="file"]), textarea, select, [contenteditable="true"], .text-setting, .editable-control'));
 }
 
 function bindMobileInteractionGuards() {
   const belongsToStudioDocument = target => target instanceof Node && Boolean(document.body?.contains(target));
   const clearStudioSelection = () => {
+    // Native input selections are independent from document.getSelection().
+    // Never clear a document range while a real editor owns focus.
+    if (isTextEntryActive()) return;
     const selection = document.getSelection?.();
     const anchor = selection?.anchorNode?.parentElement || selection?.anchorNode;
     if (selection?.rangeCount && belongsToStudioDocument(anchor) && !isEditableControlTarget(anchor)) selection.removeAllRanges();
@@ -3266,10 +3304,6 @@ function bindMobileInteractionGuards() {
   const blockBrowserSelection = event => {
     if (belongsToStudioDocument(event.target) && !isEditableControlTarget(event.target)) event.preventDefault();
   };
-  // Android Chrome can start its own long-press selection before selectstart
-  // reaches the page. A tiny non-blocking selection clear loop runs only while
-  // a non-editable AIR-DROW surface is pressed; scrolling and normal clicks
-  // still work because no touchstart/pointerdown default is cancelled.
   let selectionClearTimer = 0;
   const stopClearLoop = () => {
     if (selectionClearTimer) window.clearInterval(selectionClearTimer);
@@ -3280,16 +3314,11 @@ function bindMobileInteractionGuards() {
     if (!belongsToStudioDocument(event.target) || isEditableControlTarget(event.target)) return;
     clearStudioSelection();
     stopClearLoop();
-    selectionClearTimer = window.setInterval(clearStudioSelection, 48);
+    selectionClearTimer = window.setInterval(clearStudioSelection, 70);
   };
-  /* The onboarding, recovery and boot overlays are siblings of #app, so the
-     guard applies across the complete studio document, not just settings. */
-  document.querySelectorAll('body *:not(input):not(textarea):not(select):not([contenteditable="true"])').forEach(node => {
-    node.setAttribute("unselectable", "on");
-    node.style.setProperty("-webkit-user-select", "none", "important");
-    node.style.setProperty("user-select", "none", "important");
-    node.style.setProperty("-webkit-touch-callout", "none", "important");
-  });
+  // CSS owns the selection contract. Do not stamp inline user-select:none onto
+  // every ancestor: Android Chromium can inherit that into a nested input and
+  // dismiss its keyboard after the first focus.
   document.addEventListener("selectstart", blockBrowserSelection, { capture: true });
   document.addEventListener("dragstart", blockBrowserSelection, { capture: true });
   document.addEventListener("contextmenu", event => {
@@ -3301,9 +3330,6 @@ function bindMobileInteractionGuards() {
   document.addEventListener("pointerdown", startClearLoop, { capture: true, passive: true });
   document.addEventListener("pointerup", stopClearLoop, { capture: true, passive: true });
   document.addEventListener("pointercancel", stopClearLoop, { capture: true, passive: true });
-  // Some Android Chromium builds route a long press through Touch Events
-  // before Pointer Events. Mirror the same non-blocking selection clear loop
-  // so onboarding and every overlay stay protected as well.
   document.addEventListener("touchstart", startClearLoop, { capture: true, passive: true });
   document.addEventListener("touchend", stopClearLoop, { capture: true, passive: true });
   document.addEventListener("touchcancel", stopClearLoop, { capture: true, passive: true });
@@ -3313,41 +3339,42 @@ function bindMobileInteractionGuards() {
 
 function bindImmediateTextEntry() {
   const editableSelector = 'input:not([type="range"]):not([type="checkbox"]):not([type="color"]):not([type="file"]), textarea, select, [contenteditable="true"]';
-  const getField = target => target instanceof Element ? target.closest(editableSelector) : null;
-  const focusField = field => {
-    if (!field || field.disabled || field.readOnly) return;
-    try { field.focus({ preventScroll: true }); } catch { field.focus(); }
+  // Reserve the viewport before Android opens its keyboard. This is deliberately
+  // not a programmatic focus call: the browser owns the first native tap.
+  document.addEventListener("pointerdown", event => {
+    const field = event.target instanceof Element ? event.target.closest(editableSelector) : null;
+    if (!field) return;
+    state.textEntryIntentUntil = performance.now() + 1800;
+    document.documentElement.classList.add("airdrow-editor-active");
+    syncEditorViewport();
+    window.setTimeout(() => {
+      if (!isTextEntryActive() && Number(state.textEntryIntentUntil || 0) <= performance.now()) {
+        document.documentElement.classList.remove("airdrow-editor-active");
+        document.documentElement.style.removeProperty("--airdrow-editor-viewport-height");
+      }
+    }, 1880);
+  }, { capture: true, passive: true });
+  // Let Android Chrome perform its native focus from the first direct tap.
+  // Programmatic pointerdown/touchstart focus was causing a focus/viewport
+  // race on some devices and the keyboard immediately collapsed.
+  document.addEventListener("focusin", event => {
+    const field = event.target instanceof Element ? event.target.closest(editableSelector) : null;
+    if (!field) return;
+    document.documentElement.classList.add("airdrow-editor-active");
+    syncEditorViewport();
     const scroll = field.closest?.(".settings-scroll");
     if (scroll) {
       scroll.classList.add("has-editor-focus");
-      requestAnimationFrame(() => field.scrollIntoView?.({ block: "nearest", inline: "nearest", behavior: "auto" }));
+      requestAnimationFrame(() => field.scrollIntoView?.({ block: "center", inline: "nearest", behavior: "auto" }));
     }
-  };
-  const focusFromEvent = event => {
-    const direct = getField(event.target);
-    if (direct) {
-      focusField(direct);
-      return;
-    }
-    // Tapping the visual label around a real field should enter text at once,
-    // not require a second or third tap on Android Chrome.
-    const wrapper = event.target instanceof Element ? event.target.closest(".text-setting") : null;
-    const nested = wrapper?.querySelector?.(editableSelector);
-    if (nested) focusField(nested);
-  };
-  document.addEventListener("pointerdown", focusFromEvent, { capture: true, passive: true });
-  document.addEventListener("touchstart", focusFromEvent, { capture: true, passive: true });
-  document.addEventListener("focusin", event => {
-    const field = getField(event.target);
-    if (!field) return;
-    field.closest?.(".settings-scroll")?.classList.add("has-editor-focus");
   }, { capture: true });
   document.addEventListener("focusout", () => {
     window.setTimeout(() => {
-      if (!document.activeElement?.matches?.(editableSelector)) {
-        document.querySelectorAll(".settings-scroll.has-editor-focus").forEach(node => node.classList.remove("has-editor-focus"));
-      }
-    }, 0);
+      if (hasTextEntryIntent()) return;
+      document.documentElement.classList.remove("airdrow-editor-active");
+      document.documentElement.style.removeProperty("--airdrow-editor-viewport-height");
+      document.querySelectorAll(".settings-scroll.has-editor-focus").forEach(node => node.classList.remove("has-editor-focus"));
+    }, 120);
   }, { capture: true });
 }
 
@@ -3508,8 +3535,23 @@ function bindControls() {
     await startHandTracker({ forceReload: true });
   });
 
-  [ui.brush, ui.smoothing, ui.color, ui.brushStyle, ui.symmetryCount, ui.symmetryMirror, ui.shapeAssist, ui.shapeSnapMode, ui.shapeIntent, ui.shapeConfidence, ui.gestureShortcuts, ui.pressure, ui.eraserSize, ui.profile, ui.trackingFps, ui.bright, ui.mirror, ui.resolution, ui.cameraView, ui.handGuide, ui.safePinch, ui.warmEngine, ui.grid, ui.reduceMotion, ui.themeMode, ui.apiUrl, ui.replayDuration, ui.replayBrand, ui.creatorName, ui.creatorTagline, ui.templatePack, ui.aiPreset, ui.aiSize, ui.aiDirection, ui.performanceMode].filter(Boolean)
+  const textOnlyControls = new Set([ui.projectName, ui.apiUrl, ui.creatorName, ui.creatorTagline, ui.aiDirection].filter(Boolean));
+  const syncTextDraft = input => {
+    if (input === ui.projectName) state.projectTitle = String(input.value || "").replace(/\s+/g, " ").slice(0, 72);
+    if (input === ui.apiUrl) state.settings.apiUrl = String(input.value || "").trim();
+    if (input === ui.creatorName) state.settings.creatorName = String(input.value || "").slice(0, 72);
+    if (input === ui.creatorTagline) state.settings.creatorTagline = String(input.value || "").slice(0, 96);
+    if (input === ui.aiDirection) state.settings.aiDirection = String(input.value || "").slice(0, 280);
+    // Do not call applySettings() here. It repaints language/workspace while
+    // Android is opening the keyboard and can steal focus from the field.
+    queueSave();
+  };
+  [ui.brush, ui.smoothing, ui.color, ui.brushStyle, ui.symmetryCount, ui.symmetryMirror, ui.shapeAssist, ui.shapeSnapMode, ui.shapeIntent, ui.shapeConfidence, ui.gestureShortcuts, ui.pressure, ui.eraserSize, ui.profile, ui.trackingFps, ui.bright, ui.mirror, ui.resolution, ui.cameraView, ui.handGuide, ui.safePinch, ui.warmEngine, ui.grid, ui.reduceMotion, ui.themeMode, ui.projectName, ui.apiUrl, ui.replayDuration, ui.replayBrand, ui.creatorName, ui.creatorTagline, ui.templatePack, ui.aiPreset, ui.aiSize, ui.aiDirection, ui.performanceMode].filter(Boolean)
     .forEach(input => input.addEventListener("input", () => {
+      if (textOnlyControls.has(input)) {
+        syncTextDraft(input);
+        return;
+      }
       applyControlChanges();
       if (input === ui.warmEngine && ui.warmEngine.checked) scheduleHandEngineWarmup();
     }));

@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Final Clean Delivery Edition",
-  "version": "7.6.0",
-  "buildId": "air-drow-v760-final-clean-delivery",
+  "name": "AIR-DROW Interaction & Vision Tutorial Edition",
+  "version": "7.6.1",
+  "buildId": "air-drow-v761-interaction-vision-tutorial",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -29,7 +29,7 @@
   },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v760-final-clean-delivery.sh",
-  "release": "Final Clean Delivery Edition",
+  "installer": "termux/replace-with-v761-interaction-vision-tutorial.sh",
+  "release": "Interaction & Vision Tutorial Edition",
   "assetRevision": "760"
 }

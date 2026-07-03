@@ -1,6 +1,6 @@
-AIR-DROW v7.6.0 — Final Clean Delivery
+AIR-DROW v7.6.1 — Final Clean Delivery
 
-1. Put AIR-DROW_v7.6.0_FINAL_CLEAN_DELIVERY.zip in /sdcard/Download
+1. Put AIR-DROW_v7.6.1_FINAL_CLEAN_DELIVERY.zip in /sdcard/Download
 2. Run the one-line Termux command supplied with the release.
 3. The installer keeps .git, creates a rollback backup, installs exact dependencies, runs npm run vercel:build, then commits and pushes only after every verification passes.
 

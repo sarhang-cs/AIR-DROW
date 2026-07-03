@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.6.0",
-  "buildId": "air-drow-v760-final-clean-delivery",
-  "release": "Final Clean Delivery Edition",
+  "version": "7.6.1",
+  "buildId": "air-drow-v761-interaction-vision-tutorial",
+  "release": "Interaction & Vision Tutorial Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -23,5 +23,5 @@
     "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Final Clean Delivery Edition"
+  "name": "AIR-DROW Interaction & Vision Tutorial Edition"
 }

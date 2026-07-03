@@ -23,7 +23,7 @@ if (vercel.outputDirectory !== "public" || vercel.installCommand !== "npm ci --n
 if (!pkg.dependencies?.["@mediapipe/tasks-vision"]) throw new Error("Hand drawing dependency is missing.");
 if (pkg.engines?.node !== ">=22 <25") throw new Error("Node engine must support Vercel and Termux.");
 if (pkg.version !== release.version || !release.buildId || !release.assetRevision) throw new Error("Release metadata is incomplete.");
-if (!manifest.name.includes("AIR-DROW") || !manifest.start_url.includes("v760")) throw new Error("Install manifest is missing the current release.");
+if (!manifest.name.includes("AIR-DROW") || !manifest.start_url.includes("v761")) throw new Error("Install manifest is missing the current release.");
 if (!html.includes('production-ui.css?v=760')) throw new Error("Consolidated production stylesheet is not linked.");
 for (const obsolete of ["phase2-ui.css", "ui-clarity.css", "final-layout-localization.css", "bootstrap-hotfix.css"]) if (html.includes(obsolete) || worker.includes(obsolete)) throw new Error(`Obsolete stylesheet reference remains: ${obsolete}`);
 if (worker.includes('"/vendor/models/hand_landmarker.task"')) throw new Error("The hand model must not be in the install shell.");

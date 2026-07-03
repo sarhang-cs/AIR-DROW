@@ -1813,17 +1813,25 @@ html[data-airdrow-selection-lock="true"] .boot-card {
 }
 
 
-/* v7.6.0 mobile text-entry contract: real text fields always win the first tap. */
+/* v7.6.1 mobile text-entry contract: native controls keep the Android keyboard
+   on the first tap. Static AIR-DROW copy remains protected by the selection lock. */
+:root { --airdrow-editor-viewport-height: 100dvh; }
 .text-setting, .text-setting input, .ai-studio-section textarea, #apiUrlInput { pointer-events: auto !important; }
 .text-setting input, .ai-studio-section textarea, #apiUrlInput {
   min-height: 48px;
   cursor: text;
   touch-action: manipulation;
+  caret-color: var(--accent-2);
   -webkit-user-select: text !important;
   user-select: text !important;
   -webkit-touch-callout: default !important;
+  -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
 }
-.settings-scroll.has-editor-focus { overscroll-behavior-y: contain; }
+html.airdrow-editor-active .settings-drawer {
+  height: min(calc(var(--airdrow-editor-viewport-height) - max(8px, env(safe-area-inset-bottom))), 860px) !important;
+  max-height: min(calc(var(--airdrow-editor-viewport-height) - max(8px, env(safe-area-inset-bottom))), 860px) !important;
+}
+.settings-scroll.has-editor-focus { overscroll-behavior-y: contain; scroll-padding-bottom: calc(var(--drawer-scroll-safe-end) + 42px); }
 
 /* Completed calibration remains visible, then exits as a deliberate success state. */
 .hand-calibration-overlay {
@@ -1841,3 +1849,49 @@ html[data-airdrow-selection-lock="true"] .boot-card {
 }
 :root.reduce-motion .hand-calibration-overlay,
 :root.reduce-motion .hand-calibration-overlay .hand-calibration-sheet { transition: none !important; }
+
+
+/* v7.6.1: live-camera controls keep a deliberate contrast pair on white themes. */
+:root[data-theme="light"] .toolbar .tool-button.camera-live {
+  color: var(--theme-icon-ink, var(--accent-ink)) !important;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--panel-solid) 72%, var(--accent-soft)), color-mix(in srgb, var(--panel) 88%, var(--accent-soft))) !important;
+  border-color: color-mix(in srgb, var(--accent-2) 48%, var(--line)) !important;
+  box-shadow: 0 7px 17px color-mix(in srgb, var(--skin-shadow) 48%, transparent), inset 0 1px 0 rgba(255,255,255,.92) !important;
+}
+:root[data-theme="light"] .toolbar .tool-button.camera-live .toolbar-icon,
+:root[data-theme="light"] .toolbar .tool-button.camera-live .toolbar-icon svg { color: currentColor !important; stroke: currentColor !important; }
+
+
+/* v7.6.1 Android keyboard final guard: a text entry owns the drawer until
+   the native focus transition has settled; no render is allowed mid-transition. */
+html.airdrow-editor-active .settings-scroll {
+  scroll-behavior: auto !important;
+  touch-action: pan-y !important;
+}
+html.airdrow-editor-active input[type="text"],
+html.airdrow-editor-active input[type="url"],
+html.airdrow-editor-active textarea {
+  position: relative;
+  z-index: 4;
+  pointer-events: auto !important;
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+/* Camera/hand controls use a single adaptive monochrome vector on bright skins. */
+:root[data-theme="light"] .toolbar .tool-button.camera-live {
+  color: var(--accent-ink) !important;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--panel-solid) 86%, var(--accent-soft)), color-mix(in srgb, var(--panel) 82%, var(--accent-soft))) !important;
+  border-color: color-mix(in srgb, var(--accent-2) 58%, var(--line)) !important;
+}
+:root[data-theme="light"] .toolbar .tool-button.camera-live .toolbar-icon,
+:root[data-theme="light"] .toolbar .tool-button.camera-live .toolbar-icon svg,
+:root[data-theme="light"] .toolbar .tool-button.camera-live .toolbar-icon svg * {
+  color: currentColor !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+:root[data-theme="light"] .toolbar .tool-button.camera-live .toolbar-icon svg {
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,.78));
+}

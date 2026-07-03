@@ -1,12 +1,12 @@
 {
-  "version": "7.6.0",
-  "buildId": "air-drow-v760-final-clean-delivery",
+  "version": "7.6.1",
+  "buildId": "air-drow-v761-interaction-vision-tutorial",
   "releasedAt": "2026-07-04T01:40:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Final Clean Delivery Edition: cleaned source layout, GitHub-ready real screenshots, fully bilingual dynamic surfaces, premium paired light/dark themes, and an About profile for Sarhang Salah.",
+  "summary": "AIR-DROW Interaction & Vision Tutorial Edition: cleaned source layout, GitHub-ready real screenshots, fully bilingual dynamic surfaces, premium paired light/dark themes, and an About profile for Sarhang Salah.",
   "features": [
     "Keeps the complete product copy synchronized between Kurdish and English, including runtime check cards, camera feedback, calibration, onboarding and recovery surfaces.",
     "Preserves completed hand calibration and onboarding state through neutral persistent keys with one-time migration from prior releases.",
@@ -16,7 +16,7 @@
   ],
   "assetRevision": "760",
   "phase": 11,
-  "stage": "final-clean-delivery",
+  "stage": "interaction-vision-tutorial",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",

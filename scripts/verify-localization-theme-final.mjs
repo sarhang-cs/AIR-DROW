@@ -22,11 +22,12 @@ const appKeys = new Set([...app.matchAll(/\bt\(\s*["']([\w-]+)["']/g)].map(match
 for (const key of appKeys) {
   if (!(key in I18N.ku) || !(key in I18N.en)) throw new Error(`Missing bilingual runtime copy: ${key}`);
 }
-for (const key of ["calibrationAim", "calibrationSaved", "calibrationInvalid", "calibrationCheckPassed", "scanWaitForEngine", "scanPlaceHandNow", "networkChecking", "copyUnavailable"]) {
+for (const key of ["calibrationAim", "calibrationSaved", "calibrationInvalid", "calibrationCheckPassed", "scanWaitForEngine", "scanPlaceHandNow", "networkChecking", "copyUnavailable", "ariaHandTutorial", "handTutorialKicker", "handTutorialTitle", "handTutorialIntro", "handTutorialStep1", "handTutorialStep2", "handTutorialStep3", "handTutorialNote"]) {
   if (!I18N.ku[key] || !I18N.en[key]) throw new Error(`Required localization key is missing: ${key}`);
 }
 if (!app.includes("refreshDynamicLanguageSurfaces();") || !app.includes("finalLiveQa?.render();") || !app.includes("deviceReadiness?.render();") || !app.includes("refreshHandScanLanguage")) throw new Error("Language switching must repaint every dynamic readiness surface.");
-if (!app.includes("selectionClearTimer") || !app.includes("unselectable") || !app.includes("pointerdown") || !app.includes("bindImmediateTextEntry")) throw new Error("The complete Android interaction and first-tap text-entry guard is missing.");
+if (!app.includes("selectionClearTimer") || !app.includes("pointerdown") || !app.includes("bindImmediateTextEntry") || !app.includes("textEntryIntentUntil") || !app.includes("hasTextEntryIntent")) throw new Error("The complete Android interaction and first-tap text-entry guard is missing.");
+if (!index.includes("hand-tutorial-card") || !app.includes("drawHandSkeleton")) throw new Error("The local hand tutorial and real landmark visual feedback are missing.");
 for (const skin of ["violet", "pink", "sapphire", "obsidian", "silver", "gold"]) {
   for (const theme of ["dark", "light"]) {
     if (!css.includes(`:root[data-theme="${theme}"][data-skin="${skin}"]`)) throw new Error(`Missing ${theme} token set for ${skin}.`);

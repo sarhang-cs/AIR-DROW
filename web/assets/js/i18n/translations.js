@@ -579,6 +579,14 @@ const ku = Object.freeze({
   "calibrationSaved": "کالیبراسیۆن پاشەکەوت کرا و لەم وێبگەڕەدا چالاکە",
   "calibrationInvalid": "کالیبراسیۆن پشتڕاست نەکرایەوە. دووبارە دەست پێ بکە و هەموو تارگێتەکان بگە.",
   "networkChecking": "پەیوەندی پشکنین دەکرێت…",
+  "ariaHandTutorial": "ڕێنماییی کامێرا و دەست",
+  "handTutorialKicker": "ڕێنمایی ڕاستەوخۆ",
+  "handTutorialTitle": "شوێنی دروست بۆ دەست و کامێرا",
+  "handTutorialIntro": "مۆبایلەکە جێگیر بگرە؛ پەنجەی نیشانە و گەوجەی دەستت بە ڕوونی لە چوارچێوە بن.",
+  "handTutorialStep1": "مۆبایل جێگیر بگرە و کامێرا بۆ دەست ڕابکێشە.",
+  "handTutorialStep2": "دەست لە دووری پێشنیارکراوی ٣٥–٥٥ سم ڕابگرە.",
+  "handTutorialStep3": "پەنجەی نیشانە و گەوجە نزیک بکە؛ پاشان بە نرمی بجوڵێ.",
+  "handTutorialNote": "ئەم وێنەیە تەنها ڕێنماییە؛ ئەپ تەنها landmarkی ڕاستەقینەی دەستت لە کامێراوە بەکار دەهێنێت.",
   "copyUnavailable": "دەق بەردەست نییە"
 });
 
@@ -635,7 +643,7 @@ const en = Object.freeze({
   "cameraHandCheckReportTitle": "Camera & Hand Check",
   "aboutSummary": "A welcoming drawing studio for touch, pen and hand drawing. Your artwork and preferences stay on this device.",
   "ariaDeveloperProfile": "Developer and Instagram profile",
-  "aboutDeveloperLabel": "App created by",
+  "aboutDeveloperLabel": "APP CREATED BY",
   "aboutDeveloperValue": "Sarhang Salah",
   "instagramProfileAria": "Open Sarhang Salah Instagram profile",
   "instagramOpenProfile": "Open profile",
@@ -1159,6 +1167,14 @@ const en = Object.freeze({
   "calibrationSaved": "Calibration was saved and is active in this browser",
   "calibrationInvalid": "Calibration could not be verified. Start again and reach every target.",
   "networkChecking": "Checking connection…",
+  "ariaHandTutorial": "Camera and hand tutorial",
+  "handTutorialKicker": "LIVE HAND GUIDE",
+  "handTutorialTitle": "Position your hand for reliable tracking",
+  "handTutorialIntro": "Keep the phone steady and keep your index finger and thumb clearly inside the frame.",
+  "handTutorialStep1": "Keep the phone steady and point the camera toward your hand.",
+  "handTutorialStep2": "Keep your hand roughly 35–55 cm from the camera.",
+  "handTutorialStep3": "Bring index finger and thumb together, then move smoothly to draw.",
+  "handTutorialNote": "This is a visual guide only. AIR-DROW uses only the real hand landmarks detected from your camera.",
   "copyUnavailable": "Text unavailable"
 });
 

@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "7.6.0",
-  "buildId": "air-drow-v760-final-clean-delivery",
+  "version": "7.6.1",
+  "buildId": "air-drow-v761-interaction-vision-tutorial",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {
@@ -127,8 +127,8 @@
     },
     {
       "path": "toolbar/hand.svg",
-      "sha256": "04e798de0fda9b6889c76b3a8c5791501b72e18166068fc7fcdfd042c81ae910",
-      "bytes": 3587
+      "sha256": "c7c866786f9ada74388b09530842bdcf97c3a41da00b206d20e7470ba84092c0",
+      "bytes": 808
     },
     {
       "path": "toolbar/moon.svg",
@@ -147,8 +147,8 @@
     },
     {
       "path": "toolbar/sun.svg",
-      "sha256": "6b58bfe434a45b95b4dca82bd86f2cb73995afbbd2d5be2784eca916a3db6bb0",
-      "bytes": 310
+      "sha256": "56135be3134a9fbfc7790af6fa9c440707db4eb9aa0a54db1d889837c6351bbf",
+      "bytes": 340
     },
     {
       "path": "toolbar/toolbar-icons.css",
@@ -191,5 +191,5 @@
       "bytes": 502
     }
   ],
-  "release": "Final Clean Delivery Edition"
+  "release": "Interaction & Vision Tutorial Edition"
 }

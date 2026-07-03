@@ -6,7 +6,7 @@
 
 ### A private drawing studio for touch, pen and hand
 
-**Final Clean Delivery · 2026 · Created by Sarhang Salah**
+**Interaction & Vision Tutorial Edition · v7.6.1 · Created by Sarhang Salah**
 
 [![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
@@ -40,7 +40,7 @@ AIR-DROW is a responsive PWA drawing studio designed for touch, pen and optional
 
 **Touch and pen.** Open AIR-DROW and draw immediately. Brush size, smoothing, color, pressure, undo and redo are available from the studio.
 
-**Hand drawing.** Open Camera, wait for the local hand engine to become ready, then place one hand in view. The app does not ask you to hold your hand up while the model is still loading. A four-target calibration is saved locally after a real successful check.
+**Hand drawing.** Open Camera, wait for the local hand engine to become ready, then place one hand in view. The app does not ask you to hold your hand up while the model is still loading. The built-in offline animated guide shows phone placement, a 35–55 cm hand distance, index/thumb pinch and smooth movement. A four-target calibration is saved locally after a real successful check.
 
 **Shape assistance.** Use shape assistance for cleaner lines, circles, rectangles and triangles while keeping direct control of every stroke.
 
@@ -88,3 +88,6 @@ For Android/Termux replacement, use [`termux/TERMUX_INSTALL.txt`](./termux/TERMU
 
 ---
 <div align="center">Made for ideas in motion · <strong>AIR-DROW</strong> · <a href="#top">Back to top</a></div>
+
+
+> **v7.6.1:** Android keyboard reliability, high-contrast live-camera controls, and an offline animated hand-position tutorial were added.
