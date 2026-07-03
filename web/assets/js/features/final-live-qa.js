@@ -15,6 +15,11 @@ export function createFinalLiveQa({ status, score, list, getCopy, release, getRu
   const copy = (key, fallback) => text(getCopy, key, fallback);
   const label = key => copy(`finalLiveQa${key}`, key);
 
+  function detailText(item) {
+    if (!item?.detailKey) return String(item?.detail || "");
+    return copy(item.detailKey, item.detailFallback || "");
+  }
+
   function render() {
     if (!list) return;
     list.replaceChildren();
@@ -24,7 +29,8 @@ export function createFinalLiveQa({ status, score, list, getCopy, release, getRu
       const title = document.createElement("span");
       title.textContent = label(item.key);
       const value = document.createElement("b");
-      value.textContent = `${stateLabel(copy, item.state)}${item.detail ? ` · ${item.detail}` : ""}`;
+      const detail = detailText(item);
+      value.textContent = `${stateLabel(copy, item.state)}${detail ? ` · ${detail}` : ""}`;
       row.append(title, value);
       list.append(row);
     }
@@ -54,9 +60,9 @@ export function createFinalLiveQa({ status, score, list, getCopy, release, getRu
       { key: "Release", state: release?.version ? "ready" : "unavailable", detail: "" },
       { key: "Canvas", state: runtime.canvasReady ? "ready" : "limited", detail: "" },
       { key: "Project", state: runtime.hasLocalProject ? "ready" : "limited", detail: "" },
-      { key: "Camera", state: cameraReady ? "ready" : "pending", detail: cameraReady ? "" : copy("finalLiveQaCameraPending", "Open Camera") },
-      { key: "HandEngine", state: cameraReady ? (engineReady ? "ready" : "limited") : "pending", detail: cameraReady ? "" : copy("finalLiveQaEnginePending", "Open Camera") },
-      { key: "HandDetection", state: handRecent ? "ready" : "pending", detail: handRecent ? "" : copy("finalLiveQaHandPending", "Show one hand") }
+      { key: "Camera", state: cameraReady ? "ready" : "pending", detailKey: cameraReady ? "" : "finalLiveQaCameraPending", detailFallback: "Open Camera" },
+      { key: "HandEngine", state: cameraReady ? (engineReady ? "ready" : "limited") : "pending", detailKey: cameraReady ? "" : "finalLiveQaEnginePending", detailFallback: "Open Camera" },
+      { key: "HandDetection", state: handRecent ? "ready" : "pending", detailKey: handRecent ? "" : "finalLiveQaHandPending", detailFallback: "Show one hand" }
     ];
     running = false;
     render();
@@ -65,7 +71,10 @@ export function createFinalLiveQa({ status, score, list, getCopy, release, getRu
 
   function report() {
     const header = `AIR-DROW · ${copy("cameraHandCheckReportTitle", "Camera & Hand Check")} · v${release?.version || ""}`.trim();
-    const body = lastResults.map(item => `${label(item.key)}: ${stateLabel(copy, item.state)}${item.detail ? ` (${item.detail})` : ""}`).join("\n");
+    const body = lastResults.map(item => {
+      const detail = detailText(item);
+      return `${label(item.key)}: ${stateLabel(copy, item.state)}${detail ? ` (${detail})` : ""}`;
+    }).join("\n");
     return `${header}\n${body}`.trim();
   }
 

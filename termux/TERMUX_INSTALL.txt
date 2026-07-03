@@ -1,7 +1,7 @@
-AIR-DROW v7.5.5 — Localization & Theme Final
+AIR-DROW v7.5.6 — Input, Language & Hand Startup
 
 1. Download the complete ZIP to /sdcard/Download.
 2. Run the one-line Termux command provided with this release.
 3. The installer preserves .git, creates a timestamped backup, validates the production build, pushes only when checks pass, and restores the older source if a check fails.
 
-This release completes Kurdish/English runtime re-rendering, locks browser text-selection callouts throughout the studio, and provides six paired dark/light theme palettes with icon contrast protection.
+This release completes runtime language re-rendering, first-tap mobile text entry, global non-editable selection locking, honest local hand-engine loading guidance, calibration-success confirmation, and six paired dark/light theme palettes with icon contrast protection.

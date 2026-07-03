@@ -7,7 +7,7 @@ import { HAND_CALIBRATION_DEFAULT } from "../features/hand-calibration.js";
 export const STORAGE_KEY = "air-drow.v2.project-pointer";
 // Calibration is also stored independently from the current canvas so a real
 // completed hand setup survives project restores and gallery changes.
-export const HAND_CALIBRATION_STORAGE_KEY = "air-drow.v755.hand-calibration";
+export const HAND_CALIBRATION_STORAGE_KEY = "air-drow.v756.hand-calibration";
 export const LEGACY_STORAGE_KEY = "air-drow.clean-canvas.v105";
 export const OLD_MIRROR_KEY = "airdraw.phase22.reload-mirror";
 
@@ -16,10 +16,10 @@ export const OLD_MIRROR_KEY = "airdraw.phase22.reload-mirror";
 // so this base URL intentionally has NO trailing slash.
 export const MEDIAPIPE_MODULE_URLS = [new URL("../../../vendor/mediapipe/vision_bundle.js", import.meta.url).href];
 export const MEDIAPIPE_WASM_URLS = [new URL("../../../vendor/mediapipe/wasm", import.meta.url).href];
-export const HAND_MODEL = new URL("../../../vendor/models/hand_landmarker.task?model=v755-localization-theme-final", import.meta.url).href;
+export const HAND_MODEL = new URL("../../../vendor/models/hand_landmarker.task?model=v756-input-language-hand-startup", import.meta.url).href;
 
-export const APP_RELEASE = Object.freeze({ version: "7.5.5", buildId: "air-drow-v755-localization-theme-final" });
-export const QUICK_START_KEY = "air-drow.v755.quick-start.complete";
+export const APP_RELEASE = Object.freeze({ version: "7.5.6", buildId: "air-drow-v756-input-language-hand-startup" });
+export const QUICK_START_KEY = "air-drow.v756.quick-start.complete";
 
 export const PROFILE_RULES = Object.freeze({
   sensitive: Object.freeze({ start: .39, stop: .54, smooth: .34, confidence: .50, enterFrames: 2, exitFrames: 2, stableFrames: 3, maxJump: .58, lostFrames: 3, minPalm: .030, minIndexReach: .30, minThumbReach: .09, maxTipDepth: 1.85, minIndexAngle: 16, minPalmAspect: .36, maxPalmAspect: 4.6, minFingerSpan: .32, minWristReach: .48 }),

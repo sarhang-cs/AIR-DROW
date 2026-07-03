@@ -101,10 +101,13 @@ const state = {
   handScanStatusVisual: "idle",
   handScanHasDetected: false,
   handScanReadyTimer: 0,
+  handRuntimePhase: "idle",
   calibrationOverlayTimer: 0,
+  calibrationOverlayExitTimer: 0,
   handStartPromise: null,
   handWarmTimer: 0,
   handWarmed: false,
+  handAssetPrimePromise: null,
   handRawPoint: null,
   lastGuideLandmarks: null,
   lastGuideSeenAt: 0,
@@ -753,6 +756,44 @@ function t(key, fallback = key) {
   return dictionary.copyUnavailable || fallback || key;
 }
 
+function refreshHandScanLanguage() {
+  if (!ui?.handScan || ui.handScan.hidden) return;
+  const phase = state.handRuntimePhase || ui.handScan.dataset.stage || "warm";
+  const copy = {
+    warm: ["warm", "scanWarming", "Preparing hand engine…", "scanWaitForEngine", "Please wait while the hand engine starts."],
+    camera: ["camera", "scanCameraLoading", "Camera is on; loading the hand engine…", "scanWaitForEngine", "Please wait while the hand engine starts."],
+    detect: ["detect", "scanPlaceHandNow", "Hand engine is ready", "scanPlaceHandNowHint", "Now hold your hand in front of the camera"],
+    found: ["found", "scanFound", "Hand found", "gestureArm", "Open hand detected — pinch is armed"],
+    ready: ["ready", "handCheckPassed", "Hand check passed", "handReadyToDraw", "Hand check is complete — ready to draw"],
+    missing: ["missing", "handNotFound", "Hand not found", "scanCamera", "Camera is ready; hold your hand in view"],
+    problem: ["problem", "engineUnavailable", "Hand engine unavailable", "engineTryAgain", "Reload engine"]
+  }[phase];
+  if (!copy) return;
+  setHandScanStage(copy[0], t(copy[1], copy[2]), t(copy[3], copy[4]));
+  if (phase === "warm" || phase === "camera") setText(ui.handStatus, t("scanWarming", "Preparing hand engine…"));
+  if (phase === "detect") setText(ui.handStatus, t("scanPlaceHandNow", "Hand engine is ready"));
+}
+
+function refreshCalibrationLanguage() {
+  if (!ui?.calibrationOverlay || ui.calibrationOverlay.hidden) return;
+  if (ui.calibrationOverlay.dataset.state === "complete") {
+    setText(ui.calibrationTitle, t("calibrationCheckPassed", "Calibration check completed successfully"));
+    setText(ui.calibrationStep, "4/4 ✓");
+    setText(ui.calibrationHint, t("calibrationSuccessHint", "Calibration was saved and is active for hand drawing on this browser"));
+    return;
+  }
+  updateCalibrationOverlay(handCalibration?.current?.());
+}
+
+function refreshDynamicLanguageSurfaces() {
+  refreshHandScanLanguage();
+  refreshCalibrationLanguage();
+  updateHandCalibrationStatus();
+  deviceReadiness?.render();
+  finalLiveQa?.render();
+  void refreshStabilityStatus();
+}
+
 function applyLanguage() {
   const language = state.settings.language === "en" ? "en" : "ku";
   state.settings.language = language;
@@ -805,11 +846,10 @@ function applyLanguage() {
   if (ui.cameraModePicker) ui.cameraModePicker.dataset.title = t("cameraModeTitle", "Choose camera mode");
   ui.languageChoices.forEach(button => button.classList.toggle("selected", button.dataset.language === language));
   setText(ui.fontStatus, language === "en" ? "System Sans" : "Noto Kufi Arabic");
-  // Dynamic cards keep their previous DOM until they are re-rendered. Repaint
-  // every local-status surface here so a language switch is truly global.
-  deviceReadiness?.render();
-  finalLiveQa?.render();
-  void refreshStabilityStatus();
+  // Dynamic cards and active hand/calibration overlays own runtime text, so
+  // repaint them from translation keys immediately rather than waiting for a
+  // person to press Check again.
+  refreshDynamicLanguageSurfaces();
   setWorkspace(state.workspace, { resetPanels: false });
   updateLiveHud();
 }
@@ -1192,13 +1232,26 @@ function bindPointerEvents() {
 }
 
 
+function primeHandAssetsForCamera() {
+  if (state.handWarmed) return Promise.resolve();
+  if (state.handAssetPrimePromise) return state.handAssetPrimePromise;
+  // This request begins only after the person explicitly opens Camera. It
+  // overlaps model download with camera allocation, never creates a task in
+  // the background, and makes a first scan materially faster on Android.
+  const task = primeLocalHandAssets({ modelUrl: HAND_MODEL, moduleUrl: MEDIAPIPE_MODULE_URLS[0] })
+    .then(() => { state.handWarmed = true; })
+    .finally(() => {
+      if (state.handAssetPrimePromise === task) state.handAssetPrimePromise = null;
+    });
+  state.handAssetPrimePromise = task;
+  return task;
+}
+
 function warmHandEngineNow() {
   if (state.settings.warmHandEngine === false || state.landmarker || state.handLoadPromise) return;
   // Never instantiate MediaPipe in the background. Some Android WebViews
   // reject a pre-created task before a live camera frame exists.
-  primeLocalHandAssets({ modelUrl: HAND_MODEL, moduleUrl: MEDIAPIPE_MODULE_URLS[0] })
-    .then(() => { state.handWarmed = true; })
-    .catch(error => console.warn("Local hand assets could not be primed.", error));
+  primeHandAssetsForCamera().catch(error => console.warn("Local hand assets could not be primed.", error));
 }
 
 function scheduleHandEngineWarmup() {
@@ -1321,7 +1374,9 @@ async function startCamera() {
       }
     });
 
-    setText(ui.handStatus, ["hand", "hand-eraser"].includes(state.mode) ? t("scanDetect", "Scanning hand…") : t("cameraReady", "Camera ready"));
+    setText(ui.handStatus, ["hand", "hand-eraser"].includes(state.mode)
+      ? (state.landmarker ? t("scanPlaceHandNow", "Hand engine is ready") : t("scanWarming", "Preparing hand engine…"))
+      : t("cameraReady", "Camera ready"));
     updateLiveHud();
     return state.stream;
   } catch (error) {
@@ -1533,7 +1588,10 @@ function updateCalibrationOverlay(event = handCalibration?.current?.()) {
     }
     return;
   }
+  clearTimeout(state.calibrationOverlayTimer);
+  clearTimeout(state.calibrationOverlayExitTimer);
   ui.calibrationOverlay.hidden = false;
+  ui.calibrationOverlay.classList.remove("is-hiding");
   ui.calibrationOverlay.dataset.state = "active";
   const target = event.target;
   if (target && ui.calibrationTarget) {
@@ -1557,17 +1615,25 @@ function updateCalibrationOverlay(event = handCalibration?.current?.()) {
 function showCalibrationCompleteOverlay() {
   if (!ui.calibrationOverlay) return;
   clearTimeout(state.calibrationOverlayTimer);
+  clearTimeout(state.calibrationOverlayExitTimer);
   ui.calibrationOverlay.hidden = false;
+  ui.calibrationOverlay.classList.remove("is-hiding");
   ui.calibrationOverlay.dataset.state = "complete";
-  setText(ui.calibrationTitle, t("calibrationComplete", "Hand calibration completed"));
+  setText(ui.calibrationTitle, t("calibrationCheckPassed", "Calibration check completed successfully"));
   setText(ui.calibrationStep, "4/4 ✓");
-  setText(ui.calibrationHint, t("calibrationSaved", "Calibration was saved and is active everywhere in this browser"));
+  setText(ui.calibrationHint, t("calibrationSuccessHint", "Calibration was saved and is active for hand drawing on this browser"));
   if (ui.calibrationMeterFill) ui.calibrationMeterFill.style.setProperty("--calibration-progress", "100%");
   if (ui.calibrateHand) ui.calibrateHand.disabled = false;
+  // A completed check remains readable, then leaves with the same calm fade
+  // used by the camera hand-check rather than disappearing in one frame.
   state.calibrationOverlayTimer = setTimeout(() => {
-    ui.calibrationOverlay.hidden = true;
-    ui.calibrationOverlay.dataset.state = "idle";
-  }, 1850);
+    ui.calibrationOverlay.classList.add("is-hiding");
+    state.calibrationOverlayExitTimer = setTimeout(() => {
+      ui.calibrationOverlay.hidden = true;
+      ui.calibrationOverlay.classList.remove("is-hiding");
+      ui.calibrationOverlay.dataset.state = "idle";
+    }, 520);
+  }, 2400);
 }
 
 async function startHandCalibration() {
@@ -1732,6 +1798,7 @@ function setHandScanVisual(visual = "idle") {
 
 function showHandScan(label = t("scanWarming", "Preparing hand engine…"), hint = "") {
   clearTimeout(state.handScanHideTimer);
+  state.handRuntimePhase = "warm";
   state.handScanStartedAt = performance.now();
   state.handScanHasDetected = false;
   ui.handScan.classList.remove("is-hiding");
@@ -1744,6 +1811,7 @@ function showHandScan(label = t("scanWarming", "Preparing hand engine…"), hint
 
 function setHandScanStage(stage, label, hint) {
   clearTimeout(state.handScanHideTimer);
+  state.handRuntimePhase = stage || "idle";
   ui.handScan.classList.remove("is-hiding");
   ui.handScan.dataset.stage = stage;
   ui.handScan.dataset.state = "active";
@@ -1764,6 +1832,7 @@ function hideHandScan(delay = 180) {
     ui.handScan.classList.remove("is-hiding");
     ui.handScan.dataset.stage = "warm";
     ui.handScan.dataset.state = "idle";
+    state.handRuntimePhase = "idle";
     setHandScanVisual("idle");
   }, delay);
 }
@@ -1802,19 +1871,25 @@ async function startHandTracker({ forceReload = false } = {}) {
   if (state.handStartPromise && !forceReload) return state.handStartPromise;
 
   const startTask = (async () => {
+    const engineAlreadyReady = Boolean(state.landmarker) && !forceReload;
+    // Begin the small runtime import and local model prefetch while the user
+    // has explicitly started Camera. This overlaps the slowest first-run work
+    // with camera allocation, but the UI does not ask for a hand yet.
+    const assetPrime = engineAlreadyReady ? Promise.resolve() : primeHandAssetsForCamera();
+    const modulePrime = engineAlreadyReady ? Promise.resolve() : loadMediaPipeModule();
     showHandScan(
-      state.landmarker ? t("scanCamera", "Camera is ready; hold your hand in view") : t("scanWarming", "Preparing hand engine…"),
-      state.landmarker ? t("scanDetect", "Checking hand stability…") : t("scanWarming", "Preparing hand engine…")
+      engineAlreadyReady ? t("scanPlaceHandNow", "Hand engine is ready") : t("scanWarming", "Preparing hand engine…"),
+      engineAlreadyReady ? t("scanPlaceHandNowHint", "Now hold your hand in front of the camera") : t("scanWaitForEngine", "Please wait while the hand engine starts.")
     );
-    setText(ui.handStatus, t("scanWarming", "Preparing hand engine…"));
+    setText(ui.handStatus, engineAlreadyReady ? t("scanPlaceHandNow", "Hand engine is ready") : t("scanWarming", "Preparing hand engine…"));
 
     let cameraReady = false;
     try {
       await startCamera();
       cameraReady = true;
-      if (!state.handScanHasDetected) {
-        setHandScanStage("camera", t("scanCamera", "Camera is ready; place your hand in frame"), t("scanDetect", "Checking hand stability…"));
-        setText(ui.handStatus, t("scanDetect", "Scanning hand…"));
+      if (!state.handScanHasDetected && !engineAlreadyReady) {
+        setHandScanStage("camera", t("scanCameraLoading", "Camera is on; loading the hand engine…"), t("scanWaitForEngine", "Please wait while the hand engine starts."));
+        setText(ui.handStatus, t("scanWarming", "Preparing hand engine…"));
       }
     } catch (error) {
       error.airdrowStage = "camera";
@@ -1822,11 +1897,11 @@ async function startHandTracker({ forceReload = false } = {}) {
     }
 
     try {
-      // A live frame exists before wasm/task creation. This is essential on
-      // Android devices where camera allocation and wasm initialization can
-      // otherwise contend for the same startup window.
+      // A live frame exists before task creation. The model/runtime fetches
+      // are started above, so Android can finish them while the stream warms.
       await waitForCameraFrame(2200);
       if (ui.camera.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) throw new Error("Camera did not deliver a video frame");
+      await Promise.all([assetPrime, modulePrime]);
       await loadHandLandmarker({ forceReload });
     } catch (error) {
       error.airdrowStage = "engine";
@@ -1837,7 +1912,8 @@ async function startHandTracker({ forceReload = false } = {}) {
       stopHandLoop();
       state.lastDetection = 0;
       state.lastFpsAt = performance.now();
-      setHandScanStage("detect", t("gestureScan", "Checking hand stability"), t("gestureHelp", "Open your hand, hold your fingers together, then move to draw"));
+      setHandScanStage("detect", t("scanPlaceHandNow", "Hand engine is ready"), t("scanPlaceHandNowHint", "Now hold your hand in front of the camera"));
+      setText(ui.handStatus, t("scanPlaceHandNow", "Hand engine is ready"));
       hideRecovery("camera");
       handFrame();
     } catch (error) {
@@ -3198,7 +3274,54 @@ function bindMobileInteractionGuards() {
   document.addEventListener("pointerdown", startClearLoop, { capture: true, passive: true });
   document.addEventListener("pointerup", stopClearLoop, { capture: true, passive: true });
   document.addEventListener("pointercancel", stopClearLoop, { capture: true, passive: true });
+  // Some Android Chromium builds route a long press through Touch Events
+  // before Pointer Events. Mirror the same non-blocking selection clear loop
+  // so onboarding and every overlay stay protected as well.
+  document.addEventListener("touchstart", startClearLoop, { capture: true, passive: true });
+  document.addEventListener("touchend", stopClearLoop, { capture: true, passive: true });
+  document.addEventListener("touchcancel", stopClearLoop, { capture: true, passive: true });
+  document.addEventListener("touchmove", stopClearLoop, { capture: true, passive: true });
   document.addEventListener("selectionchange", clearStudioSelection, { passive: true });
+}
+
+function bindImmediateTextEntry() {
+  const editableSelector = 'input:not([type="range"]):not([type="checkbox"]):not([type="color"]):not([type="file"]), textarea, select, [contenteditable="true"]';
+  const getField = target => target instanceof Element ? target.closest(editableSelector) : null;
+  const focusField = field => {
+    if (!field || field.disabled || field.readOnly) return;
+    try { field.focus({ preventScroll: true }); } catch { field.focus(); }
+    const scroll = field.closest?.(".settings-scroll");
+    if (scroll) {
+      scroll.classList.add("has-editor-focus");
+      requestAnimationFrame(() => field.scrollIntoView?.({ block: "nearest", inline: "nearest", behavior: "auto" }));
+    }
+  };
+  const focusFromEvent = event => {
+    const direct = getField(event.target);
+    if (direct) {
+      focusField(direct);
+      return;
+    }
+    // Tapping the visual label around a real field should enter text at once,
+    // not require a second or third tap on Android Chrome.
+    const wrapper = event.target instanceof Element ? event.target.closest(".text-setting") : null;
+    const nested = wrapper?.querySelector?.(editableSelector);
+    if (nested) focusField(nested);
+  };
+  document.addEventListener("pointerdown", focusFromEvent, { capture: true, passive: true });
+  document.addEventListener("touchstart", focusFromEvent, { capture: true, passive: true });
+  document.addEventListener("focusin", event => {
+    const field = getField(event.target);
+    if (!field) return;
+    field.closest?.(".settings-scroll")?.classList.add("has-editor-focus");
+  }, { capture: true });
+  document.addEventListener("focusout", () => {
+    window.setTimeout(() => {
+      if (!document.activeElement?.matches?.(editableSelector)) {
+        document.querySelectorAll(".settings-scroll.has-editor-focus").forEach(node => node.classList.remove("has-editor-focus"));
+      }
+    }, 0);
+  }, { capture: true });
 }
 
 function bindControls() {
@@ -3505,6 +3628,7 @@ async function boot() {
   loadingManager.setBoot({ progress: 20, label: t("bootCanvas", "Setting up canvas…") });
   bindControls();
   bindMobileInteractionGuards();
+  bindImmediateTextEntry();
   bindPointerEvents();
   loadingManager.setBoot({ progress: 45, label: t("bootProject", "Opening local project…") });
   await loadProject();

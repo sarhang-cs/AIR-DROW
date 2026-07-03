@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.5.5",
-  "buildId": "air-drow-v755-localization-theme-final",
-  "release": "Localization & Theme Final Edition",
+  "version": "7.5.6",
+  "buildId": "air-drow-v756-input-language-hand-startup",
+  "release": "Input, Language & Hand Startup Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -17,5 +17,6 @@
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
   "releaseGate": "npm run vercel:build validates bilingual markup and runtime coverage, dynamic language re-rendering, six paired theme palettes, icon contrast, selection guard, local hand model and generated production assets.",
-  "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, and release information."
+  "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, and release information.",
+  "name": "AIR-DROW Input, Language & Hand Startup Edition"
 }

@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 7.5.5 Localization & Theme Final Edition.
+> This guide applies to AIR-DROW 7.5.6 Input, Language & Hand Startup Edition.
 
 AIR-DROW is local-first.
 

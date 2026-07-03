@@ -1,8 +1,8 @@
 {
   "name": "air-drow",
-  "version": "7.5.5",
+  "version": "7.5.6",
   "private": true,
-  "description": "AIR-DROW Localization & Theme Final Edition \u2014 a private drawing studio for touch, pen and optional hand drawing.",
+  "description": "AIR-DROW Input, Language & Hand Startup Edition — reliable mobile text entry, language-safe runtime UI, and honest local hand-engine startup.",
   "type": "module",
   "dependencies": {
     "@mediapipe/tasks-vision": "0.10.35"
@@ -17,7 +17,7 @@
     "build:static": "node scripts/build-selfhosted-mediapipe.mjs",
     "hand-loader:verify": "node scripts/verify-hand-runtime-loader-fix.mjs",
     "deploy-build:verify": "node scripts/verify-deployment-build-order.mjs",
-    "verify:source": "npm run icons:sync && npm run icons:verify && npm run icons:local:verify && npm run preflight && npm run check && npm run model:verify && npm run release:verify && npm run production:verify && npm run localization:verify",
+    "verify:source": "npm run icons:sync && npm run icons:verify && npm run icons:local:verify && npm run preflight && npm run check && npm run model:verify && npm run release:verify && npm run production:verify && npm run localization:verify && npm run input-language-hand:verify",
     "verify:deploy-output": "npm run hand-loader:verify && npm run deploy-build:verify",
     "build": "npm run verify:source && npm run build:static && npm run verify:deploy-output",
     "vercel:build": "npm run model:verify && npm run build",
@@ -25,7 +25,8 @@
     "release:verify": "node scripts/verify-final-release.mjs",
     "icons:local:verify": "node scripts/verify-local-icon-package.mjs",
     "production:verify": "node scripts/verify-localization-theme-final.mjs",
-    "localization:verify": "node scripts/verify-localization-theme-final.mjs"
+    "localization:verify": "node scripts/verify-localization-theme-final.mjs",
+    "input-language-hand:verify": "node scripts/verify-input-language-hand-startup.mjs"
   },
   "engines": {
     "node": ">=22 <25"

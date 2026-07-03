@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v755-localization-theme-final";
+const BUILD_ID = "air-drow-v756-input-language-hand-startup";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 

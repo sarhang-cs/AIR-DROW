@@ -6,7 +6,7 @@
 
 ### Draw with touch, pen and hand
 
-**SARHANG IO · 2026 · 7.5.5 Localization & Theme Final Edition**
+**SARHANG IO · 2026 · 7.5.6 Input, Language & Hand Startup Edition**
 
 [![Private by default](https://img.shields.io/badge/Private-by%20default-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Touch, Pen & Hand](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
@@ -21,13 +21,15 @@
 
 This release is verified through the production gate below. The gate checks source integrity, the local hand model, generated MediaPipe deployment files, bilingual dictionaries, lazy camera asset loading, and release metadata. Camera behavior must still be tested on the target Android devices after deployment because browser camera permissions and GPU paths are device-specific.
 
-## What changed in 7.5.5
+## What changed in 7.5.6
 
 - **Complete runtime localization:** changing between Kurdî and English now re-renders dynamic readiness cards, hand-check results, calibration guidance, status labels and recovery text. A selected language no longer leaves inherited text from the previous language on screen.
 - **One dictionary contract:** Kurdish and English contain the same verified key set, including calibration and camera feedback. A missing translation cannot silently fall back to the opposite language.
 - **Six paired visual themes:** Violet, Pink, Sapphire, Obsidian, Silver and Gold each have separately tuned dark and light palettes, matching surfaces, accessible text and state colors.
 - **Icon contrast protection:** navigation, toolbar, scanner and status icons inherit contrast-safe theme tokens; active icons remain visible in both modes.
-- **Android interaction polish:** browser text selection, Copy/Share/Translate/Search callouts and blue tap highlights are blocked on studio UI while real fields remain editable.
+- **Android input & interaction polish:** real text fields request focus on the first tap; browser text selection, Copy/Share/Translate/Search callouts and blue tap highlights are blocked across every non-editable studio surface, including onboarding.
+- **Honest hand startup:** AIR-DROW waits while the local MediaPipe runtime and model load, then asks you to put a hand in view only after the engine is ready.
+- **Saved calibration confirmation:** successful four-target calibration confirms that it was saved, remains visible briefly, then closes with a calm exit animation.
 - **Transactional Termux replacement:** the installer preserves `.git`, makes a backup, validates the build, pushes only after verification, and restores the old project if a build fails.
 
 ## Ways to draw

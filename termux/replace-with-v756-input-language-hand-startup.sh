@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# AIR-DROW v7.5.5 — Localization & Theme Final Edition
+# AIR-DROW v7.5.6 — Input, Language & Hand Startup Edition
 # Transactional replacement: preserve .git, verify/build before push, then restore the old source if validation fails.
 set -Eeuo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="7.5.5"
+VERSION="7.5.6"
 REPO="${1:-$HOME/AIR-DROW-GITHUB}"
 BACKUP="${REPO}.backup-${VERSION//./-}-$(date +%Y%m%d-%H%M%S)"
 RESTORE_REQUIRED=0
@@ -45,7 +45,7 @@ echo "Building and verifying AIR-DROW v$VERSION…"
 npm run vercel:build
 RESTORE_REQUIRED=0
 git add -A
-if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.5.5 localization and theme final"; fi
+if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.5.6 input, language and hand startup"; fi
 BRANCH="$(git branch --show-current 2>/dev/null || true)"
 [ -n "$BRANCH" ] || BRANCH="main"
 git push origin "HEAD:$BRANCH"

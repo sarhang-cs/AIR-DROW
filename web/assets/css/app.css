@@ -1811,3 +1811,33 @@ html[data-airdrow-selection-lock="true"] .boot-card {
   -webkit-user-select: none !important;
   user-select: none !important;
 }
+
+
+/* v7.5.6 mobile text-entry contract: real text fields always win the first tap. */
+.text-setting, .text-setting input, .ai-studio-section textarea, #apiUrlInput { pointer-events: auto !important; }
+.text-setting input, .ai-studio-section textarea, #apiUrlInput {
+  min-height: 48px;
+  cursor: text;
+  touch-action: manipulation;
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  -webkit-touch-callout: default !important;
+}
+.settings-scroll.has-editor-focus { overscroll-behavior-y: contain; }
+
+/* Completed calibration remains visible, then exits as a deliberate success state. */
+.hand-calibration-overlay {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .46s ease, visibility .46s ease;
+}
+.hand-calibration-overlay .hand-calibration-sheet {
+  transition: transform .46s cubic-bezier(.2,.82,.25,1), opacity .46s ease, filter .46s ease;
+}
+.hand-calibration-overlay.is-hiding { opacity: 0; visibility: hidden; pointer-events: none; }
+.hand-calibration-overlay.is-hiding .hand-calibration-sheet { transform: translate(-50%,-47%) scale(.96); opacity: 0; filter: blur(2px); }
+.hand-calibration-overlay[data-state="complete"] .hand-calibration-sheet h2::after {
+  content: " ✓"; color: #82e7ad;
+}
+:root.reduce-motion .hand-calibration-overlay,
+:root.reduce-motion .hand-calibration-overlay .hand-calibration-sheet { transition: none !important; }

@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "7.5.5",
-  "buildId": "air-drow-v755-localization-theme-final",
+  "version": "7.5.6",
+  "buildId": "air-drow-v756-input-language-hand-startup",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {
@@ -191,5 +191,5 @@
       "bytes": 502
     }
   ],
-  "release": "Localization & Theme Final Edition"
+  "release": "Input, Language & Hand Startup Edition"
 }

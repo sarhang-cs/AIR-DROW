@@ -1,22 +1,22 @@
 {
-  "version": "7.5.5",
-  "buildId": "air-drow-v755-localization-theme-final",
-  "releasedAt": "2026-07-03T23:30:00Z",
+  "version": "7.5.6",
+  "buildId": "air-drow-v756-input-language-hand-startup",
+  "releasedAt": "2026-07-04T00:15:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Localization & Theme Final Edition: every supported visible label re-renders from one bilingual source when the language changes, and each of the six premium skins now has its own paired dark and light palette with explicit icon contrast.",
+  "summary": "AIR-DROW Input, Language & Hand Startup Edition: instant mobile keyboard focus, language-safe runtime check surfaces, honest hand-engine startup guidance, and a calm saved-calibration success transition.",
   "features": [
-    "Uses a single Kurdish/English dictionary for static labels, dynamic readiness cards, calibration feedback, project UI and onboarding; runtime surfaces repaint immediately when language changes.",
-    "Prevents untranslated fallback text from leaking into the opposite language and validates every markup and runtime translation key before build.",
-    "Adds six paired premium palettes—violet, pink, sapphire, obsidian, silver and gold—with a separately tuned dark and light mode, readable controls and persistent icon contrast.",
-    "Strengthens Android long-press handling across the complete app document, including onboarding and overlays, while keeping real editable fields available.",
-    "Retains real camera, hand, calibration, storage and connectivity checks; no placeholder status values are introduced."
+    "Makes real text inputs focus on the first Android tap while preserving selection protection on non-editable AIR-DROW surfaces.",
+    "Stores Camera & Hand Check detail keys instead of stale translated strings, so an open check repaints immediately when Kurdish or English changes.",
+    "Starts same-origin model/runtime prefetch only after Camera is explicitly chosen, overlaps it with camera allocation, and tells the person to wait before asking them to show a hand.",
+    "Shows a saved-calibration success message long enough to read, then closes through a calm exit animation.",
+    "Refines light-mode premium palettes and icon contrast without introducing fake device, camera, or hand status."
   ],
-  "assetRevision": "755",
+  "assetRevision": "756",
   "phase": 10,
-  "stage": "localization-theme-final",
+  "stage": "input-language-hand-startup",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",

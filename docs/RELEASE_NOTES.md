@@ -1,6 +1,6 @@
 # AIR-DROW Release Notes
 
-## v7.5.5 — Localization & Theme Final
+## v7.5.6 — Input, Language & Hand Startup
 
 - Re-renders all dynamic UI immediately after language changes, including Hand drawing check, calibration guidance, device readiness, network state and recovery messages.
 - Verifies a matching Kurdish/English dictionary contract and prevents opposite-language fallback text.
@@ -13,3 +13,10 @@
 ## Verification
 
 `npm run vercel:build` validates the local hand model, MediaPipe build output, bilingual keys, dynamic localization paths, paired themes, release identity and deploy-ready output.
+
+## v7.5.6 — Input, Language & Hand Startup
+
+- Mobile text entry is first-tap focused.
+- Active runtime check content is language-safe.
+- The first local hand-engine load has honest wait/ready guidance.
+- Calibration completion now confirms saved state before exiting.

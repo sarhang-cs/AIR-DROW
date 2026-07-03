@@ -1,6 +1,6 @@
 # ڕێنمایی بەکارهێنانی AIR-DROW
 
-> ئەم ڕێنماییە بۆ AIR-DROW 7.5.5 Localization & Theme Final Edition ـە.
+> ئەم ڕێنماییە بۆ AIR-DROW 7.5.6 Input, Language & Hand Startup Edition ـە.
 
 ## دەستپێکردن بە کێشان
 
