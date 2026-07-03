@@ -1,3 +1,14 @@
+# AIR-DROW v6.1.0 — Phase 2: Premium UI, RTL & Mobile Layout
+
+- Added a mobile-first premium UI layer with a safe-area Settings bottom sheet and a clean desktop side workspace.
+- Added explicit Dark / Light selection in Settings while preserving the top toolbar quick-toggle.
+- Refined all six complete interface skins: Violet, Pink, Sapphire, Obsidian, Silver and Gold.
+- Hardened RTL/LTR layout for labels, select arrows, toggles, drawer title and section summaries.
+- Made narrow-screen toolbar controls horizontally reachable instead of clipped or reduced to tiny buttons.
+- Preserved text-only FPS, Online and CAM overlays with no background card, border or blur.
+
+---
+
 # AIR-DROW v6.0.2 — Phase 1: Foundation Hardening
 
 - Added canonical Phase 1 release metadata (`version`, `buildId`, `assetRevision`, `phase`) and synchronized it across runtime, service worker, manifests, health endpoint and verifiers.

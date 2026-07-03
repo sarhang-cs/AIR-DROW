@@ -569,6 +569,7 @@ function syncSettingsUI() {
   ui.grid.value = state.settings.grid;
   ui.reduceMotion.checked = state.settings.reduceMotion;
   ui.themeMode.value = state.settings.theme;
+  ui.themeChoices.forEach(button => button.classList.toggle("selected", button.dataset.themeMode === state.settings.theme));
   ui.apiUrl.value = state.settings.apiUrl || "";
   ui.colorSwatches.forEach(button => button.classList.toggle("active", button.dataset.color.toLowerCase() === String(state.settings.color).toLowerCase()));
   updateSettingOutputs();
@@ -693,6 +694,7 @@ function applyTheme() {
   ui.app.style.removeProperty("background");
   document.querySelector('meta[name="theme-color"]')?.setAttribute("content", light ? "#f5f3ff" : "#080914");
   ui.theme.classList.toggle("theme-active", light);
+  ui.themeChoices.forEach(button => button.classList.toggle("selected", button.dataset.themeMode === activeTheme));
 }
 
 function applyCameraView() {
@@ -2796,6 +2798,12 @@ function bindControls() {
   ui.resetDialog.addEventListener("click", event => {
     if (event.target === ui.resetDialog) closeResetSettingsDialog();
   });
+  ui.themeChoices.forEach(button => button.addEventListener("click", () => {
+    state.settings.theme = button.dataset.themeMode === "light" ? "light" : "dark";
+    ui.themeMode.value = state.settings.theme;
+    applySettings();
+    queueSave();
+  }));
   ui.skinChoices.forEach(button => button.addEventListener("click", () => {
     state.settings.skin = button.dataset.skin;
     applySettings();

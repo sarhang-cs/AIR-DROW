@@ -1,14 +1,15 @@
 {
   "project": "AIR-DROW",
-  "version": "6.0.2",
-  "buildId": "air-drow-v602-foundation-final",
-  "release": "Phase 1 — Foundation Hardening",
+  "version": "6.1.0",
+  "buildId": "air-drow-v610-phase2-premium-ui",
+  "release": "Phase 2 — Premium UI, RTL and Mobile Layout",
   "architecture": {
     "styles": [
       "web/assets/css/app.css",
       "web/assets/css/visual-system.css",
       "web/assets/css/icon-system.css",
-      "web/assets/css/drawer-layout.css"
+      "web/assets/css/drawer-layout.css",
+      "web/assets/css/phase2-ui.css"
     ],
     "runtime": [
       "web/assets/js/config/runtime.js",
@@ -26,9 +27,9 @@
     "Phase 5: final QA, release package, README, screenshots and Termux deployment procedure."
   ],
   "privacy": "Drawing data stays local unless the creator explicitly requests an export, share or AI generation.",
-  "stage": "phase-1-foundation-hardening",
-  "releaseGate": "npm run vercel:build first ensures the exact local HandLandmarker task, then validates source contracts, builds the self-hosted MediaPipe runtime and verifies generated deployment assets.",
+  "stage": "phase-2-premium-ui-mobile-rtl",
+  "releaseGate": "npm run vercel:build confirms the local model, verifies UI source contracts, builds the self-hosted MediaPipe runtime and verifies generated deployment assets.",
   "notes": [
-    "v6.0.2 Phase 1 centralizes release metadata and removes fragile hard-coded verifier release constants."
+    "v6.1.0 Phase 2 provides a clean premium UI system with full themes, explicit dark/light modes and a safe mobile workspace drawer."
   ]
 }

@@ -13,8 +13,8 @@ const worker = read("web/sw.js");
 const manifest = JSON.parse(read("PROJECT_MANIFEST.json"));
 const assets = JSON.parse(read("web/assets/LOCAL_ASSETS_MANIFEST.json"));
 
-if (release.phase !== 1 || release.version !== pkg.version || !release.buildId || !release.assetRevision) {
-  throw new Error("Canonical Phase 1 release metadata is incomplete or inconsistent.");
+if (release.phase < 1 || release.version !== pkg.version || !release.buildId || !release.assetRevision) {
+  throw new Error("Canonical release baseline metadata is incomplete or inconsistent.");
 }
 for (const [name, data] of Object.entries({ project: manifest, localAssets: assets })) {
   if (data.version !== release.version || data.buildId !== release.buildId) {
@@ -35,4 +35,4 @@ if (!scripts.build.includes("verify:source") || !scripts.build.includes("build:s
   throw new Error("Build pipeline ordering is incomplete.");
 }
 if (!existsSync(resolve(root, "web/vendor/models/MODEL_MANIFEST.json"))) throw new Error("Official model manifest is missing.");
-console.log(`AIR-DROW Phase 1 foundation hardening verified: v${release.version} / ${release.buildId}`);
+console.log(`AIR-DROW foundation baseline verified: v${release.version} / ${release.buildId}`);

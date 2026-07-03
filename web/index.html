@@ -6,17 +6,17 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW Export, Save & Onboarding — local-first drawing, reliable files and guided first use." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=602" />
-  <meta name="air-drow-build" content="air-drow-v602-foundation-final" />
-  <meta name="air-drow-icon-pack" content="foundation-final-v602" />
+  <link rel="manifest" href="./manifest.webmanifest?v=610" />
+  <meta name="air-drow-build" content="air-drow-v610-phase2-premium-ui" />
+  <meta name="air-drow-icon-pack" content="phase2-premium-ui-v610" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=602" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=610" />
   <link rel="modulepreload" href="./vendor/mediapipe/vision_bundle.js" />
   <link rel="preload" as="fetch" href="./vendor/models/hand_landmarker.task?model=v6-fbc2a300" crossorigin="anonymous" />
   <link rel="preload" as="fetch" href="./vendor/mediapipe/wasm/vision_wasm_internal.wasm" crossorigin="anonymous" />
-  <title>AIR-DROW v6.0.2 — Foundation Hardening</title>
+  <title>AIR-DROW v6.1.0 — Premium UI System</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
       font-family: "Noto Kufi Arabic";
@@ -26,10 +26,11 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=602" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=602" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=602" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=602" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=610" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=610" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=610" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=610" />
+    <link rel="stylesheet" href="./assets/css/phase2-ui.css?v=610" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
@@ -50,7 +51,7 @@
     <div class="recovery-actions"><button id="recoveryActionBtn" class="recovery-action" type="button" hidden></button><button id="recoveryDismissBtn" class="recovery-dismiss" type="button" aria-label="Dismiss" data-i18n-aria-label="ariaDismiss">×</button></div>
   </aside>
 
-<div id="app" class="app">
+<div id="app" class="app" data-ui-phase="2">
     <main id="studio" class="studio" aria-label="AIR-DROW canvas" data-i18n-aria-label="ariaStudioCanvas">
       <video id="camera" class="camera" playsinline muted aria-hidden="true"></video>
       <canvas id="drawCanvas" class="draw-canvas"></canvas>
@@ -517,6 +518,10 @@
           <div class="setting-body">
             <input id="themeMode" type="hidden" value="dark" />
             <p class="small-status" data-i18n="skinHint">ڕەنگی UI هەڵبژێرە؛ دوگمەی مانگ/خۆر تەنها دۆخی تاریک و ڕوون دەگۆڕێت.</p>
+            <div id="themeChoices" class="theme-mode-grid" aria-label="Theme mode" data-i18n-aria-label="ariaThemeMode">
+              <button type="button" class="theme-mode-choice selected" data-theme-mode="dark"><span data-i18n="themeDark">دۆخی تاریک</span></button>
+              <button type="button" class="theme-mode-choice" data-theme-mode="light"><span data-i18n="themeLight">دۆخی ڕوون</span></button>
+            </div>
             <div id="skinChoices" class="skin-grid" aria-label="Premium appearance themes" data-i18n-aria-label="ariaPremiumThemes">
               <button type="button" class="skin-choice selected" data-skin="violet"><strong data-i18n="skinViolet">مۆرەی لوکس</strong><small data-i18n="skinVioletSub">پەنجەرەی شیشەیی و نەرم</small></button>
               <button type="button" class="skin-choice" data-skin="pink"><strong data-i18n="skinPink">پینکی شیشەیی</strong><small data-i18n="skinPinkSub">نەرم، جوان و cute</small></button>
@@ -631,7 +636,7 @@
             </div>
             <div class="about-grid">
               <div><span data-i18n="developer">گەشەپێدەر</span><b>SARHANG IO</b></div>
-              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b class="numeric-value">v6.0.2</b></div>
+              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b class="numeric-value">v6.1.0</b></div>
               <div><span data-i18n="uiFont">فۆنتی UI</span><b id="fontStatus">Noto / System</b></div>
               <div><span data-i18n="release">Release</span><b data-i18n="releaseCameraUiComplete">Export, Save & Onboarding</b></div>
             </div>
@@ -682,7 +687,7 @@
       recovery path because the application module never evaluated.
     */
     (() => {
-      const BUILD_ID = "air-drow-v602-foundation-final";
+      const BUILD_ID = "air-drow-v610-phase2-premium-ui";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

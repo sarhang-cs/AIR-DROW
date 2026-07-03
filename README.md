@@ -1,3 +1,9 @@
+# AIR-DROW v6.1.0 — Phase 2: Premium UI, RTL & Mobile Layout
+
+AIR-DROW now ships with a premium mobile-first Settings workspace, explicit Dark/Light modes, six complete UI skins and robust RTL/LTR control geometry. The drawing engine and local-first MediaPipe runtime remain unchanged.
+
+---
+
 # AIR-DROW v6.0.2 — Phase 1: Foundation Hardening
 
 This phase hardens the project foundation before UI and hand-engine refinements: deterministic `npm ci`, canonical release metadata, stricter Vercel build ordering, post-build generated-runtime verification and a local-first MediaPipe policy.

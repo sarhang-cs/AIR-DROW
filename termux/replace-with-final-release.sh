@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
-# AIR-DROW v6.0.2 — safe source replacement helper for Termux.
+# AIR-DROW v6.1.0 — Phase 2 safe source replacement helper for Termux.
 # The Git repository metadata is retained; only the working tree is replaced.
 set -Eeuo pipefail
-RELEASE_VERSION="6.0.2"
+RELEASE_VERSION="6.1.0"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET_DIR="${AIR_DROW_TARGET_DIR:-$HOME/AIR-DROW-GITHUB}"
 STAMP="$(date +%Y%m%d-%H%M%S)"
@@ -31,7 +31,7 @@ done
 ACTUAL_VERSION="$(node -p "require(process.argv[1]).version" "$SOURCE_DIR/package.json")"
 [[ "$ACTUAL_VERSION" == "$RELEASE_VERSION" ]] || fail "Version mismatch: expected $RELEASE_VERSION, found $ACTUAL_VERSION"
 info "پشکنینی source package…"
-(cd "$SOURCE_DIR" && node scripts/preflight.mjs && node scripts/verify-foundation-hardening.mjs && node scripts/validate-inline.mjs)
+(cd "$SOURCE_DIR" && node scripts/preflight.mjs && node scripts/verify-foundation-hardening.mjs && node scripts/verify-phase2-ui-system.mjs && node scripts/validate-inline.mjs)
 mkdir -p "$BACKUP_DIR"
 shopt -s dotglob nullglob
 for item in "$TARGET_DIR"/*; do
@@ -41,7 +41,7 @@ done
 REPLACED=1
 cp -a "$SOURCE_DIR/." "$TARGET_DIR/"
 info "دامەزراندنی dependency ـەکان، دابەزاندنی مۆدێلی فەرمی و build…"
-(cd "$TARGET_DIR" && npm ci --no-audit --no-fund && npm run vercel:build)
+(cd "$TARGET_DIR" && npm_config_loglevel=error npm ci --no-audit --no-fund && npm run vercel:build)
 BUILT=1
 printf '\n[SUCCESS] AIR-DROW v%s جێگیر و build کرا.\n' "$RELEASE_VERSION"
 printf '[BACKUP] %s\n' "$BACKUP_DIR"

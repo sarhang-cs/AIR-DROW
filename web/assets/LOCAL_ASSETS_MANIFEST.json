@@ -1,6 +1,6 @@
 {
-  "version": "6.0.2",
-  "buildId": "air-drow-v602-foundation-final",
+  "version": "6.1.0",
+  "buildId": "air-drow-v610-phase2-premium-ui",
   "policy": "All browser runtime UI assets, MediaPipe modules, WASM files and the hand model are same-origin local assets. The exact official model must be packaged for final release; build-time synchronization is a controlled fallback only.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -29,6 +29,6 @@
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v6.0.2 Phase 1 hardens deterministic deploy, canonical release metadata and generated runtime validation while keeping the FPS, Online and CAM status text background-free.",
-  "assetRevision": "602"
+  "releaseStatus": "v6.1.0 Phase 2 delivers a premium mobile-first settings workspace, explicit dark/light controls, six complete visual skins, stable RTL/LTR controls and text-only FPS, Online and CAM overlays.",
+  "assetRevision": "610"
 }

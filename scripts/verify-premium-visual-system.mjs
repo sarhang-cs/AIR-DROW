@@ -6,12 +6,14 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = file => readFileSync(resolve(root, file), "utf8");
 const html = read("web/index.html");
 const css = read("web/assets/css/visual-system.css");
+const phase2 = read("web/assets/css/phase2-ui.css");
 const app = read("web/assets/js/app.js");
 const appearance = read("web/assets/js/config/appearance.js");
 const release = JSON.parse(read("web/release.json"));
 
 for (const file of [
   "web/assets/css/visual-system.css",
+  "web/assets/css/phase2-ui.css",
   "web/assets/js/config/appearance.js"
 ]) {
   if (!existsSync(resolve(root, file))) throw new Error(`Premium visual source missing: ${file}`);
@@ -27,5 +29,5 @@ for (const selector of [".settings-drawer", ".settings-section", ".workspace-doc
   if (!css.includes(selector)) throw new Error(`Premium surface selector missing: ${selector}`);
 }
 const forbiddenEmoji = /[\u{1F300}-\u{1FAFF}]/u;
-if (forbiddenEmoji.test(css)) throw new Error("Simple emoji must not ship in the premium visual stylesheet.");
+if (forbiddenEmoji.test(css) || forbiddenEmoji.test(phase2)) throw new Error("Simple emoji must not ship in premium visual stylesheets.");
 console.log("AIR-DROW Premium Visual System verified: six skins, glass surfaces and modular appearance source are present.");

@@ -36,5 +36,5 @@ if (!app.includes('document.querySelectorAll("[data-i18n-title]")')) throw new E
 if (!builder.includes("verify-local-hand-model.mjs") || builder.includes("fetchWithRetry") || builder.includes("storage.googleapis.com")) {
   throw new Error("MediaPipe static build must verify the bundled local model and remain network-free.");
 }
-if (!release.version || !release.buildId || release.phase !== 1) throw new Error("Completion-pass release metadata is inconsistent.");
+if (!release.version || !release.buildId || release.phase < 1) throw new Error("Completion-pass release metadata is inconsistent.");
 console.log("AIR-DROW Final Completion Pass verified: local icons, centralized translations and strict local model build contract are correct.");

@@ -1,9 +1,9 @@
 {
-  "name": "AIR-DROW v6.0.2 — Foundation Hardening",
+  "name": "AIR-DROW v6.1.0 — Premium UI System",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v602",
+  "start_url": "./?build=v610",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
-  "description": "AIR-DROW: local drawing and hand tracking with deterministic local-first runtime delivery."
+  "description": "AIR-DROW: local drawing and hand tracking with a premium mobile-first interface and local-first runtime delivery."
 }

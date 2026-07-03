@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v602-foundation-final";
+const BUILD_ID = "air-drow-v610-phase2-premium-ui";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [
@@ -11,6 +11,7 @@ const APP_SHELL = [
   "/assets/css/visual-system.css",
   "/assets/icons/toolbar/redo.svg",
   "/assets/css/drawer-layout.css",
+  "/assets/css/phase2-ui.css",
   "/assets/css/icon-system.css",
   "/assets/js/config/runtime.js",
   "/assets/js/config/appearance.js",

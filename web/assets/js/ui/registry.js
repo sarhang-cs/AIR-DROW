@@ -122,6 +122,7 @@ export function collectUi() {
   gridOut: $("gridOut"),
   reduceMotion: $("reduceMotionToggle"),
   themeMode: $("themeMode"),
+  themeChoices: [...document.querySelectorAll("[data-theme-mode]")],
   skinChoices: [...document.querySelectorAll("[data-skin]")],
   languageChoices: [...document.querySelectorAll("[data-language]")],
   colorSwatches: [...document.querySelectorAll("[data-color]")],
