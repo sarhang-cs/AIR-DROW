@@ -1,18 +1,16 @@
 {
-  "name": "AIR-DROW Production Clean & Mobile Reliability Edition",
-  "version": "7.5.0",
-  "buildId": "air-drow-v750-production-clean",
+  "name": "AIR-DROW Bootstrap Reliability Hotfix Edition",
+  "version": "7.5.1",
+  "buildId": "air-drow-v751-bootstrap-hotfix",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
     "web/vendor/mediapipe/vision_bundle.js",
     "web/vendor/mediapipe/wasm/vision_wasm_internal.wasm",
     "web/vendor/mediapipe/wasm/vision_wasm_module_internal.wasm",
-    "web/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.wasm",
-    "public/vendor/mediapipe/vision_bundle.js",
-    "public/vendor/models/hand_landmarker.task"
+    "web/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.wasm"
   ],
-  "delivery": "This complete final-layout and localization source package is ready for npm ci and npm run vercel:build. node_modules is intentionally excluded because it is reproduced from package-lock.json.",
+  "delivery": "This complete bootstrap-reliability source package is ready for npm ci and npm run vercel:build. node_modules and public are intentionally excluded because the production output is regenerated from package-lock.json and web during build.",
   "userDocs": [
     "README.md",
     "README_KU.md",
@@ -23,5 +21,5 @@
   ],
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. This release standardizes the AIR-DROW mark and improves contrast across dark and light themes.",
-  "installer": "termux/replace-with-v750-production-clean.sh"
+  "installer": "termux/replace-with-v751-bootstrap-hotfix.sh"
 }

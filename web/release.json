@@ -1,22 +1,21 @@
 {
-  "version": "7.5.0",
-  "buildId": "air-drow-v750-production-clean",
-  "releasedAt": "2026-07-03T19:30:00Z",
+  "version": "7.5.1",
+  "buildId": "air-drow-v751-bootstrap-hotfix",
+  "releasedAt": "2026-07-03T20:10:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Production Clean & Mobile Reliability Edition: consistent AIR-DROW branding, refined settings alignment, full Kurdish/English interface coverage, improved light-mode icon contrast, and a cleaned release structure.",
+  "summary": "AIR-DROW Bootstrap Reliability Hotfix Edition: repairs the inline startup bootstrap so the app module loads normally instead of remaining at the initial 7% screen.",
   "features": [
-    "Draw with touch, pen or an optional camera-powered hand tool.",
-    "Use one AIR-DROW mark across boot, settings and About App.",
-    "Read the complete interface in Kurdî (Sorani) or English, including export, creator and performance controls.",
-    "Use refined settings spacing, card hierarchy, responsive RTL/LTR alignment and higher-contrast light-mode icons.",
-    "Keep projects, backups and optional hand tools private on this device by default."
+    "Repairs the startup bootstrap declaration collision that could leave the app frozen at 7%.",
+    "Keeps touch, pen, optional camera-powered hand drawing, local projects and safe exports available.",
+    "Preserves local same-origin hand model and runtime delivery.",
+    "Retains Kurdish (Sorani) and English interface support with responsive RTL/LTR layout."
   ],
-  "assetRevision": "750",
+  "assetRevision": "751",
   "phase": 10,
-  "stage": "production-clean",
+  "stage": "bootstrap-hotfix",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",

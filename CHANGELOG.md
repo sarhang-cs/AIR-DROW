@@ -1,11 +1,9 @@
 # Changelog
 
-## 7.5.0 — Production Clean & Mobile Reliability Edition
+## 7.5.1 — Bootstrap Reliability Hotfix Edition
 
-- Removed first-install MediaPipe/model preloading and heavy install-cache payloads.
-- Consolidated late UI patch files into `production-ui.css`.
-- Completed Kurdish camera-stop and drawing-area localization; bootstrap recovery respects saved language.
-- Removed generated `public/` files from the source distribution; the build regenerates them deterministically.
-- Added origin allow-list, body-size cap, stricter request budget and retry headers for optional AI creation.
-- Added production integrity verification and a transactional Termux replacement script.
-- Added a production integrity gate and documented target-device camera QA.
+- Fixed the startup screen remaining at **7%**: `web/index.html` had two identical `const BOOT_COPY`, `preferredBootLanguage`, `bootLanguage`, and `bootCopy` declarations in one inline script. The browser correctly raised a syntax error before the app module could start.
+- Rebuilt the inline bootstrap as one declaration-safe startup routine.
+- Added inline-script syntax parsing to `npm run check`; duplicated bootstrap declarations now fail the build before a ZIP can be released.
+- Bumped all release identifiers to `air-drow-v751-bootstrap-hotfix` so the corrected startup script is fetched after deploy.
+- Retained lazy MediaPipe/model loading, generated `public/` output, and source-package cleanup from the previous production build.

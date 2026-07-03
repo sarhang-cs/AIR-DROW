@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW is a private drawing studio for touch, pen and optional hand drawing. Create, save and export from one place." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=750" />
-  <meta name="air-drow-build" content="air-drow-v750-production-clean" />
-  <meta name="air-drow-icon-pack" content="production-clean-v750" />
+  <link rel="manifest" href="./manifest.webmanifest?v=751" />
+  <meta name="air-drow-build" content="air-drow-v751-bootstrap-hotfix" />
+  <meta name="air-drow-icon-pack" content="bootstrap-hotfix-v751" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=750" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=751" />
   <title>AIR-DROW — Draw with Touch, Pen & Hand</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
@@ -23,11 +23,11 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=750" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=750" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=750" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=750" />
-    <link rel="stylesheet" href="./assets/css/production-ui.css?v=750" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=751" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=751" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=751" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=751" />
+    <link rel="stylesheet" href="./assets/css/production-ui.css?v=751" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
@@ -632,7 +632,7 @@
               <p class="about-summary" data-i18n="aboutSummary">بۆ کێشان بە تەچ، قەڵەم و ناساندنی دەست دروستکراوە؛ data و کێشانەکانت بە شێوەی local لە browser پارێزراون.</p>
             </div>
             <div class="about-grid about-grid-clean">
-              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v7.5.0</b></div>
+              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v7.5.1</b></div>
               <div><span data-i18n="aboutMadeFor">بۆ چی دروستکراوە؟</span><b data-i18n="aboutMadeForValue">تەچ • قەڵەم • دەست</b></div>
               <div><span data-i18n="aboutPrivacy">تایبەتمەندی</span><b data-i18n="aboutPrivacyValue">داتاکەت لەسەر ئامێرەکەت دەمێنێت</b></div>
             </div>
@@ -709,40 +709,18 @@
   </section>
   <script>
     /*
-      Bootstrap recovery is deliberately inline: it runs even when a stale
-      service worker serves an old/mismatched JavaScript module.  The previous
-      direct module entry could leave the shell visibly frozen at 7% with no
-      recovery path because the application module never evaluated.
+      This bootstrap is intentionally inline: it starts before the ES-module
+      graph and can recover from stale browser caches without leaving AIR-DROW
+      parked on the first loading frame.
     */
     (() => {
-      const BUILD_ID = "air-drow-v750-production-clean";
+      const BUILD_ID = "air-drow-v751-bootstrap-hotfix";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");
       const percent = document.getElementById("bootPercent");
       const fill = document.getElementById("bootProgressFill");
       const retry = document.getElementById("bootRetryBtn");
-      const BOOT_COPY = {
-        ku: {
-          preparing: "ستۆدیۆ ئامادە دەکرێت…",
-          refreshing: "فایلە ناوخۆییەکانی ستۆدیۆ نوێ دەکرێنەوە…",
-          failed: "ستۆدیۆ بار نەبوو. دوگمەی دووبارە هەوڵ بدە دابگرە.",
-        },
-        en: {
-          preparing: "Preparing studio…",
-          refreshing: "Refreshing local studio files…",
-          failed: "Studio could not load. Tap retry to refresh local files.",
-        }
-      };
-      function preferredBootLanguage() {
-        try { return localStorage.getItem("air-drow.language") === "en" ? "en" : "ku"; } catch { return "ku"; }
-      }
-      const bootLanguage = preferredBootLanguage();
-      const bootCopy = BOOT_COPY[bootLanguage];
-      if (bootLanguage === "en") {
-        document.documentElement.lang = "en";
-        document.documentElement.dir = "ltr";
-      }
       const BOOT_COPY = {
         ku: {
           preparing: "ستۆدیۆ ئامادە دەکرێت…",
@@ -756,7 +734,8 @@
         }
       };
       function preferredBootLanguage() {
-        try { return localStorage.getItem("air-drow.language") === "en" ? "en" : "ku"; } catch { return "ku"; }
+        try { return localStorage.getItem("air-drow.language") === "en" ? "en" : "ku"; }
+        catch { return "ku"; }
       }
       const bootLanguage = preferredBootLanguage();
       const bootCopy = BOOT_COPY[bootLanguage];
@@ -766,6 +745,7 @@
       }
       let loading = false;
       let recovered = false;
+      let moduleLoaded = false;
 
       function paint(progress, message) {
         const safe = Math.max(0, Math.min(100, Number(progress) || 0));
@@ -800,13 +780,14 @@
           retry.hidden = false;
           retry.onclick = async () => {
             sessionStorage.removeItem(ATTEMPT_KEY);
+            recovered = false;
             await recover();
           };
         }
       }
 
       async function recover() {
-        if (recovered) return;
+        if (recovered || window.__AIRDROW_APP_MODULE_READY) return;
         recovered = true;
         if (sessionStorage.getItem(ATTEMPT_KEY) === "1") {
           showManualRecovery();
@@ -829,6 +810,7 @@
         entry.type = "module";
         entry.src = `./assets/js/app.js?build=${encodeURIComponent(BUILD_ID)}`;
         entry.addEventListener("load", () => {
+          moduleLoaded = true;
           if (window.__AIRDROW_APP_MODULE_READY) sessionStorage.removeItem(ATTEMPT_KEY);
         }, { once: true });
         entry.addEventListener("error", () => { void recover(); }, { once: true });
@@ -837,7 +819,7 @@
 
       if (retry) retry.onclick = () => { void recover(); };
       window.setTimeout(() => {
-        if (!window.__AIRDROW_APP_MODULE_READY) void recover();
+        if (!window.__AIRDROW_APP_MODULE_READY && !moduleLoaded) void recover();
       }, 9000);
       loadApplication();
     })();

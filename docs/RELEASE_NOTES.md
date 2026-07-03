@@ -1,10 +1,15 @@
-# AIR-DROW v7.5.0 Release Notes
+# AIR-DROW v7.5.1 Release Notes
 
-## Production reliability
-The service worker now installs only the light application shell. The local hand model and MediaPipe runtime remain same-origin, but are fetched and cached only when the person opens Camera. This reduces first-install storage and network cost substantially on constrained Android devices.
+## Startup reliability hotfix
 
-## Clean source delivery
-`public/` is build output, not source. It is excluded from Git and this ZIP; `npm run vercel:build` recreates and verifies it before Vercel deploys.
+This release repairs a JavaScript declaration collision in the initial inline bootstrap. Because the same constants were declared twice, browsers stopped parsing the startup script before `app.js` was requested. The visible result was the AIR-DROW loading screen stuck at **7%**.
 
-## Language and safety
-Kurdish and English dictionaries are verified to contain identical keys. The camera-stop message and hand-check drawing-area label are translated. Optional AI creation stays disabled until explicitly enabled on the server and can be limited to approved origins using `AIRDROW_AI_ALLOWED_ORIGINS`.
+The startup routine is now a single clean script. The production gate additionally extracts and parses every inline script, so this failure mode is rejected during `npm run vercel:build`.
+
+## Deployment behavior
+
+The release build ID is now `air-drow-v751-bootstrap-hotfix`. Deploying this version makes the browser request the corrected HTML and module entry; the service worker continues to use network-first behavior for HTML and JavaScript modules.
+
+## Mobile behavior retained
+
+The app still loads the heavy hand model and MediaPipe runtime only when Camera is explicitly opened. Touch and pen drawing do not wait for camera assets.

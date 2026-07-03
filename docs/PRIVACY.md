@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 7.5.0 Production Clean & Mobile Reliability Edition.
+> This guide applies to AIR-DROW 7.5.1 Bootstrap Reliability Hotfix Edition.
 
 AIR-DROW is local-first.
 

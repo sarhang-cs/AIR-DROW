@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, rmSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
@@ -40,6 +40,19 @@ for (const file of modules) {
 const index = readFileSync(resolve(root, "web/index.html"), "utf8");
 if (!index.includes("air-drow-bootstrap-repair") || !index.includes('entry.type = "module"')) throw new Error("Recoverable application bootstrap is not linked from index.html.");
 if (index.includes("gateNewestRelease")) throw new Error("Legacy forced-update gate must not be shipped.");
-console.log("AIR-DROW source modules passed syntax and entrypoint validation.");
+/* Parse inline scripts too. A declaration collision in the initial bootstrap can
+ * freeze the UI before app.js is requested, so module-only syntax checking is
+ * insufficient. */
+const inlineScripts = [...index.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)].map(match => match[1].trim()).filter(Boolean);
+for (const [position, script] of inlineScripts.entries()) {
+  const temporary = resolve(root, `.tmp-inline-${position}.js`);
+  try {
+    writeFileSync(temporary, script, "utf8");
+    execFileSync(process.execPath, ["--check", temporary], { stdio: "inherit" });
+  } finally {
+    rmSync(temporary, { force: true });
+  }
+}
+console.log("AIR-DROW source modules and inline bootstrap passed syntax validation.");
 
 await import(new URL("./verify-toolbar-icon-bundle.mjs", import.meta.url));

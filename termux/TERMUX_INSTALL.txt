@@ -1,7 +1,7 @@
-AIR-DROW v7.5.0 — one-command safe replacement
+AIR-DROW v7.5.1 — one-command safe replacement
 
-Download AIR-DROW_v7.5.0_PRODUCTION_CLEAN.zip to /sdcard/Download, then paste this into Termux. Change only REPO if your old GitHub project is in a different folder:
+Download AIR-DROW_v7.5.1_BOOTSTRAP_HOTFIX.zip to /sdcard/Download, then paste this into Termux. Change only REPO if your old GitHub project is in a different folder:
 
-REPO="$HOME/AIR-DROW-GITHUB"; ZIP="/sdcard/Download/AIR-DROW_v7.5.0_PRODUCTION_CLEAN.zip"; pkg update -y && pkg install -y nodejs-lts git unzip && rm -rf "$HOME/AIR-DROW-V750" && mkdir -p "$HOME/AIR-DROW-V750" && unzip -q "$ZIP" -d "$HOME/AIR-DROW-V750" && bash "$HOME/AIR-DROW-V750/AIR-DROW-v7.5.0-PRODUCTION-CLEAN/termux/replace-with-v750-production-clean.sh" "$REPO"
+REPO="$HOME/AIR-DROW-GITHUB"; ZIP="/sdcard/Download/AIR-DROW_v7.5.1_BOOTSTRAP_HOTFIX.zip"; pkg update -y && pkg install -y nodejs-lts git unzip && rm -rf "$HOME/AIR-DROW-V751" && mkdir -p "$HOME/AIR-DROW-V751" && unzip -q "$ZIP" -d "$HOME/AIR-DROW-V751" && bash "$HOME/AIR-DROW-V751/AIR-DROW-v7.5.1-BOOTSTRAP-HOTFIX/termux/replace-with-v751-bootstrap-hotfix.sh" "$REPO"
 
 This backs up all old project files except .git, installs exact dependencies, builds, verifies, commits and pushes. If verification fails, it restores the old project automatically.

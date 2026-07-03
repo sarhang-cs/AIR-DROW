@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# AIR-DROW v7.5.0 — Production Clean & Mobile Reliability Edition
+# AIR-DROW v7.5.1 — Bootstrap Reliability Hotfix Edition
 # Transactional full replacement: preserve only .git, verify/build, then push.
 set -Eeuo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="7.5.0"
+VERSION="7.5.1"
 REPO="${1:-$HOME/AIR-DROW-GITHUB}"
 BACKUP="${REPO}.backup-${VERSION//./-}-$(date +%Y%m%d-%H%M%S)"
 RESTORE_REQUIRED=0
@@ -34,7 +34,7 @@ echo "Replacing old AIR-DROW project files with v$VERSION…"; cp -a "$SOURCE"/.
 cd "$REPO"; echo "Installing exact dependencies…"; npm_config_loglevel=error npm ci --no-audit --no-fund
 echo "Building and verifying AIR-DROW v$VERSION…"; npm run vercel:build
 RESTORE_REQUIRED=0; git add -A
-if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.5.0 production clean"; fi
+if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.5.1 bootstrap hotfix"; fi
 BRANCH="$(git branch --show-current 2>/dev/null || true)"; [ -n "$BRANCH" ] || BRANCH="main"
 git push origin "HEAD:$BRANCH"; rm -rf "$BACKUP"
 printf '\n========================================\nDONE ✅ AIR-DROW v%s was verified and pushed.\nVercel can now deploy the branch.\n========================================\n' "$VERSION"

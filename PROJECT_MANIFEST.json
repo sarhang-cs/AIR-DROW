@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.5.0",
-  "buildId": "air-drow-v750-production-clean",
-  "release": "Production Clean & Mobile Reliability Edition",
+  "version": "7.5.1",
+  "buildId": "air-drow-v751-bootstrap-hotfix",
+  "release": "Bootstrap Reliability Hotfix Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",

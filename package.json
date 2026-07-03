@@ -1,8 +1,8 @@
 {
   "name": "air-drow",
-  "version": "7.5.0",
+  "version": "7.5.1",
   "private": true,
-  "description": "AIR-DROW Production Clean & Mobile Reliability Edition \u2014 a private drawing studio for touch, pen and optional hand drawing.",
+  "description": "AIR-DROW Bootstrap Reliability Hotfix Edition \u2014 a private drawing studio for touch, pen and optional hand drawing.",
   "type": "module",
   "dependencies": {
     "@mediapipe/tasks-vision": "0.10.35"
@@ -24,7 +24,7 @@
     "verify:all": "npm run vercel:build",
     "release:verify": "node scripts/verify-final-release.mjs",
     "icons:local:verify": "node scripts/verify-local-icon-package.mjs",
-    "production:verify": "node scripts/verify-production-clean.mjs"
+    "production:verify": "node scripts/verify-bootstrap-hotfix.mjs"
   },
   "engines": {
     "node": ">=22 <25"
