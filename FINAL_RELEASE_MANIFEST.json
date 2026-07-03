@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Global User Edition",
-  "version": "7.1.0",
-  "buildId": "air-drow-v710-global-user-edition",
+  "name": "AIR-DROW UI Clarity Edition",
+  "version": "7.2.0",
+  "buildId": "air-drow-v720-ui-clarity",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",

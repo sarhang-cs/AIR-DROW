@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.1.0",
-  "buildId": "air-drow-v710-global-user-edition",
-  "release": "Global User Edition",
+  "version": "7.2.0",
+  "buildId": "air-drow-v720-ui-clarity",
+  "release": "UI Clarity Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -17,5 +17,5 @@
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
   "releaseGate": "npm run vercel:build validates the local hand model, source integrity and generated production assets.",
-  "support": "Use Settings > About App for App Check or Camera & Hand Check when a feature needs attention."
+  "support": "Use Settings > About App when you want to check app readiness or hand drawing."
 }

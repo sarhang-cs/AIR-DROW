@@ -25,13 +25,13 @@ Open the Projects area, name the project if you wish, then choose Save. Your pro
 
 Open Export, choose the available format and size, then create the file. AIR-DROW saves the current project first so your newest changes are protected.
 
-## Use App Check
+## Use App readiness
 
-Open **Settings → About App → App Check** when you want to confirm that local saving, graphics and AIR-DROW files are ready.
+Open **Settings → About App → App readiness** when you want to confirm that local saving, graphics and AIR-DROW files are ready.
 
-## Use Camera & Hand Check
+## Use Hand drawing check
 
-Open Camera first. When the live camera is visible, open **Settings → About App → Camera & Hand Check** to see whether hand drawing is ready.
+Open Camera first. When the live camera is visible, open **Settings → About App → Hand drawing check** to see whether hand drawing is ready.
 
 ## Privacy
 

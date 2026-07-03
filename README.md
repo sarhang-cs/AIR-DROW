@@ -6,7 +6,7 @@
 
 ### Draw with touch, pen and hand
 
-**SARHANG IO · 2026 · v7.1.0**
+**SARHANG IO · 2026 · v7.2.0**
 
 <img src="./web/assets/readme/air-drow-cover.svg" alt="AIR-DROW artwork" width="100%" />
 
@@ -72,17 +72,17 @@ AIR-DROW is designed to keep creative work close to you.
 - Camera permission is requested only after you choose to open Camera.
 - Camera video is used for the live hand tool and is not saved by AIR-DROW.
 - The hand model and runtime are delivered with the app, so the browser does not need to fetch a hand model while you draw.
-- App Check and Camera & Hand Check run locally and do not send a report anywhere.
+- App readiness and Hand drawing check run locally and do not send a report anywhere.
 - Optional AI creation is always an explicit action. Only the sketch you choose for that action is sent to the configured AI service.
 
 Read the full [Privacy Guide](./docs/PRIVACY.md).
 
-## App Check and Camera & Hand Check
+## App readiness and Hand drawing check
 
 In **Settings → About App**, AIR-DROW includes two simple helpers:
 
-- **App Check** confirms that the app, local drawing tools and saved data area are ready. It never opens the camera.
-- **Camera & Hand Check** helps after you have opened Camera yourself. It shows whether camera and hand drawing are ready to use.
+- **App readiness** confirms that the app, local drawing tools and saved data area are ready. It never opens the camera.
+- **Hand drawing check** helps after you have opened Camera yourself. It shows whether camera and hand drawing are ready to use.
 
 These checks are made for everyday use. They are not required before you start drawing.
 
@@ -114,18 +114,18 @@ Open **Settings → About App** and choose **Kurdî** or **English**. AIR-DROW k
 
 This release package includes the AIR-DROW source, the verified local hand model, self-hosted hand runtime files, local fonts, icons, documentation and the production build configuration. `node_modules` is intentionally not included because it is recreated exactly from `package-lock.json` during installation.
 
-## Release notes — v7.1.0
+## Release notes — v7.2.0
 
-- Cleaned final project structure and unified user-facing app copy.
-- Removed build IDs and developer-style labels from the app interface.
-- Renamed technical checks into friendly **App Check** and **Camera & Hand Check** tools.
-- Updated English and Kurdish documentation for real day-to-day use.
-- Included complete local hand-tracking data in the project package.
-- Kept the app local-first, installable and ready for production deployment.
+- Cleaned the mobile button system so selected actions and primary actions are always easy to read.
+- Removed constant decorative glow and reduced dense card-within-card styling.
+- Unified all on/off controls and dropdown arrows for a consistent Android experience.
+- Kept camera status subtle, separate from the selected drawing tool.
+- Made app and hand-drawing helpers friendlier, shorter and quieter before Camera is opened.
+- Kept AI feedback inside AI Studio and removed technical billing, key, deployment and server messages from the app interface.
 
 ## Need help?
 
-Use **Settings → About App** to run App Check, then open Camera and use Camera & Hand Check when you want help confirming hand drawing. For step-by-step guidance, read the [User Guide](./docs/USER_GUIDE.md) or [ڕێنمایی بەکارهێنان](./docs/USER_GUIDE_KU.md).
+Use **Settings → About App** to run App readiness, then open Camera and use Hand drawing check when you want help confirming hand drawing. For step-by-step guidance, read the [User Guide](./docs/USER_GUIDE.md) or [ڕێنمایی بەکارهێنان](./docs/USER_GUIDE_KU.md).
 
 ---
 

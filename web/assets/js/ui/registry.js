@@ -164,6 +164,7 @@ export function collectUi() {
   checkAi: $("checkAiBtn"),
   generateAi: $("generateAiBtn"),
   aiStatus: $("aiStatus"),
+  aiStudioSection: $("aiStudioSection"),
   aiResultModal: $("aiResultModal"),
   closeAiResult: $("closeAiResultBtn"),
   aiResultImage: $("aiResultImage"),

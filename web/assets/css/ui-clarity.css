@@ -1,0 +1,283 @@
+/* AIR-DROW UI Clarity Edition
+   Final mobile-first cleanup: one button language, restrained elevation,
+   one reliable switch component, one dropdown chevron and readable status UI. */
+:root {
+  --ui-primary-a: color-mix(in srgb, var(--accent-2) 86%, #28164d);
+  --ui-primary-b: color-mix(in srgb, var(--accent) 38%, #7042be);
+  --ui-primary-fg: #ffffff;
+  --ui-control-border: color-mix(in srgb, var(--accent) 20%, var(--line));
+  --ui-control-bg: color-mix(in srgb, var(--panel-2) 92%, transparent);
+  --ui-focus-ring: color-mix(in srgb, var(--accent) 36%, transparent);
+  --ui-hairline: color-mix(in srgb, var(--accent) 16%, var(--line));
+}
+
+/* The active tool is the active tool; a live camera is a subtle status, not a second selection. */
+.tool-button.active,
+.workspace-tab.is-active,
+.workspace-dock-button.is-active {
+  color: var(--ui-primary-fg) !important;
+  border-color: color-mix(in srgb, var(--accent) 56%, rgba(255,255,255,.42)) !important;
+  background: linear-gradient(135deg, var(--ui-primary-a), var(--ui-primary-b)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.30), 0 4px 10px color-mix(in srgb, var(--skin-shadow) 44%, transparent) !important;
+}
+.tool-button.camera-live:not(.active) {
+  position: relative;
+  color: var(--accent) !important;
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.tool-button.camera-live:not(.active)::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  border: 1px solid var(--panel-solid);
+  border-radius: 50%;
+  background: #35b98c;
+  box-shadow: none;
+}
+
+/* One readable action hierarchy. Static glow is removed; focus and press retain clear feedback. */
+.setting-action,
+.quick-start-next,
+.clear-confirm,
+.reset-confirm,
+.primary-consent {
+  color: var(--text) !important;
+  border-color: var(--ui-control-border) !important;
+  background: var(--ui-control-bg) !important;
+  box-shadow: inset 0 1px 0 var(--glass-highlight) !important;
+}
+.setting-action.primary-viral,
+.setting-action.ai-generate,
+.creator-pack-primary,
+.quick-start-next,
+.clear-confirm,
+.reset-confirm,
+.primary-consent {
+  color: var(--ui-primary-fg) !important;
+  border-color: color-mix(in srgb, var(--accent) 58%, rgba(255,255,255,.36)) !important;
+  background: linear-gradient(135deg, var(--ui-primary-a), var(--ui-primary-b)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.30), 0 4px 10px color-mix(in srgb, var(--skin-shadow) 38%, transparent) !important;
+  text-shadow: 0 1px 1px rgba(0,0,0,.18);
+}
+.setting-action:hover:not(:disabled),
+.setting-action:focus-visible,
+.quick-start-next:hover,
+.quick-start-next:focus-visible {
+  transform: translateY(-1px);
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--ui-focus-ring), inset 0 1px 0 var(--glass-highlight) !important;
+}
+.setting-action:active:not(:disabled),
+.quick-start-next:active { transform: translateY(0) scale(.985); }
+.setting-action:disabled,
+.ai-generate:disabled,
+.creator-pack-primary:disabled {
+  color: color-mix(in srgb, var(--text) 52%, transparent) !important;
+  border-color: var(--line-soft) !important;
+  background: color-mix(in srgb, var(--panel-2) 72%, transparent) !important;
+  box-shadow: none !important;
+  text-shadow: none;
+  opacity: .62;
+}
+
+/* Calm surface hierarchy: cards communicate grouping without heavy glow or nested-card noise. */
+.settings-section,
+.settings-section[open],
+.challenge-card,
+.shape-precision-card,
+.about-hero,
+.final-stability-card,
+.hand-calibration-card,
+.export-lab,
+.ai-result-panel,
+.device-readiness-card {
+  box-shadow: inset 0 1px 0 var(--glass-highlight) !important;
+}
+.settings-section {
+  border-color: var(--ui-hairline) !important;
+  background: color-mix(in srgb, var(--panel) 94%, transparent) !important;
+}
+.settings-section[open] { border-color: color-mix(in srgb, var(--accent) 32%, var(--line)) !important; }
+.settings-section[open] summary {
+  background: color-mix(in srgb, var(--accent-soft) 34%, transparent) !important;
+}
+.challenge-card,
+.shape-precision-card,
+.about-hero,
+.final-stability-card,
+.hand-calibration-card,
+.export-lab,
+.ai-result-panel,
+.device-readiness-card {
+  border-color: var(--ui-hairline) !important;
+  background: color-mix(in srgb, var(--panel-2) 78%, transparent) !important;
+}
+.viral-section .setting-body,
+.creator-pack-section .setting-body,
+.ai-studio-section .setting-body { gap: 10px; }
+.viral-divider { background: var(--line-soft) !important; }
+
+/* A single Android-safe switch. It cannot fall back to a blue native checkbox. */
+.toggle-control {
+  width: 48px !important;
+  height: 28px !important;
+  min-width: 48px !important;
+  min-height: 28px !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+.toggle-control > input[type="checkbox"] {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+.toggle-visual {
+  width: 48px !important;
+  height: 28px !important;
+  overflow: hidden !important;
+  border-color: color-mix(in srgb, var(--accent) 18%, var(--line)) !important;
+  background: color-mix(in srgb, var(--panel-solid) 84%, #000 16%) !important;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.22), inset 0 1px 0 var(--glass-highlight) !important;
+}
+.toggle-visual::after {
+  top: 3px !important;
+  left: 3px !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-color: rgba(255,255,255,.62) !important;
+  background: linear-gradient(145deg,#fff,#dfe3ee) !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,.26), inset 0 1px 0 rgba(255,255,255,.92) !important;
+}
+.toggle-control > input[type="checkbox"]:checked + .toggle-visual {
+  border-color: color-mix(in srgb, var(--accent) 66%, transparent) !important;
+  background: linear-gradient(135deg, var(--ui-primary-a), var(--ui-primary-b)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.32), 0 2px 7px color-mix(in srgb, var(--skin-shadow) 32%, transparent) !important;
+}
+.toggle-control > input[type="checkbox"]:checked + .toggle-visual::after { transform: translateX(20px) !important; }
+.toggle-control > input[type="checkbox"]:focus-visible + .toggle-visual { outline: 2px solid var(--accent) !important; outline-offset: 3px; }
+
+/* One crisp chevron replaces the duplicated triangle pair on mobile select controls. */
+.setting-line select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'%3E%3Cpath d='M4.5 6.75 9 11.25l4.5-4.5' fill='none' stroke='%23a98cf4' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-size: 18px 18px !important;
+  border-color: var(--ui-control-border) !important;
+  background-color: color-mix(in srgb, var(--panel-2) 90%, transparent) !important;
+}
+html[dir="ltr"] .setting-line select { background-position: calc(100% - 12px) 50% !important; padding-right: 42px !important; }
+html[dir="rtl"] .setting-line select { background-position: 12px 50% !important; padding-left: 42px !important; }
+
+/* Compact, readable status cards. Never clip the important result on a phone. */
+.about-grid-clean > div:last-child { grid-column: 1 / -1; }
+.about-grid-clean b,
+.device-readiness-list li span,
+.device-readiness-list li b {
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
+.device-readiness-list { gap: 8px !important; }
+.device-readiness-list li { min-height: 60px; padding: 9px !important; }
+.device-readiness-list li span { font-size: 9px !important; line-height: 1.35; }
+.device-readiness-list li b { min-height: 2.55em; margin-top: 4px; font-size: 10px !important; line-height: 1.35; }
+.device-readiness-card .compact-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.device-readiness-card .compact-actions .setting-action { width: 100%; }
+
+/* AI feedback belongs inside Create > AI Studio and never covers the drawing canvas. */
+.recovery-notice[data-kind="ai"] { display: none !important; }
+.ai-status { min-height: 2.8em; color: var(--muted); }
+.ai-studio-section[data-busy="true"] .ai-status { color: var(--accent); }
+[data-user-hidden="true"] { display: none !important; }
+
+@media (max-width: 390px) {
+  .device-readiness-list { grid-template-columns: 1fr 1fr !important; }
+  .device-readiness-card .compact-actions { grid-template-columns: 1fr; }
+  .creator-pack-grid, .ai-grid, .viral-grid { gap: 8px; }
+}
+
+/* Final visual safeguards: never let legacy glow or browser controls win on Android. */
+.setting-action,
+.setting-action > span,
+.setting-action > strong,
+.creator-pack-primary,
+.ai-generate,
+.primary-viral,
+.quick-start-next,
+.clear-confirm,
+.reset-confirm,
+.primary-consent {
+  -webkit-text-fill-color: currentColor !important;
+}
+.setting-action.primary-viral,
+.setting-action.ai-generate,
+.creator-pack-primary,
+.quick-start-next,
+.clear-confirm,
+.reset-confirm,
+.primary-consent,
+.setting-action.primary-viral *,
+.setting-action.ai-generate *,
+.creator-pack-primary *,
+.quick-start-next *,
+.clear-confirm *,
+.reset-confirm *,
+.primary-consent * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+.setting-action:disabled,
+.setting-action:disabled *,
+.ai-generate:disabled,
+.ai-generate:disabled *,
+.creator-pack-primary:disabled,
+.creator-pack-primary:disabled * {
+  color: color-mix(in srgb, var(--text) 52%, transparent) !important;
+  -webkit-text-fill-color: color-mix(in srgb, var(--text) 52%, transparent) !important;
+}
+/* All native select decorations are suppressed before the one SVG chevron is applied. */
+.setting-line select,
+.export-lab select,
+.viral-section select,
+.creator-pack-section select,
+.ai-studio-section select {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'%3E%3Cpath d='M4.5 6.75 9 11.25l4.5-4.5' fill='none' stroke='%23a98cf4' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-size: 18px 18px !important;
+  background-color: color-mix(in srgb, var(--panel-2) 90%, transparent) !important;
+}
+.setting-line select::-ms-expand { display: none; }
+/* Switch markup is visually driven only by the AIR-DROW track/knob. */
+.toggle-control > input[type="checkbox"] {
+  position: absolute !important;
+  inset: 0 auto auto 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+.toggle-control { position: relative !important; cursor: pointer; }
+.toggle-control:has(input:focus-visible) .toggle-visual { outline: 2px solid var(--accent) !important; outline-offset: 3px; }
+/* The global notice is reserved for camera/storage/offline recovery, never AI service availability. */
+#recoveryNotice[data-kind="ai"] { display: none !important; }
+/* Do not visually treat a camera state icon as an active draw tool. */
+.tool-button.camera-live:not(.active) .tool-label { color: var(--muted) !important; }
+/* Make readiness cards calm, roomy and legible rather than dashboard-like. */
+.device-readiness-card .small-status,
+.final-stability-card .small-status { line-height: 1.45; }
+.device-readiness-card [data-state="pending"] b { color: var(--muted) !important; }
+@media (max-width: 520px) {
+  .settings-section { border-radius: 22px !important; }
+  .settings-section + .settings-section { margin-top: 12px !important; }
+  .setting-action { min-height: 50px; }
+}

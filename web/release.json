@@ -1,27 +1,27 @@
 {
-  "version": "7.1.0",
-  "buildId": "air-drow-v710-global-user-edition",
+  "version": "7.2.0",
+  "buildId": "air-drow-v720-ui-clarity",
   "releasedAt": "2026-07-03T00:00:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Global User Edition: a polished local-first drawing studio for touch, pen and hand drawing.",
+  "summary": "AIR-DROW UI Clarity Edition: a calmer, more readable drawing studio for touch, pen and hand drawing.",
   "features": [
     "Draw with touch, pen or an optional camera-powered hand tool.",
+    "Use one clear button system, calmer panels and readable controls on mobile.",
     "Save projects, make backups, and export artwork from the same workspace.",
     "Use a local hand model and self-hosted runtime for private hand tracking.",
-    "Choose language, appearance, drawing tools and camera preferences from Settings.",
-    "Use the friendly App Check and Camera & Hand Check panels when you want help confirming that features are ready."
+    "Choose language, appearance, drawing tools and camera preferences from Settings."
   ],
-  "assetRevision": "710",
-  "phase": 7,
-  "stage": "global-user-experience-release",
+  "assetRevision": "720",
+  "phase": 8,
+  "stage": "ui-clarity-release",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",
     "handTracking": "The deployed app uses the local same-origin hand model and runtime. It does not download a hand model while you draw.",
-    "checks": "App Check and Camera & Hand Check only read local browser and app state. They do not open the camera themselves or send a report anywhere."
+    "checks": "App readiness and Hand drawing check only read local browser and app state. They do not open the camera themselves or send a report anywhere."
   },
   "buildPolicy": {
     "sourceModel": "web/vendor/models/hand_landmarker.task",

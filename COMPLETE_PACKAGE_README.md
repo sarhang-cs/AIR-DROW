@@ -1,10 +1,24 @@
-# AIR-DROW Complete Project Package
+# AIR-DROW Complete Package
 
-This folder contains the final AIR-DROW Global User Edition source package.
+This package contains the complete **AIR-DROW v7.2.0 UI Clarity Edition**.
 
-- Open `README.md` for the English overview.
-- Open `README_KU.md` for the Sorani Kurdish overview.
-- Use `docs/USER_GUIDE.md` or `docs/USER_GUIDE_KU.md` for everyday instructions.
-- The verified local hand model is included in `web/vendor/models/hand_landmarker.task`.
-- The self-hosted MediaPipe runtime files are included in `web/vendor/mediapipe`.
-- `node_modules` is intentionally not included; run `npm ci --no-audit --no-fund` to recreate it from `package-lock.json`.
+It includes the full app source, the local hand-drawing model, MediaPipe runtime files, fonts, icons, the ready-to-deploy app output, and user guides in Kurdish and English.
+
+## Start here
+
+- `README.md` — English overview
+- `README_KU.md` — ڕێنمایی کوردی
+- `docs/USER_GUIDE.md` and `docs/USER_GUIDE_KU.md` — everyday drawing, saving and hand-drawing help
+- `docs/PRIVACY.md` — privacy information
+
+## What works locally
+
+Touch drawing, pen drawing, saved projects, backups, exports, the optional hand tool, and the app checks all run inside the browser. AIR-DROW opens the camera only when the person using the app chooses Camera.
+
+The full local hand model and runtime are included, so hand drawing does not need to download its model while the app is running.
+
+## Installing this package
+
+Use the included `termux/replace-with-ui-clarity.sh` installer through the one-copy Termux command provided with the release. It keeps the GitHub connection, creates a backup first, checks the full app before pushing, and restores the previous project if the check cannot finish.
+
+`node_modules` is not included because it is recreated from the locked package list during installation.

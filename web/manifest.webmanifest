@@ -1,7 +1,7 @@
 {
   "name": "AIR-DROW — Draw with Touch, Pen & Hand",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v710",
+  "start_url": "./?build=v720",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",

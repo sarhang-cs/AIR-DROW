@@ -1,6 +1,6 @@
 {
-  "version": "7.1.0",
-  "buildId": "air-drow-v710-global-user-edition",
+  "version": "7.2.0",
+  "buildId": "air-drow-v720-ui-clarity",
   "policy": "AIR-DROW uses local same-origin interface assets, MediaPipe modules, WASM files and the verified hand model. Your drawing session is private to this device unless you choose an export, share or optional AI action.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -22,13 +22,13 @@
   "assets/lottie/hand-detected-verify.json": "assets/lottie/hand-detected-verify.json",
   "assets/lottie/hand-missing-error.json": "assets/lottie/hand-missing-error.json",
   "assets/lottie/hand-problem-warning.json": "assets/lottie/hand-problem-warning.json",
-  "note": "Kurdish UI uses local Noto Kufi Arabic. Drawing, hand tracking, projects, backups, exports, App Check and Camera & Hand Check work locally in the browser.",
+  "note": "Kurdish UI uses local Noto Kufi Arabic. Drawing, hand tracking, projects, backups, exports, App readiness and Hand drawing check work locally in the browser.",
   "interfaceIconSystem": {
     "folder": "assets/icons",
     "editable": true,
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v7.1.0 Global User Edition: refined user-facing copy, clean app information, friendly checks and complete local runtime assets.",
-  "assetRevision": "710"
+  "releaseStatus": "v7.2.0 UI Clarity Edition: readable controls, calmer surfaces and friendly app feedback.",
+  "assetRevision": "720"
 }

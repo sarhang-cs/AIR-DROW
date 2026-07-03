@@ -4,10 +4,10 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const required = [
-  "web/index.html", "web/assets/css/app.css", "web/assets/css/phase2-ui.css", "web/release.json", "web/sw.js", "web/manifest.webmanifest", "web/favicon.svg", "web/assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf",
+  "web/index.html", "web/assets/css/app.css", "web/assets/css/phase2-ui.css", "web/assets/css/ui-clarity.css", "web/release.json", "web/sw.js", "web/manifest.webmanifest", "web/favicon.svg", "web/assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf",
   "web/assets/js/app.js", "web/assets/js/config/runtime.js", "web/assets/js/i18n/translations.js", "web/assets/js/ui/registry.js", "web/assets/js/core/project-store.js", "web/assets/js/core/release-manager.js", "web/assets/js/core/font-kit.js", "web/assets/js/core/loading-manager.js", "web/assets/js/core/performance-governor.js", "web/assets/js/core/reliability-center.js", "web/assets/js/core/persistence-guard.js",
   "web/assets/js/features/device-readiness.js", "web/assets/js/features/final-live-qa.js", "web/assets/js/features/hand-calibration.js", "web/assets/js/features/hand-tracking-engine.js", "web/assets/js/features/onboarding-flow.js", "web/assets/js/features/exporter.js", "web/assets/js/features/ai-studio.js",
-  "web/vendor/models/hand_landmarker.task", "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-user-release.mjs", "scripts/verify-local-hand-model.mjs", "scripts/verify-hand-runtime-loader-fix.mjs", "scripts/verify-deployment-build-order.mjs", "scripts/sync-toolbar-icons.mjs", "scripts/verify-toolbar-icon-bundle.mjs", "api/health.js", "api/ai/generate.js", ".env.example", "vercel.json", "package.json"
+  "web/vendor/models/hand_landmarker.task", "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-user-release.mjs", "scripts/verify-ui-clarity.mjs", "scripts/verify-local-hand-model.mjs", "scripts/verify-hand-runtime-loader-fix.mjs", "scripts/verify-deployment-build-order.mjs", "scripts/sync-toolbar-icons.mjs", "scripts/verify-toolbar-icon-bundle.mjs", "api/health.js", "api/ai/generate.js", ".env.example", "vercel.json", "package.json"
 ];
 const icons = ["brush", "eraser", "hand", "camera", "undo", "redo", "trash", "moon", "sun", "settings"];
 const missing = [...required, ...icons.map(name => `web/assets/icons/toolbar/${name}.svg`)].filter(file => !existsSync(resolve(root, file)));

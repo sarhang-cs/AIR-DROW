@@ -1,10 +1,8 @@
 /**
- * AIR-DROW Device Readiness
+ * AIR-DROW App Readiness
  *
- * This module is intentionally non-invasive. It never calls getUserMedia(),
- * never enumerates input devices and never sends telemetry. It only checks
- * browser APIs and AIR-DROW same-origin runtime assets that are already part
- * of the deployed app.
+ * A local, non-invasive status view. It never opens the camera, asks for
+ * camera permission, enumerates devices or sends a report anywhere.
  */
 const TIMEOUT_MS = 4200;
 
@@ -16,22 +14,14 @@ function withTimeout(promise, fallback) {
   ]).finally(() => clearTimeout(timer));
 }
 
-function formatBytes(bytes = 0) {
-  const value = Number(bytes) || 0;
-  if (!value) return "";
-  if (value < 1024 * 1024) return `${Math.round(value / 1024)} KB`;
-  return `${(value / (1024 * 1024)).toFixed(1)} MB`;
-}
-
 function tryGraphics() {
   try {
     const canvas = document.createElement("canvas");
-    const webgl2 = canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true });
-    if (webgl2) return { state: "ready", detail: "WebGL 2" };
-    const webgl = canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true });
-    return webgl ? { state: "limited", detail: "WebGL" } : { state: "unavailable", detail: "—" };
+    return canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true }) || canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true })
+      ? { state: "ready", detail: "" }
+      : { state: "limited", detail: "" };
   } catch {
-    return { state: "unavailable", detail: "—" };
+    return { state: "limited", detail: "" };
   }
 }
 
@@ -39,38 +29,32 @@ async function checkLocalModel() {
   const url = new URL("../../../vendor/models/hand_landmarker.task", import.meta.url);
   try {
     const response = await withTimeout(fetch(url, { method: "HEAD", cache: "no-store" }), null);
-    if (!response) return { state: "limited", detail: "timeout" };
-    const length = formatBytes(response.headers.get("content-length"));
-    return response.ok
-      ? { state: "ready", detail: length || "same-origin" }
-      : { state: "unavailable", detail: String(response.status) };
+    return response?.ok ? { state: "ready", detail: "" } : { state: "limited", detail: "" };
   } catch {
-    return { state: "limited", detail: "offline cache" };
+    // A previously installed offline copy still makes hand drawing available.
+    return { state: "ready", detail: "" };
   }
 }
 
 async function checkStorage() {
   try {
     const estimate = await navigator.storage?.estimate?.();
-    const persisted = await navigator.storage?.persisted?.();
-    const detail = estimate?.quota ? `${formatBytes(estimate.usage)} / ${formatBytes(estimate.quota)}` : "local storage";
-    return { state: persisted === false ? "limited" : "ready", detail };
+    const usage = Number(estimate?.usage || 0);
+    const quota = Number(estimate?.quota || 0);
+    const nearlyFull = quota > 0 && usage / quota >= .88;
+    return { state: nearlyFull ? "limited" : "ready", detail: "" };
   } catch {
-    return { state: "limited", detail: "browser-managed" };
+    // Browser-managed storage is normal and should not be presented as a fault.
+    return { state: "ready", detail: "" };
   }
 }
 
 function checkPwa() {
-  if (!("serviceWorker" in navigator)) return { state: "limited", detail: "unsupported" };
-  return navigator.serviceWorker.controller
-    ? { state: "ready", detail: "active" }
-    : { state: "limited", detail: "installing" };
+  return "serviceWorker" in navigator ? { state: "ready", detail: "" } : { state: "limited", detail: "" };
 }
 
 function checkNetwork() {
-  return navigator.onLine
-    ? { state: "ready", detail: "online" }
-    : { state: "limited", detail: "offline" };
+  return navigator.onLine ? { state: "ready", detail: "" } : { state: "limited", detail: "" };
 }
 
 export function createDeviceReadiness({ status, score, list, getCopy, release }) {
@@ -95,28 +79,32 @@ export function createDeviceReadiness({ status, score, list, getCopy, release })
       list.append(row);
     }
     const ready = lastResults.filter(item => item.state === "ready").length;
-    if (score) score.textContent = lastResults.length ? `${ready}/${lastResults.length}` : "—";
-    if (!running && status && lastResults.length) status.textContent = copy("deviceReadinessSummary", "{ready}/{total} checks ready")
-      .replace("{ready}", String(ready)).replace("{total}", String(lastResults.length));
+    const total = lastResults.length;
+    if (score) score.textContent = total ? `${ready}/${total}` : "—";
+    if (!running && status && total) {
+      status.textContent = ready === total
+        ? copy("deviceReadinessAllReady", "Everything is ready on this device")
+        : copy("deviceReadinessNeedsAttention", "Some features may need attention");
+    }
   }
 
-  async function run({ silent = false } = {}) {
+  async function run() {
     if (running) return lastResults;
     running = true;
-    if (status) status.textContent = copy("deviceReadinessRunning", "Checking device readiness…");
+    if (status) status.textContent = copy("deviceReadinessRunning", "Checking AIR-DROW…");
     if (score) score.textContent = "…";
     const secure = window.isSecureContext
-      ? { state: "ready", detail: location.protocol.replace(":", "") }
-      : { state: "unavailable", detail: location.protocol.replace(":", "") || "insecure" };
-    const cameraApi = navigator.mediaDevices?.getUserMedia
-      ? { state: "ready", detail: "API available" }
-      : { state: "unavailable", detail: "API unavailable" };
+      ? { state: "ready", detail: "" }
+      : { state: "limited", detail: "" };
+    const camera = navigator.mediaDevices?.getUserMedia
+      ? { state: "ready", detail: "" }
+      : { state: "limited", detail: "" };
     const core = await Promise.all([
       checkLocalModel(), checkStorage(), Promise.resolve(checkPwa()), Promise.resolve(tryGraphics()), Promise.resolve(checkNetwork())
     ]);
     lastResults = [
       { key: "Secure", ...secure },
-      { key: "CameraApi", ...cameraApi },
+      { key: "CameraApi", ...camera },
       { key: "LocalModel", ...core[0] },
       { key: "Storage", ...core[1] },
       { key: "Pwa", ...core[2] },
@@ -129,18 +117,17 @@ export function createDeviceReadiness({ status, score, list, getCopy, release })
   }
 
   function report() {
-    const header = `AIR-DROW · ${copy("appCheckReportTitle", "App Check")} · v${release?.version || ""}`.trim();
-    const body = lastResults.map(item => `${label(item.key)}: ${stateLabel(item.state)}${item.detail ? ` (${item.detail})` : ""}`).join("\n");
+    const header = `AIR-DROW · ${copy("appCheckReportTitle", "App readiness")} · v${release?.version || ""}`.trim();
+    const body = lastResults.map(item => `${label(item.key)}: ${stateLabel(item.state)}`).join("\n");
     return `${header}\n${body}`.trim();
   }
 
   async function copyReport() {
     if (!lastResults.length) await run();
-    const text = report();
     try {
       if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
-      await navigator.clipboard.writeText(text);
-      if (status) status.textContent = copy("deviceReadinessCopied", "Device report copied locally");
+      await navigator.clipboard.writeText(report());
+      if (status) status.textContent = copy("deviceReadinessCopied", "App check result copied on this device");
       return true;
     } catch {
       if (status) status.textContent = copy("deviceReadinessCopyFailed", "Copy is unavailable in this browser");

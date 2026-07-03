@@ -60,9 +60,9 @@ export const config = { maxDuration: 60 };
 export default async function handler(req, res) {
   if (req.method !== "POST") return json(res, 405, { ok: false, message: "Method not allowed" });
   if (process.env.AIRDROW_AI_ENABLED !== "true" || !process.env.OPENAI_API_KEY) {
-    return json(res, 503, { ok: false, message: "AI Studio is not enabled on this deployment. Add OPENAI_API_KEY and AIRDROW_AI_ENABLED=true in Vercel Environment Variables." });
+    return json(res, 503, { ok: false, message: "AI creation is unavailable right now. Please try again later." });
   }
-  if (rateLimited(req)) return json(res, 429, { ok: false, message: "AI Studio limit reached. Please wait one minute before trying again." });
+  if (rateLimited(req)) return json(res, 429, { ok: false, message: "AI creation is busy right now. Please try again in a moment." });
 
   try {
     const body = req.body && typeof req.body === "object" ? req.body : {};
@@ -86,19 +86,18 @@ export default async function handler(req, res) {
     const payload = await response.json().catch(() => ({}));
     if (!response.ok || !payload?.data?.[0]?.b64_json) {
       const code = response.status || 502;
-      const detail = cleanText(payload?.error?.message || "Image generation did not complete", 180);
-      return json(res, code >= 400 && code < 600 ? code : 502, { ok: false, message: detail });
+      return json(res, code >= 400 && code < 600 ? code : 502, { ok: false, message: "AI creation could not be completed. Please try again later." });
     }
 
     return json(res, 200, {
       ok: true,
-      provider: "OpenAI GPT Image",
+      provider: "AI Studio",
       preset,
       image: `data:image/png;base64,${payload.data[0].b64_json}`,
       revisedPrompt: payload.data[0].revised_prompt || ""
     });
   } catch (error) {
     console.error("AIR-DROW AI generation error", error);
-    return json(res, 500, { ok: false, message: "AI Studio could not finish this request. Check your deployment settings and try again." });
+    return json(res, 500, { ok: false, message: "AI creation could not be completed. Please try again later." });
   }
 }

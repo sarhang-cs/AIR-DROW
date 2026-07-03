@@ -283,16 +283,17 @@ function reportHandEngineFailure(error) {
 
 function aiFailureMessage(error) {
   const raw = String(error?.message || error || "").toLowerCase();
-  if (/billing hard limit|insufficient_quota|quota|usage limit/.test(raw)) return t("aiBillingLimit", "AI credits or the project budget are unavailable. Add API billing credit, then try again.");
-  if (/unauthorized|api key|401/.test(raw)) return t("aiKeyProblem", "AI is not authorized. Check the protected Vercel API key and redeploy.");
-  if (/failed to fetch|network|offline/.test(raw)) return t("aiOffline", "AI needs an internet connection. Your local drawing is still safe.");
-  return t("aiFailed", "AI artwork could not be created");
+  if (/failed to fetch|network|offline/.test(raw)) return t("aiOffline", "AI creation needs an internet connection. Your drawing stays on this device.");
+  if (/billing hard limit|insufficient_quota|quota|usage limit|unauthorized|api key|401/.test(raw)) return t("aiUnavailable", "AI creation is unavailable right now. Your drawing is safe; please try again later.");
+  return t("aiFailed", "AI creation could not be completed. Your drawing stays on this device.");
 }
 
 function reportAiFailure(error) {
   const message = aiFailureMessage(error);
   setText(ui.aiStatus, message);
-  showRecovery({ kind: "ai", icon: "", title: t("aiRecoveryTitle", "AI needs attention"), body: message, actionLabel: t("aiCheckAgain", "Check AI"), action: () => checkAiStudio() });
+  // AI feedback belongs inside Create > AI Studio. It must never cover the canvas.
+  hideRecovery("ai");
+  toast(message);
 }
 
 function reportExportFailure(retry) {
@@ -584,14 +585,12 @@ async function restoreBackupArchive(file) {
     else await renderProjectGallery();
     await refreshStabilityStatus();
   const runDeviceReadiness = () => { void deviceReadiness?.run({ silent: true }); };
-  const runFinalLiveQa = () => { void finalLiveQa?.run({ silent: true }); };
   if ("requestIdleCallback" in window) {
     window.requestIdleCallback(runDeviceReadiness, { timeout: 2600 });
-    window.requestIdleCallback(runFinalLiveQa, { timeout: 3200 });
   } else {
     setTimeout(runDeviceReadiness, 900);
-    setTimeout(runFinalLiveQa, 1200);
   }
+  // Camera & Hand Check stays quiet until the person chooses to test the camera.
     loadingManager?.endTask("backup");
     const detail = result.restoredGallery ? ` · ${result.restoredGallery}` : "";
     setText(ui.backupStatus, `${t("backupRestored", "Backup restored")}${detail}`);
@@ -2462,7 +2461,11 @@ async function createCreatorTemplate(share = false) {
 
 function setAiBusy(busy, message = "") {
   state.aiBusy = Boolean(busy);
-  [ui.generateAi, ui.checkAi, ui.downloadAiResult, ui.shareAiResult].filter(Boolean).forEach(button => { button.disabled = Boolean(busy); });
+  [ui.generateAi, ui.checkAi, ui.downloadAiResult, ui.shareAiResult].filter(Boolean).forEach(button => {
+    button.disabled = Boolean(busy);
+    button.setAttribute("aria-busy", String(Boolean(busy)));
+  });
+  ui.aiStudioSection?.toggleAttribute("data-busy", Boolean(busy));
   if (message && ui.aiStatus) setText(ui.aiStatus, message);
   if (busy) loadingManager?.beginTask("ai", { label: message || t("progressPreparing", "Preparing…"), progress: 14, indeterminate: true });
   else loadingManager?.endTask("ai");
@@ -2478,16 +2481,15 @@ async function checkAiStudio() {
   try {
     const health = await ensureAiStudio().health();
     const message = health.aiConfigured
-      ? `${t("aiReady", "AI Studio is connected and ready.")} v${health.version || "?"}`
-      : t("aiNotConfigured", "AI endpoint is live, but OPENAI_API_KEY and AIRDROW_AI_ENABLED=true are required in Vercel.");
+      ? t("aiReady", "AI creation is ready.")
+      : t("aiNotConfigured", "AI creation is unavailable right now. Your drawing stays on this device.");
     setText(ui.aiStatus, message);
-    toast(health.aiConfigured ? t("aiReady", "AI Studio is connected and ready.") : t("aiNotConfiguredShort", "AI needs deployment setup"));
+    toast(health.aiConfigured ? t("aiReady", "AI creation is ready.") : t("aiNotConfiguredShort", "AI creation is unavailable right now"));
     return health;
   } catch (error) {
     console.warn(error);
-    const message = t("aiUnavailable", "AI endpoint is unavailable. Deploy on Vercel, then check again.");
+    const message = t("aiUnavailable", "AI creation is unavailable right now. Your drawing is safe; please try again later.");
     setText(ui.aiStatus, message);
-    toast(message);
     reportAiFailure(error);
     return null;
   } finally {
@@ -3259,14 +3261,12 @@ async function boot() {
   await loadLocalAssetManifest();
   await refreshStabilityStatus();
   const runDeviceReadiness = () => { void deviceReadiness?.run({ silent: true }); };
-  const runFinalLiveQa = () => { void finalLiveQa?.run({ silent: true }); };
   if ("requestIdleCallback" in window) {
     window.requestIdleCallback(runDeviceReadiness, { timeout: 2600 });
-    window.requestIdleCallback(runFinalLiveQa, { timeout: 3200 });
   } else {
     setTimeout(runDeviceReadiness, 900);
-    setTimeout(runFinalLiveQa, 1200);
   }
+  // Camera & Hand Check stays quiet until the person chooses to test the camera.
   void releaseManager.init();
   setGestureStatus("ready", t("gestureReady", "Ready"));
   updateHistoryControls();

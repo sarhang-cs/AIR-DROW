@@ -1,25 +1,13 @@
 /**
  * AIR-DROW Camera & Hand Check
  *
- * Passive local state report for the master release. This module does not call
- * getUserMedia(), does not enumerate devices and does not transmit telemetry.
- * Camera and hand rows only become ready after the creator uses the existing
- * Camera control and the running app exposes active state through getRuntime.
+ * Passive local state reporting only. It never opens the camera, asks for
+ * permission, enumerates devices or transmits information.
  */
 const RECENT_HAND_MS = 2400;
 
-function text(copy, key, fallback) {
-  return copy?.(key, fallback) || fallback;
-}
-
-function stateLabel(copy, state) {
-  return text(copy, `finalLiveQaStatus${state[0].toUpperCase()}${state.slice(1)}`, state);
-}
-
-function copyReportToClipboard(value) {
-  if (!navigator.clipboard?.writeText) return Promise.reject(new Error("Clipboard unavailable"));
-  return navigator.clipboard.writeText(value);
-}
+function text(copy, key, fallback) { return copy?.(key, fallback) || fallback; }
+function stateLabel(copy, state) { return text(copy, `finalLiveQaStatus${state[0].toUpperCase()}${state.slice(1)}`, state); }
 
 export function createFinalLiveQa({ status, score, list, getCopy, release, getRuntime }) {
   let lastResults = [];
@@ -40,23 +28,22 @@ export function createFinalLiveQa({ status, score, list, getCopy, release, getRu
       row.append(title, value);
       list.append(row);
     }
+    const cameraRow = lastResults.find(item => item.key === "Camera");
+    const cameraStarted = cameraRow?.state === "ready";
     const ready = lastResults.filter(item => item.state === "ready").length;
     const total = lastResults.length;
-    if (score) score.textContent = total ? `${ready}/${total}` : "—";
+    if (score) score.textContent = total && cameraStarted ? `${ready}/${total}` : "—";
     if (!running && status && total) {
-      const pending = lastResults.filter(item => item.state === "pending").length;
-      status.textContent = pending
-        ? copy("finalLiveQaSummaryPending", "{ready}/{total} checks ready · {pending} waiting for your live camera test")
-          .replace("{ready}", String(ready)).replace("{total}", String(total)).replace("{pending}", String(pending))
-        : copy("finalLiveQaSummary", "{ready}/{total} checks ready")
-          .replace("{ready}", String(ready)).replace("{total}", String(total));
+      status.textContent = cameraStarted
+        ? (ready === total ? copy("finalLiveQaAllReady", "Hand drawing is ready") : copy("finalLiveQaNeedsAttention", "Keep one hand clearly in the camera view"))
+        : copy("finalLiveQaOpenCamera", "Open Camera when you want to check hand drawing");
     }
   }
 
   async function run() {
     if (running) return lastResults;
     running = true;
-    if (status) status.textContent = copy("finalLiveQaRunning", "Reading final runtime state…");
+    if (status) status.textContent = copy("finalLiveQaRunning", "Checking camera and hand drawing…");
     if (score) score.textContent = "…";
     const runtime = getRuntime?.() || {};
     const now = Date.now();
@@ -64,12 +51,12 @@ export function createFinalLiveQa({ status, score, list, getCopy, release, getRu
     const engineReady = Boolean(runtime.handEngineReady);
     const handRecent = Number(runtime.handDetectedAt || 0) > 0 && now - Number(runtime.handDetectedAt) <= RECENT_HAND_MS;
     lastResults = [
-      { key: "Release", state: release?.version && release?.buildId ? "ready" : "unavailable", detail: release?.version ? `v${release.version}` : "metadata" },
-      { key: "Canvas", state: runtime.canvasReady ? "ready" : "unavailable", detail: runtime.canvasReady ? "interactive" : "not ready" },
-      { key: "Project", state: runtime.hasLocalProject ? "ready" : "limited", detail: runtime.lastSavedAt ? "saved locally" : "local session" },
-      { key: "Camera", state: cameraReady ? "ready" : "pending", detail: cameraReady ? "live frame" : copy("finalLiveQaCameraPending", "open camera to test") },
-      { key: "HandEngine", state: cameraReady ? (engineReady ? "ready" : "limited") : "pending", detail: cameraReady ? (engineReady ? (runtime.handDelegate || "local") : "loading") : copy("finalLiveQaEnginePending", "starts after camera") },
-      { key: "HandDetection", state: handRecent ? "ready" : "pending", detail: handRecent ? `${Math.round(Number(runtime.handFps || 0))} FPS` : copy("finalLiveQaHandPending", "show one hand in frame") }
+      { key: "Release", state: release?.version ? "ready" : "unavailable", detail: "" },
+      { key: "Canvas", state: runtime.canvasReady ? "ready" : "limited", detail: "" },
+      { key: "Project", state: runtime.hasLocalProject ? "ready" : "limited", detail: "" },
+      { key: "Camera", state: cameraReady ? "ready" : "pending", detail: cameraReady ? "" : copy("finalLiveQaCameraPending", "Open Camera") },
+      { key: "HandEngine", state: cameraReady ? (engineReady ? "ready" : "limited") : "pending", detail: cameraReady ? "" : copy("finalLiveQaEnginePending", "Open Camera") },
+      { key: "HandDetection", state: handRecent ? "ready" : "pending", detail: handRecent ? "" : copy("finalLiveQaHandPending", "Show one hand") }
     ];
     running = false;
     render();
@@ -79,15 +66,15 @@ export function createFinalLiveQa({ status, score, list, getCopy, release, getRu
   function report() {
     const header = `AIR-DROW · ${copy("cameraHandCheckReportTitle", "Camera & Hand Check")} · v${release?.version || ""}`.trim();
     const body = lastResults.map(item => `${label(item.key)}: ${stateLabel(copy, item.state)}${item.detail ? ` (${item.detail})` : ""}`).join("\n");
-    const footer = copy("finalLiveQaReportPrivacy", "Passive local report — no camera was opened and no data was transmitted by this check.");
-    return `${header}\n${body}\n${footer}`.trim();
+    return `${header}\n${body}`.trim();
   }
 
   async function copyReport() {
     if (!lastResults.length) await run();
     try {
-      await copyReportToClipboard(report());
-      if (status) status.textContent = copy("finalLiveQaCopied", "Final QA report copied locally");
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(report());
+      if (status) status.textContent = copy("finalLiveQaCopied", "Camera and hand result copied on this device");
       return true;
     } catch {
       if (status) status.textContent = copy("finalLiveQaCopyFailed", "Copy is unavailable in this browser");
@@ -95,5 +82,5 @@ export function createFinalLiveQa({ status, score, list, getCopy, release, getRu
     }
   }
 
-  return { run, render, report, copyReport };
+  return { run, render, copyReport, report };
 }
