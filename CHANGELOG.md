@@ -1,6 +1,6 @@
 # AIR-DROW Changelog
 
-## v7.5.2 — Runtime & Storage Reliability Hotfix
+## v7.5.3 — Interaction & Hand Scan Polish
 - Added the narrow `wasm-unsafe-eval` Content Security Policy allowance required by the self-hosted MediaPipe WebAssembly runtime.
 - Kept general JavaScript `unsafe-eval` disabled.
 - Moved Project Gallery loading out of normal Draw startup; it now loads when Projects is opened.
@@ -10,10 +10,10 @@
 
 # Changelog
 
-## 7.5.2 — Runtime & Storage Reliability Hotfix Edition
+## 7.5.3 — Interaction & Hand Scan Polish Edition
 
 - Fixed the startup screen remaining at **7%**: `web/index.html` had two identical `const BOOT_COPY`, `preferredBootLanguage`, `bootLanguage`, and `bootCopy` declarations in one inline script. The browser correctly raised a syntax error before the app module could start.
 - Rebuilt the inline bootstrap as one declaration-safe startup routine.
 - Added inline-script syntax parsing to `npm run check`; duplicated bootstrap declarations now fail the build before a ZIP can be released.
-- Bumped all release identifiers to `air-drow-v752-runtime-storage-hotfix` so the corrected startup script is fetched after deploy.
+- Bumped all release identifiers to `air-drow-v753-interaction-scan-polish` so the corrected startup script is fetched after deploy.
 - Retained lazy MediaPipe/model loading, generated `public/` output, and source-package cleanup from the previous production build.

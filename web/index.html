@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW is a private drawing studio for touch, pen and optional hand drawing. Create, save and export from one place." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=752" />
-  <meta name="air-drow-build" content="air-drow-v752-runtime-storage-hotfix" />
-  <meta name="air-drow-icon-pack" content="runtime-storage-hotfix-v752" />
+  <link rel="manifest" href="./manifest.webmanifest?v=753" />
+  <meta name="air-drow-build" content="air-drow-v753-interaction-scan-polish" />
+  <meta name="air-drow-icon-pack" content="interaction-scan-polish-v753" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=752" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=753" />
   <title>AIR-DROW — Draw with Touch, Pen & Hand</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
@@ -23,11 +23,11 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=752" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=752" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=752" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=752" />
-    <link rel="stylesheet" href="./assets/css/production-ui.css?v=752" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=753" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=753" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=753" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=753" />
+    <link rel="stylesheet" href="./assets/css/production-ui.css?v=753" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
@@ -168,14 +168,14 @@
     <div id="handScan" class="hand-scan" hidden data-stage="warm" aria-live="polite">
       <div class="hand-scan-surface">
         <div id="handScanStatus" class="hand-scan-status" data-visual="idle" aria-hidden="true">
-          <div class="hand-scan-status-icon success">
-            <span class="app-icon icon-status-success" aria-hidden="true"></span>
+          <div class="hand-scan-status-icon success" data-status-icon="verified">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4" opacity=".42"></circle><path d="M7.35 12.3l3.05 3.05 6.35-6.7"></path></svg>
           </div>
-          <div class="hand-scan-status-icon missing">
-            <span class="app-icon icon-status-missing" aria-hidden="true"></span>
+          <div class="hand-scan-status-icon missing" data-status-icon="warning">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 8.35 15.1a1.45 1.45 0 0 1-1.27 2.1H4.92a1.45 1.45 0 0 1-1.27-2.1L12 3.6Z"></path><path d="M12 9.25v4.45"></path><path d="M12 17.1h.01"></path></svg>
           </div>
-          <div class="hand-scan-status-icon problem">
-            <span class="app-icon icon-status-problem" aria-hidden="true"></span>
+          <div class="hand-scan-status-icon problem" data-status-icon="problem">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"></circle><path d="M12 7.9v5.05"></path><path d="M12 16.45h.01"></path></svg>
           </div>
         </div>
         <div class="hand-scan-reticle" aria-hidden="true"></div>
@@ -632,7 +632,7 @@
               <p class="about-summary" data-i18n="aboutSummary">بۆ کێشان بە تەچ، قەڵەم و ناساندنی دەست دروستکراوە؛ data و کێشانەکانت بە شێوەی local لە browser پارێزراون.</p>
             </div>
             <div class="about-grid about-grid-clean">
-              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v7.5.2</b></div>
+              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v7.5.3</b></div>
               <div><span data-i18n="aboutMadeFor">بۆ چی دروستکراوە؟</span><b data-i18n="aboutMadeForValue">تەچ • قەڵەم • دەست</b></div>
               <div><span data-i18n="aboutPrivacy">تایبەتمەندی</span><b data-i18n="aboutPrivacyValue">داتاکەت لەسەر ئامێرەکەت دەمێنێت</b></div>
             </div>
@@ -714,7 +714,7 @@
       parked on the first loading frame.
     */
     (() => {
-      const BUILD_ID = "air-drow-v752-runtime-storage-hotfix";
+      const BUILD_ID = "air-drow-v753-interaction-scan-polish";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

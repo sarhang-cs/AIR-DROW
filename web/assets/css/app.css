@@ -18,10 +18,33 @@
 }
 
 * { box-sizing: border-box; }
-html, body { width: 100%; min-height: 100%; margin: 0; background: var(--bg); color: var(--text); }
+/* Mobile interaction contract: AIR-DROW is a native-feeling drawing studio, so
+   Android text-selection callouts and browser tap flashes must never attach to
+   controls, cards or labels. Real text-entry fields remain editable below. */
+*, *::before, *::after { -webkit-tap-highlight-color: transparent; }
+html, body { width: 100%; min-height: 100%; margin: 0; background: var(--bg); color: var(--text); -webkit-touch-callout: none; }
 body { overflow: hidden; }
 button, input, select, textarea { font: inherit; }
-button { -webkit-tap-highlight-color: transparent; }
+.app, .app * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+/* Preserve ordinary text editing only where a person can enter real values. */
+.app input:not([type="range"]):not([type="checkbox"]):not([type="color"]),
+.app textarea,
+.app select,
+.app [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+button, summary, label, [role="button"], [data-workspace-nav], [data-camera-view],
+.setting-action, .tool-button, .workspace-tab, .workspace-dock-button,
+.toggle-control, .settings-section {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .app { position: relative; width: 100%; height: 100dvh; overflow: hidden; background: var(--bg); }
@@ -691,7 +714,7 @@ html[dir="ltr"] .camera-mode-option { align-items: flex-start; text-align: left;
 .hand-scan[data-stage="detect"] { --scan-core: #4d8fff; --scan-core-2: #79d5ff; --scan-progress: 76%; }
 .hand-scan[data-stage="found"] { --scan-core: #67a8ff; --scan-core-2: #93dcff; --scan-progress: 100%; }
 .hand-scan[data-stage="ready"] { --scan-core: #6fd2a0; --scan-core-2: #9ee7bf; --scan-progress: 100%; }
-.hand-scan[data-stage="missing"] { --scan-core: #7aa8ff; --scan-core-2: #aad8ff; --scan-progress: 32%; }
+.hand-scan[data-stage="missing"] { --scan-core: #f4bd55; --scan-core-2: #ffe29b; --scan-progress: 32%; }
 .hand-scan[data-stage="problem"] { --scan-core: #ffd160; --scan-core-2: #ffe69d; --scan-progress: 22%; }
 .hand-scan.is-hiding { opacity: 0; transform: translate(-50%, -50%) scale(.97); }
 
@@ -770,8 +793,8 @@ html[dir="ltr"] .camera-mode-option { align-items: flex-start; text-align: left;
 }
 
 .hand-scan[data-stage="missing"] .hand-scan-reticle {
-  border-color: #88b8ff;
-  box-shadow: 0 0 0 6px rgba(110, 164, 255, .10), 0 0 24px rgba(110, 164, 255, .18), inset 0 0 16px rgba(110,164,255,.10);
+  border-color: #ffd160;
+  box-shadow: 0 0 0 6px rgba(255,209,96,.12), 0 0 24px rgba(255,209,96,.24), inset 0 0 16px rgba(255,209,96,.12);
 }
 .hand-scan[data-stage="problem"] .hand-scan-reticle {
   border-color: #ffd160;
@@ -810,7 +833,17 @@ html[dir="ltr"] .camera-mode-option { align-items: flex-start; text-align: left;
   border: 1px solid rgba(255,255,255,.12);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 10px 24px rgba(0,0,0,.18);
 }
-.hand-scan-status-icon svg { width: 22px; height: 22px; }
+.hand-scan-status-icon svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.hand-scan-status-icon .app-icon { display: none; }
 .hand-scan-status[data-visual="success"] .hand-scan-status-icon.success,
 .hand-scan-status[data-visual="missing"] .hand-scan-status-icon.missing,
 .hand-scan-status[data-visual="problem"] .hand-scan-status-icon.problem {
@@ -822,16 +855,18 @@ html[dir="ltr"] .camera-mode-option { align-items: flex-start; text-align: left;
   background: linear-gradient(180deg, rgba(20,38,36,.74), rgba(14,28,35,.54));
 }
 .hand-scan-status-icon.missing {
-  color: #8cc2ff;
-  background: linear-gradient(180deg, rgba(19,28,48,.76), rgba(12,18,32,.56));
-}
-.hand-scan-status-icon.problem {
   color: #ffd160;
   background: linear-gradient(180deg, rgba(48,36,16,.82), rgba(24,18,8,.60));
+}
+.hand-scan-status-icon.problem {
+  color: #ff9b9b;
+  background: linear-gradient(180deg, rgba(54,24,30,.84), rgba(28,13,18,.62));
 }
 .hand-scan-status[data-visual="success"] .hand-scan-status-icon.success { animation: handScanStatusPop .64s cubic-bezier(.19,.89,.28,1.25); }
 .hand-scan-status[data-visual="missing"] .hand-scan-status-icon.missing,
 .hand-scan-status[data-visual="problem"] .hand-scan-status-icon.problem { animation: handScanStatusFloat 1.15s ease-in-out infinite; }
+.hand-scan[data-stage="ready"] .hand-scan-surface { animation: handScanSuccessSettle .62s cubic-bezier(.18,.92,.26,1.12) both; }
+.hand-scan.is-hiding .hand-scan-surface { animation: handScanDismiss .52s cubic-bezier(.4,0,.2,1) both; }
 .hand-scan[data-stage="found"] .hand-scan-reticle::before,
 .hand-scan[data-stage="found"] .hand-scan-reticle::after,
 .hand-scan[data-stage="ready"] .hand-scan-reticle::before,
@@ -849,6 +884,15 @@ html[dir="ltr"] .camera-mode-option { align-items: flex-start; text-align: left;
 }
 @keyframes handScanStatusFloat {
   50% { transform: translateY(-2px) scale(1.02); }
+}
+@keyframes handScanSuccessSettle {
+  0% { transform: scale(.96); filter: brightness(.94); }
+  56% { transform: scale(1.025); filter: brightness(1.10); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+@keyframes handScanDismiss {
+  0% { transform: scale(1); filter: blur(0); }
+  100% { transform: translateY(-12px) scale(.965); filter: blur(2px); }
 }
 
 .hand-scan-label {
@@ -922,8 +966,8 @@ html[dir="ltr"] .camera-mode-option { align-items: flex-start; text-align: left;
 
 :root[data-theme="light"] .hand-scan-status-icon { border-color: rgba(103, 136, 196, .16); box-shadow: inset 0 1px 0 rgba(255,255,255,.92), 0 12px 30px rgba(70, 92, 140, .12); }
 :root[data-theme="light"] .hand-scan-status-icon.success { background: linear-gradient(180deg, rgba(241,255,249,.96), rgba(230,245,255,.86)); color: #24a96f; }
-:root[data-theme="light"] .hand-scan-status-icon.missing { background: linear-gradient(180deg, rgba(241,247,255,.96), rgba(232,242,255,.88)); color: #4a8fff; }
-:root[data-theme="light"] .hand-scan-status-icon.problem { background: linear-gradient(180deg, rgba(255,251,239,.98), rgba(255,246,220,.92)); color: #d48b00; }
+:root[data-theme="light"] .hand-scan-status-icon.missing { background: linear-gradient(180deg, rgba(255,251,239,.98), rgba(255,246,220,.92)); color: #bf7900; }
+:root[data-theme="light"] .hand-scan-status-icon.problem { background: linear-gradient(180deg, rgba(255,244,245,.98), rgba(255,231,234,.92)); color: #c84456; }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .hand-scan-surface { background: color-mix(in srgb, var(--panel) 92%, #080913); }
@@ -933,7 +977,8 @@ html[dir="ltr"] .camera-mode-option { align-items: flex-start; text-align: left;
 :root.reduce-motion .hand-scan-reticle::before,
 :root.reduce-motion .hand-scan-reticle::after,
 :root.reduce-motion .hand-scan-progress i::after,
-:root.reduce-motion .hand-scan-status-icon { animation: none !important; }
+:root.reduce-motion .hand-scan-status-icon,
+:root.reduce-motion .hand-scan-surface { animation: none !important; }
 :root.reduce-motion .hand-scan-progress i { width: var(--scan-progress, 24%); }
 
 @media (max-width: 380px) {

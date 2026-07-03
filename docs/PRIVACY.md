@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 7.5.2 Runtime & Storage Reliability Hotfix Edition.
+> This guide applies to AIR-DROW 7.5.3 Interaction & Hand Scan Polish Edition.
 
 AIR-DROW is local-first.
 

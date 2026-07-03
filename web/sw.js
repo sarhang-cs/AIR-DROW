@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v752-runtime-storage-hotfix";
+const BUILD_ID = "air-drow-v753-interaction-scan-polish";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 

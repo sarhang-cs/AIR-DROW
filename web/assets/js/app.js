@@ -1664,11 +1664,16 @@ function hideHandScan(delay = 180) {
 
 function showHandScanReady() {
   clearTimeout(state.handScanReadyTimer);
+  /* A verified hand must be acknowledged clearly. The former implementation
+     changed to green and disappeared too quickly on mobile, making a real
+     successful check look like a flicker. */
   setHandScanStage("found", t("scanFound", "Hand found"), t("gestureArm", "Open hand detected — pinch is armed"));
   state.handScanReadyTimer = setTimeout(() => {
-    setHandScanStage("ready", t("trackingStable", "Stable and ready"), t("gestureArm", "Open hand detected — pinch is armed"));
-    hideHandScan(1400);
-  }, 760);
+    setHandScanStage("ready", t("handCheckPassed", "Hand check passed"), t("handReadyToDraw", "Hand tracking is ready to draw"));
+    state.handScanReadyTimer = setTimeout(() => {
+      hideHandScan(520);
+    }, 1850);
+  }, 640);
 }
 
 async function waitForCameraFrame(timeoutMs = 1800) {
@@ -3008,6 +3013,26 @@ async function checkApi() {
   await checkAiStudio();
 }
 
+function isEditableControlTarget(target) {
+  if (!(target instanceof Element)) return false;
+  return Boolean(target.closest('input:not([type="range"]):not([type="checkbox"]):not([type="color"]), textarea, select, [contenteditable="true"]'));
+}
+
+function bindMobileInteractionGuards() {
+  const belongsToApp = target => target instanceof Node && Boolean(ui?.app?.contains(target));
+  const blockBrowserSelection = event => {
+    if (belongsToApp(event.target) && !isEditableControlTarget(event.target)) event.preventDefault();
+  };
+  /* Prevent Android long-press from selecting interface labels, displaying
+     Copy/Search callouts, or applying the browser's blue press rectangle.
+     Text-entry controls intentionally remain native and editable. */
+  document.addEventListener("selectstart", blockBrowserSelection, { capture: true });
+  document.addEventListener("dragstart", blockBrowserSelection, { capture: true });
+  document.addEventListener("contextmenu", event => {
+    if (belongsToApp(event.target) && !isEditableControlTarget(event.target)) event.preventDefault();
+  }, { capture: true });
+}
+
 function bindControls() {
   ui.manual.addEventListener("click", () => setMode("manual"));
   ui.eraser.addEventListener("click", () => setMode("eraser"));
@@ -3308,6 +3333,7 @@ async function boot() {
   setWorkspace(state.workspace, { resetPanels: false });
   loadingManager.setBoot({ progress: 20, label: t("bootCanvas", "Setting up canvas…") });
   bindControls();
+  bindMobileInteractionGuards();
   bindPointerEvents();
   loadingManager.setBoot({ progress: 45, label: t("bootProject", "Opening local project…") });
   await loadProject();

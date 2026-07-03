@@ -1,4 +1,4 @@
-AIR-DROW v7.5.2 — Runtime & Storage Reliability Hotfix
+AIR-DROW v7.5.3 — Interaction & Hand Scan Polish
 
 1. Download the complete ZIP to /sdcard/Download.
 2. Run the one-line Termux command provided with this release.

@@ -9,7 +9,7 @@ const manifestPath = resolve(iconRoot, "USER_ICON_PACKAGE.json");
 if (!existsSync(manifestPath)) throw new Error("Local icon package manifest is missing.");
 
 const pack = JSON.parse(readFileSync(manifestPath, "utf8"));
-if (pack.version !== "7.5.2" || pack.buildId !== "air-drow-v752-runtime-storage-hotfix") {
+if (pack.version !== "7.5.3" || pack.buildId !== "air-drow-v753-interaction-scan-polish") {
   throw new Error("Local icon package metadata is inconsistent.");
 }
 if (!Array.isArray(pack.files) || pack.files.length < 30) {
