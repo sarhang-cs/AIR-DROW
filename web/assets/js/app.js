@@ -3163,6 +3163,11 @@ window.addEventListener("unhandledrejection", event => {
 });
 
 
+function syncReleaseIdentity() {
+  setText(ui?.appVersionValue, `v${AIRDROW_RELEASE.version}`);
+  setText(ui?.appBuildId, AIRDROW_RELEASE.buildId);
+}
+
 async function loadLocalAssetManifest() {
   try {
     const response = await fetch("./assets/LOCAL_ASSETS_MANIFEST.json", { cache: "force-cache" });
@@ -3180,6 +3185,7 @@ async function boot() {
   handCtx = ui.hand?.getContext?.("2d") || null;
   if (!drawCtx || !handCtx) throw new Error("AIR-DROW canvas contexts are unavailable");
 
+  syncReleaseIdentity();
   setupReliabilityCenter();
   loadingManager = createLoadingManager();
   performanceGovernor = createPerformanceGovernor({ mode: state.settings.performanceMode });

@@ -9,7 +9,7 @@ const version = JSON.parse(read("web/release.json")).version;
 const buildId = JSON.parse(read("web/release.json")).buildId;
 const packageJson = JSON.parse(read("package.json"));
 const release = JSON.parse(read("web/release.json"));
-if (release.phase < 1 || !release.assetRevision) throw new Error("release baseline metadata is incomplete.");
+if (release.phase !== 5 || release.stage !== "release-readiness-and-documentation" || !release.assetRevision) throw new Error("Phase 5 release metadata is incomplete.");
 const manifest = JSON.parse(read("PROJECT_MANIFEST.json"));
 const assetManifest = JSON.parse(read("web/assets/LOCAL_ASSETS_MANIFEST.json"));
 const modelManifest = JSON.parse(read("web/vendor/models/MODEL_MANIFEST.json"));
@@ -21,13 +21,13 @@ const hudVerifier = read("scripts/verify-transparent-status-hud.mjs");
 const fistGuideVerifier = read("scripts/verify-fist-guide-continuity.mjs");
 
 for (const file of [
-  "README.md", "README_KU.md", "CHANGELOG.md", "PHASE_4_PROJECT_SAFETY_MANIFEST.json", "PHASE_4_QA_REPORT.md",
-  "docs/CODEBASE_KU.md", "docs/DEPLOYMENT_KU.md", "docs/ASSET_REQUIREMENTS_KU.md", "docs/LOCAL_HAND_MODEL_KU.md", "docs/PHASE_4_PROJECT_SAFETY_KU.md",
+  "README.md", "README_KU.md", "CHANGELOG.md", "PHASE_4_PROJECT_SAFETY_MANIFEST.json", "PHASE_4_QA_REPORT.md", "PHASE_5_RELEASE_MANIFEST.json", "PHASE_5_QA_REPORT.md",
+  "docs/CODEBASE_KU.md", "docs/DEPLOYMENT_KU.md", "docs/ASSET_REQUIREMENTS_KU.md", "docs/LOCAL_HAND_MODEL_KU.md", "docs/PHASE_4_PROJECT_SAFETY_KU.md", "docs/PHASE_5_RELEASE_READINESS_KU.md", "docs/RELEASE_DELIVERY_KU.md",
   "docs/RELEASE_CHECKLIST_KU.md", "docs/TERMUX_FINAL_REPLACE_KU.md",
   "termux/replace-with-final-release.sh", "termux/verify-final-release.sh",
   "web/vendor/models/README.md", "web/vendor/models/MODEL_MANIFEST.json",
   "web/vendor/models/hand_landmarker.task", "scripts/verify-local-hand-model.mjs",
-  "web/assets/js/core/persistence-guard.js", "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-hand-sync-performance.mjs", "scripts/verify-phase3-hand-drawing.mjs", "scripts/verify-phase4-project-safety.mjs", "scripts/verify-transparent-status-hud.mjs", "scripts/verify-fist-guide-continuity.mjs"
+  "web/assets/js/core/persistence-guard.js", "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-hand-sync-performance.mjs", "scripts/verify-phase3-hand-drawing.mjs", "scripts/verify-phase4-project-safety.mjs", "scripts/verify-phase5-release-readiness.mjs", "scripts/verify-transparent-status-hud.mjs", "scripts/verify-fist-guide-continuity.mjs"
 ]) {
   if (!existsSync(resolve(root, file))) throw new Error(`Required final-release file is missing: ${file}`);
 }
@@ -43,7 +43,7 @@ for (const [label, value] of Object.entries({ release: release.buildId, projectM
 if (!runtime.includes(`version: "${version}"`) || !runtime.includes(`buildId: "${buildId}"`)) throw new Error("Runtime release metadata is inconsistent.");
 if (!worker.includes(`const BUILD_ID = "${buildId}"`)) throw new Error("Service worker build ID is inconsistent.");
 if (!worker.includes('/vendor/models/hand_landmarker.task') || !worker.includes('/vendor/mediapipe/vision_bundle.js')) throw new Error("Local hand runtime is not covered by the service-worker cache.");
-if (!index.includes(`content="${buildId}"`) || !index.includes(`v${version}`)) throw new Error("Index release metadata is inconsistent.");
+if (!index.includes(`content="${buildId}"`) || !index.includes(`v${version}`) || !index.includes('id="appVersionValue"') || !index.includes('id="appBuildId"')) throw new Error("Index release metadata is inconsistent.");
 if (!health.includes(`version: "${version}"`)) throw new Error("Health endpoint version is inconsistent.");
 if (!read("web/manifest.webmanifest").includes(`v${version}`)) throw new Error("PWA manifest version is inconsistent.");
 if (modelManifest.bytes !== 7819105 || modelManifest.sha256 !== "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1") throw new Error("Official model manifest integrity values are inconsistent.");

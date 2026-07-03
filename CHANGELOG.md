@@ -1,3 +1,18 @@
+# AIR-DROW v6.4.0 — Phase 5: Release Readiness & Documentation
+
+## Added
+- Added a canonical in-app release identity: Settings > About now shows the runtime version and exact build ID.
+- Added `phase5:verify`, `PHASE_5_RELEASE_MANIFEST.json`, Phase 5 QA report and Kurdish release/delivery documentation.
+
+## Changed
+- Synchronized version `6.4.0`, build ID `air-drow-v640-phase5-release-readiness` and asset revision `640` across package metadata, release descriptor, service worker, PWA manifest, health endpoint and local-asset manifest.
+- Replaced the long historical README front page with a current-release overview and build/deploy instructions.
+
+## Preserved
+- Phase 1–4 UI, hand tracking, local persistence, exports, updates and privacy behavior are unchanged.
+
+---
+
 # AIR-DROW Changelog
 
 ## v6.3.0 — Phase 4 project safety, export and onboarding polish

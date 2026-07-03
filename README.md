@@ -1,49 +1,35 @@
-# AIR-DROW v6.3.0 — Phase 4: Project Safety, Export & Onboarding Polish
+# AIR-DROW v6.4.0 — Final Release Readiness
 
-AIR-DROW now protects the latest valid local project with a bounded same-tab recovery journal, flushes saves as the app backgrounds or closes, saves before every export and before user-controlled updates, and provides a WebP-to-PNG fallback for incompatible mobile browsers. Backup delivery is safer on Android and the first-use flow supports swipe, keyboard navigation and focus restoration.
+AIR-DROW is a local-first drawing studio for touch, pen, camera and hand tracking. The browser loads the hand runtime and official HandLandmarker asset from the same deployed origin. Strokes, settings, recovery drafts and project backups remain on the device unless the creator explicitly exports, shares or uses the optional AI workflow.
 
----
+## Current release: Phase 5
 
-# AIR-DROW v6.2.0 — Phase 3: Hand Tracking & Drawing Engine
+Phase 5 makes the release package auditable and easier to maintain. The About panel now displays the runtime’s canonical version and build ID, metadata is synchronized across all release surfaces, and a dedicated verification gate prevents release documentation or UI identity from drifting.
 
-AIR-DROW Phase 3 refines the live hand-drawing path: velocity-aware fingertip tracking, lower-latency camera ink, stable pinch start/release behavior, a calibrated hand eraser, and bounded continuity through a brief closed fist or detector drop. A sudden detector jump still ends the active stroke immediately, so no bridge line is painted.
+- **Version:** `6.4.0`
+- **Build:** `air-drow-v640-phase5-release-readiness`
+- **Release gate:** `npm run vercel:build`
+- **Node.js:** `24.x`
+- **Runtime policy:** same-origin local MediaPipe modules and hand model; no browser-time CDN model download
 
----
+## What Phase 1–4 already delivered
 
-# AIR-DROW v6.1.0 — Phase 2: Premium UI, RTL & Mobile Layout
+- Foundation hardening, deterministic installs, Vercel build gates and a local-first hand runtime.
+- Premium mobile-first UI, RTL/LTR stability, themes, local icons and text-only FPS/Online/CAM overlays.
+- Velocity-aware hand drawing, stable pinch behavior, short closed-fist continuity, guarded jumps and calibrated eraser targeting.
+- Protected saves, recovery journaling, safe exports, update-save enforcement and touch-first onboarding.
 
-AIR-DROW now ships with a premium mobile-first Settings workspace, explicit Dark/Light modes, six complete UI skins and robust RTL/LTR control geometry. The drawing engine and local-first MediaPipe runtime remain unchanged.
+## Build and deploy
 
----
-
-# AIR-DROW v6.0.2 — Phase 1: Foundation Hardening
-
-This phase hardens the project foundation before UI and hand-engine refinements: deterministic `npm ci`, canonical release metadata, stricter Vercel build ordering, post-build generated-runtime verification and a local-first MediaPipe policy.
-
-**Current source-package note:** the exact `hand_landmarker.task` must be present at `web/vendor/models/hand_landmarker.task` for a fully offline build. `npm run vercel:build` can securely fetch and checksum-verify it only as a build-time fallback when it is absent. The deployed browser never downloads a remote hand model or MediaPipe runtime.
-
----
-
-# AIR-DROW v5.2.3 — Fist Guide Continuity Fix
-
-AIR-DROW is a local-first drawing studio for touch, pen, camera and hand tracking.
-
-## Closed-fist guide behavior
-The visible hand guide is now rendered whenever MediaPipe confidently returns hand landmarks, including a closed fist. The stricter open-hand geometry checks still control pinch drawing, so making a fist cannot accidentally start a stroke.
-
-A short, bounded guide hold hides single-frame detector drops caused by occlusion without leaving a frozen guide after the hand exits the camera.
-
-## Live status overlay
-`FPS`, `Online`, and `CAM` remain direct overlay text with no filled panel, border, pill, blur backdrop, or boxed background.
-
-## Deploy
 ```bash
-npm install
-npm run build
+npm ci --no-audit --no-fund
+npm run vercel:build
 ```
 
-Push the repository to GitHub; the linked Vercel project deploys automatically.
+Commit and push to the linked `main` branch. Vercel deploys automatically; when an automatic deployment is delayed, create a production deployment from `main` in the Vercel Deployments page.
 
-## v5.2.3 — Release Verification Recovery Fix
+## Validation
 
-The release validator now checks the transparent status HUD and closed-fist guide continuity independently, preventing the prior false build failure.
+The source verification chain covers release metadata, UI/RTL contracts, local assets, tracking, export/recovery behavior, Phase 5 readiness and the generated self-hosted MediaPipe output. The official hand model is verified by exact byte length and SHA-256.
+
+See `README_KU.md` for the Sorani Kurdish release overview and `docs/RELEASE_DELIVERY_KU.md` for the mobile/Termux delivery procedure.

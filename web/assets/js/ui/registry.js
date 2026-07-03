@@ -127,6 +127,8 @@ export function collectUi() {
   languageChoices: [...document.querySelectorAll("[data-language]")],
   colorSwatches: [...document.querySelectorAll("[data-color]")],
   fontStatus: $("fontStatus"),
+  appVersionValue: $("appVersionValue"),
+  appBuildId: $("appBuildId"),
   layoutOut: $("layoutOut"),
   export: $("exportBtn"),
   share: $("shareBtn"),

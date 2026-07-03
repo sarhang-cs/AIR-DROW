@@ -15,7 +15,7 @@ const i18n = read("web/assets/js/i18n/translations.js");
 const release = JSON.parse(read("web/release.json"));
 
 if (!existsSync(resolve(root, "web/assets/js/core/persistence-guard.js"))) throw new Error("Phase 4 persistence guard is missing.");
-if (release.phase !== 4 || release.stage !== "project-safety-and-polish") throw new Error("Phase 4 release metadata is incomplete.");
+if (release.phase < 4) throw new Error("Phase 4 project-safety baseline is missing from this release.");
 for (const marker of [
   "createPersistenceGuard", "captureRecoveryJournal", "recoverIfNewer", "flushProjectSave",
   'reason: "pagehide"', 'reason: "hidden"', "beforeunload", "Project could not be saved before export",

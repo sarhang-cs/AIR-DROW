@@ -1,22 +1,21 @@
 {
-  "version": "6.3.0",
-  "buildId": "air-drow-v630-phase4-project-safety",
+  "version": "6.4.0",
+  "buildId": "air-drow-v640-phase5-release-readiness",
   "releasedAt": "2026-07-03T00:00:00Z",
-  "channel": "phase",
+  "channel": "release",
   "updatePolicy": "user-controlled-save-before-apply",
   "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Phase 4 release: protected project recovery journal, lifecycle-safe local saves, WebP-to-PNG export fallback, Android-safe backup delivery, save-before-update enforcement and touch-first onboarding polish.",
+  "summary": "Phase 5 release: canonical source metadata, a visible in-app build identity, release-readiness checks, delivery documentation and final deployment guidance.",
   "features": [
-    "A bounded same-tab recovery journal protects the newest drawing state during refresh, renderer restart, background-tab eviction or a save interruption; it is restored only when newer than the persisted project.",
-    "Autosave now captures a protected draft immediately, flushes on page lifecycle transitions and reports a timestamped successful local save after IndexedDB commits.",
-    "Export saves the current project before output and falls back from unsupported WebP encoding to a valid PNG rather than failing the creator workflow.",
-    "Backup downloads retain their object URL long enough for delayed Android browser downloads, while update application checks that the project save completed before navigation.",
-    "Onboarding restores focus and accepts keyboard or horizontal touch navigation without changing the premium RTL/mobile visual system."
+    "The Settings > About panel now renders the canonical runtime version and build identifier, so the app itself exposes the exact release currently loaded by the browser.",
+    "Release metadata is synchronized across the package, PWA manifest, release descriptor, service worker, health endpoint, local asset manifest and project manifest.",
+    "A dedicated Phase 5 verifier checks that release documentation, in-app release identity, Kurdish/English copy and deployment contracts remain aligned before the static build runs.",
+    "The final release guide documents the local-first runtime, protected project recovery, safe exports, controlled updates and Termux/Vercel delivery sequence."
   ],
-  "assetRevision": "630",
-  "phase": 4,
-  "stage": "project-safety-and-polish",
+  "assetRevision": "640",
+  "phase": 5,
+  "stage": "release-readiness-and-documentation",
   "buildPolicy": {
     "sourceModel": "web/vendor/models/hand_landmarker.task",
     "fallback": "npm run model:sync remains recovery-only; production clients use the verified local asset.",
@@ -25,6 +24,8 @@
     "deploy": "npm run vercel:build",
     "projectSafety": "Recovery journaling is session-scoped and bounded. It never uploads drawing data and is cleared after a verified local persistence commit.",
     "export": "Exports save the current project first. Unsupported WebP encoding falls back to a PNG file locally.",
-    "updates": "Applying a release requires a completed local save before service-worker promotion or cache-busted navigation."
+    "updates": "Applying a release requires a completed local save before service-worker promotion or cache-busted navigation.",
+    "releaseReadiness": "Phase 5 validates canonical release identity in source, UI, documentation and generated deployment assets before the release is marked ready.",
+    "delivery": "Use npm run vercel:build locally or in CI. The deployment uses self-hosted MediaPipe runtime and the verified same-origin hand model only."
   }
 }

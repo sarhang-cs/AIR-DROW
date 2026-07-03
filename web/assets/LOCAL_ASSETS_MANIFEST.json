@@ -1,6 +1,6 @@
 {
-  "version": "6.3.0",
-  "buildId": "air-drow-v630-phase4-project-safety",
+  "version": "6.4.0",
+  "buildId": "air-drow-v640-phase5-release-readiness",
   "policy": "All browser runtime UI assets, MediaPipe modules, WASM files and the hand model are same-origin local assets. The exact official model must be packaged for final release; build-time synchronization is a controlled fallback only.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -29,6 +29,6 @@
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v6.3.0 Phase 4 protects local project state with a bounded same-tab recovery journal, lifecycle save flushes, resilient exports, Android-safe backups and safe controlled updates.",
-  "assetRevision": "630"
+  "releaseStatus": "v6.4.0 Phase 5 finalizes canonical source metadata, in-app build visibility, release documentation and pre-deployment readiness verification.",
+  "assetRevision": "640"
 }

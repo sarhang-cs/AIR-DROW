@@ -1,26 +1,17 @@
-# Release checklist — AIR-DROW v5.2.3
+# چێکلیستی کۆتایی بڵاوکردنەوە — AIR-DROW v6.4.0
 
-## پێش deploy
+## پێش push
 
-- [x] source ZIP ـەکە هیچ legacy hand-model ـێکی کۆنی تێدا نییە.
-- [x] `scripts/sync-official-hand-model.mjs` URL، قەبارە و SHA-256 ـی مۆدێلی فەرمی پشکنین دەکات.
-- [x] runtime بە `/vendor/models/hand_landmarker.task?model=v620-hand-drawing` ڕێکخراوە بۆ بەتاڵکردنەوەی cache ـی کۆن.
-- [x] service worker URL ـی نوێی مۆدێل و runtime ـە لۆکاڵەکان cache دەکات.
-- [x] version و build ID لە manifest، runtime، health API و service worker یەکخراون.
-- [x] هیچ remote model URL یان runtime download fallback نییە.
+- [ ] `npm ci --no-audit --no-fund` بێ هەڵە تەواو بوو.
+- [ ] `npm run vercel:build` بە سەرکەوتوویی تێپەڕبوو.
+- [ ] مۆدێلی `web/vendor/models/hand_landmarker.task` هەیە و checksum پەسەند کرا.
+- [ ] لە Settings > دەربارەی ئەپ، `v6.4.0` و `air-drow-v640-phase5-release-readiness` پێشبینی کراون.
 
-## لە کاتی build/deploy
+## دوای Vercel Ready
 
-- [ ] `npm run build` بە سەرکەوتوویی تەواو بێت.
-- [ ] `npm run model:verify` checksum ـی مۆدێلی دابەزێنراو پشتڕاست بکاتەوە.
-- [ ] `public/vendor/models/hand_landmarker.task` دوای build هەبێت.
-- [ ] deploy بە `npm run build` بکرێت، نەک `--prebuilt` یان public folder ـی بە تەنها.
-
-## دوای deploy
-
-- [ ] پەڕەکە refresh بکە و پەیامی update ـی PWA قبوڵ بکە، یان Chrome بکەوە و دووبارە بیکەرەوە.
-- [ ] Camera/Hand mode لە Android Chrome تاقی بکەرەوە و دڵنیابەوە پەیامی `Hand runtime is unavailable` نەماوە.
-
-
-## v5.2.3 status overlay note
-FPS, Online and CAM are source-defined transparent text overlays with no background panel.
+- [ ] Deployment = Ready و Production Current.
+- [ ] Settings > دەربارەی ئەپ وەشان و Build ID ـی نوێ پیشان دەدات.
+- [ ] کامێرا تەنها دوای کردارکردنی بەکارهێنەر permission داوا دەکات.
+- [ ] یەک هێڵ بە touch و یەک هێڵ بە pinch تاقی کراوەتەوە.
+- [ ] export ـی PNG/SVG تاقی کراوەتەوە.
+- [ ] پاش refresh، پڕۆژەی پاشەکەوتکراو بەردەوامە.

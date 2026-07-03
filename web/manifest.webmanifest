@@ -1,9 +1,9 @@
 {
-  "name": "AIR-DROW v6.3.0 \u2014 Project Safety & Export",
+  "name": "AIR-DROW v6.4.0 — Final Release",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v630",
+  "start_url": "./?build=v640",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
-  "description": "AIR-DROW: local drawing with protected recovery, safe exports, offline local-first persistence and reliable controlled updates."
+  "description": "AIR-DROW: local-first drawing for touch, pen and hand tracking with protected recovery, safe exports, self-hosted MediaPipe and controlled updates."
 }
