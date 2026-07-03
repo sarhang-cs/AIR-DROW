@@ -1,11 +1,11 @@
-# چێکلیستی کۆتایی بڵاوکردنەوە — AIR-DROW v6.4.0
+# چێکلیستی کۆتایی بڵاوکردنەوە — AIR-DROW v6.5.0
 
 ## پێش push
 
 - [ ] `npm ci --no-audit --no-fund` بێ هەڵە تەواو بوو.
 - [ ] `npm run vercel:build` بە سەرکەوتوویی تێپەڕبوو.
 - [ ] مۆدێلی `web/vendor/models/hand_landmarker.task` هەیە و checksum پەسەند کرا.
-- [ ] لە Settings > دەربارەی ئەپ، `v6.4.0` و `air-drow-v640-phase5-release-readiness` پێشبینی کراون.
+- [ ] لە Settings > دەربارەی ئەپ، `v6.5.0` و `air-drow-v650-phase6-device-readiness` پێشبینی کراون.
 
 ## دوای Vercel Ready
 

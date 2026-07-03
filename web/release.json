@@ -1,21 +1,21 @@
 {
-  "version": "6.4.0",
-  "buildId": "air-drow-v640-phase5-release-readiness",
+  "version": "6.5.0",
+  "buildId": "air-drow-v650-phase6-device-readiness",
   "releasedAt": "2026-07-03T00:00:00Z",
   "channel": "release",
   "updatePolicy": "user-controlled-save-before-apply",
   "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Phase 5 release: canonical source metadata, a visible in-app build identity, release-readiness checks, delivery documentation and final deployment guidance.",
+  "summary": "Phase 6 release: a privacy-preserving, real device-readiness console for the mobile browser, local hand model and installed runtime.",
   "features": [
-    "The Settings > About panel now renders the canonical runtime version and build identifier, so the app itself exposes the exact release currently loaded by the browser.",
-    "Release metadata is synchronized across the package, PWA manifest, release descriptor, service worker, health endpoint, local asset manifest and project manifest.",
-    "A dedicated Phase 5 verifier checks that release documentation, in-app release identity, Kurdish/English copy and deployment contracts remain aligned before the static build runs.",
-    "The final release guide documents the local-first runtime, protected project recovery, safe exports, controlled updates and Termux/Vercel delivery sequence."
+    "Settings > About now includes a real Device Readiness panel that checks secure context, camera API availability, local hand-model reachability, local storage, PWA control, graphics capability and network state.",
+    "The readiness check never opens the camera, never enumerates cameras, and never transmits device information. It only reads local browser capabilities and same-origin AIR-DROW assets.",
+    "A compact diagnostic report can be copied locally for troubleshooting. The report contains capability labels only; it contains no camera image, drawing content, personal identity or remote telemetry.",
+    "The Phase 6 source verifier keeps the readiness UI, translations, service-worker asset list and canonical release metadata aligned before deployment."
   ],
-  "assetRevision": "640",
-  "phase": 5,
-  "stage": "release-readiness-and-documentation",
+  "assetRevision": "650",
+  "phase": 6,
+  "stage": "device-readiness-and-runtime-diagnostics",
   "buildPolicy": {
     "sourceModel": "web/vendor/models/hand_landmarker.task",
     "fallback": "npm run model:sync remains recovery-only; production clients use the verified local asset.",
@@ -25,7 +25,8 @@
     "projectSafety": "Recovery journaling is session-scoped and bounded. It never uploads drawing data and is cleared after a verified local persistence commit.",
     "export": "Exports save the current project first. Unsupported WebP encoding falls back to a PNG file locally.",
     "updates": "Applying a release requires a completed local save before service-worker promotion or cache-busted navigation.",
-    "releaseReadiness": "Phase 5 validates canonical release identity in source, UI, documentation and generated deployment assets before the release is marked ready.",
-    "delivery": "Use npm run vercel:build locally or in CI. The deployment uses self-hosted MediaPipe runtime and the verified same-origin hand model only."
+    "releaseReadiness": "Phase 6 validates the device-readiness module, UI markers, translation coverage, same-origin model probe and PWA cache contract before static build runs.",
+    "delivery": "Use npm run vercel:build locally or in CI. The deployment uses self-hosted MediaPipe runtime and the verified same-origin hand model only.",
+    "deviceReadiness": "The in-app Device Readiness panel performs only non-invasive browser capability checks. It never calls getUserMedia(), never prompts for camera permission, never enumerates devices and never uploads diagnostic data."
   }
 }

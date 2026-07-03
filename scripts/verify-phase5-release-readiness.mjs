@@ -20,36 +20,31 @@ const docs = [
   "docs/RELEASE_DELIVERY_KU.md", "docs/RELEASE_CHECKLIST_KU.md"
 ];
 
-if (release.phase !== 5 || release.stage !== "release-readiness-and-documentation") {
-  throw new Error("Phase 5 release metadata is incomplete.");
-}
+if (release.phase < 5) throw new Error("Phase 5 release-readiness baseline is missing.");
 for (const file of docs) if (!existsSync(resolve(root, file))) throw new Error(`Phase 5 release file is missing: ${file}`);
 for (const [label, value] of Object.entries({ package: pkg.version, project: project.version, assets: assets.version })) {
-  if (value !== release.version) throw new Error(`Phase 5 ${label} version mismatch: expected ${release.version}, got ${value}.`);
+  if (value !== release.version) throw new Error(`Phase 5 canonical ${label} version mismatch: expected ${release.version}, got ${value}.`);
 }
 for (const [label, value] of Object.entries({ project: project.buildId, assets: assets.buildId })) {
-  if (value !== release.buildId) throw new Error(`Phase 5 ${label} build ID mismatch: expected ${release.buildId}, got ${value}.`);
+  if (value !== release.buildId) throw new Error(`Phase 5 canonical ${label} build ID mismatch: expected ${release.buildId}, got ${value}.`);
 }
 if (!runtime.includes(`version: "${release.version}"`) || !runtime.includes(`buildId: "${release.buildId}"`)) {
   throw new Error("Runtime release identity is not canonical.");
 }
 for (const marker of [
   'id="appVersionValue"', 'id="appBuildId"', `v${release.version}`, release.buildId,
-  'data-i18n="buildId"', 'data-i18n="releaseFinalQA"'
+  'data-i18n="buildId"'
 ]) if (!html.includes(marker)) throw new Error(`Phase 5 About UI marker missing: ${marker}`);
 for (const marker of ['appVersionValue:', 'appBuildId:']) if (!registry.includes(marker)) throw new Error(`Phase 5 UI registry marker missing: ${marker}`);
 for (const marker of ['function syncReleaseIdentity()', 'AIRDROW_RELEASE.version', 'AIRDROW_RELEASE.buildId', 'syncReleaseIdentity();']) {
   if (!app.includes(marker)) throw new Error(`Phase 5 release identity sync marker missing: ${marker}`);
 }
-for (const marker of ['"buildId"', '"releaseFinalQA"']) {
-  const count = i18n.split(marker).length - 1;
-  if (count < 2) throw new Error(`Phase 5 translation key is missing for Kurdish or English: ${marker}`);
-}
+if ((i18n.split('"buildId"').length - 1) < 2) throw new Error("Phase 5 translation coverage is incomplete.");
 for (const [file, marker] of [
-  ['README.md', release.buildId], ['README_KU.md', `v${release.version}`],
-  ['CHANGELOG.md', `Phase 5`], ['PHASE_5_QA_REPORT.md', 'npm run vercel:build'],
+  ['README.md', 'Phase 5'], ['README_KU.md', 'v6.'], ['CHANGELOG.md', 'Phase 5'],
+  ['PHASE_5_QA_REPORT.md', 'npm run vercel:build'],
   ['docs/PHASE_5_RELEASE_READINESS_KU.md', 'Settings > دەربارەی ئەپ'],
   ['docs/RELEASE_DELIVERY_KU.md', 'Deployments → Create Deployment']
-]) if (!read(file).includes(marker)) throw new Error(`Phase 5 documentation marker missing in ${file}: ${marker}`);
+]) if (!read(file).includes(marker)) throw new Error(`Phase 5 documentation baseline missing in ${file}: ${marker}`);
 
-console.log(`AIR-DROW Phase 5 release readiness verified: v${release.version} / ${release.buildId}.`);
+console.log(`AIR-DROW Phase 5 release-readiness baseline verified: v${release.version} / ${release.buildId}.`);

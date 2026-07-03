@@ -18,6 +18,7 @@ import { createReliabilityCenter } from "./core/reliability-center.js";
 import { createBackupManager } from "./core/backup-manager.js";
 import { createPersistenceGuard } from "./core/persistence-guard.js";
 import { createFinalStability } from "./core/final-stability.js";
+import { createDeviceReadiness } from "./features/device-readiness.js";
 import { createHandStabilizer, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
 import { createLocalHandLandmarker, primeLocalHandAssets } from "./features/hand-engine-bootstrap.js";
 import { APP_RELEASE as AIRDROW_RELEASE, HAND_MODEL, LEGACY_STORAGE_KEY, MEDIAPIPE_MODULE_URLS, MEDIAPIPE_WASM_URLS, OLD_MIRROR_KEY, PROFILE_RULES, QUICK_START_KEY, STORAGE_KEY, createDefaultSettings } from "./config/runtime.js";
@@ -43,6 +44,7 @@ let performanceGovernor = null;
 let backupManager = null;
 let persistenceGuard = null;
 let finalStability = null;
+let deviceReadiness = null;
 let releaseManager = null;
 let exporter = null;
 let replayStudio = null;
@@ -579,6 +581,9 @@ async function restoreBackupArchive(file) {
     if (result.restoredCurrent) await loadProject();
     else await renderProjectGallery();
     await refreshStabilityStatus();
+  const runDeviceReadiness = () => { void deviceReadiness?.run({ silent: true }); };
+  if ("requestIdleCallback" in window) window.requestIdleCallback(runDeviceReadiness, { timeout: 2600 });
+  else setTimeout(runDeviceReadiness, 900);
     loadingManager?.endTask("backup");
     const detail = result.restoredGallery ? ` · ${result.restoredGallery}` : "";
     setText(ui.backupStatus, `${t("backupRestored", "Backup restored")}${detail}`);
@@ -725,6 +730,7 @@ function applyLanguage() {
   if (ui.cameraModePicker) ui.cameraModePicker.dataset.title = state.settings.language === "en" ? "Choose camera mode" : "شێوازی کامێرا هەڵبژێرە";
   ui.languageChoices.forEach(button => button.classList.toggle("selected", button.dataset.language === language));
   setText(ui.fontStatus, language === "en" ? "System Sans" : "Noto Kufi Arabic");
+  deviceReadiness?.render();
   setWorkspace(state.workspace, { resetPanels: false });
   updateLiveHud();
 }
@@ -3028,6 +3034,8 @@ function bindControls() {
   ui.importBackup?.addEventListener("click", () => ui.importBackupInput?.click());
   ui.importBackupInput?.addEventListener("change", event => { const file = event.target.files?.[0]; void restoreBackupArchive(file); event.target.value = ""; });
   ui.runStabilityCheck?.addEventListener("click", () => { void refreshStabilityStatus({ announce: true }); });
+  ui.runDeviceReadiness?.addEventListener("click", () => { void deviceReadiness?.run(); });
+  ui.copyDeviceReadiness?.addEventListener("click", () => { void deviceReadiness?.copyReport(); });
   ui.galleryList?.addEventListener("click", event => {
     const button = event.target.closest("[data-gallery-action]");
     if (!button) return;
@@ -3192,6 +3200,13 @@ async function boot() {
   backupManager = createBackupManager({ projectStore, appVersion: AIRDROW_RELEASE.version });
   persistenceGuard = createPersistenceGuard();
   finalStability = createFinalStability({ projectStore, release: AIRDROW_RELEASE });
+  deviceReadiness = createDeviceReadiness({
+    status: ui.deviceReadinessStatus,
+    score: ui.deviceReadinessScore,
+    list: ui.deviceReadinessList,
+    getCopy: t,
+    release: AIRDROW_RELEASE
+  });
   loadingManager.setBoot({ progress: 8, label: t("bootPreparing", "Preparing studio…") });
   updateLayoutClass();
   setWorkspace(state.workspace, { resetPanels: false });
@@ -3216,6 +3231,9 @@ async function boot() {
   loadingManager.setBoot({ progress: 72, label: t("bootAssets", "Preparing local assets…") });
   await loadLocalAssetManifest();
   await refreshStabilityStatus();
+  const runDeviceReadiness = () => { void deviceReadiness?.run({ silent: true }); };
+  if ("requestIdleCallback" in window) window.requestIdleCallback(runDeviceReadiness, { timeout: 2600 });
+  else setTimeout(runDeviceReadiness, 900);
   void releaseManager.init();
   setGestureStatus("ready", t("gestureReady", "Ready"));
   updateHistoryControls();

@@ -1707,3 +1707,21 @@ html[lang="ku"] .mixed-inline, html[lang="ku"] .inline-code, .numeric-value { di
 
 /* SVG symbols used in onboarding stay inside the editable app asset bundle. */
 .quick-start-visual img { width: 30px; height: 30px; display: block; object-fit: contain; }
+
+
+/* Phase 6 — Device Readiness lives inside Settings > About; it does not affect the transparent live HUD. */
+.device-readiness-card { margin-top: 10px; padding: 11px; border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line)); border-radius: 14px; background: linear-gradient(145deg, color-mix(in srgb, var(--accent-soft) 68%, transparent), transparent 72%), var(--panel-2); }
+.device-readiness-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.device-readiness-head strong { display: block; color: var(--text); font-size: 11px; }
+.device-readiness-head p, .device-readiness-privacy { margin: 4px 0 0; color: var(--muted); font-size: 9px; line-height: 1.65; }
+.device-readiness-score { flex: 0 0 auto; min-width: 39px; padding: 5px 7px; border: 1px solid var(--line-soft); border-radius: 9px; color: var(--accent); background: var(--panel); font-size: 11px; direction: ltr; text-align: center; }
+.device-readiness-status { margin: 10px 0 7px; color: var(--text); font-size: 10px; font-weight: 700; }
+.device-readiness-list { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0 0 9px; padding: 0; list-style: none; }
+.device-readiness-list li { min-width: 0; padding: 7px; border: 1px solid var(--line-soft); border-radius: 9px; background: var(--panel); }
+.device-readiness-list li span, .device-readiness-list li b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.device-readiness-list li span { color: var(--muted); font-size: 8px; }
+.device-readiness-list li b { margin-top: 3px; color: var(--text); font-size: 9px; direction: ltr; text-align: start; }
+.device-readiness-list li[data-state="ready"] b { color: var(--success, #28b487); }
+.device-readiness-list li[data-state="limited"] b { color: var(--warning, #c98f2a); }
+.device-readiness-list li[data-state="unavailable"] b { color: var(--danger, #cf5d70); }
+@media (max-width: 360px) { .device-readiness-list { grid-template-columns: 1fr; } }

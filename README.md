@@ -1,3 +1,10 @@
+# AIR-DROW v6.5.0 — Device Ready Release
+
+AIR-DROW now includes **Device Readiness** in Settings → About. It performs real browser/runtime checks locally, without opening the camera or transmitting device information.
+
+**Active build:** `air-drow-v650-phase6-device-readiness`
+
+
 # AIR-DROW v6.4.0 — Final Release Readiness
 
 AIR-DROW is a local-first drawing studio for touch, pen, camera and hand tracking. The browser loads the hand runtime and official HandLandmarker asset from the same deployed origin. Strokes, settings, recovery drafts and project backups remain on the device unless the creator explicitly exports, shares or uses the optional AI workflow.

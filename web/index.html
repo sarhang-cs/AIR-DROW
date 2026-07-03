@@ -6,17 +6,17 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW Final Release — local-first drawing, protected projects, self-hosted hand tracking and reliable updates." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=640" />
-  <meta name="air-drow-build" content="air-drow-v640-phase5-release-readiness" />
-  <meta name="air-drow-icon-pack" content="phase5-release-readiness-v640" />
+  <link rel="manifest" href="./manifest.webmanifest?v=650" />
+  <meta name="air-drow-build" content="air-drow-v650-phase6-device-readiness" />
+  <meta name="air-drow-icon-pack" content="phase6-device-readiness-v650" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=640" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=650" />
   <link rel="modulepreload" href="./vendor/mediapipe/vision_bundle.js" />
   <link rel="preload" as="fetch" href="./vendor/models/hand_landmarker.task?model=v620-hand-drawing" crossorigin="anonymous" />
   <link rel="preload" as="fetch" href="./vendor/mediapipe/wasm/vision_wasm_internal.wasm" crossorigin="anonymous" />
-  <title>AIR-DROW v6.4.0 — Final Release</title>
+  <title>AIR-DROW v6.5.0 — Device Ready Release</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
       font-family: "Noto Kufi Arabic";
@@ -26,11 +26,11 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=640" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=640" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=640" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=640" />
-    <link rel="stylesheet" href="./assets/css/phase2-ui.css?v=640" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=650" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=650" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=650" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=650" />
+    <link rel="stylesheet" href="./assets/css/phase2-ui.css?v=650" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
@@ -636,11 +636,27 @@
             </div>
             <div class="about-grid">
               <div><span data-i18n="developer">گەشەپێدەر</span><b>SARHANG IO</b></div>
-              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v6.4.0</b></div>
-              <div><span data-i18n="buildId">ناسنامەی build</span><b id="appBuildId" class="about-build-id">air-drow-v640-phase5-release-readiness</b></div>
+              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v6.5.0</b></div>
+              <div><span data-i18n="buildId">ناسنامەی build</span><b id="appBuildId" class="about-build-id">air-drow-v650-phase6-device-readiness</b></div>
               <div><span data-i18n="uiFont">فۆنتی UI</span><b id="fontStatus">Noto / System</b></div>
-              <div><span data-i18n="release">Release</span><b data-i18n="releaseFinalQA">Final Release &amp; QA</b></div>
+              <div><span data-i18n="release">Release</span><b data-i18n="releaseDeviceReadiness">Final Release &amp; QA</b></div>
             </div>
+            <section class="device-readiness-card" aria-label="Device readiness" data-i18n-aria-label="ariaDeviceReadiness">
+              <div class="device-readiness-head">
+                <div>
+                  <strong data-i18n="deviceReadinessTitle">پشکنینی ئامادەیی ئامێر</strong>
+                  <p data-i18n="deviceReadinessHint">بەبێ کردنەوەی کامێرا، توانای وێبگەڕ و فایلە ناوخۆییەکان پشکنین دەکرێن.</p>
+                </div>
+                <b id="deviceReadinessScore" class="device-readiness-score" aria-live="polite">—</b>
+              </div>
+              <p id="deviceReadinessStatus" class="device-readiness-status" role="status" aria-live="polite" data-i18n="deviceReadinessIdle">هێشتا پشکنین نەکراوە.</p>
+              <ul id="deviceReadinessList" class="device-readiness-list" aria-live="polite"></ul>
+              <div class="compact-actions">
+                <button id="runDeviceReadinessBtn" type="button" class="setting-action" data-i18n="deviceReadinessRun">پشکنین بکە</button>
+                <button id="copyDeviceReadinessBtn" type="button" class="setting-action" data-i18n="deviceReadinessCopy">کۆپیکردنی ڕاپۆرت</button>
+              </div>
+              <p class="device-readiness-privacy" data-i18n="deviceReadinessPrivacy">ئەم پشکنینە ڕێگەپێدانی کامێرا داوا ناکات، هیچ کامێرا یان وێنەیەک ناکاتەوە و هیچ زانیارییەک بۆ دەرەوە نانێرێت.</p>
+            </section>
             <div id="languageChoices" class="language-switch">
               <button type="button" class="language-choice selected" data-language="ku">کوردی</button>
               <button type="button" class="language-choice" data-language="en">English</button>
@@ -688,7 +704,7 @@
       recovery path because the application module never evaluated.
     */
     (() => {
-      const BUILD_ID = "air-drow-v640-phase5-release-readiness";
+      const BUILD_ID = "air-drow-v650-phase6-device-readiness";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

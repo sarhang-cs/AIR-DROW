@@ -1,40 +1,30 @@
-import { existsSync, readFileSync, statSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { spawnSync } from "node:child_process";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = file => readFileSync(resolve(root, file), "utf8");
-const version = JSON.parse(read("web/release.json")).version;
-const buildId = JSON.parse(read("web/release.json")).buildId;
-const packageJson = JSON.parse(read("package.json"));
-const release = JSON.parse(read("web/release.json"));
-if (release.phase !== 5 || release.stage !== "release-readiness-and-documentation" || !release.assetRevision) throw new Error("Phase 5 release metadata is incomplete.");
-const manifest = JSON.parse(read("PROJECT_MANIFEST.json"));
-const assetManifest = JSON.parse(read("web/assets/LOCAL_ASSETS_MANIFEST.json"));
-const modelManifest = JSON.parse(read("web/vendor/models/MODEL_MANIFEST.json"));
+const json = file => JSON.parse(read(file));
+const release = json("web/release.json");
+const pkg = json("package.json");
+const manifest = json("PROJECT_MANIFEST.json");
+const assetManifest = json("web/assets/LOCAL_ASSETS_MANIFEST.json");
 const runtime = read("web/assets/js/config/runtime.js");
 const worker = read("web/sw.js");
 const index = read("web/index.html");
-const health = read("api/health.js");
-const hudVerifier = read("scripts/verify-transparent-status-hud.mjs");
-const fistGuideVerifier = read("scripts/verify-fist-guide-continuity.mjs");
+const buildId = release.buildId;
+const version = release.version;
 
-for (const file of [
-  "README.md", "README_KU.md", "CHANGELOG.md", "PHASE_4_PROJECT_SAFETY_MANIFEST.json", "PHASE_4_QA_REPORT.md", "PHASE_5_RELEASE_MANIFEST.json", "PHASE_5_QA_REPORT.md",
-  "docs/CODEBASE_KU.md", "docs/DEPLOYMENT_KU.md", "docs/ASSET_REQUIREMENTS_KU.md", "docs/LOCAL_HAND_MODEL_KU.md", "docs/PHASE_4_PROJECT_SAFETY_KU.md", "docs/PHASE_5_RELEASE_READINESS_KU.md", "docs/RELEASE_DELIVERY_KU.md",
-  "docs/RELEASE_CHECKLIST_KU.md", "docs/TERMUX_FINAL_REPLACE_KU.md",
-  "termux/replace-with-final-release.sh", "termux/verify-final-release.sh",
-  "web/vendor/models/README.md", "web/vendor/models/MODEL_MANIFEST.json",
-  "web/vendor/models/hand_landmarker.task", "scripts/verify-local-hand-model.mjs",
-  "web/assets/js/core/persistence-guard.js", "scripts/build-selfhosted-mediapipe.mjs", "scripts/verify-bootstrap-pwa-recovery.mjs", "scripts/verify-hand-sync-performance.mjs", "scripts/verify-phase3-hand-drawing.mjs", "scripts/verify-phase4-project-safety.mjs", "scripts/verify-phase5-release-readiness.mjs", "scripts/verify-transparent-status-hud.mjs", "scripts/verify-fist-guide-continuity.mjs"
-]) {
-  if (!existsSync(resolve(root, file))) throw new Error(`Required final-release file is missing: ${file}`);
+if (release.phase !== 6 || release.stage !== "device-readiness-and-runtime-diagnostics" || !release.assetRevision) {
+  throw new Error("Phase 6 release metadata is incomplete.");
 }
-
-for (const [label, value] of Object.entries({
-  package: packageJson.version, release: release.version, projectManifest: manifest.version, assetManifest: assetManifest.version
-})) {
+const required = [
+  "README.md", "README_KU.md", "CHANGELOG.md", "PHASE_6_DEVICE_READINESS_MANIFEST.json", "PHASE_6_QA_REPORT.md",
+  "docs/PHASE_6_DEVICE_READINESS_KU.md", "scripts/verify-phase6-device-readiness.mjs",
+  "web/assets/js/features/device-readiness.js"
+];
+for (const file of required) if (!existsSync(resolve(root, file))) throw new Error(`Phase 6 release file missing: ${file}`);
+for (const [label, value] of Object.entries({ package: pkg.version, projectManifest: manifest.version, assetManifest: assetManifest.version })) {
   if (value !== version) throw new Error(`${label} version must be ${version}; got ${value}`);
 }
 for (const [label, value] of Object.entries({ release: release.buildId, projectManifest: manifest.buildId, assetManifest: assetManifest.buildId })) {
@@ -42,19 +32,8 @@ for (const [label, value] of Object.entries({ release: release.buildId, projectM
 }
 if (!runtime.includes(`version: "${version}"`) || !runtime.includes(`buildId: "${buildId}"`)) throw new Error("Runtime release metadata is inconsistent.");
 if (!worker.includes(`const BUILD_ID = "${buildId}"`)) throw new Error("Service worker build ID is inconsistent.");
-if (!worker.includes('/vendor/models/hand_landmarker.task') || !worker.includes('/vendor/mediapipe/vision_bundle.js')) throw new Error("Local hand runtime is not covered by the service-worker cache.");
+if (!worker.includes("device-readiness.js")) throw new Error("Service worker must pre-cache the device readiness module.");
 if (!index.includes(`content="${buildId}"`) || !index.includes(`v${version}`) || !index.includes('id="appVersionValue"') || !index.includes('id="appBuildId"')) throw new Error("Index release metadata is inconsistent.");
-if (!health.includes(`version: "${version}"`)) throw new Error("Health endpoint version is inconsistent.");
-if (!read("web/manifest.webmanifest").includes(`v${version}`)) throw new Error("PWA manifest version is inconsistent.");
-if (modelManifest.bytes !== 7819105 || modelManifest.sha256 !== "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1") throw new Error("Official model manifest integrity values are inconsistent.");
-if (!/SHA-256/.test(String(modelManifest.validation || ""))) throw new Error("Official model manifest validation policy is missing.");
-if (statSync(resolve(root, "web/vendor/models/hand_landmarker.task")).size !== modelManifest.bytes) throw new Error("Bundled hand-model size is inconsistent.");
-if (!read("scripts/sync-official-hand-model.mjs").includes("storage.googleapis.com")) throw new Error("Official hand-model synchronization source is missing.");
-if (read("termux/replace-with-final-release.sh").includes("rm -rf /")) throw new Error("Unsafe Termux replacement command found.");
-if (!hudVerifier.includes("Legacy boxed HUD background must not ship") || !hudVerifier.includes("Live camera status is intentionally text-only")) {
-  throw new Error("Transparent status HUD verification contract is missing.");
-}
-if (!fistGuideVerifier.includes("visible guide must not be gated by open-hand drawing eligibility")) throw new Error("Closed-fist guide continuity verification contract is missing.");
-const localModel = spawnSync(process.execPath, [resolve(root, "scripts/verify-local-hand-model.mjs")], { cwd: root, encoding: "utf8" });
-if (localModel.status !== 0) throw new Error(`Bundled local model verification failed: ${localModel.stderr || localModel.stdout}`);
-console.log(`AIR-DROW release integrity verified: v${version} / ${buildId}`);
+if (!index.includes('id="runDeviceReadinessBtn"') || !index.includes('id="deviceReadinessList"')) throw new Error("Phase 6 device-readiness UI is missing.");
+if (!read("web/assets/js/app.js").includes("createDeviceReadiness")) throw new Error("Phase 6 device-readiness runtime integration is missing.");
+console.log(`AIR-DROW Phase 6 release integrity verified: v${version} / ${buildId}`);

@@ -1,3 +1,10 @@
+# AIR-DROW v6.5.0 — Phase 6: Device Readiness & Runtime Diagnostics
+
+- Added a non-invasive Device Readiness panel in Settings → About.
+- Reports real secure-context, camera-API, same-origin model, storage, PWA, graphics and network status.
+- Never opens the camera, requests permission, enumerates devices or uploads diagnostics.
+- Added `phase6:verify`, a Phase 6 manifest, QA report and Kurdish implementation guide.
+
 # AIR-DROW v6.4.0 — Phase 5: Release Readiness & Documentation
 
 ## Added

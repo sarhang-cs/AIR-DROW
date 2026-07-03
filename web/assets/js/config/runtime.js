@@ -15,7 +15,7 @@ export const MEDIAPIPE_MODULE_URLS = [new URL("../../../vendor/mediapipe/vision_
 export const MEDIAPIPE_WASM_URLS = [new URL("../../../vendor/mediapipe/wasm", import.meta.url).href];
 export const HAND_MODEL = new URL("../../../vendor/models/hand_landmarker.task?model=v620-hand-drawing", import.meta.url).href;
 
-export const APP_RELEASE = Object.freeze({ version: "6.4.0", buildId: "air-drow-v640-phase5-release-readiness" });
+export const APP_RELEASE = Object.freeze({ version: "6.5.0", buildId: "air-drow-v650-phase6-device-readiness" });
 export const QUICK_START_KEY = "air-drow.v640.quick-start.complete";
 
 export const PROFILE_RULES = Object.freeze({

@@ -1,9 +1,9 @@
 {
-  "name": "AIR-DROW v6.4.0 — Final Release",
+  "name": "AIR-DROW v6.5.0 — Device Ready Release",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v640",
+  "start_url": "./?build=v650",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
-  "description": "AIR-DROW: local-first drawing for touch, pen and hand tracking with protected recovery, safe exports, self-hosted MediaPipe and controlled updates."
+  "description": "AIR-DROW: local-first drawing for touch, pen and hand tracking with protected recovery, safe exports, self-hosted MediaPipe, controlled updates and privacy-preserving device readiness diagnostics."
 }
