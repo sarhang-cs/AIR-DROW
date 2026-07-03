@@ -1725,3 +1725,7 @@ html[lang="ku"] .mixed-inline, html[lang="ku"] .inline-code, .numeric-value { di
 .device-readiness-list li[data-state="limited"] b { color: var(--warning, #c98f2a); }
 .device-readiness-list li[data-state="unavailable"] b { color: var(--danger, #cf5d70); }
 @media (max-width: 360px) { .device-readiness-list { grid-template-columns: 1fr; } }
+
+/* Phase 7 final live QA: passive state reporting, no camera action. */
+.final-live-qa-card { border-color: color-mix(in srgb, var(--accent) 34%, var(--line)); }
+.device-readiness-list li[data-state="pending"] b { color: var(--warning, #c98f2a); }

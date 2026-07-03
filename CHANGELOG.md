@@ -1,3 +1,10 @@
+# Changelog
+
+## v7.0.0 — Final Live QA & Master Release
+- Added passive local Final Live QA for release, canvas, project, camera, hand-engine and hand-detection state.
+- Added Phase 7 source verifier, PWA cache contract and master Termux delivery script.
+- No camera permission is requested by Final Live QA; live camera verification remains creator-initiated.
+
 # AIR-DROW v6.5.0 — Phase 6: Device Readiness & Runtime Diagnostics
 
 - Added a non-invasive Device Readiness panel in Settings → About.

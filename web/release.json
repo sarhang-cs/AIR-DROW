@@ -1,21 +1,24 @@
 {
-  "version": "6.5.0",
-  "buildId": "air-drow-v650-phase6-device-readiness",
+  "version": "7.0.0",
+  "buildId": "air-drow-v700-phase7-final-live-qa",
   "releasedAt": "2026-07-03T00:00:00Z",
   "channel": "release",
   "updatePolicy": "user-controlled-save-before-apply",
   "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Phase 6 release: a privacy-preserving, real device-readiness console for the mobile browser, local hand model and installed runtime.",
+  "summary": "Phase 7 master release: a truthful local final-QA panel combines static release checks with live camera and hand-engine state only after the creator starts the camera.",
   "features": [
     "Settings > About now includes a real Device Readiness panel that checks secure context, camera API availability, local hand-model reachability, local storage, PWA control, graphics capability and network state.",
     "The readiness check never opens the camera, never enumerates cameras, and never transmits device information. It only reads local browser capabilities and same-origin AIR-DROW assets.",
     "A compact diagnostic report can be copied locally for troubleshooting. The report contains capability labels only; it contains no camera image, drawing content, personal identity or remote telemetry.",
-    "The Phase 6 source verifier keeps the readiness UI, translations, service-worker asset list and canonical release metadata aligned before deployment."
+    "The Phase 6 source verifier keeps the readiness UI, translations, service-worker asset list and canonical release metadata aligned before deployment.",
+    "Settings > About includes Final Live QA. It reports release identity, canvas readiness, save safety, and — only when already active — camera, hand-engine and recent hand-detection state.",
+    "Final Live QA never calls getUserMedia(), never requests permission, never enumerates hardware and never transmits any diagnostic data. Camera verification stays creator-initiated via the existing Camera button.",
+    "The final release source verifier keeps the live-QA UI, translations, PWA cache list, build metadata, release documents and static delivery contract aligned before deployment."
   ],
-  "assetRevision": "650",
-  "phase": 6,
-  "stage": "device-readiness-and-runtime-diagnostics",
+  "assetRevision": "700",
+  "phase": 7,
+  "stage": "final-live-qa-and-master-release",
   "buildPolicy": {
     "sourceModel": "web/vendor/models/hand_landmarker.task",
     "fallback": "npm run model:sync remains recovery-only; production clients use the verified local asset.",
@@ -27,6 +30,8 @@
     "updates": "Applying a release requires a completed local save before service-worker promotion or cache-busted navigation.",
     "releaseReadiness": "Phase 6 validates the device-readiness module, UI markers, translation coverage, same-origin model probe and PWA cache contract before static build runs.",
     "delivery": "Use npm run vercel:build locally or in CI. The deployment uses self-hosted MediaPipe runtime and the verified same-origin hand model only.",
-    "deviceReadiness": "The in-app Device Readiness panel performs only non-invasive browser capability checks. It never calls getUserMedia(), never prompts for camera permission, never enumerates devices and never uploads diagnostic data."
+    "deviceReadiness": "The in-app Device Readiness panel performs only non-invasive browser capability checks. It never calls getUserMedia(), never prompts for camera permission, never enumerates devices and never uploads diagnostic data.",
+    "finalLiveQa": "The Final Live QA panel performs local passive runtime checks only. It does not open the camera or send telemetry. Camera/hand rows become ready only after the creator independently opens the camera and a current hand detection exists.",
+    "masterRelease": "Use npm run vercel:build for deterministic static output. The source ZIP excludes the large official model; the Termux installer preserves the previously verified same-origin model before building."
   }
 }

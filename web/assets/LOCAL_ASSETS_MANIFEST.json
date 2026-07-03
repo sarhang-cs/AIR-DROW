@@ -1,6 +1,6 @@
 {
-  "version": "6.5.0",
-  "buildId": "air-drow-v650-phase6-device-readiness",
+  "version": "7.0.0",
+  "buildId": "air-drow-v700-phase7-final-live-qa",
   "policy": "All browser runtime UI assets, MediaPipe modules, WASM files and the hand model are same-origin local assets. The exact official model must be packaged for final release; build-time synchronization is a controlled fallback only.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -29,6 +29,6 @@
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v6.5.0 Phase 6 adds a privacy-preserving Device Readiness panel with real, non-invasive browser/runtime checks and a local troubleshooting report.",
-  "assetRevision": "650"
+  "releaseStatus": "v7.0.0 Phase 7 master release adds passive Final Live QA reporting for canvas, save state, active camera, hand engine and recent detection without camera prompts or telemetry.",
+  "assetRevision": "700"
 }

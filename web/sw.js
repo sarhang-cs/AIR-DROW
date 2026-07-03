@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v650-phase6-device-readiness";
+const BUILD_ID = "air-drow-v700-phase7-final-live-qa";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [
@@ -28,6 +28,7 @@ const APP_SHELL = [
   "/assets/js/core/persistence-guard.js",
   "/assets/js/core/final-stability.js",
   "/assets/js/features/device-readiness.js",
+  "/assets/js/features/final-live-qa.js",
   "/assets/js/app.js",
   "/assets/js/core/project-store.js",
   "/assets/js/core/release-manager.js",

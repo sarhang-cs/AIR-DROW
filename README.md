@@ -1,3 +1,9 @@
+# AIR-DROW v7.0.0 — Final Live QA & Master Release
+
+Final master release. Settings → About now includes Final Live QA: a passive local report for release identity, canvas, project safety and—only after you independently start the existing camera—real camera/hand runtime state. It never opens the camera, requests permission, enumerates devices or sends telemetry.
+
+See `docs/PHASE_7_FINAL_LIVE_QA_KU.md` for the on-device test sequence.
+
 # AIR-DROW v6.5.0 — Device Ready Release
 
 AIR-DROW now includes **Device Readiness** in Settings → About. It performs real browser/runtime checks locally, without opening the camera or transmitting device information.

@@ -1,0 +1,15 @@
+{
+  "phase": 7,
+  "version": "7.0.0",
+  "buildId": "air-drow-v700-phase7-final-live-qa",
+  "title": "Final Live QA & Master Release",
+  "scope": [
+    "Passive release identity, canvas and local-project checks",
+    "Camera state only after creator independently opens existing camera control",
+    "Hand engine and recent detection reporting without camera prompts",
+    "PWA cache and build verifier coverage",
+    "Master Termux replacement with local-model preservation"
+  ],
+  "privacy": "The QA panel never requests camera permission, never opens a camera, never enumerates devices, and never transmits diagnostics.",
+  "releaseGate": "npm run vercel:build"
+}

@@ -15,15 +15,16 @@ const index = read("web/index.html");
 const buildId = release.buildId;
 const version = release.version;
 
-if (release.phase !== 6 || release.stage !== "device-readiness-and-runtime-diagnostics" || !release.assetRevision) {
-  throw new Error("Phase 6 release metadata is incomplete.");
+if (release.phase !== 7 || release.stage !== "final-live-qa-and-master-release" || !release.assetRevision) {
+  throw new Error("Phase 7 release metadata is incomplete.");
 }
 const required = [
-  "README.md", "README_KU.md", "CHANGELOG.md", "PHASE_6_DEVICE_READINESS_MANIFEST.json", "PHASE_6_QA_REPORT.md",
-  "docs/PHASE_6_DEVICE_READINESS_KU.md", "scripts/verify-phase6-device-readiness.mjs",
-  "web/assets/js/features/device-readiness.js"
+  "README.md", "README_KU.md", "CHANGELOG.md", "PHASE_7_FINAL_LIVE_QA_MANIFEST.json", "PHASE_7_QA_REPORT.md",
+  "docs/PHASE_7_FINAL_LIVE_QA_KU.md", "docs/RELEASE_DELIVERY_KU.md",
+  "scripts/verify-phase7-final-live-qa.mjs", "web/assets/js/features/final-live-qa.js",
+  "termux/replace-with-phase7.sh"
 ];
-for (const file of required) if (!existsSync(resolve(root, file))) throw new Error(`Phase 6 release file missing: ${file}`);
+for (const file of required) if (!existsSync(resolve(root, file))) throw new Error(`Phase 7 release file missing: ${file}`);
 for (const [label, value] of Object.entries({ package: pkg.version, projectManifest: manifest.version, assetManifest: assetManifest.version })) {
   if (value !== version) throw new Error(`${label} version must be ${version}; got ${value}`);
 }
@@ -32,8 +33,11 @@ for (const [label, value] of Object.entries({ release: release.buildId, projectM
 }
 if (!runtime.includes(`version: "${version}"`) || !runtime.includes(`buildId: "${buildId}"`)) throw new Error("Runtime release metadata is inconsistent.");
 if (!worker.includes(`const BUILD_ID = "${buildId}"`)) throw new Error("Service worker build ID is inconsistent.");
-if (!worker.includes("device-readiness.js")) throw new Error("Service worker must pre-cache the device readiness module.");
+if (!worker.includes("final-live-qa.js")) throw new Error("Service worker must pre-cache Final Live QA.");
 if (!index.includes(`content="${buildId}"`) || !index.includes(`v${version}`) || !index.includes('id="appVersionValue"') || !index.includes('id="appBuildId"')) throw new Error("Index release metadata is inconsistent.");
-if (!index.includes('id="runDeviceReadinessBtn"') || !index.includes('id="deviceReadinessList"')) throw new Error("Phase 6 device-readiness UI is missing.");
-if (!read("web/assets/js/app.js").includes("createDeviceReadiness")) throw new Error("Phase 6 device-readiness runtime integration is missing.");
-console.log(`AIR-DROW Phase 6 release integrity verified: v${version} / ${buildId}`);
+for (const marker of ['id="runDeviceReadinessBtn"', 'id="runFinalLiveQaBtn"', 'id="finalLiveQaList"', 'data-i18n="finalLiveQaPrivacy"']) {
+  if (!index.includes(marker)) throw new Error(`Phase 7 final QA UI marker missing: ${marker}`);
+}
+const app = read("web/assets/js/app.js");
+if (!app.includes("createDeviceReadiness") || !app.includes("createFinalLiveQa")) throw new Error("Phase 6/7 runtime integration is missing.");
+console.log(`AIR-DROW Phase 7 master release integrity verified: v${version} / ${buildId}`);

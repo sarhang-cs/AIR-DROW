@@ -13,8 +13,8 @@ const i18n = read("web/assets/js/i18n/translations.js");
 const worker = read("web/sw.js");
 const modulePath = "web/assets/js/features/device-readiness.js";
 
-if (release.phase !== 6 || release.stage !== "device-readiness-and-runtime-diagnostics") {
-  throw new Error("Phase 6 release metadata is incomplete.");
+if (release.phase < 6 || !release.stage) {
+  throw new Error("Phase 6 release baseline is incomplete.");
 }
 for (const file of [modulePath, "PHASE_6_DEVICE_READINESS_MANIFEST.json", "PHASE_6_QA_REPORT.md", "docs/PHASE_6_DEVICE_READINESS_KU.md"]) {
   if (!existsSync(resolve(root, file))) throw new Error(`Phase 6 file is missing: ${file}`);
@@ -39,4 +39,4 @@ if (!worker.includes("device-readiness.js")) throw new Error("Phase 6 device mod
 for (const key of ['"deviceReadinessTitle"', '"deviceReadinessPrivacy"', '"deviceStatusReady"', '"deviceLocalModel"']) {
   if ((i18n.split(key).length - 1) < 2) throw new Error(`Phase 6 translation coverage missing: ${key}`);
 }
-console.log(`AIR-DROW Phase 6 Device Readiness verified: v${release.version} / ${release.buildId}.`);
+console.log(`AIR-DROW Phase 6 Device Readiness baseline verified: v${release.version} / ${release.buildId}.`);

@@ -19,6 +19,7 @@ import { createBackupManager } from "./core/backup-manager.js";
 import { createPersistenceGuard } from "./core/persistence-guard.js";
 import { createFinalStability } from "./core/final-stability.js";
 import { createDeviceReadiness } from "./features/device-readiness.js";
+import { createFinalLiveQa } from "./features/final-live-qa.js";
 import { createHandStabilizer, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
 import { createLocalHandLandmarker, primeLocalHandAssets } from "./features/hand-engine-bootstrap.js";
 import { APP_RELEASE as AIRDROW_RELEASE, HAND_MODEL, LEGACY_STORAGE_KEY, MEDIAPIPE_MODULE_URLS, MEDIAPIPE_WASM_URLS, OLD_MIRROR_KEY, PROFILE_RULES, QUICK_START_KEY, STORAGE_KEY, createDefaultSettings } from "./config/runtime.js";
@@ -45,6 +46,7 @@ let backupManager = null;
 let persistenceGuard = null;
 let finalStability = null;
 let deviceReadiness = null;
+let finalLiveQa = null;
 let releaseManager = null;
 let exporter = null;
 let replayStudio = null;
@@ -582,8 +584,14 @@ async function restoreBackupArchive(file) {
     else await renderProjectGallery();
     await refreshStabilityStatus();
   const runDeviceReadiness = () => { void deviceReadiness?.run({ silent: true }); };
-  if ("requestIdleCallback" in window) window.requestIdleCallback(runDeviceReadiness, { timeout: 2600 });
-  else setTimeout(runDeviceReadiness, 900);
+  const runFinalLiveQa = () => { void finalLiveQa?.run({ silent: true }); };
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(runDeviceReadiness, { timeout: 2600 });
+    window.requestIdleCallback(runFinalLiveQa, { timeout: 3200 });
+  } else {
+    setTimeout(runDeviceReadiness, 900);
+    setTimeout(runFinalLiveQa, 1200);
+  }
     loadingManager?.endTask("backup");
     const detail = result.restoredGallery ? ` · ${result.restoredGallery}` : "";
     setText(ui.backupStatus, `${t("backupRestored", "Backup restored")}${detail}`);
@@ -3036,6 +3044,8 @@ function bindControls() {
   ui.runStabilityCheck?.addEventListener("click", () => { void refreshStabilityStatus({ announce: true }); });
   ui.runDeviceReadiness?.addEventListener("click", () => { void deviceReadiness?.run(); });
   ui.copyDeviceReadiness?.addEventListener("click", () => { void deviceReadiness?.copyReport(); });
+  ui.runFinalLiveQa?.addEventListener("click", () => { void finalLiveQa?.run(); });
+  ui.copyFinalLiveQa?.addEventListener("click", () => { void finalLiveQa?.copyReport(); });
   ui.galleryList?.addEventListener("click", event => {
     const button = event.target.closest("[data-gallery-action]");
     if (!button) return;
@@ -3207,6 +3217,24 @@ async function boot() {
     getCopy: t,
     release: AIRDROW_RELEASE
   });
+  finalLiveQa = createFinalLiveQa({
+    status: ui.finalLiveQaStatus,
+    score: ui.finalLiveQaScore,
+    list: ui.finalLiveQaList,
+    getCopy: t,
+    release: AIRDROW_RELEASE,
+    getRuntime: () => ({
+      canvasReady: Boolean(drawCtx && handCtx && ui.draw?.width > 0 && ui.hand?.width > 0),
+      hasLocalProject: Array.isArray(state.strokes),
+      lastSavedAt: state.lastSavedAt,
+      cameraActive: Boolean(state.stream?.active),
+      cameraFrameReady: Boolean(ui.camera && ui.camera.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA),
+      handEngineReady: Boolean(state.landmarker),
+      handDetectedAt: Number(state.lastDetection || 0),
+      handFps: Number(state.fps || 0),
+      handDelegate: state.handDelegate || ""
+    })
+  });
   loadingManager.setBoot({ progress: 8, label: t("bootPreparing", "Preparing studio…") });
   updateLayoutClass();
   setWorkspace(state.workspace, { resetPanels: false });
@@ -3232,8 +3260,14 @@ async function boot() {
   await loadLocalAssetManifest();
   await refreshStabilityStatus();
   const runDeviceReadiness = () => { void deviceReadiness?.run({ silent: true }); };
-  if ("requestIdleCallback" in window) window.requestIdleCallback(runDeviceReadiness, { timeout: 2600 });
-  else setTimeout(runDeviceReadiness, 900);
+  const runFinalLiveQa = () => { void finalLiveQa?.run({ silent: true }); };
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(runDeviceReadiness, { timeout: 2600 });
+    window.requestIdleCallback(runFinalLiveQa, { timeout: 3200 });
+  } else {
+    setTimeout(runDeviceReadiness, 900);
+    setTimeout(runFinalLiveQa, 1200);
+  }
   void releaseManager.init();
   setGestureStatus("ready", t("gestureReady", "Ready"));
   updateHistoryControls();
