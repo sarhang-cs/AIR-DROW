@@ -50,6 +50,6 @@
     "foundation:verify": "node scripts/verify-foundation-hardening.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": "24.x"
   }
 }
