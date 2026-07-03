@@ -1,20 +1,28 @@
 {
-  "version": "5.2.3",
-  "buildId": "air-drow-v523-release-verification-recovery-fix",
-  "releasedAt": "2026-07-02T20:15:00Z",
-  "channel": "release",
+  "version": "6.0.2",
+  "buildId": "air-drow-v602-foundation-final",
+  "releasedAt": "2026-07-03T00:00:00Z",
+  "channel": "phase",
   "updatePolicy": "user-controlled-save-before-apply",
   "handEngine": "official-build-synced-task-bundle-self-hosted-runtime",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "Release Verification Recovery Fix: transparent-status HUD and closed-fist hand-guide checks are independently validated, so a valid release no longer fails on a mismatched verifier.",
+  "summary": "Phase 1 final foundation release: canonical release metadata, deterministic npm install, safe Vercel build order, strict generated-runtime verification and a local-first hand-model policy.",
   "features": [
-    "Final release validation now invokes the dedicated transparent status-HUD contract instead of mistakenly reusing the fist-guide verifier",
-    "The visible hand guide no longer depends on the open-hand drawing-eligibility gate, so a confidently detected closed fist keeps its landmarks and links visible",
-    "Closed-fist guide rendering uses the same normalized camera crop and mirror projection as an open hand",
-    "A short bounded guide hold covers one or two detector drop frames during finger occlusion without keeping a stale hand overlay indefinitely",
-    "Drawing and pinch safety remain strict: a closed fist never becomes an accidental drawing action merely because the guide is visible",
-    "Hand detector confidence is relaxed only for the detector; geometry, stability and pinch gates retain their existing safeguards",
-    "FPS, Online and CAM remain text-only overlays with no background panel, border or blur surface",
-    "Local MediaPipe GPU delegate remains preferred with deterministic CPU fallback"
-  ]
+    "Release metadata is versioned from one canonical source and all runtime, cache and verifier identifiers are synchronized.",
+    "Vercel uses npm ci for deterministic dependency installation and runs the explicit vercel:build gate.",
+    "The generated MediaPipe runtime is validated after static build, including JavaScript, WASM and local model output.",
+    "The app remains runtime-local: deployed clients load MediaPipe and the hand model only from same-origin vendor paths.",
+    "The official hand model is included as a required, verified source asset in the final release package; Vercel uses the local file and does not need to download it.",
+    "No camera request is made by build, install or service-worker bootstrap."
+  ],
+  "assetRevision": "602",
+  "phase": 1,
+  "stage": "foundation-hardening",
+  "buildPolicy": {
+    "sourceModel": "web/vendor/models/hand_landmarker.task",
+    "fallback": "npm run model:sync is a recovery-only action; the final package already contains the verified local model",
+    "runtimeNetwork": "no remote MediaPipe module or model is loaded by the deployed browser",
+    "install": "npm ci --no-audit --no-fund",
+    "deploy": "npm run vercel:build"
+  }
 }

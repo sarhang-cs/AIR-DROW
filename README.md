@@ -1,3 +1,11 @@
+# AIR-DROW v6.0.2 — Phase 1: Foundation Hardening
+
+This phase hardens the project foundation before UI and hand-engine refinements: deterministic `npm ci`, canonical release metadata, stricter Vercel build ordering, post-build generated-runtime verification and a local-first MediaPipe policy.
+
+**Current source-package note:** the exact `hand_landmarker.task` must be present at `web/vendor/models/hand_landmarker.task` for a fully offline build. `npm run vercel:build` can securely fetch and checksum-verify it only as a build-time fallback when it is absent. The deployed browser never downloads a remote hand model or MediaPipe runtime.
+
+---
+
 # AIR-DROW v5.2.3 — Fist Guide Continuity Fix
 
 AIR-DROW is a local-first drawing studio for touch, pen, camera and hand tracking.

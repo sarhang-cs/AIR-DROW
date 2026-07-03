@@ -13,6 +13,10 @@ for (const rel of [
   "public/vendor/mediapipe/vision_bundle.js",
   "public/vendor/mediapipe/wasm/vision_wasm_internal.js",
   "public/vendor/mediapipe/wasm/vision_wasm_internal.wasm",
+  "public/vendor/mediapipe/wasm/vision_wasm_module_internal.js",
+  "public/vendor/mediapipe/wasm/vision_wasm_module_internal.wasm",
+  "public/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.js",
+  "public/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.wasm",
   "public/vendor/models/hand_landmarker.task"
 ]) {
   const file = resolve(root, rel);

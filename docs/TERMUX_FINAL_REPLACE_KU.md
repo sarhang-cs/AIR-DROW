@@ -1,3 +1,9 @@
+# AIR-DROW v6.0.2 — قۆناغی ١: Termux replacement
+
+سکریپتی `termux/replace-with-final-release.sh` ئێستا `npm ci` و `npm run vercel:build` بەکاردهێنێت و پێش گۆڕینی پڕۆژەی کۆن پشکنینی سەرچاوە دەکات. backup ـەکە تەنها کاتێک دەسڕدرێتەوە کە build بە سەرکەوتوویی تەواو بێت.
+
+---
+
 # AIR-DROW v5.2.3 — Termux replacement
 
 This repair fixes a release-script validation error that incorrectly required the official Google HandLandmarker task asset to begin with a generic ZIP header.

@@ -1,9 +1,9 @@
 {
-  "name": "AIR-DROW v5.2.3 — Release Verification Recovery Fix",
+  "name": "AIR-DROW v6.0.2 — Foundation Hardening",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v523",
+  "start_url": "./?build=v602",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
-  "description": "AIR-DROW: local drawing and hand tracking with closed-fist guide continuity."
+  "description": "AIR-DROW: local drawing and hand tracking with deterministic local-first runtime delivery."
 }

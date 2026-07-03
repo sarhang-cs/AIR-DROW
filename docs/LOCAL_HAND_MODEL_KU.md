@@ -1,3 +1,9 @@
+# AIR-DROW v6.0.2 — یاسای model ـی دەست
+
+لە قۆناغی ١، `hand_landmarker.task` لە کاتی runtime هەمیشە local ـە. بۆ release ـی کۆتایی، model ـەکە لە ناو ZIP ـی سەرچاوە دەنرێت؛ تەنها fallback ـی Vercel/Termux لە کاتی build دەتوانێت ئەو فایلە لە سەرچاوەی فەرمی دابەزێنێت و checksum ـی بپشکنێت.
+
+---
+
 # مۆدێلی دەستی AIR-DROW — v5.2.3
 
 لە وەشانی `v5.2.3`، پڕۆژەکە مۆدێلی legacy ـی کۆن بەکارناهێنێت. ئەو مۆدێلە بە شێوەی دەستی لە پێکهاتەکانی MediaPipe Hands کۆکرابووەوە و لە Android Chrome هەڵەی `NormalizationOptions` ـی دروست دەکرد.
@@ -22,7 +28,7 @@ npm run model:sync
 لە کاتی بەکارهێنانی ئەپەکە، مۆدێل بە شێوەی local لەم شوێنەوە دەخوێندرێتەوە:
 
 ```text
-/vendor/models/hand_landmarker.task?model=v5-fbc2a300
+/vendor/models/hand_landmarker.task?model=v6-fbc2a300
 ```
 
 واتە تەنها کاتی build پەیوەندی ئینتەرنێت پێویستە؛ لە ناو browser ـدا مۆدێلەکە دووبارە لە دەرەوە دابەزێنرێت.

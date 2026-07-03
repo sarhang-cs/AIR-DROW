@@ -8,6 +8,7 @@ const html = read("web/index.html");
 const css = read("web/assets/css/visual-system.css");
 const app = read("web/assets/js/app.js");
 const appearance = read("web/assets/js/config/appearance.js");
+const release = JSON.parse(read("web/release.json"));
 
 for (const file of [
   "web/assets/css/visual-system.css",
@@ -15,7 +16,7 @@ for (const file of [
 ]) {
   if (!existsSync(resolve(root, file))) throw new Error(`Premium visual source missing: ${file}`);
 }
-if (!html.includes('href="./assets/css/visual-system.css?v=522"')) throw new Error("Premium visual stylesheet is not linked.");
+if (!html.includes(`href="./assets/css/visual-system.css?v=${release.assetRevision}"`)) throw new Error("Premium visual stylesheet is not linked.");
 if (!app.includes('normalizeSkin') || !app.includes('from "./config/appearance.js"')) throw new Error("Appearance normalizer is not used by app.js.");
 for (const skin of ["violet", "pink", "sapphire", "obsidian", "silver", "gold"]) {
   if (!html.includes(`data-skin="${skin}"`)) throw new Error(`Premium skin control missing: ${skin}`);

@@ -1,3 +1,13 @@
+# AIR-DROW v6.0.2 — Phase 1: Foundation Hardening
+
+- Added canonical Phase 1 release metadata (`version`, `buildId`, `assetRevision`, `phase`) and synchronized it across runtime, service worker, manifests, health endpoint and verifiers.
+- Changed Vercel installation to deterministic `npm ci --no-audit --no-fund`.
+- Added explicit `vercel:build`, `model:ensure`, `model:verify`, `verify:all` and `foundation:verify` gates.
+- Strengthened generated MediaPipe runtime validation for JS/WASM variants and the local model output.
+- Hardened build-time model fallback retries; browser runtime remains strictly same-origin local.
+
+---
+
 # AIR-DROW v5.2.3 — Fist Guide Continuity Fix
 
 ## Fixed

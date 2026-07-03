@@ -1,3 +1,11 @@
+# AIR-DROW v6.0.2 — قۆناغی ١: بەهێزکردنی بنەما
+
+ئەم قۆناغە بنەمای پڕۆژەکە بەهێز دەکات: `npm ci` ـی دیار و پێدار، یەک سەرچاوەی metadata ـی وەشان، ڕیزبەندیی build ـی Vercel، پشکنینی runtime ـی دروستکراو دوای build، و یاسای MediaPipe ـی local-first.
+
+**تێبینیی ZIP ـی سەرچاوە:** بۆ build ـی تەواو بەبێ ئینتەرنێت، دەبێ `hand_landmarker.task` لە `web/vendor/models/hand_landmarker.task` هەبێت. `npm run vercel:build` تەنها لە کاتی نەبوونی ئەو فایلەدا، وەک fallback ـی build، لە سەرچاوەی فەرمی دایدەبەزێنێت و checksum ـی پشکنین دەکات. لە ئەپی deploy کراودا هیچ model یان runtime ـێکی دوور دابەزێنرێت.
+
+---
+
 # AIR-DROW v5.2.3 — چاکسازیی بەردەوامی ڕێنمایی مشت
 
 کاتێک دەست دەکرێت بە مشت ✊🏻، ئەگەر MediaPipe landmark ـەکانی دەست بدۆزێتەوە، هێڵ و خاڵی ڕێنماییی دەست دیار دەمێنن.

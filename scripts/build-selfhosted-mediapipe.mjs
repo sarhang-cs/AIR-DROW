@@ -35,7 +35,12 @@ copyRequired(sourceModel, outputModel);
 for (const path of [
   resolve(output, "index.html"),
   resolve(vendorRoot, "vision_bundle.js"),
+  resolve(vendorRoot, "wasm", "vision_wasm_internal.js"),
   resolve(vendorRoot, "wasm", "vision_wasm_internal.wasm"),
+  resolve(vendorRoot, "wasm", "vision_wasm_module_internal.js"),
+  resolve(vendorRoot, "wasm", "vision_wasm_module_internal.wasm"),
+  resolve(vendorRoot, "wasm", "vision_wasm_nosimd_internal.js"),
+  resolve(vendorRoot, "wasm", "vision_wasm_nosimd_internal.wasm"),
   outputModel
 ]) {
   if (!existsSync(path)) throw new Error(`Build output missing: ${path}`);

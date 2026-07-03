@@ -1,3 +1,9 @@
+# AIR-DROW v6.0.2 — قۆناغی ١: Build و Deploy ـی بەهێز
+
+لە Vercel ـدا install command = `npm ci --no-audit --no-fund` و build command = `npm run vercel:build`. ئەم build ـە پێش هەموو شتێک model ـی local دڵنیادەکاتەوە، پاشان سەرچاوە و runtime ـی دروستکراو پشکنین دەکات.
+
+---
+
 # ڕێنمایی build و deploy ـی AIR-DROW v5.2.3
 
 لە Vercel، `buildCommand` بریتییە لە `npm run build` و `outputDirectory` بریتییە لە `public`.

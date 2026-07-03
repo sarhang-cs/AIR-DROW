@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "5.2.3",
-  "buildId": "air-drow-v523-release-verification-recovery-fix",
-  "release": "Release Verification Recovery Fix",
+  "version": "6.0.2",
+  "buildId": "air-drow-v602-foundation-final",
+  "release": "Phase 1 — Foundation Hardening",
   "architecture": {
     "styles": [
       "web/assets/css/app.css",
@@ -19,17 +19,16 @@
     "iconSystem": "web/assets/icons/ICON_SYSTEM.md"
   },
   "scope": [
-    "Phase 1: clean code, local icon assets and centralized translations",
-    "Phase 2: premium visual system and Dark/Light polish",
-    "Phase 3: hand tracking reliability, pinch stability, writing smoothness and camera isolation",
-    "Phase 4: export, save, update and onboarding reliability",
-    "Phase 5: final release metadata, documentation, Termux replacement and deploy checklist",
-    "v5.2.3: a confidently detected closed fist keeps its visible guide; gesture and drawing gates remain strict."
+    "Phase 1: foundation hardening — deterministic install/build, Vercel deployment contract, canonical metadata, cache discipline and local-first runtime policy.",
+    "Phase 2: premium visual system, RTL layouts, themes and mobile drawer refinement.",
+    "Phase 3: hand tracking reliability, pinch stability, drawing smoothness, camera isolation and fist continuity.",
+    "Phase 4: export, save, update, offline recovery, onboarding and privacy polish.",
+    "Phase 5: final QA, release package, README, screenshots and Termux deployment procedure."
   ],
   "privacy": "Drawing data stays local unless the creator explicitly requests an export, share or AI generation.",
-  "stage": "phase-5.2.3-release-verification-recovery-fix",
-  "releaseGate": "npm run build verifies closed-fist guide continuity, closed-fist guide continuity, synchronizes the official Google HandLandmarker task, validates the pinned SHA-256 and builds the local runtime. The runtime never downloads a model.",
+  "stage": "phase-1-foundation-hardening",
+  "releaseGate": "npm run vercel:build first ensures the exact local HandLandmarker task, then validates source contracts, builds the self-hosted MediaPipe runtime and verifies generated deployment assets.",
   "notes": [
-    "v5.2.3: release checks validate transparent HUD and closed-fist continuity independently."
+    "v6.0.2 Phase 1 centralizes release metadata and removes fragile hard-coded verifier release constants."
   ]
 }

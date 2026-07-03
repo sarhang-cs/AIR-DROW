@@ -5,10 +5,11 @@ import { spawnSync } from "node:child_process";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = file => readFileSync(resolve(root, file), "utf8");
-const version = "5.2.3";
-const buildId = "air-drow-v523-release-verification-recovery-fix";
+const version = JSON.parse(read("web/release.json")).version;
+const buildId = JSON.parse(read("web/release.json")).buildId;
 const packageJson = JSON.parse(read("package.json"));
 const release = JSON.parse(read("web/release.json"));
+if (release.phase !== 1 || !release.assetRevision) throw new Error("Phase 1 release metadata is incomplete.");
 const manifest = JSON.parse(read("PROJECT_MANIFEST.json"));
 const assetManifest = JSON.parse(read("web/assets/LOCAL_ASSETS_MANIFEST.json"));
 const modelManifest = JSON.parse(read("web/vendor/models/MODEL_MANIFEST.json"));

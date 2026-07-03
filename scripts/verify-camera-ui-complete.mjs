@@ -23,10 +23,13 @@ for (const marker of [
   "createLocalHandLandmarker", "primeLocalHandAssets", "handleHandRuntimeFailure",
   "hideRecovery(\"camera\")", "reportHandEngineFailure", "await waitForCameraFrame(2200)"
 ]) if (!app.includes(marker)) throw new Error(`Hand-engine reliability marker is missing: ${marker}`);
-for (const marker of ["local-url-cpu", "local-url-default", "local-buffer-cpu", "modelAssetPath: modelUrl"]) {
+for (const marker of [
+  "local-url-gpu", "local-buffer-gpu", "local-url-cpu", "local-buffer-cpu",
+  "modelAssetPath: modelUrl", "modelAssetBuffer: modelBuffer", "preferredDelegate"
+]) {
   if (!bootstrap.includes(marker)) throw new Error(`Local hand bootstrap marker is missing: ${marker}`);
 }
-if (!runtime.includes('wasm/", import.meta.url')) throw new Error("Local WASM directory must use a trailing slash.");
+if (!runtime.includes('new URL("../../../vendor/mediapipe/wasm", import.meta.url)')) throw new Error("Local WASM directory must use the no-trailing-slash base required by the MediaPipe resolver.");
 for (const marker of [
   "grid-template-rows: var(--drawer-header-height) var(--drawer-tabs-height) minmax(0, 1fr)",
   "overflow-y: auto !important", "scroll-padding-block", "toggle-control", "toggle-visual",
@@ -34,5 +37,5 @@ for (const marker of [
 ]) if (!css.includes(marker)) throw new Error(`Drawer/RTL reliability marker is missing: ${marker}`);
 if (!html.includes('data-toolbar-icon="redo"') || !html.includes('AIRDROW_ICON:redo:START')) throw new Error("Redo must use the same inline local toolbar icon contract as undo.");
 for (const marker of ["/assets/css/icon-system.css", "/assets/css/drawer-layout.css", "/vendor/models/hand_landmarker.task", "/vendor/mediapipe/vision_bundle.js"]) if (!worker.includes(marker)) throw new Error(`Service-worker cache is missing ${marker}`);
-if (release.version !== "5.2.3" || release.buildId !== "air-drow-v523-release-verification-recovery-fix") throw new Error("Camera/UI release metadata is inconsistent.");
+if (!release.version || !release.buildId || release.phase !== 1) throw new Error("Camera/UI release metadata is inconsistent.");
 console.log("AIR-DROW Hand Runtime Loader Fix verified: local camera-frame-first hand engine, Android-safe toggles, fixed drawer geometry, stable RTL/LTR header and visible history icons.");

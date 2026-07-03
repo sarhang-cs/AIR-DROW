@@ -5,3 +5,4 @@ public/
 *.zip
 .env
 .air-drow-inline-check.mjs
+.DS_Store

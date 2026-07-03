@@ -39,8 +39,8 @@ async function writeManifest() {
     bytes: EXPECTED_BYTES,
     sha256: EXPECTED_SHA256,
     validation: "Exact byte length and SHA-256. No ZIP-header or archive-entry assumptions are made.",
-    delivery: "Fetched once during npm run build, checksum-verified, then copied to public/vendor/models for local runtime use.",
-    networkPolicy: "No runtime hand-model download is allowed. The deployed app only reads /vendor/models/hand_landmarker.task?model=v5-fbc2a300.",
+    delivery: "Final release packages include this exact verified task asset. npm run model:sync is a controlled build-time fallback only when the source file is absent.",
+    networkPolicy: "No runtime hand-model download is allowed. The deployed app only reads /vendor/models/hand_landmarker.task?model=v6-fbc2a300.",
     integrityPolicy: "Build fails unless the exact official task binary is present."
   };
   await mkdir(modelDirectory, { recursive: true });
@@ -61,12 +61,20 @@ async function useExistingVerifiedTask() {
 
 if (!await useExistingVerifiedTask()) {
   let response;
-  try {
-    response = await fetch(MODEL_URL, { cache: "no-store", signal: AbortSignal.timeout(90_000) });
-  } catch (cause) {
-    throw new Error(`Could not download the official HandLandmarker model. Connect this build to the internet and retry. ${cause?.message || cause}`);
+  let lastFailure;
+  for (let attempt = 1; attempt <= 3; attempt += 1) {
+    try {
+      response = await fetch(MODEL_URL, { cache: "no-store", signal: AbortSignal.timeout(90_000) });
+      if (response.ok) break;
+      lastFailure = new Error(`Official HandLandmarker download returned HTTP ${response.status}.`);
+    } catch (cause) {
+      lastFailure = cause;
+    }
+    if (attempt < 3) await new Promise(resolveDelay => setTimeout(resolveDelay, attempt * 1_500));
   }
-  if (!response.ok) throw new Error(`Official HandLandmarker download returned HTTP ${response.status}.`);
+  if (!response?.ok) {
+    throw new Error(`Could not download the official HandLandmarker model after 3 attempts. Add the exact verified file at web/vendor/models/hand_landmarker.task for an offline build, then retry. ${lastFailure?.message || lastFailure || "Unknown network failure"}`);
+  }
 
   const payload = Buffer.from(await response.arrayBuffer());
   const sha256 = verifyOfficialTask(payload);

@@ -11,6 +11,7 @@ const runtime = read("web/assets/js/config/runtime.js");
 const appearance = read("web/assets/js/config/appearance.js");
 const translations = read("web/assets/js/i18n/translations.js");
 const registry = read("web/assets/js/ui/registry.js");
+const release = JSON.parse(read("web/release.json"));
 
 for (const file of [
   "web/assets/css/app.css",
@@ -34,7 +35,7 @@ for (const oldArtifact of [
 ]) {
   if (existsSync(resolve(root, oldArtifact))) throw new Error(`Obsolete artifact must not remain: ${oldArtifact}`);
 }
-if (!html.includes('href="./assets/css/app.css?v=522"')) throw new Error("External application stylesheet is not linked.");
+if (!html.includes(`href="./assets/css/app.css?v=${release.assetRevision}"`)) throw new Error("External application stylesheet is not linked.");
 if (html.includes("<style>")) throw new Error("The application stylesheet must not remain embedded in index.html.");
 if (!app.includes('from "./config/runtime.js"') || !app.includes('from "./i18n/translations.js"') || !app.includes('from "./ui/registry.js"')) {
   throw new Error("App shell must use the modular config, translation and UI registry files.");

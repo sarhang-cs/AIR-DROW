@@ -1,7 +1,7 @@
 {
-  "version": "5.2.3",
-  "buildId": "air-drow-v523-release-verification-recovery-fix",
-  "policy": "All UI icons, fonts and the MediaPipe runtime are local. Before build, the official Google HandLandmarker task is downloaded once, checksum-verified and copied to public/vendor/models. No runtime hand-model download is permitted.",
+  "version": "6.0.2",
+  "buildId": "air-drow-v602-foundation-final",
+  "policy": "All browser runtime UI assets, MediaPipe modules, WASM files and the hand model are same-origin local assets. The exact official model must be packaged for final release; build-time synchronization is a controlled fallback only.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
     "editable": true,
@@ -29,5 +29,6 @@
     "method": "Semantic CSS mask classes backed by local SVG assets",
     "guide": "assets/icons/ICON_SYSTEM.md"
   },
-  "releaseStatus": "v5.2.3 removes the FPS, Online and CAM status backgrounds while retaining camera-safe readable overlay text."
+  "releaseStatus": "v6.0.2 Phase 1 hardens deterministic deploy, canonical release metadata and generated runtime validation while keeping the FPS, Online and CAM status text background-free.",
+  "assetRevision": "602"
 }
