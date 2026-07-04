@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "8.1.0",
-  "buildId": "air-drow-v810-on-device-launch-validation",
-  "release": "On-device Launch Validation & Final Release Gate",
+  "version": "8.2.0",
+  "buildId": "air-drow-v820-visual-guidance-persistence",
+  "release": "Visual Guidance & Persistent Settings Refinement",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -23,11 +23,11 @@
     "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW On-device Launch Validation & Final Release Gate Edition",
-  "releasedAt": "2026-07-04T02:20:00Z",
-  "summary": "v8.1.0 adds a local, privacy-preserving preflight for canvas rendering, PNG/JPG encoding and local file preparation while clearly separating those checks from real camera and Android download validation.",
-  "stage": "on-device-launch-validation",
-  "phase": 18,
-  "assetRevision": "810",
-  "releaseName": "AIR-DROW On-device Launch Validation & Final Release Gate Edition"
+  "name": "AIR-DROW Visual Guidance & Persistent Settings Refinement Edition",
+  "releasedAt": "2026-07-04T05:25:00Z",
+  "summary": "v8.2.0 restores configurable full-hand live guidance, stores ordinary settings locally, keeps reset explicit and makes Kurdish About/Instagram cards compact on Android.",
+  "stage": "visual-guidance-persistence",
+  "phase": 19,
+  "assetRevision": "820",
+  "releaseName": "AIR-DROW Visual Guidance & Persistent Settings Refinement Edition"
 }

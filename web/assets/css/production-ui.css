@@ -795,7 +795,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 :root.reduce-motion .hand-tutorial-card * { animation:none !important; }
 @media (max-width:390px) { .hand-tutorial-head { grid-template-columns:1fr; } .hand-tutorial-visual { max-width:190px; justify-self:center; } }
 
-/* ===== v8.1.0 On-device Launch Validation & Final Release Gate ===== */
+/* ===== v8.2.0 Visual Guidance & Persistent Settings Refinement ===== */
 /* One responsive source of truth: cards stay balanced on a phone and QR remains beside the creator profile. */
 .about-creator-card {
   display:grid;
@@ -935,7 +935,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v8.1.0 — release launch validation with protected hand palette and local reliability controls.
+/* v8.2.0 — release launch validation with protected hand palette and local reliability controls.
  * The palette is a real control surface: it sits above the canvas and is
  * explicitly blocked from pointer / hand drawing by app.js surface guards. */
 .hand-palette {
@@ -1010,7 +1010,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v8.1.0 — critical input safety and Kurdish mobile typography. */
+/* v8.2.0 — critical input safety and Kurdish mobile typography. */
 .hand-palette[hidden] { display: none !important; }
 /* Palette, live HUD and camera state occupy distinct vertical bands. */
 @media (max-width: 560px) {
@@ -1054,7 +1054,7 @@ html[lang="ku"] .about-grid div { min-height: 88px; padding: 11px; }
 }
 
 
-/* v8.1.0 — mobile safety, quiet hand guide and Kurdish reading rhythm. */
+/* v8.2.0 — mobile safety, quiet hand guide and Kurdish reading rhythm. */
 .hand-canvas { isolation: isolate; }
 html[lang="ku"] .hand-gesture-help,
 html[lang="ku"] .hand-quality,
@@ -1074,3 +1074,51 @@ html[lang="ku"] .about-qr-copy strong {
   html[lang="ku"] .settings-section summary > span:not(.summary-icon) { font-size: 12px; line-height: 1.68; }
   html[lang="ku"] .about-summary { font-size: 11px; line-height: 1.92; }
 }
+
+/* ===== v8.2.0 Visual Guidance & Persistent Settings Refinement =====
+ * One compact source layer for Android hand guidance and Kurdish readability. */
+.hand-guide-controls {
+  display:grid;
+  gap:8px;
+  margin:6px 0 10px;
+  padding:10px;
+  border:1px solid color-mix(in srgb,var(--accent) 19%,var(--line));
+  border-radius:14px;
+  background:color-mix(in srgb,var(--panel-solid,var(--panel)) 68%,transparent);
+}
+.hand-guide-controls .range-row { grid-template-columns:minmax(0,1fr) minmax(86px,1.1fr) 42px; align-items:center; gap:8px; }
+.hand-guide-controls output { min-width:42px; color:var(--accent); font:800 10px/1 var(--font-en,inherit); text-align:end; font-variant-numeric:tabular-nums; }
+.hand-guide-note { margin:0; color:var(--muted); font-size:9px; line-height:1.65; }
+.reset-card { width:min(92vw, 430px); max-height:min(78dvh, 560px); overflow:auto; padding:22px; border-radius:22px; }
+.reset-scope { margin:8px 0 18px; line-height:1.75; }
+html[lang="ku"] .hand-guide-controls,
+html[lang="ku"] .reset-card { font-family:"Noto Kufi Arabic",system-ui,sans-serif; letter-spacing:0; }
+html[lang="ku"] .hand-guide-controls .range-row { line-height:1.8; }
+html[lang="ku"] .hand-guide-note { font-size:10px; line-height:1.95; }
+/* Kurdish creator/QR remains short: copy and QR are side-by-side inside one compact card. */
+html[lang="ku"] .about-creator-card { grid-template-columns:92px minmax(0,1fr); gap:9px; padding:9px; align-items:center; }
+html[lang="ku"] .about-creator-copy { order:2; padding:2px 0; text-align:right; }
+html[lang="ku"] .about-qr-link { order:1; grid-template-columns:1fr; grid-template-rows:auto auto; gap:3px; min-height:104px; padding:7px; }
+html[lang="ku"] .about-qr-copy { order:1; gap:2px; }
+html[lang="ku"] .about-qr-media { order:2; gap:2px; }
+html[lang="ku"] .about-qr-media img { width:68px; height:68px; padding:4px; border-radius:11px; }
+html[lang="ku"] .about-qr-copy strong { font-size:10px; line-height:1.65; }
+html[lang="ku"] .about-qr-copy small,
+html[lang="ku"] .about-qr-media > span { font-size:8px; line-height:1.55; }
+html[lang="ku"] .about-creator-kicker { font-size:9px; line-height:1.65; }
+html[lang="ku"] .about-creator-name { margin-top:2px; font-size:14px; line-height:1.7; }
+html[lang="ku"] .about-instagram-link { margin-top:7px; padding:7px 8px; }
+html[lang="ku"] .about-summary { line-height:1.86; }
+html[lang="ku"] .about-grid { gap:8px; }
+html[lang="ku"] .about-grid div { min-height:76px; padding:9px; }
+html[lang="ku"] .about-grid b { line-height:1.7; }
+@media (max-width:390px) {
+  .hand-guide-controls { padding:8px; gap:7px; }
+  .hand-guide-controls .range-row { grid-template-columns:minmax(0,1fr) minmax(72px,1fr) 38px; gap:6px; }
+  html[lang="ku"] .about-creator-card { grid-template-columns:86px minmax(0,1fr); gap:7px; padding:8px; }
+  html[lang="ku"] .about-qr-link { min-height:96px; padding:6px; }
+  html[lang="ku"] .about-qr-media img { width:62px; height:62px; }
+  html[lang="ku"] .about-creator-name { font-size:13px; }
+  html[lang="ku"] .settings-section summary > span:not(.summary-icon) { line-height:1.7; }
+}
+

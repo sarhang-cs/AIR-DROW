@@ -1,4 +1,4 @@
-AIR-DROW v8.1.0 — On-device Launch Validation & Final Release Gate
+AIR-DROW v8.2.0 — Visual Guidance & Persistent Settings Refinement
 
 Complete source package with the verified local MediaPipe hand model and runtime.
 Run npm ci --no-audit --no-fund then npm run verify:all.

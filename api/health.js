@@ -5,7 +5,7 @@ export default function handler(req, res) {
   const configured = process.env.AIRDROW_AI_ENABLED === "true" && Boolean(process.env.OPENAI_API_KEY);
   return res.status(200).json({
     ok: true,
-    version: "8.1.0",
+    version: "8.2.0",
     provider: "AIR-DROW optional AI",
     aiConfigured: configured,
     enabled: configured,

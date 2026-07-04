@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# AIR-DROW v8.1.0 — On-device Launch Validation & Final Release Gate
+# AIR-DROW v8.2.0 — Visual Guidance & Persistent Settings Refinement
 # Transactional replacement: preserve .git, verify/build before push, then restore old source if validation fails.
 set -Eeuo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="8.1.0"
+VERSION="8.2.0"
 REPO="${1:-$HOME/AIR-DROW-GITHUB}"
 BACKUP="${REPO}.backup-${VERSION//./-}-$(date +%Y%m%d-%H%M%S)"
 RESTORE_REQUIRED=0
@@ -31,7 +31,7 @@ VERSION_FOUND="$(node -e 'const fs=require("fs"); console.log(JSON.parse(fs.read
 [ "$VERSION_FOUND" = "$VERSION" ] || { echo "Expected AIR-DROW v$VERSION, found v$VERSION_FOUND"; exit 1; }
 [ -s "$SOURCE/web/vendor/models/hand_landmarker.task" ] || { echo "The local hand model is missing."; exit 1; }
 [ -s "$SOURCE/web/vendor/mediapipe/vision_bundle.js" ] || { echo "The local hand runtime is missing."; exit 1; }
-[ -f "$SOURCE/docs/V810_ON_DEVICE_VALIDATION_KU.md" ] || { echo "The on-device validation guide is missing."; exit 1; }
+[ -f "$SOURCE/docs/V820_VISUAL_GUIDANCE_PERSISTENCE_KU.md" ] || { echo "The v8.2 visual guidance guide is missing."; exit 1; }
 
 echo "Creating a safe backup…"
 mkdir -p "$BACKUP"
@@ -49,7 +49,7 @@ echo "Building and verifying AIR-DROW v$VERSION…"
 npm run verify:all && npm test
 RESTORE_REQUIRED=0
 git add -A
-if ! git diff --cached --quiet; then git commit -m "AIR-DROW v8.1.0 on-device launch validation"; fi
+if ! git diff --cached --quiet; then git commit -m "AIR-DROW v8.2.0 visual guidance persistence refinement"; fi
 BRANCH="$(git branch --show-current 2>/dev/null || true)"
 [ -n "$BRANCH" ] || BRANCH="main"
 git push origin "HEAD:$BRANCH"

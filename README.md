@@ -6,7 +6,7 @@
 
 ### A private drawing studio for touch, pen and hand
 
-**On-device Launch Validation & Final Release Gate Edition · v8.1.0 · Created by Sarhang Salah**
+**Visual Guidance & Persistent Settings Refinement Edition · v8.2.0 · Created by Sarhang Salah**
 
 [![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
@@ -86,13 +86,13 @@ The production gate validates local hand-model integrity, generated MediaPipe ru
 
 For Android/Termux replacement, use [`termux/TERMUX_INSTALL.txt`](./termux/TERMUX_INSTALL.txt). The installer keeps `.git`, makes a rollback backup, validates the production build, commits and pushes only after a successful gate.
 
-Before tagging a live deployment, run the in-app App readiness check and complete the [Android Device Validation Checklist](./docs/DEVICE_VALIDATION_CHECKLIST.md). See [On-device Launch Validation](./docs/V810_ON_DEVICE_VALIDATION.md) for the exact boundary between browser checks and physical-device checks. It is intentionally separate from automated checks because only a real phone can confirm its camera driver, permission prompt and browser download sheet.
+Before tagging a live deployment, run the in-app App readiness check and complete the [Android Device Validation Checklist](./docs/DEVICE_VALIDATION_CHECKLIST.md). See [Visual Guidance & Persistent Settings](./docs/V820_VISUAL_GUIDANCE_PERSISTENCE.md) for the exact boundary between browser checks and physical-device checks. It is intentionally separate from automated checks because only a real phone can confirm its camera driver, permission prompt and browser download sheet.
 
 ---
 <div align="center">Made for ideas in motion · <strong>AIR-DROW</strong> · <a href="#top">Back to top</a></div>
 
 
-## v8.1.0 highlights
+## v8.2.0 highlights
 
 - **Export Studio:** PNG, JPG and WebP with 1×, 2× and 4× output, Fit/Fill/Stretch layouts, social presets and A4/A3 300 PPI layouts.
 - **Hand gesture controls:** hover an index finger over the top palette to select a color; hold up two fingers to toggle Hand Eraser. No hand pose can save, export, clear, share or download a file; those actions require a real on-screen tap.
@@ -101,6 +101,16 @@ Before tagging a live deployment, run the in-app App readiness check and complet
 - **On-device launch validation:** Settings → About App → App readiness now checks a temporary canvas, PNG/JPG encoding and local file preparation without opening the camera or downloading a file. Real camera permission and the Android download sheet still require a physical phone test.
 
 
-## v8.1.0 on-device launch validation
+## v8.2.0 on-device launch validation
 
 This release adds a private on-device preflight: it verifies a temporary drawing surface, PNG/JPG encoding and local file preparation without opening the camera, downloading a file, reading your artwork or sending a report. It keeps the real Android camera and browser download confirmation clearly separate, so final release claims remain honest.
+
+## v8.2.0 — Visual Guidance & Persistent Settings
+
+- Full, configurable live hand guide on the non-exported camera feedback layer.
+- Hand palette re-sync after live camera startup.
+- Persistent guide opacity/thickness controls and an explicit settings-only reset.
+- Compact Kurdish mobile About/Instagram card typography.
+
+See [`docs/V820_VISUAL_GUIDANCE_PERSISTENCE.md`](docs/V820_VISUAL_GUIDANCE_PERSISTENCE.md).
+

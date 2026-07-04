@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW is a private drawing studio for touch, pen and optional hand drawing. Create, save and export from one place." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=810" />
-  <meta name="air-drow-build" content="air-drow-v810-on-device-launch-validation" />
-  <meta name="air-drow-icon-pack" content="on-device-launch-validation-v810" />
+  <link rel="manifest" href="./manifest.webmanifest?v=820" />
+  <meta name="air-drow-build" content="air-drow-v820-visual-guidance-persistence" />
+  <meta name="air-drow-icon-pack" content="visual-guidance-persistence-v820" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=810" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=820" />
   <title>AIR-DROW — Draw with Touch, Pen & Hand</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
@@ -23,11 +23,11 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=810" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=810" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=810" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=810" />
-    <link rel="stylesheet" href="./assets/css/production-ui.css?v=810" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=820" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=820" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=820" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=820" />
+    <link rel="stylesheet" href="./assets/css/production-ui.css?v=820" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
@@ -233,7 +233,7 @@
           <span class="app-icon icon-reset" aria-hidden="true"></span>
         </div>
         <h2 id="resetDialogTitle" data-i18n="resetSettings">ڕیسێتی ڕێکخستنەکان</h2>
-        <p data-i18n="resetSettingsBody">تەنها ڕەنگ، ستایل، زمان، کامێرا و هەموو ڕێکخستنەکان دەگەڕێنێتەوە بۆ بنەڕەت. کێشانەکانت ناسڕدرێنەوە.</p>
+        <p class="reset-scope" data-i18n="resetSettingsBody">تەنها ڕەنگ، ستایل، زمان، کامێرا و هەموو ڕێکخستنەکان دەگەڕێنێتەوە بۆ بنەڕەت. کێشانەکانت ناسڕدرێنەوە.</p>
         <div class="reset-actions">
           <button id="resetCancelBtn" class="reset-cancel" type="button" data-i18n="cancel">پاشگەزبوونەوە</button>
           <button id="resetConfirmBtn" class="reset-confirm" type="button" data-i18n="confirmReset">ڕیسێت بکە</button>
@@ -500,6 +500,19 @@
               <span data-i18n="handGuide">نیشاندانی هێڵی دەست</span>
               <span class="toggle-control"><input id="handGuideToggle" type="checkbox" /><span class="toggle-visual" aria-hidden="true"></span></span>
             </label>
+            <div class="hand-guide-controls" data-camera-runtime>
+              <label class="range-row" for="handGuideOpacity">
+                <span data-i18n="handGuideOpacity">ڕوونی هێڵی دەست</span>
+                <input id="handGuideOpacity" type="range" min="20" max="100" step="1" value="68" />
+                <output id="handGuideOpacityOut" for="handGuideOpacity">68%</output>
+              </label>
+              <label class="range-row" for="handGuideThickness">
+                <span data-i18n="handGuideThickness">ئەستوری هێڵی دەست</span>
+                <input id="handGuideThickness" type="range" min="1" max="5" step="0.1" value="2.6" />
+                <output id="handGuideThicknessOut" for="handGuideThickness">2.6</output>
+              </label>
+              <p class="hand-guide-note" data-i18n="handGuideHint">ئەم هێڵانە تەنها ڕێنمایی کامێران؛ لە ناو کێشان و فایلە دەرکراوەکانت نایەن.</p>
+            </div>
             <label class="setting-line" data-camera-runtime>
               <span data-i18n="safePinch">پاراستنی pinch بۆ کێشان</span>
               <span class="toggle-control"><input id="safePinchToggle" type="checkbox" checked /><span class="toggle-visual" aria-hidden="true"></span></span>
@@ -695,7 +708,7 @@
               <p class="about-summary" data-i18n="aboutSummary">ستودیۆیەکی ئازادە بۆ کێشان بە تەچ، قەڵەم و دەست. کێشان و ڕێکخستنەکانت لەسەر ئەم ئامێرە دەمێنن.</p>
             </div>
             <div class="about-grid about-grid-clean">
-              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v8.1.0</b></div>
+              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v8.2.0</b></div>
               <div><span data-i18n="aboutMadeFor">بۆ چی دروستکراوە؟</span><b data-i18n="aboutMadeForValue">تەچ • قەڵەم • دەست</b></div>
               <div><span data-i18n="aboutPrivacy">تایبەتمەندی</span><b data-i18n="aboutPrivacyValue">داتاکەت لەسەر ئامێرەکەت دەمێنێت</b></div>
             </div>
@@ -799,7 +812,7 @@
       parked on the first loading frame.
     */
     (() => {
-      const BUILD_ID = "air-drow-v810-on-device-launch-validation";
+      const BUILD_ID = "air-drow-v820-visual-guidance-persistence";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

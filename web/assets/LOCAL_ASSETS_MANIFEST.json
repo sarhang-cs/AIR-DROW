@@ -1,6 +1,6 @@
 {
-  "version": "8.1.0",
-  "buildId": "air-drow-v810-on-device-launch-validation",
+  "version": "8.2.0",
+  "buildId": "air-drow-v820-visual-guidance-persistence",
   "policy": "AIR-DROW uses local same-origin interface assets, MediaPipe modules, WASM files and the verified hand model. Your drawing session is private to this device unless you choose an export, share or optional AI action.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -30,7 +30,7 @@
     "guide": "assets/icons/ICON_SYSTEM.md",
     "packageManifest": "assets/icons/USER_ICON_PACKAGE.json"
   },
-  "releaseStatus": "v8.1.0 On-device Launch Validation & Final Release Gate Edition: the page, runtime and PWA cache share one revision while private local canvas/PNG/JPG/file-preparation checks and protected physical actions remain active across AIR-DROW.",
-  "assetRevision": "810",
-  "revision": "810"
+  "releaseStatus": "v8.2.0 Visual Guidance & Persistent Settings Refinement: full live hand guidance, persistent local preferences, compact Kurdish mobile typography and protected physical actions.",
+  "assetRevision": "820",
+  "revision": "820"
 }

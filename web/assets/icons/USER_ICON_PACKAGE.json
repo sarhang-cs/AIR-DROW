@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "8.1.0",
-  "buildId": "air-drow-v810-on-device-launch-validation",
+  "version": "8.2.0",
+  "buildId": "air-drow-v820-visual-guidance-persistence",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {
@@ -191,5 +191,5 @@
       "bytes": 502
     }
   ],
-  "release": "On-device Launch Validation & Final Release Gate Edition"
+  "release": "Visual Guidance & Persistent Settings Refinement Edition"
 }

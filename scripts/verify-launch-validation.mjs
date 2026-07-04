@@ -8,8 +8,8 @@ const { I18N } = await import(resolve(root, "web/assets/js/i18n/translations.js"
 const feature = read("web/assets/js/features/device-readiness.js");
 const index = read("web/index.html");
 const docs = [
-  "docs/V810_ON_DEVICE_VALIDATION.md",
-  "docs/V810_ON_DEVICE_VALIDATION_KU.md",
+  "docs/V820_VISUAL_GUIDANCE_PERSISTENCE.md",
+  "docs/V820_VISUAL_GUIDANCE_PERSISTENCE_KU.md",
   "docs/DEVICE_VALIDATION_CHECKLIST.md",
   "docs/DEVICE_VALIDATION_CHECKLIST_KU.md"
 ];

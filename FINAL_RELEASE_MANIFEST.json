@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW On-device Launch Validation & Final Release Gate Edition",
-  "version": "8.1.0",
-  "buildId": "air-drow-v810-on-device-launch-validation",
+  "name": "AIR-DROW Visual Guidance & Persistent Settings Refinement Edition",
+  "version": "8.2.0",
+  "buildId": "air-drow-v820-visual-guidance-persistence",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -22,8 +22,11 @@
     "docs/DEVICE_VALIDATION_CHECKLIST_KU.md",
     "docs/screenshots/air-drow-studio-en.png",
     "docs/screenshots/air-drow-hand-en.png",
-    "docs/V810_ON_DEVICE_VALIDATION.md",
-    "docs/V810_ON_DEVICE_VALIDATION_KU.md"
+    "docs/V820_VISUAL_GUIDANCE_PERSISTENCE.md",
+    "docs/V820_VISUAL_GUIDANCE_PERSISTENCE_KU.md",
+    "docs/V820_VISUAL_GUIDANCE_PERSISTENCE.md",
+    "docs/V820_VISUAL_GUIDANCE_PERSISTENCE_KU.md",
+    "docs/V820_QA_REPORT.md"
   ],
   "developerProfile": {
     "name": "Sarhang Salah",
@@ -33,20 +36,20 @@
   },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v810-on-device-launch-validation.sh",
-  "release": "On-device Launch Validation & Final Release Gate",
-  "assetRevision": "810",
-  "releasedAt": "2026-07-04T02:20:00Z",
-  "releaseName": "AIR-DROW On-device Launch Validation & Final Release Gate Edition",
-  "summary": "A release-gate package: private on-device browser validation for canvas, image encoding and file preparation, cache/build synchronization, action safety QA and bilingual real-device guidance.",
+  "installer": "termux/replace-with-v820-visual-guidance-persistence.sh",
+  "release": "Visual Guidance & Persistent Settings Refinement",
+  "assetRevision": "820",
+  "releasedAt": "2026-07-04T05:25:00Z",
+  "releaseName": "AIR-DROW Visual Guidance & Persistent Settings Refinement Edition",
+  "summary": "A complete source package with full configurable live hand guidance, compact Kurdish mobile layouts, persistent preferences and a physical-action safety boundary.",
   "releaseChecks": [
     "Trusted physical controls are required before any file-producing or destructive action can run.",
     "Raster exports render stored source strokes before any live-canvas snapshot fallback.",
     "The local launch preflight verifies temporary canvas pixels, PNG/JPG encoding and object-URL preparation without opening the camera or downloading a file.",
     "The optional hand guide uses a compact pinch indicator and never appears over active ink.",
     "Hand coordinates cannot paint through palette, toolbar, dock, settings or dialog surfaces.",
-    "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.1.0 build identity."
+    "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.2.0 build identity."
   ],
-  "stage": "on-device-launch-validation",
+  "stage": "visual-guidance-persistence",
   "phase": 18
 }

@@ -533,14 +533,17 @@ function localDate(value) {
 function projectFromStorage(value) {
   if (!value || typeof value !== "object" || !Array.isArray(value.strokes)) return null;
   const settings = { ...defaults, ...(value.settings || {}) };
-  // Projects from releases before the physical-action gate may retain a
-  // noisy hand guide or old shortcut preference. Migrate once to a quiet,
-  // opt-in hand experience; real controls remain the only route to files.
-  if (Number(settings.inputSafetyVersion || 0) < 4) {
+  // v8.2 keeps hand guidance visible and configurable without coupling it to
+  // drawing, exporting or any privileged UI action. Existing local projects
+  // migrate once; every later control change stays persisted until Reset Settings.
+  if (Number(settings.inputSafetyVersion || 0) < 5) {
     settings.gestureShortcuts = false;
-    settings.showHandGuide = false;
-    settings.inputSafetyVersion = 4;
+    settings.showHandGuide = true;
+    settings.handGuideOpacity = 68;
+    settings.handGuideThickness = 2.6;
+    settings.inputSafetyVersion = 5;
   }
+  normalizeHandGuideSettings(settings);
   return {
     strokes: value.strokes,
     settings,
@@ -814,7 +817,16 @@ function setDrawingColor(color, { save = true, announce = false } = {}) {
   return true;
 }
 
+function normalizeHandGuideSettings(settings = state.settings) {
+  if (!settings || typeof settings !== "object") return settings;
+  settings.showHandGuide = settings.showHandGuide !== false;
+  settings.handGuideOpacity = Math.max(20, Math.min(100, Number(settings.handGuideOpacity ?? 68)));
+  settings.handGuideThickness = Math.max(1, Math.min(5, Number(settings.handGuideThickness ?? 2.6)));
+  return settings;
+}
+
 function syncSettingsUI() {
+  normalizeHandGuideSettings();
   ui.brush.value = state.settings.brushSize;
   ui.smoothing.value = state.settings.smoothing;
   updateColorSurfaces();
@@ -844,6 +856,8 @@ function syncSettingsUI() {
   ui.resolution.value = state.settings.cameraWidth;
   ui.cameraView.value = state.settings.cameraView;
   ui.handGuide.checked = state.settings.showHandGuide;
+  if (ui.handGuideOpacity) ui.handGuideOpacity.value = String(state.settings.handGuideOpacity);
+  if (ui.handGuideThickness) ui.handGuideThickness.value = String(state.settings.handGuideThickness);
   ui.safePinch.checked = state.settings.safePinch !== false;
   ui.warmEngine.checked = state.settings.warmHandEngine !== false;
   ui.grid.value = state.settings.grid;
@@ -880,7 +894,9 @@ function updateSettingOutputs() {
   setText(ui.gridOut, `${state.settings.grid}%`);
   setText(ui.shapeConfidenceOut, `${Math.round(Number(state.settings.shapeConfidence) || 86)}%`);
   setText(ui.exportQualityOut, `${Math.round(Number(state.settings.exportQuality) || 92)}%`);
-  [ui.brush, ui.smoothing, ui.eraserSize, ui.grid, ui.shapeConfidence, ui.exportQuality].forEach(updateRangeProgress);
+  setText(ui.handGuideOpacityOut, `${Math.round(Number(state.settings.handGuideOpacity) || 68)}%`);
+  setText(ui.handGuideThicknessOut, Number(state.settings.handGuideThickness || 2.6).toFixed(1));
+  [ui.brush, ui.smoothing, ui.eraserSize, ui.grid, ui.shapeConfidence, ui.exportQuality, ui.handGuideOpacity, ui.handGuideThickness].filter(Boolean).forEach(updateRangeProgress);
 }
 
 
@@ -1065,6 +1081,7 @@ function updateLiveHud() {
 }
 
 function applySettings() {
+  normalizeHandGuideSettings();
   state.settings.handCalibration = normalizeHandCalibration(state.settings.handCalibration);
   state.settings.targetFps = [15, 24, 30].includes(Number(state.settings.targetFps)) ? Number(state.settings.targetFps) : 24;
   state.settings.cameraWidth = [480, 640, 960].includes(Number(state.settings.cameraWidth)) ? Number(state.settings.cameraWidth) : 480;
@@ -1453,6 +1470,7 @@ async function startCamera() {
   if (state.stream) {
     ui.studio.classList.add("camera-on");
     applyCameraView();
+    updateModeButtons();
     return state.stream;
   }
   if (state.cameraStarting) {
@@ -1523,6 +1541,9 @@ async function startCamera() {
     setText(ui.handStatus, ["hand", "hand-eraser"].includes(state.mode)
       ? (state.landmarker ? t("scanPlaceHandNow", "Hand engine is ready") : t("scanWarming", "Preparing hand engine…"))
       : t("cameraReady", "Camera ready"));
+    // getUserMedia resolves asynchronously; re-sync after the stream exists so
+    // the hand colour palette cannot remain hidden due to a pre-stream render.
+    updateModeButtons();
     updateLiveHud();
     return state.stream;
   } catch (error) {
@@ -1553,6 +1574,9 @@ function stopCamera() {
   hideHandScan();
   if (handCalibration?.current?.().active) cancelHandCalibration({ quiet: true });
   clearHandCanvas();
+  state.lastGuideLandmarks = null;
+  state.lastGuideSeenAt = 0;
+  clearHandPaletteHover();
   state.erasingGesture = false;
   clearTimeout(state.handScanReadyTimer);
   state.handScanReadyTimer = 0;
@@ -1658,10 +1682,10 @@ function updateModeButtons() {
   ui.manual.classList.toggle("active", state.mode === "manual");
   ui.eraser.classList.toggle("eraser-active", eraserActive);
   ui.handMode.classList.toggle("active", handActive);
-  // The top palette is only a hand-drawing aid. Hiding it outside a live hand
-  // session keeps normal drawing clear and removes another accidental target.
+  // The top palette is only a live hand-session control. The stream can arrive
+  // after mode selection, so this is called again from startCamera() once it is real.
   if (ui.handPalette) {
-    const visible = handActive && Boolean(state.stream);
+    const visible = ["hand", "hand-eraser"].includes(state.mode) && Boolean(state.stream);
     ui.handPalette.hidden = !visible;
     ui.handPalette.setAttribute("aria-hidden", String(!visible));
     if (!visible) clearHandPaletteHover();
@@ -2269,9 +2293,19 @@ function clearHandCanvas() {
 // The guide is visual feedback only. It must not be coupled to the stricter
 // open-hand geometry gate used for pinch drawing: a closed fist has valid
 // landmarks but intentionally fails open-finger reach tests.
-const HAND_GUIDE_MIN_SCORE = .58;
-const HAND_GUIDE_MIN_SCALE = .034;
+const HAND_GUIDE_MIN_SCORE = .42;
+const HAND_GUIDE_MIN_SCALE = .026;
 const HAND_GUIDE_HOLD_MS = 420;
+// MediaPipe hand-landmark topology. This guide lives on handCanvas only, never
+// in the drawing stroke list, so it can guide the user without entering export.
+const HAND_BONES = Object.freeze([
+  [0, 1], [1, 2], [2, 3], [3, 4],
+  [0, 5], [5, 6], [6, 7], [7, 8],
+  [0, 9], [9, 10], [10, 11], [11, 12],
+  [0, 13], [13, 14], [14, 15], [15, 16],
+  [0, 17], [17, 18], [18, 19], [19, 20],
+  [5, 9], [9, 13], [13, 17]
+]);
 
 function cacheHandGuide(points, geometry, now) {
   if (!Array.isArray(points) || points.length < 21) return false;
@@ -2293,16 +2327,15 @@ function cacheHandGuide(points, geometry, now) {
 }
 
 function drawHeldHandGuide(now) {
-  // During an active stroke the cursor alone is enough. Holding an old guide
-  // underneath live ink makes the canvas look like it is part of the artwork.
-  if (state.handDrawing || !state.settings.showHandGuide || !state.lastGuideLandmarks?.length) return false;
+  if (!state.settings.showHandGuide || !state.lastGuideLandmarks?.length) return false;
   const elapsed = now - state.lastGuideSeenAt;
   if (!Number.isFinite(elapsed) || elapsed < 0 || elapsed > HAND_GUIDE_HOLD_MS) return false;
 
   // Covers a single detector miss caused by finger occlusion while avoiding a
-  // long-lived frozen guide when the hand actually leaves the camera.
-  const opacity = Math.max(.08, .22 - (elapsed / HAND_GUIDE_HOLD_MS) * .14);
-  drawHandSkeleton(state.lastGuideLandmarks, opacity);
+  // long-lived frozen guide when the hand actually leaves the camera. The guide
+  // stays faintly visible while ink is active; it cannot become a drawn stroke.
+  const opacity = Math.max(.18, 1 - (elapsed / HAND_GUIDE_HOLD_MS) * .82);
+  drawHandSkeleton(state.lastGuideLandmarks, opacity * (state.handDrawing ? .72 : 1));
   return true;
 }
 
@@ -2409,10 +2442,11 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
 
     const stablePosition = stabilised.stable;
     const assessment = trackingAssessment(geometry, stablePosition, stabilised.jumped);
-    // Hand-guide visuals must never make a weak/false detector result look
-    // trustworthy. Only a stable, drawable hand can populate the guide cache.
-    const guideDetected = candidate && assessment.usable && cacheHandGuide(landmarks, geometry, now);
-    if (state.settings.showHandGuide && guideDetected && !state.handDrawing) drawHandSkeleton(landmarks, .16);
+    // Guidance is intentionally less strict than drawing. A closed fist or a
+    // brief open-hand confidence dip can still be useful visual feedback, while
+    // pinch drawing keeps its stricter geometry and stability gate below.
+    const guideDetected = cacheHandGuide(landmarks, geometry, now);
+    if (state.settings.showHandGuide && guideDetected) drawHandSkeleton(landmarks, state.handDrawing ? .84 : 1);
     updateTrackingHealth(assessment);
 
     if (!candidate || !stabilised.point) {
@@ -2607,36 +2641,56 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
   }
 }
 
-function drawHandSkeleton(points, opacity = .16) {
+function drawHandSkeleton(points, opacity = 1) {
   const { width, height } = canvasMetrics();
   handCtx.clearRect(0, 0, width, height);
-  const map = point => normalizedToCanvasPoint(point);
-  const thumb = map(points[4]);
-  const index = map(points[8]);
+  if (!state.settings.showHandGuide || !Array.isArray(points) || points.length < 21) return;
 
-  // This is deliberately a pinch-position aid, not a full hand skeleton. Full
-  // bones visually compete with the artwork on a phone and can be mistaken for
-  // drawn lines. The guide is optional and disappears while ink is active.
+  const guideOpacity = Math.max(.2, Math.min(1, (Number(state.settings.handGuideOpacity) || 68) / 100))
+    * Math.max(.12, Math.min(1, Number(opacity) || 1));
+  const guideWidth = Math.max(1, Math.min(5, Number(state.settings.handGuideThickness) || 2.6));
+  const mapped = points.map(normalizedToCanvasPoint);
+
+  // This canvas is composited only for live camera feedback. Exporter reads
+  // ui.draw and source strokes, never handCtx, so guides cannot leak into files.
   handCtx.save();
-  handCtx.globalAlpha = Math.max(.06, Math.min(.18, Number(opacity) || .16));
-  handCtx.setLineDash([2, 5]);
-  handCtx.lineWidth = 1;
-  handCtx.strokeStyle = "rgba(193,236,255,.9)";
+  handCtx.globalAlpha = guideOpacity;
+  handCtx.lineCap = "round";
+  handCtx.lineJoin = "round";
+  handCtx.lineWidth = guideWidth;
+  handCtx.strokeStyle = "rgba(98, 221, 255, .96)";
+  handCtx.shadowColor = "rgba(77, 236, 196, .58)";
+  handCtx.shadowBlur = Math.max(4, guideWidth * 3);
   handCtx.beginPath();
-  handCtx.moveTo(thumb.x, thumb.y);
-  handCtx.lineTo(index.x, index.y);
+  HAND_BONES.forEach(([from, to]) => {
+    const a = mapped[from]; const b = mapped[to];
+    if (!a || !b) return;
+    handCtx.moveTo(a.x, a.y);
+    handCtx.lineTo(b.x, b.y);
+  });
   handCtx.stroke();
-  handCtx.setLineDash([]);
-  handCtx.globalAlpha = Math.max(.34, Math.min(.62, (Number(opacity) || .16) + .28));
-  handCtx.strokeStyle = "rgba(117,231,255,.95)";
-  handCtx.lineWidth = 1.5;
-  handCtx.beginPath();
-  handCtx.arc(index.x, index.y, 6.5, 0, Math.PI * 2);
-  handCtx.stroke();
-  handCtx.fillStyle = "rgba(255,202,116,.92)";
-  handCtx.beginPath();
-  handCtx.arc(thumb.x, thumb.y, 2.25, 0, Math.PI * 2);
-  handCtx.fill();
+
+  handCtx.shadowBlur = 0;
+  mapped.forEach((point, index) => {
+    if (!point) return;
+    const isIndex = index === 8;
+    const isThumb = index === 4;
+    const radius = isIndex ? guideWidth * 2.5 + 3 : (isThumb ? guideWidth * 1.8 + 2.4 : Math.max(1.7, guideWidth * .66));
+    handCtx.fillStyle = isIndex ? "rgba(116, 255, 213, .98)" : (isThumb ? "rgba(255, 202, 116, .98)" : "rgba(117, 231, 255, .9)");
+    handCtx.beginPath();
+    handCtx.arc(point.x, point.y, radius, 0, Math.PI * 2);
+    handCtx.fill();
+  });
+
+  const index = mapped[8];
+  if (index) {
+    handCtx.globalAlpha = Math.min(1, guideOpacity + .18);
+    handCtx.lineWidth = Math.max(1.4, guideWidth * .8);
+    handCtx.strokeStyle = "rgba(188, 255, 234, .98)";
+    handCtx.beginPath();
+    handCtx.arc(index.x, index.y, guideWidth * 3 + 7, 0, Math.PI * 2);
+    handCtx.stroke();
+  }
   handCtx.restore();
 }
 
@@ -2943,8 +2997,9 @@ function closeResetSettingsDialog() {
   syncBodyScroll();
 }
 
-function resetAllSettings() {
-  // Drawings and view are deliberately preserved. Only app preferences reset.
+async function resetAllSettings() {
+  // This is the only destructive preferences path. Artwork, history, gallery
+  // records, title and camera-independent view remain untouched.
   stopCamera();
   state.landmarker?.close?.();
   state.landmarker = null;
@@ -2956,14 +3011,21 @@ function resetAllSettings() {
   state.handDelegate = preferredHandDelegate();
   state.handEngineError = "";
   state.handWarmed = false;
-  state.settings = { ...defaults };
+  state.lastGuideLandmarks = null;
+  state.lastGuideSeenAt = 0;
+  state.settings = structuredClone(defaults);
+  normalizeHandGuideSettings();
   state.shortcutGate.reset();
+  state.pinchGate.reset();
+  state.handContinuity.reset();
   state.mode = "manual";
+  clearHandPaletteHover();
+  clearHandCanvas();
   updateModeButtons();
   syncSettingsUI();
   applySettings();
   closeResetSettingsDialog();
-  saveProject({ quiet: true });
+  await saveProject({ quiet: true, reason: "settings-reset" });
   toast(t("settingsResetDone", "Settings restored to default"));
 }
 
@@ -3635,6 +3697,9 @@ function applyControlChanges() {
   state.settings.cameraWidth = [480, 640, 960].includes(Number(ui.resolution.value)) ? Number(ui.resolution.value) : 480;
   state.settings.cameraView = ui.cameraView.value;
   state.settings.showHandGuide = ui.handGuide.checked;
+  state.settings.handGuideOpacity = Number(ui.handGuideOpacity?.value || 68);
+  state.settings.handGuideThickness = Number(ui.handGuideThickness?.value || 2.6);
+  normalizeHandGuideSettings();
   state.settings.safePinch = ui.safePinch.checked;
   state.settings.warmHandEngine = ui.warmEngine.checked;
   state.settings.grid = Number(ui.grid.value);
@@ -3980,7 +4045,7 @@ function bindControls() {
     // Android is opening the keyboard and can steal focus from the field.
     queueSave();
   };
-  [ui.brush, ui.smoothing, ui.color, ui.brushStyle, ui.symmetryCount, ui.symmetryMirror, ui.shapeAssist, ui.shapeSnapMode, ui.shapeIntent, ui.shapeConfidence, ui.gestureShortcuts, ui.pressure, ui.eraserSize, ui.profile, ui.trackingFps, ui.bright, ui.mirror, ui.resolution, ui.cameraView, ui.handGuide, ui.safePinch, ui.warmEngine, ui.grid, ui.reduceMotion, ui.themeMode, ui.projectName, ui.apiUrl, ui.replayDuration, ui.replayBrand, ui.creatorName, ui.creatorTagline, ui.templatePack, ui.aiPreset, ui.aiSize, ui.aiDirection, ui.performanceMode, ui.exportScale, ui.exportLayout, ui.exportQuality, ui.exportCameraComposite].filter(Boolean)
+  [ui.brush, ui.smoothing, ui.color, ui.brushStyle, ui.symmetryCount, ui.symmetryMirror, ui.shapeAssist, ui.shapeSnapMode, ui.shapeIntent, ui.shapeConfidence, ui.gestureShortcuts, ui.pressure, ui.eraserSize, ui.profile, ui.trackingFps, ui.bright, ui.mirror, ui.resolution, ui.cameraView, ui.handGuide, ui.handGuideOpacity, ui.handGuideThickness, ui.safePinch, ui.warmEngine, ui.grid, ui.reduceMotion, ui.themeMode, ui.projectName, ui.apiUrl, ui.replayDuration, ui.replayBrand, ui.creatorName, ui.creatorTagline, ui.templatePack, ui.aiPreset, ui.aiSize, ui.aiDirection, ui.performanceMode, ui.exportScale, ui.exportLayout, ui.exportQuality, ui.exportCameraComposite].filter(Boolean)
     .forEach(input => input.addEventListener("input", () => {
       if (textOnlyControls.has(input)) {
         syncTextDraft(input);

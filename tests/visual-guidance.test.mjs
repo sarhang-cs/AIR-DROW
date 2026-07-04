@@ -1,0 +1,21 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { createDefaultSettings } from "../web/assets/js/config/runtime.js";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const read = file => readFileSync(resolve(root, file), "utf8");
+const settings = createDefaultSettings();
+assert.equal(settings.showHandGuide, true);
+assert.equal(settings.handGuideOpacity, 68);
+assert.equal(settings.handGuideThickness, 2.6);
+assert.equal(settings.inputSafetyVersion, 5);
+const app = read("web/assets/js/app.js");
+assert.match(app, /const HAND_BONES = Object\.freeze/);
+assert.match(app, /\[0, 1\], \[1, 2\], \[2, 3\], \[3, 4\]/);
+assert.match(app, /getArtworkCanvas: \(\) => ui\.draw/);
+assert.equal((app.match(/bindPhysicalAction\(ui\.clear, clearCanvas\)/g) || []).length, 1);
+assert.match(app, /handGuideOpacity = Number\(ui\.handGuideOpacity/);
+assert.match(app, /await saveProject\(\{ quiet: true, reason: "settings-reset" \}\)/);
+console.log("Visual guidance defaults, isolated export path and persistent reset QA passed.");

@@ -1,10 +1,10 @@
 # AIR-DROW changelog
 
-## v8.1.0 — On-device Launch Validation & Final Release Gate
+## v8.2.0 — Visual Guidance & Persistent Settings Refinement
 
 - Expanded the local App readiness view with private checks for a temporary drawing surface, PNG/JPG blob encoding and local object-URL preparation. These checks never open the camera, download a file, inspect artwork or send a report.
 - Added a source/test gate for the readiness probe and bilingual documentation that separates browser preflight coverage from real Android permission, camera and download-sheet validation.
-- Synchronized the page, runtime, model cache key, PWA manifest, worker cache and release descriptors under the v8.1.0 / revision 810 identity.
+- Synchronized the page, runtime, model cache key, PWA manifest, worker cache and release descriptors under the v8.2.0 / revision 820 identity.
 
 ## v8.0.0 — Final Release Readiness & Cache Integrity
 
@@ -34,3 +34,12 @@
 ## v7.7.0 — Export, Gesture & Reliability
 
 - Added high-resolution export planning, smoothing and guarded color controls.
+
+## v8.2.0 — Visual Guidance & Persistent Settings Refinement
+
+- Restored full configurable hand-guide rendering on the dedicated camera feedback canvas.
+- Added persisted guide opacity and thickness controls.
+- Fixed hand palette startup synchronization after asynchronous camera acquisition.
+- Tightened Kurdish Android typography and compact creator/Instagram QR layout.
+- Standardized preference-only reset behavior and recorded source QA coverage.
+
