@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW is a private drawing studio for touch, pen and optional hand drawing. Create, save and export from one place." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=820" />
-  <meta name="air-drow-build" content="air-drow-v820-visual-guidance-persistence" />
-  <meta name="air-drow-icon-pack" content="visual-guidance-persistence-v820" />
+  <link rel="manifest" href="./manifest.webmanifest?v=830" />
+  <meta name="air-drow-build" content="air-drow-v830-export-preview-save-polish" />
+  <meta name="air-drow-icon-pack" content="visual-guidance-persistence-v830" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=820" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=830" />
   <title>AIR-DROW — Draw with Touch, Pen & Hand</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
@@ -23,11 +23,11 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=820" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=820" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=820" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=820" />
-    <link rel="stylesheet" href="./assets/css/production-ui.css?v=820" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=830" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=830" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=830" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=830" />
+    <link rel="stylesheet" href="./assets/css/production-ui.css?v=830" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
@@ -326,6 +326,7 @@
               <p class="small-status export-note" data-i18n="exportVectorHint">PNG/JPG/WebP هەمان دیمەنەکە دەپارێزن؛ SVG/PDF بۆ هێڵ و brush ـە سازگارەکان وەک vector دەرئەچن.</p>
             </div>
             <div class="compact-actions export-actions">
+              <button id="exportPreviewBtn" type="button" class="setting-action" data-i18n="exportPreview">پێشبینینی دەرکردن</button>
               <button id="exportBtn" type="button" class="setting-action" data-i18n="export">دەرکردن</button>
               <button id="shareBtn" type="button" class="setting-action" data-i18n="share">بڵاوکردنەوە</button>
               <button id="saveBtn" type="button" class="setting-action" data-i18n="save">پاشەکەوت</button>
@@ -708,7 +709,7 @@
               <p class="about-summary" data-i18n="aboutSummary">ستودیۆیەکی ئازادە بۆ کێشان بە تەچ، قەڵەم و دەست. کێشان و ڕێکخستنەکانت لەسەر ئەم ئامێرە دەمێنن.</p>
             </div>
             <div class="about-grid about-grid-clean">
-              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v8.2.0</b></div>
+              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v8.3.0</b></div>
               <div><span data-i18n="aboutMadeFor">بۆ چی دروستکراوە؟</span><b data-i18n="aboutMadeForValue">تەچ • قەڵەم • دەست</b></div>
               <div><span data-i18n="aboutPrivacy">تایبەتمەندی</span><b data-i18n="aboutPrivacyValue">داتاکەت لەسەر ئامێرەکەت دەمێنێت</b></div>
             </div>
@@ -793,6 +794,22 @@
     </aside>
   </div>
 
+  <section id="exportPreviewDialog" class="export-preview-dialog" data-airdrow-surface hidden role="dialog" aria-modal="true" aria-labelledby="exportPreviewTitle">
+    <div class="export-preview-card">
+      <header class="export-preview-head">
+        <div><h2 id="exportPreviewTitle" data-i18n="exportPreviewTitle">پێشبینینی فایل</h2><p id="exportPreviewHint" data-i18n="exportPreviewHint">ئەمە تەنها پێشبینینە؛ هیچ فایلێک تا تۆ دەرکردن دابنێیت دابەزێنرێت.</p></div>
+        <button id="closeExportPreviewBtn" class="close-button" type="button" data-i18n-aria-label="ariaCloseExportPreview" aria-label="Close preview"><span class="app-icon icon-close" aria-hidden="true"></span></button>
+      </header>
+      <div class="export-preview-frame"><img id="exportPreviewImage" alt="Export preview" data-i18n-alt="exportPreviewImageAlt" hidden /><p id="exportPreviewEmpty" class="export-preview-empty" hidden></p></div>
+      <p id="exportPreviewMeta" class="export-preview-meta" aria-live="polite">—</p>
+      <p id="exportPreviewNote" class="export-preview-note" data-i18n="exportPreviewNoDownload">پێشبینین هیچ download ـێک دروست ناکات.</p>
+      <div class="reset-actions export-preview-actions">
+        <button id="exportPreviewDownloadBtn" type="button" class="reset-confirm" data-i18n="exportPreviewDownload">ئێستا دەر بکە</button>
+        <button id="exportPreviewShareBtn" type="button" class="reset-cancel" data-i18n="exportPreviewShare">بڵاوکردنەوە</button>
+      </div>
+    </div>
+  </section>
+
   <section id="quickStartOverlay" class="quick-start-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="quickStartTitle">
     <div class="quick-start-card">
       <header class="quick-start-head"><div><h2 id="quickStartTitle" data-i18n="quickStartTitle">بەخێربێیت بۆ AIR-DROW</h2><p data-i18n="quickStartIntro">لە چوار هەنگاوی کورتدا ئامادەی کێشان دەبیت.</p></div><button id="quickStartSkipBtn" class="quick-start-skip" type="button" data-i18n="quickStartSkip">تێپەڕاندن</button></header>
@@ -812,7 +829,7 @@
       parked on the first loading frame.
     */
     (() => {
-      const BUILD_ID = "air-drow-v820-visual-guidance-persistence";
+      const BUILD_ID = "air-drow-v830-export-preview-save-polish";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

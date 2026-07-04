@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v820-visual-guidance-persistence";
+const BUILD_ID = "air-drow-v830-export-preview-save-polish";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 
@@ -9,15 +9,15 @@ const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [
   "/",
   "/index.html",
-  "/manifest.webmanifest?v=820",
+  "/manifest.webmanifest?v=830",
   "/favicon.svg",
   "/assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf",
-  "/assets/icons/toolbar/toolbar-icons.css?v=820",
-  "/assets/css/app.css?v=820",
-  "/assets/css/visual-system.css?v=820",
-  "/assets/css/icon-system.css?v=820",
-  "/assets/css/drawer-layout.css?v=820",
-  "/assets/css/production-ui.css?v=820"
+  "/assets/icons/toolbar/toolbar-icons.css?v=830",
+  "/assets/css/app.css?v=830",
+  "/assets/css/visual-system.css?v=830",
+  "/assets/css/icon-system.css?v=830",
+  "/assets/css/drawer-layout.css?v=830",
+  "/assets/css/production-ui.css?v=830"
 ];
 
 async function clearAirDrawCaches({ keepCurrent = false } = {}) {

@@ -53,6 +53,7 @@ let deviceReadiness = null;
 let finalLiveQa = null;
 let releaseManager = null;
 let exporter = null;
+let exportPreviewUrl = "";
 let replayStudio = null;
 let shareCardStudio = null;
 let templateStudio = null;
@@ -232,6 +233,7 @@ function hasBlockingOverlay() {
     || (ui.clearDialog && !ui.clearDialog.hidden)
     || (ui.resetDialog && !ui.resetDialog.hidden)
     || (ui.aiResultModal && !ui.aiResultModal.hidden)
+    || (ui.exportPreviewDialog && !ui.exportPreviewDialog.hidden)
   );
 }
 
@@ -3306,11 +3308,83 @@ async function prepareProjectOutput() {
 
 function setExportBusy(busy, message = "", { progress = 14, indeterminate = false } = {}) {
   state.exportBusy = Boolean(busy);
-  [ui.export, ui.share, ui.save, ui.quickSave].filter(Boolean).forEach(button => { button.disabled = Boolean(busy); button.setAttribute("aria-busy", String(Boolean(busy))); });
+  [ui.exportPreview, ui.export, ui.share, ui.save, ui.quickSave, ui.exportPreviewDownload, ui.exportPreviewShare].filter(Boolean).forEach(button => { button.disabled = Boolean(busy); button.setAttribute("aria-busy", String(Boolean(busy))); });
   if (busy) {
     setExportStatus(message || t("exportPreparing", "Preparing file…"), "working");
     loadingManager?.beginTask("export", { label: message || t("exportPreparing", "Preparing file…"), progress, indeterminate });
   } else loadingManager?.endTask("export");
+}
+
+function releaseExportPreviewUrl() {
+  if (!exportPreviewUrl) return;
+  try { URL.revokeObjectURL(exportPreviewUrl); } catch {}
+  exportPreviewUrl = "";
+}
+
+function closeExportPreview() {
+  releaseExportPreviewUrl();
+  if (ui.exportPreviewImage) { ui.exportPreviewImage.removeAttribute("src"); ui.exportPreviewImage.hidden = true; }
+  if (ui.exportPreviewEmpty) { ui.exportPreviewEmpty.hidden = true; setText(ui.exportPreviewEmpty, ""); }
+  if (ui.exportPreviewDialog) ui.exportPreviewDialog.hidden = true;
+  syncBodyScroll();
+}
+
+function previewSummary(result, requestedFormat) {
+  const label = exportFormatLabel(result.format || requestedFormat);
+  if (!result.previewable) {
+    return t("exportPreviewProjectMeta", "AIR-DROW project · {count} strokes").replace("{count}", String(result.strokeCount || 0));
+  }
+  const exact = result.info || {};
+  const preview = result.preview || {};
+  const compact = `${preview.width || "—"} × ${preview.height || "—"}`;
+  const target = `${exact.width || "—"} × ${exact.height || "—"}`;
+  return `${label} · ${t("exportPreviewTarget", "Output")}: ${target} px · ${t("exportPreviewCanvas", "Preview")}: ${compact} px`;
+}
+
+async function previewExportCurrent() {
+  if (state.exportBusy) return;
+  syncExportCompatibility({ announce: true });
+  const format = ui.exportFormat?.value || "png";
+  try {
+    finishStroke();
+    render({ immediate: true });
+    projectNameFromInput();
+    setExportBusy(true, t("exportPreviewPreparing", "Preparing preview…"), { progress: 24 });
+    const result = await ensureExporter().previewFile({
+      format,
+      preset: ui.exportPreset?.value || "current",
+      transparent: Boolean(ui.exportTransparent?.checked),
+      scale: Number(ui.exportScale?.value || state.settings.exportScale || 1),
+      layout: ui.exportLayout?.value || state.settings.exportLayout || "fit",
+      quality: Number(ui.exportQuality?.value || state.settings.exportQuality || 92),
+      includeCamera: Boolean(ui.exportCameraComposite?.checked)
+    });
+    releaseExportPreviewUrl();
+    if (ui.exportPreviewImage) {
+      if (result.previewable && result.blob) {
+        exportPreviewUrl = URL.createObjectURL(result.blob);
+        ui.exportPreviewImage.src = exportPreviewUrl;
+        ui.exportPreviewImage.hidden = false;
+      } else ui.exportPreviewImage.hidden = true;
+    }
+    if (ui.exportPreviewEmpty) {
+      ui.exportPreviewEmpty.hidden = Boolean(result.previewable);
+      setText(ui.exportPreviewEmpty, result.previewable ? "" : t("exportPreviewProjectOnly", "This project file keeps your editable strokes and settings. It has no image preview."));
+    }
+    setText(ui.exportPreviewMeta, previewSummary(result, format));
+    setText(ui.exportPreviewNote, result.previewable
+      ? t("exportPreviewNoDownload", "Previewing does not create a download.")
+      : t("exportPreviewProjectOnly", "This project file keeps your editable strokes and settings. It has no image preview."));
+    if (ui.exportPreviewDialog) ui.exportPreviewDialog.hidden = false;
+    syncBodyScroll();
+    setExportStatus(t("exportPreviewReady", "Preview is ready — no file has been downloaded."), "success");
+  } catch (error) {
+    console.error(error);
+    diagnostics?.record("export-preview", error);
+    const message = t("exportPreviewFailed", "Preview could not be created. Your drawing is still safe.");
+    setExportStatus(message, "error");
+    toast(message);
+  } finally { setExportBusy(false); }
 }
 
 async function exportCurrent() {
@@ -3972,8 +4046,13 @@ function bindControls() {
   ui.closeSettings.addEventListener("click", () => openSettings(false));
   ui.backdrop.addEventListener("click", () => openSettings(false));
 
+  bindPhysicalAction(ui.exportPreview, () => { void previewExportCurrent(); });
   bindPhysicalAction(ui.export, () => { void exportCurrent(); });
   bindPhysicalAction(ui.share, () => { void shareCurrent(); });
+  ui.closeExportPreview?.addEventListener("click", closeExportPreview);
+  ui.exportPreviewDialog?.addEventListener("click", event => { if (event.target === ui.exportPreviewDialog) closeExportPreview(); });
+  bindPhysicalAction(ui.exportPreviewDownload, () => { closeExportPreview(); void exportCurrent(); });
+  bindPhysicalAction(ui.exportPreviewShare, () => { closeExportPreview(); void shareCurrent(); });
   ui.save.addEventListener("click", () => { projectNameFromInput(); void saveProject(); });
   ui.snapLast?.addEventListener("click", snapLastStroke);
   ui.saveGallery?.addEventListener("click", () => { void saveProjectToGallery(); });

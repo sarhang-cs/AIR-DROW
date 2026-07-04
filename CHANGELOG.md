@@ -1,5 +1,12 @@
 # AIR-DROW changelog
 
+## v8.3.0 — Export Preview & Save Polish
+
+- Added local, memory-capped export preview that does not invoke a browser download.
+- Added explicit protected Export/Share actions inside the preview dialog, with cleanup of temporary object URLs.
+- Added QA coverage that prevents preview code from calling the file-download path.
+
+
 ## v8.2.0 — Visual Guidance & Persistent Settings Refinement
 
 - Expanded the local App readiness view with private checks for a temporary drawing surface, PNG/JPG blob encoding and local object-URL preparation. These checks never open the camera, download a file, inspect artwork or send a report.

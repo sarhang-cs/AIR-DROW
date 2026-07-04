@@ -640,6 +640,21 @@ const ku = Object.freeze({
   "quickSaveDone": "وێنەکە دابەزێنرا.",
   "exportOutputLimited": "بۆ پاراستنی بیرگەی ئامێر ڕێکخرا.",
   "exportCompatibilityAdjusted": "هەڵبژاردەکانی دەرکردن بەپێی ئەم فۆرماتە ڕێکخران.",
+  "exportPreview": "پێشبینینی دەرکردن",
+  "exportPreviewTitle": "پێشبینینی فایل",
+  "exportPreviewHint": "ئەمە تەنها پێشبینینە؛ هیچ فایلێک تا تۆ دەرکردن دابنێیت دابەزێنرێت.",
+  "ariaCloseExportPreview": "داخستنی پێشبینین",
+  "exportPreviewImageAlt": "پێشبینینی فایلە دەرکراوەکە",
+  "exportPreviewNoDownload": "پێشبینین هیچ download ـێک دروست ناکات.",
+  "exportPreviewPreparing": "پێشبینین ئامادە دەکرێت…",
+  "exportPreviewReady": "پێشبینین ئامادەیە — هیچ فایلێک دابەزێنراوە نییە.",
+  "exportPreviewFailed": "پێشبینین دروست نەبوو؛ کێشانەکەت هەر پارێزراوە.",
+  "exportPreviewDownload": "ئێستا دەر بکە",
+  "exportPreviewShare": "بڵاوکردنەوە",
+  "exportPreviewTarget": "دەرئەنجام",
+  "exportPreviewCanvas": "پێشبینین",
+  "exportPreviewProjectMeta": "پڕۆژەی AIR-DROW · {count} هێڵ",
+  "exportPreviewProjectOnly": "ئەم فایلە هێڵ و ڕێکخستنە دەستکاریکراوەکانت دەپارێزێت؛ پێشبینینی وێنەی نییە."
 
 });
 
@@ -1281,6 +1296,21 @@ const en = Object.freeze({
   "quickSaveDone": "Image saved.",
   "exportOutputLimited": "Adjusted for device memory.",
   "exportCompatibilityAdjusted": "Export options were adjusted for this format.",
+  "exportPreview": "Preview export",
+  "exportPreviewTitle": "File preview",
+  "exportPreviewHint": "This is a preview only. No file is downloaded until you explicitly export it.",
+  "ariaCloseExportPreview": "Close export preview",
+  "exportPreviewImageAlt": "Preview of the exported file",
+  "exportPreviewNoDownload": "Previewing does not create a download.",
+  "exportPreviewPreparing": "Preparing preview…",
+  "exportPreviewReady": "Preview is ready — no file has been downloaded.",
+  "exportPreviewFailed": "Preview could not be created. Your drawing is still safe.",
+  "exportPreviewDownload": "Export now",
+  "exportPreviewShare": "Share",
+  "exportPreviewTarget": "Output",
+  "exportPreviewCanvas": "Preview",
+  "exportPreviewProjectMeta": "AIR-DROW project · {count} strokes",
+  "exportPreviewProjectOnly": "This project file keeps your editable strokes and settings. It has no image preview."
 
 });
 

@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "8.2.0",
-  "buildId": "air-drow-v820-visual-guidance-persistence",
-  "release": "Visual Guidance & Persistent Settings Refinement",
+  "version": "8.3.0",
+  "buildId": "air-drow-v830-export-preview-save-polish",
+  "release": "Export Preview & Save Polish",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -12,7 +12,7 @@
     "Private on-device preferences"
   ],
   "languages": [
-    "Kurdî (Sorani)",
+    "Kurd\u00ee (Sorani)",
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
@@ -20,14 +20,20 @@
   "support": "Use Settings > About App to review app readiness (including local PNG/JPG encoding), hand drawing readiness, language, release information and developer profile.",
   "developer": {
     "name": "Sarhang Salah",
-    "kurdishName": "سەرهەنگ سلاح",
+    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Visual Guidance & Persistent Settings Refinement Edition",
-  "releasedAt": "2026-07-04T05:25:00Z",
-  "summary": "v8.2.0 restores configurable full-hand live guidance, stores ordinary settings locally, keeps reset explicit and makes Kurdish About/Instagram cards compact on Android.",
-  "stage": "visual-guidance-persistence",
-  "phase": 19,
-  "assetRevision": "820",
-  "releaseName": "AIR-DROW Visual Guidance & Persistent Settings Refinement Edition"
+  "name": "AIR-DROW Export Preview & Save Polish Edition",
+  "releasedAt": "2026-07-04T06:00:00Z",
+  "summary": "A complete local drawing source package with protected no-download export preview, explicit file actions and Android-safe output flow.",
+  "stage": "export-preview-save-polish",
+  "phase": 20,
+  "assetRevision": "830",
+  "releaseName": "AIR-DROW Export Preview & Save Polish Edition",
+  "installer": "termux/replace-with-v830-export-preview-save-polish.sh",
+  "userDocs": [
+    "docs/V830_EXPORT_PREVIEW_SAVE_POLISH.md",
+    "docs/V830_EXPORT_PREVIEW_SAVE_POLISH_KU.md",
+    "docs/V830_QA_REPORT.md"
+  ]
 }

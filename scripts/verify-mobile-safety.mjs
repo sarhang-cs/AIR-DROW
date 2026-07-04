@@ -5,7 +5,7 @@ import { spawnSync } from "node:child_process";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = file => readFileSync(resolve(root, file), "utf8");
-for (const file of ["web/assets/js/app.js", "web/assets/js/features/exporter.js", "web/assets/js/config/runtime.js", "tests/mobile-safety.test.mjs", "docs/V820_VISUAL_GUIDANCE_PERSISTENCE.md"]) if (!existsSync(resolve(root, file))) throw new Error(`Missing mobile-final QA file: ${file}`);
+for (const file of ["web/assets/js/app.js", "web/assets/js/features/exporter.js", "web/assets/js/config/runtime.js", "tests/mobile-safety.test.mjs", "docs/V830_EXPORT_PREVIEW_SAVE_POLISH.md"]) if (!existsSync(resolve(root, file))) throw new Error(`Missing mobile-final QA file: ${file}`);
 const app = read("web/assets/js/app.js");
 const exporter = read("web/assets/js/features/exporter.js");
 const runtime = read("web/assets/js/config/runtime.js");
@@ -17,7 +17,7 @@ if (!runtime.includes("showHandGuide: true") || !app.includes("const HAND_BONES"
 if (!app.includes("getArtworkCanvas: () => ui.draw")) throw new Error("Hand guide must remain outside artwork export.");
 const sourceFirst = exporter.indexOf("const strokeRendererUsed") < exporter.indexOf("let snapshotUsed");
 if (!sourceFirst || !exporter.includes("if (!strokeRendererUsed &&")) throw new Error("Raster export must render source strokes before a live-canvas fallback.");
-if (release.version !== "8.2.0" || release.stage !== "visual-guidance-persistence") throw new Error("Mobile final QA release metadata is stale.");
+if (release.version !== "8.3.0" || release.stage !== "export-preview-save-polish") throw new Error("Mobile final QA release metadata is stale.");
 const result = spawnSync(process.execPath, ["tests/mobile-safety.test.mjs"], { cwd: root, encoding: "utf8" });
 if (result.status !== 0) throw new Error(result.stderr || result.stdout || "Mobile safety tests failed.");
 console.log("AIR-DROW mobile safety contract passed for the current release.");

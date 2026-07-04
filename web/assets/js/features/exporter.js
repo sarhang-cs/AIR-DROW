@@ -359,6 +359,65 @@ export function createExporter({ getProject, getCanvasSize, drawStroke, getArtwo
     return { ...encoded, filename, info: { width: encoded.plan.width, height: encoded.plan.height, layout: encoded.plan.layout, preset: encoded.plan.preset } };
   }
 
+  /**
+   * Build a compact on-device preview without invoking the download path.
+   * The preview is capped to a safe edge length so Android can show an
+   * accurate crop/layout check without allocating the full export canvas.
+   */
+  async function previewFile({ format = "png", preset = "current", transparent = false, scale = 1, layout = "fit", quality = 92, includeCamera = false } = {}) {
+    const project = projectSnapshot();
+    const selected = String(format || "png").toLowerCase();
+    const vector = selected === "svg" || selected === "pdf";
+    const projectFile = selected === "airdrow";
+    const exact = getOutputInfo({ preset, scale: vector || projectFile ? 1 : scale, layout });
+    if (projectFile) {
+      return Object.freeze({
+        previewable: false,
+        format: "airdrow",
+        info: exact,
+        strokeCount: project.strokes.length,
+        cameraIncluded: false,
+        note: "project-file"
+      });
+    }
+
+    const requested = OUTPUTS[selected] || OUTPUTS.png;
+    const forceOpaque = !requested.alpha || Boolean(includeCamera);
+    // Keep the preview below a modest edge limit. It still uses the same fit,
+    // fill or stretch transform as the full output, so crop/letterbox choices
+    // remain truthful.
+    const built = buildCanvas({
+      preset,
+      transparent: forceOpaque ? false : transparent,
+      scale: vector ? 1 : scale,
+      layout,
+      includeCamera,
+      maxSide: 900
+    });
+    let blob;
+    let previewFormat = requested.extension;
+    let fallback = false;
+    try {
+      blob = await canvasToBlob(built.canvas, requested.mime, clamp(quality, 1, 100) / 100);
+    } catch (error) {
+      if (requested.extension !== "webp") throw error;
+      blob = await canvasToBlob(built.canvas, OUTPUTS.png.mime, .95);
+      previewFormat = "png";
+      fallback = true;
+    }
+    return Object.freeze({
+      previewable: true,
+      blob,
+      format: previewFormat,
+      fallback,
+      info: exact,
+      preview: { width: built.plan.width, height: built.plan.height },
+      cameraIncluded: built.cameraIncluded,
+      flattened: forceOpaque && transparent,
+      strokeCount: project.strokes.length
+    });
+  }
+
   async function shareFile({ format = "png", preset = "current", transparent = false, scale = 1, layout = "fit", quality = 92, includeCamera = false, filenameBase = "air-drow" } = {}) {
     const supportedFormat = OUTPUTS[format] ? format : "png";
     const encoded = await encodeRaster({ format: supportedFormat, preset, transparent, scale, layout, quality, includeCamera });
@@ -372,5 +431,5 @@ export function createExporter({ getProject, getCanvasSize, drawStroke, getArtwo
     return { shared: false, downloaded: true, filename, ...encoded, formatFallback: supportedFormat !== format };
   }
 
-  return { exportFile, shareFile, buildSvg, buildPdf, buildCanvas, buildThumbnail, encodeRaster, getOutputInfo };
+  return { exportFile, shareFile, previewFile, buildSvg, buildPdf, buildCanvas, buildThumbnail, encodeRaster, getOutputInfo };
 }

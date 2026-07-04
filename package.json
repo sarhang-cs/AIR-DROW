@@ -1,8 +1,8 @@
 {
   "name": "air-drow",
-  "version": "8.2.0",
+  "version": "8.3.0",
   "private": true,
-  "description": "AIR-DROW Visual Guidance & Persistent Settings Refinement — reliable live hand guidance, persisted local controls, compact Kurdish mobile typography and protected physical actions.",
+  "description": "AIR-DROW Export Preview & Save Polish \u2014 local no-download previews, explicit file actions and stable mobile output workflow.",
   "type": "module",
   "dependencies": {
     "@mediapipe/tasks-vision": "0.10.35"
@@ -17,7 +17,7 @@
     "build:static": "node scripts/build-selfhosted-mediapipe.mjs",
     "hand-loader:verify": "node scripts/verify-hand-runtime-loader-fix.mjs",
     "deploy-build:verify": "node scripts/verify-deployment-build-order.mjs",
-    "verify:source": "npm run icons:sync && npm run icons:verify && npm run icons:local:verify && npm run preflight && npm run check && npm run model:verify && npm run release:verify && npm run production:verify && npm run localization:verify && npm run runtime:verify && npm run qa:reality && npm run qa:critical-input-export && npm run qa:release-readiness && npm run qa:launch-validation && npm run qa:visual-guidance && npm test",
+    "verify:source": "npm run icons:sync && npm run icons:verify && npm run icons:local:verify && npm run preflight && npm run check && npm run model:verify && npm run release:verify && npm run production:verify && npm run localization:verify && npm run runtime:verify && npm run qa:reality && npm run qa:critical-input-export && npm run qa:release-readiness && npm run qa:launch-validation && npm run qa:visual-guidance && npm run qa:export-preview-save && npm test",
     "verify:deploy-output": "npm run hand-loader:verify && npm run deploy-build:verify",
     "build": "npm run verify:source && npm run build:static && npm run verify:deploy-output",
     "vercel:build": "npm run model:verify && npm run build",
@@ -28,7 +28,7 @@
     "localization:verify": "node scripts/verify-localization-theme-final.mjs",
     "runtime:verify": "node scripts/verify-runtime-experience.mjs",
     "qa:reality": "node scripts/verify-calibration-reality-qa.mjs",
-    "test": "node tests/export-gesture-reliability.test.mjs && node tests/mobile-safety.test.mjs && node tests/release-readiness.test.mjs && node tests/launch-validation.test.mjs && node tests/visual-guidance.test.mjs",
+    "test": "node tests/export-gesture-reliability.test.mjs && node tests/mobile-safety.test.mjs && node tests/release-readiness.test.mjs && node tests/launch-validation.test.mjs && node tests/visual-guidance.test.mjs && node tests/export-preview-save.test.mjs",
     "qa:export-gesture": "node scripts/verify-input-export-safety.mjs",
     "qa:critical-input-export": "npm run qa:input-export-safety && npm run qa:mobile-final",
     "qa:hand-performance": "node scripts/verify-mobile-safety.mjs",
@@ -36,7 +36,8 @@
     "qa:mobile-final": "node scripts/verify-mobile-safety.mjs",
     "qa:release-readiness": "node scripts/verify-release-readiness.mjs",
     "qa:launch-validation": "node scripts/verify-launch-validation.mjs",
-    "qa:visual-guidance": "node scripts/verify-visual-guidance.mjs"
+    "qa:visual-guidance": "node scripts/verify-visual-guidance.mjs",
+    "qa:export-preview-save": "node scripts/verify-export-preview-save.mjs"
   },
   "engines": {
     "node": ">=22 <25"

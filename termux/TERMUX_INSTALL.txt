@@ -1,6 +1,6 @@
-AIR-DROW v8.2.0 — Visual Guidance & Persistent Settings Refinement
+AIR-DROW v8.3.0 — Export Preview & Save Polish
 
-1. Put AIR-DROW_v8.2.0_ON_DEVICE_LAUNCH_VALIDATION.zip in /sdcard/Download.
-2. Run termux/replace-with-v820-visual-guidance-persistence.sh from the extracted project folder.
-3. The script preserves .git, makes a rollback backup, validates npm ci + npm run verify:all, commits and pushes only after a successful production gate.
-4. After Vercel deploys, run the in-app App readiness check and then docs/DEVICE_VALIDATION_CHECKLIST_KU.md on your Android phone before making a GitHub release tag.
+1. Put AIR-DROW_v8.3.0_EXPORT_PREVIEW_SAVE_POLISH.zip in /sdcard/Download.
+2. Extract it, then run termux/replace-with-v830-export-preview-save-polish.sh from the extracted AIR-DROW-main folder.
+3. The script preserves .git, creates a rollback backup, runs npm ci + npm run verify:all + npm test, commits and pushes only after success.
+4. After Vercel deploys, use Export Preview once, close it, then explicitly test PNG/JPG export on Android.

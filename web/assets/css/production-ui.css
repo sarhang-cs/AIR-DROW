@@ -795,7 +795,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 :root.reduce-motion .hand-tutorial-card * { animation:none !important; }
 @media (max-width:390px) { .hand-tutorial-head { grid-template-columns:1fr; } .hand-tutorial-visual { max-width:190px; justify-self:center; } }
 
-/* ===== v8.2.0 Visual Guidance & Persistent Settings Refinement ===== */
+/* ===== v8.3.0 Visual Guidance & Persistent Settings Refinement ===== */
 /* One responsive source of truth: cards stay balanced on a phone and QR remains beside the creator profile. */
 .about-creator-card {
   display:grid;
@@ -935,7 +935,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v8.2.0 — release launch validation with protected hand palette and local reliability controls.
+/* v8.3.0 — release launch validation with protected hand palette and local reliability controls.
  * The palette is a real control surface: it sits above the canvas and is
  * explicitly blocked from pointer / hand drawing by app.js surface guards. */
 .hand-palette {
@@ -1010,7 +1010,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v8.2.0 — critical input safety and Kurdish mobile typography. */
+/* v8.3.0 — critical input safety and Kurdish mobile typography. */
 .hand-palette[hidden] { display: none !important; }
 /* Palette, live HUD and camera state occupy distinct vertical bands. */
 @media (max-width: 560px) {
@@ -1054,7 +1054,7 @@ html[lang="ku"] .about-grid div { min-height: 88px; padding: 11px; }
 }
 
 
-/* v8.2.0 — mobile safety, quiet hand guide and Kurdish reading rhythm. */
+/* v8.3.0 — mobile safety, quiet hand guide and Kurdish reading rhythm. */
 .hand-canvas { isolation: isolate; }
 html[lang="ku"] .hand-gesture-help,
 html[lang="ku"] .hand-quality,
@@ -1075,7 +1075,7 @@ html[lang="ku"] .about-qr-copy strong {
   html[lang="ku"] .about-summary { font-size: 11px; line-height: 1.92; }
 }
 
-/* ===== v8.2.0 Visual Guidance & Persistent Settings Refinement =====
+/* ===== v8.3.0 Visual Guidance & Persistent Settings Refinement =====
  * One compact source layer for Android hand guidance and Kurdish readability. */
 .hand-guide-controls {
   display:grid;
@@ -1124,7 +1124,7 @@ html[lang="ku"] .about-grid b { line-height:1.7; }
 
 
 
-/* ===== v8.2.0 restore: v7.6.2 hand guide look + Kurdish card rhythm ===== */
+/* ===== v8.3.0 restore: v7.6.2 hand guide look + Kurdish card rhythm ===== */
 /* Restore the original readable mobile proportions from v7.6.2 while keeping the newer persistent controls and safety fixes. */
 html[lang="ku"] .settings-title { font-size: 17px; line-height: 1.55; }
 html[lang="ku"] .settings-section summary > span:not(.summary-icon) { font-size: 13px; line-height: 1.55; }
@@ -1162,3 +1162,58 @@ html[lang="ku"] .about-grid b { font-size:9px !important; line-height:1.55 !impo
   html[lang="ku"] .about-grid span { font-size:8px !important; }
   html[lang="ku"] .about-grid b { font-size:8.4px !important; }
 }
+
+
+/* ===== v8.3.0 Export Preview & Save Polish ===== */
+.export-preview-dialog {
+  position:fixed;
+  inset:0;
+  z-index:80;
+  display:grid;
+  place-items:center;
+  padding:calc(18px + env(safe-area-inset-top, 0px)) 16px calc(18px + env(safe-area-inset-bottom, 0px));
+  background:rgba(4,5,16,.74);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.export-preview-dialog[hidden] { display:none !important; }
+.export-preview-card {
+  width:min(94vw, 520px);
+  max-height:min(88dvh, 760px);
+  overflow:auto;
+  padding:16px;
+  border:1px solid color-mix(in srgb,var(--accent) 38%,var(--line));
+  border-radius:22px;
+  color:var(--text);
+  background:linear-gradient(145deg,color-mix(in srgb,var(--panel-solid,var(--panel)) 96%,transparent),color-mix(in srgb,var(--panel-2) 92%,transparent));
+  box-shadow:0 26px 70px rgba(0,0,0,.48),inset 0 1px 0 var(--glass-highlight,rgba(255,255,255,.09));
+}
+.export-preview-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.export-preview-head h2 { margin:0; font-size:16px; line-height:1.45; }
+.export-preview-head p { margin:5px 0 0; color:var(--muted); font-size:10px; line-height:1.65; }
+.export-preview-frame {
+  display:grid;
+  place-items:center;
+  min-height:164px;
+  margin-top:12px;
+  overflow:hidden;
+  border:1px solid color-mix(in srgb,var(--accent) 20%,var(--line));
+  border-radius:16px;
+  background:repeating-conic-gradient(color-mix(in srgb,var(--panel-solid,var(--panel)) 90%,#fff) 0 25%,color-mix(in srgb,var(--panel-2) 86%,#000) 0 50%) 50% / 18px 18px;
+}
+.export-preview-frame img { display:block; width:100%; max-height:min(48dvh,440px); object-fit:contain; background:var(--bg); }
+.export-preview-empty { max-width:300px; margin:20px; color:var(--muted); font-size:11px; line-height:1.8; text-align:center; }
+.export-preview-meta { margin:10px 0 0; color:var(--accent); font-size:10px; line-height:1.65; font-variant-numeric:tabular-nums; }
+.export-preview-note { margin:5px 0 0; color:var(--muted); font-size:9px; line-height:1.6; }
+.export-preview-actions { margin-top:13px; }
+.export-preview-actions .reset-confirm,.export-preview-actions .reset-cancel { min-height:42px; }
+@media (max-width:420px) {
+  .export-preview-card { width:calc(100vw - 20px); padding:13px; border-radius:18px; }
+  .export-preview-head h2 { font-size:15px; }
+  .export-preview-frame { min-height:138px; border-radius:14px; }
+  .export-preview-frame img { max-height:46dvh; }
+}
+html[lang="ku"] .export-preview-card { font-family:"Noto Kufi Arabic",system-ui,sans-serif; letter-spacing:0; text-align:right; }
+html[lang="ku"] .export-preview-head h2 { font-size:16px; line-height:1.65; }
+html[lang="ku"] .export-preview-head p,.export-preview-meta { line-height:1.9; }
+html[lang="ku"] .export-preview-note,.export-preview-empty { line-height:1.95; }

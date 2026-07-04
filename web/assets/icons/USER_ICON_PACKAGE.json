@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "8.2.0",
-  "buildId": "air-drow-v820-visual-guidance-persistence",
+  "version": "8.3.0",
+  "buildId": "air-drow-v830-export-preview-save-polish",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {
