@@ -348,6 +348,31 @@ export const projectStore = {
     return { restoredGallery, restoredCurrent, preservedCurrent, sourceVersion: archive.appVersion || "" };
   },
 
+  /**
+   * Non-invasive storage round-trip for the Feature Check panel.
+   * Uses a private diagnostic record, never lists it in the gallery and
+   * removes it in finally even when a browser falls back from IndexedDB.
+   */
+  async probeIntegrity() {
+    const id = `diagnostic-feature-probe-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    const record = {
+      id,
+      recordType: "diagnostic",
+      savedAt: new Date().toISOString(),
+      project: { title: "AIR-DROW feature probe", strokes: [] }
+    };
+    try {
+      await putRecord(record);
+      const loaded = await getRecord(id);
+      const ok = Boolean(loaded?.id === id && Array.isArray(loaded?.project?.strokes));
+      return { ok, mode: storageMode, fallback: storageMode === "localstorage" };
+    } catch (error) {
+      return { ok: false, mode: storageMode, fallback: storageMode === "localstorage", error: storageError(error) };
+    } finally {
+      try { await removeRecord(id); } catch {}
+    }
+  },
+
   async getHealth() {
     const records = await getAllRecords();
     const valid = archiveRecords(records);

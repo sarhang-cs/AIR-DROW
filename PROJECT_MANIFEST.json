@@ -1,7 +1,7 @@
 {
   "project": "AIR-DROW",
-  "version": "8.5.0",
-  "buildId": "air-drow-v850-settings-kurdish-responsive-polish",
+  "version": "8.6.0",
+  "buildId": "air-drow-v860-all-feature-device-qa",
   "release": "Hand Input Reliability",
   "experience": [
     "Touch drawing",
@@ -12,7 +12,7 @@
     "Private on-device preferences"
   ],
   "languages": [
-    "Kurdî (Sorani)",
+    "Kurd\u00ee (Sorani)",
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
@@ -20,7 +20,7 @@
   "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, release information and developer profile.",
   "developer": {
     "name": "Sarhang Salah",
-    "kurdishName": "سەرهەنگ سلاح",
+    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
   "name": "AIR-DROW Hand Input Reliability Edition",

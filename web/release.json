@@ -1,27 +1,26 @@
 {
-  "version": "8.5.0",
-  "buildId": "air-drow-v850-settings-kurdish-responsive-polish",
+  "version": "8.6.0",
+  "buildId": "air-drow-v860-all-feature-device-qa",
   "releasedAt": "2026-07-04T16:30:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Settings + Kurdish Responsive Polish: focused everyday/advanced settings navigation, local preference persistence clarity, deterministic Settings entry and improved Sorani mobile reading rhythm.",
+  "summary": "AIR-DROW All-Feature Device QA: a private on-device validation for projects, export routes, PWA and browser support.",
   "features": [
-    "Adds a Settings home with direct routes for Camera & Hand, Appearance, Display, Live Info and System & Data.",
-    "Keeps all preferences locally persisted and makes the device-only persistence boundary visible.",
-    "Improves Sorani Kurdish settings typography, wrapping, helper-text rhythm and narrow-mobile spacing.",
-    "Clarifies preference-only Reset: drawings, history, projects and gallery remain untouched.",
-    "Preserves hand-input reliability, physical-action safety and same-origin local MediaPipe runtime."
+    "Adds Feature Check in Settings \u2192 System & Data for project storage, PNG/JPG/WebP, SVG/PDF, save/share, PWA and browser capability.",
+    "Runs only local, temporary probes; camera permission, downloads, artwork mutation and external reporting are excluded.",
+    "Keeps Camera & Hand Check separate for genuine live camera/hand verification on the current device.",
+    "Preserves existing hand reliability, Settings/Kurdish polish, physical-action safety and local MediaPipe runtime."
   ],
-  "assetRevision": "850",
+  "assetRevision": "860",
   "phase": 23,
-  "stage": "settings-kurdish-responsive-polish",
+  "stage": "all-feature-device-qa",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you explicitly export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",
     "handTracking": "The deployed app uses the local same-origin hand model and runtime. It does not download a hand model while you draw.",
-    "checks": "Readiness checks and diagnostics read browser/app state only. They do not open the camera, trigger a download, upload a report, or include camera frames, hand landmarks, drawing points, project titles, or API URLs."
+    "checks": "Readiness, Feature Check and diagnostics read only browser/app capability. They do not open a camera, trigger a download, upload a report, modify an artwork, or include camera frames, hand landmarks, drawing points, project titles or API URLs."
   },
   "buildPolicy": {
     "sourceModel": "web/vendor/models/hand_landmarker.task",

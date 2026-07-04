@@ -20,6 +20,7 @@ import { createPersistenceGuard } from "./core/persistence-guard.js";
 import { createFinalStability } from "./core/final-stability.js";
 import { createDeviceReadiness } from "./features/device-readiness.js";
 import { createFinalLiveQa } from "./features/final-live-qa.js";
+import { createFeatureValidation } from "./features/feature-validation.js";
 import { createDiagnostics } from "./core/diagnostics.js";
 import { smoothStrokePoint } from "./features/stroke-smoother.js";
 import { createHandStabilizer, createHandIntentGate, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
@@ -52,6 +53,7 @@ let persistenceGuard = null;
 let finalStability = null;
 let deviceReadiness = null;
 let finalLiveQa = null;
+let featureValidation = null;
 let releaseManager = null;
 let exporter = null;
 let exportPreviewUrl = "";
@@ -4213,6 +4215,8 @@ function bindControls() {
   ui.copyDeviceReadiness?.addEventListener("click", () => { void deviceReadiness?.copyReport(); });
   ui.runFinalLiveQa?.addEventListener("click", () => { void finalLiveQa?.run(); });
   ui.copyFinalLiveQa?.addEventListener("click", () => { void finalLiveQa?.copyReport(); });
+  ui.runFeatureQa?.addEventListener("click", () => { void featureValidation?.run(); });
+  ui.copyFeatureQa?.addEventListener("click", () => { void featureValidation?.copyReport(); });
   ui.galleryList?.addEventListener("click", event => {
     const button = event.target.closest("[data-gallery-action]");
     if (!button) return;
@@ -4435,6 +4439,14 @@ async function boot() {
       handFps: Number(state.fps || 0),
       handDelegate: state.handDelegate || ""
     })
+  });
+  featureValidation = createFeatureValidation({
+    status: ui.featureQaStatus,
+    score: ui.featureQaScore,
+    list: ui.featureQaList,
+    getCopy: t,
+    release: AIRDROW_RELEASE,
+    projectStore
   });
   loadingManager.setBoot({ progress: 8, label: t("bootPreparing", "Preparing studio…") });
   updateLayoutClass();

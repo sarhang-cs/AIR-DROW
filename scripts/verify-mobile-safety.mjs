@@ -17,7 +17,7 @@ if (!runtime.includes("showHandGuide: true") || !app.includes("const HAND_BONES"
 if (!app.includes("getArtworkCanvas: () => ui.draw")) throw new Error("Hand guide must remain outside artwork export.");
 const sourceFirst = exporter.indexOf("const strokeRendererUsed") < exporter.indexOf("let snapshotUsed");
 if (!sourceFirst || !exporter.includes("if (!strokeRendererUsed &&")) throw new Error("Raster export must render source strokes before a live-canvas fallback.");
-if (release.version !== "8.5.0" || release.stage !== "settings-kurdish-responsive-polish") throw new Error("Mobile final QA release metadata is stale.");
+if (release.version !== "8.6.0" || release.stage !== "all-feature-device-qa") throw new Error("Mobile final QA release metadata is stale.");
 const result = spawnSync(process.execPath, ["tests/mobile-safety.test.mjs"], { cwd: root, encoding: "utf8" });
 if (result.status !== 0) throw new Error(result.stderr || result.stdout || "Mobile safety tests failed.");
 console.log("AIR-DROW mobile safety contract passed for the current release.");

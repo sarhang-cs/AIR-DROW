@@ -1,5 +1,5 @@
-AIR-DROW v8.5.0 — Settings + Kurdish Responsive Polish
+AIR-DROW v8.6.0 — All-Feature Device QA
 
-1. Put AIR-DROW_v8.5.0_SETTINGS_KURDISH_RESPONSIVE_POLISH.zip in /sdcard/Download/.
-2. Extract it and run termux/replace-with-v850-settings-kurdish-responsive-polish.sh.
-3. The replacement preserves .git, runs verify:all, commits and pushes.
+1. Put AIR-DROW_v8.6.0_ALL_FEATURE_DEVICE_QA.zip in /sdcard/Download/.
+2. Extract it and run termux/replace-with-v860-all-feature-device-qa.sh from AIR-DROW-main.
+3. The script preserves .git, validates source/build, commits and pushes the clean replacement.

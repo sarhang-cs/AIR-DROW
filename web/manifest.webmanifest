@@ -1,12 +1,12 @@
 {
-  "name": "AIR-DROW — Draw with Touch, Pen & Hand",
+  "name": "AIR-DROW \u2014 Draw with Touch, Pen & Hand",
   "short_name": "AIR-DROW",
-  "start_url": "./?build=v850",
+  "start_url": "./?build=v860",
   "display": "standalone",
   "background_color": "#080914",
   "theme_color": "#080914",
   "description": "A private drawing studio for touch, pen and optional hand drawing with local projects, protected exports and configurable live hand guidance.",
-  "version": "8.5.0",
+  "version": "8.6.0",
   "icons": [
     {
       "src": "./assets/icons/brand/air-drow-mark.svg",

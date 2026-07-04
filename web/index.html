@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW is a private drawing studio for touch, pen and optional hand drawing. Create, save and export from one place." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=850" />
-  <meta name="air-drow-build" content="air-drow-v850-settings-kurdish-responsive-polish" />
-  <meta name="air-drow-icon-pack" content="settings-kurdish-responsive-polish-v850" />
+  <link rel="manifest" href="./manifest.webmanifest?v=860" />
+  <meta name="air-drow-build" content="air-drow-v860-all-feature-device-qa" />
+  <meta name="air-drow-icon-pack" content="all-feature-device-qa-v860" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=850" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=860" />
   <title>AIR-DROW — Draw with Touch, Pen & Hand</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
@@ -23,11 +23,11 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=850" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=850" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=850" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=850" />
-    <link rel="stylesheet" href="./assets/css/production-ui.css?v=850" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=860" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=860" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=860" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=860" />
+    <link rel="stylesheet" href="./assets/css/production-ui.css?v=860" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
@@ -737,7 +737,7 @@
               <p class="about-summary" data-i18n="aboutSummary">ستودیۆیەکی ئازادە بۆ کێشان بە تەچ، قەڵەم و دەست. کێشان و ڕێکخستنەکانت لەسەر ئەم ئامێرە دەمێنن.</p>
             </div>
             <div class="about-grid about-grid-clean">
-              <div class="about-meta-card about-meta-version"><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v8.5.0</b></div>
+              <div class="about-meta-card about-meta-version"><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v8.6.0</b></div>
               <div class="about-meta-card about-meta-input"><span data-i18n="aboutMadeFor">بۆ چی دروستکراوە؟</span><b data-i18n="aboutMadeForValue">تەچ • قەڵەم • دەست</b></div>
               <div class="about-meta-card about-meta-privacy"><span data-i18n="aboutPrivacy">تایبەتمەندی</span><b data-i18n="aboutPrivacyValue">داتاکەت لەسەر ئامێرەکەت دەمێنێت</b></div>
             </div>
@@ -793,6 +793,22 @@
                 <button id="copyFinalLiveQaBtn" type="button" class="setting-action" data-i18n="finalLiveQaCopy">کۆپیکردنی ڕاپۆرت</button>
               </div>
               <p class="device-readiness-privacy" data-i18n="finalLiveQaPrivacy">ئەم پشکنینە کامێرا ناکاتەوە و ڕێگەپێدان داوا ناکات. بۆ پشکنینی دەست، خۆت کامێرا بکەرەوە پاشان دووبارە پشکنین بکە.</p>
+            </section>
+            <section class="device-readiness-card feature-validation-card" aria-label="Feature check" data-i18n-aria-label="ariaFeatureQa">
+              <div class="device-readiness-head">
+                <div>
+                  <strong data-i18n="featureQaTitle">پشکنینی بەشەکان</strong>
+                  <p data-i18n="featureQaHint">ڕێگای پڕۆژە، دەرکردن، فایل، PWA و سازگاریی وێبگەڕ پشکنین دەکرێت؛ هیچ فایلێک دابەزێنرێت ناکات.</p>
+                </div>
+                <b id="featureQaScore" class="device-readiness-score" aria-live="polite">—</b>
+              </div>
+              <p id="featureQaStatus" class="device-readiness-status" role="status" aria-live="polite" data-i18n="featureQaIdle">هێشتا پشکنین نەکراوە.</p>
+              <ul id="featureQaList" class="device-readiness-list" aria-live="polite"></ul>
+              <div class="compact-actions">
+                <button id="runFeatureQaBtn" type="button" class="setting-action" data-i18n="featureQaRun">پشکنین بکە</button>
+                <button id="copyFeatureQaBtn" type="button" class="setting-action" data-i18n="featureQaCopy">کۆپیکردنی ئەنجام</button>
+              </div>
+              <p class="device-readiness-privacy" data-i18n="featureQaPrivacy">ئەم پشکنینە کامێرا ناکاتەوە، permission داوا ناکات، کێشانەکانت ناگۆڕێت و هیچ فایلێک دابەزێنێت ناکات. تەنها تاقیکردنەوەی بچووک و کاتی لەسەر ئامێرەکەت دەکات.</p>
             </section>
             <div id="languageChoices" class="language-switch">
               <button type="button" class="language-choice selected" data-language="ku" data-i18n="languageKurdish">کوردی</button>
@@ -857,7 +873,7 @@
       parked on the first loading frame.
     */
     (() => {
-      const BUILD_ID = "air-drow-v850-settings-kurdish-responsive-polish";
+      const BUILD_ID = "air-drow-v860-all-feature-device-qa";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

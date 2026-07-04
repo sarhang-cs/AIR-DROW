@@ -1,13 +1,13 @@
 # AIR-DROW Release Notes
 
-## v8.5.0 — Settings + Kurdish Responsive Polish
+## v8.6.0 — All-Feature Device QA
 - Adds focused Settings quick navigation for everyday and advanced routes.
 - Improves Sorani Kurdish mobile reading rhythm, wrapping and reset transparency.
 - Preserves project artwork, history, gallery and trusted physical actions.
 
 # AIR-DROW release notes
 
-## v8.5.0 — Hand Input Reliability
+## v8.6.0 — Hand Input Reliability
 - Deliberate open-hand/pinch/movement gate for new hand strokes.
 - Re-pinch recovery after short lost-hand interruptions.
 - Short 260 ms guide fade and smaller mobile scan card.

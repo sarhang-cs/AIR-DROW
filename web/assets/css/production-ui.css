@@ -1323,3 +1323,17 @@ html[lang="ku"] .reset-scope-list { font-size:9.5px; line-height:1.9; }
   html[lang="ku"] .settings-command-link b { font-size:9px; }
   html[lang="ku"] .settings-command-link small { font-size:7.6px; }
 }
+
+
+/* ===== v8.6.0 All-Feature Device QA ===== */
+.feature-validation-card { border-color:color-mix(in srgb,var(--accent) 33%,var(--line)); }
+.feature-validation-card .device-readiness-list li { grid-template-columns:minmax(0,1fr) auto; }
+.feature-validation-card .device-readiness-list b { max-width:46%; overflow-wrap:anywhere; text-align:end; }
+html[lang="ku"] .feature-validation-card .device-readiness-head p,
+html[lang="ku"] .feature-validation-card .device-readiness-privacy { font-size:10px; line-height:1.9; }
+html[lang="ku"] .feature-validation-card .device-readiness-list span,
+html[lang="ku"] .feature-validation-card .device-readiness-list b { font-size:10px; line-height:1.75; }
+@media (max-width:390px) {
+  .feature-validation-card .compact-actions { grid-template-columns:1fr; }
+  .feature-validation-card .device-readiness-list li { gap:7px; padding:8px; }
+}
