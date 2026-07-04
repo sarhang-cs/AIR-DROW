@@ -49,7 +49,7 @@ button, summary, label, [role="button"], [data-workspace-nav], [data-camera-view
 .setting-action, .tool-button, .workspace-tab, .workspace-dock-button,
 .toggle-control, .settings-section {
   -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+  touch-action: auto;
 }
 button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
@@ -1895,3 +1895,7 @@ html.airdrow-editor-active textarea {
 :root[data-theme="light"] .toolbar .tool-button.camera-live .toolbar-icon svg {
   filter: drop-shadow(0 1px 0 rgba(255,255,255,.78));
 }
+
+
+/* v7.6.2 Android text-entry follow-up: let the browser own editable taps fully. */
+.text-setting input, .ai-studio-section textarea, #apiUrlInput, input[type="text"], input[type="url"], textarea, select { touch-action: auto !important; -webkit-user-modify: read-write-plaintext-only; }

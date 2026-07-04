@@ -893,3 +893,19 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
   background: linear-gradient(135deg, rgba(255,255,255,.34), transparent 44%);
 }
 .about-qr-link img, .about-qr-link span { position: relative; z-index: 1; }
+
+
+/* v7.6.2 minimal polish: restore previous scan icon, fill About scan area, and reuse the hand guide inside onboarding. */
+.about-qr-link { grid-template-columns:minmax(0,1fr) auto; gap:10px; align-items:center; justify-items:stretch; min-height:132px; }
+.about-qr-copy { position:relative; display:grid; gap:6px; align-content:center; min-height:100px; padding:11px 12px; border:1px solid color-mix(in srgb,var(--accent) 18%,var(--line-soft)); border-radius:14px; background:linear-gradient(145deg,color-mix(in srgb,var(--panel-solid) 76%,transparent),color-mix(in srgb,var(--panel) 82%,transparent)); box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 10px 24px color-mix(in srgb,var(--skin-shadow) 20%,transparent); overflow:hidden; }
+.about-qr-copy::before { content:""; position:absolute; inset:-30% -15%; background:linear-gradient(115deg, transparent 18%, rgba(255,255,255,.28) 42%, transparent 62%); transform:translateX(-65%) rotate(8deg); animation:aboutGlassSweep 4.2s linear infinite; }
+.about-qr-copy strong, .about-qr-copy small, .about-qr-media { position:relative; z-index:1; }
+.about-qr-copy strong { color:var(--text); font-size:11px; line-height:1.5; }
+.about-qr-copy small { color:var(--muted); font-size:8.8px; line-height:1.6; }
+.about-qr-media { display:grid; justify-items:center; gap:5px; text-align:center; }
+@keyframes aboutGlassSweep { to { transform:translateX(95%) rotate(8deg); } }
+.quick-start-hand-guide { margin-top:10px; }
+.quick-start-hand-guide .hand-tutorial-copy h4 { font-size:12px; }
+.quick-start-hand-guide .hand-tutorial-copy p { font-size:9px; }
+.quick-start-hand-guide .hand-tutorial-head { grid-template-columns:minmax(0,1fr) 136px; }
+@media (max-width:390px) { .about-qr-link { grid-template-columns:1fr; } .about-qr-copy { min-height:0; } .about-qr-media { justify-items:start; text-align:start; } }
