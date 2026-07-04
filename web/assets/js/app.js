@@ -2646,50 +2646,56 @@ function drawHandSkeleton(points, opacity = 1) {
   handCtx.clearRect(0, 0, width, height);
   if (!state.settings.showHandGuide || !Array.isArray(points) || points.length < 21) return;
 
-  const guideOpacity = Math.max(.2, Math.min(1, (Number(state.settings.handGuideOpacity) || 68) / 100))
-    * Math.max(.12, Math.min(1, Number(opacity) || 1));
-  const guideWidth = Math.max(1, Math.min(5, Number(state.settings.handGuideThickness) || 2.6));
-  const mapped = points.map(normalizedToCanvasPoint);
+  const guideOpacity = Math.max(.18, Math.min(1, ((Number(state.settings.handGuideOpacity) || 68) / 100) * (Number(opacity) || 1)));
+  const guideScale = Math.max(.72, Math.min(2.2, (Number(state.settings.handGuideThickness) || 2.6) / 2.6));
+  const map = point => normalizedToCanvasPoint(point);
+  const links = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[0,9],[9,10],[10,11],[11,12],[0,13],[13,14],[14,15],[15,16],[0,17],[17,18],[18,19],[19,20],[5,9],[9,13],[13,17]];
 
-  // This canvas is composited only for live camera feedback. Exporter reads
-  // ui.draw and source strokes, never handCtx, so guides cannot leak into files.
   handCtx.save();
   handCtx.globalAlpha = guideOpacity;
   handCtx.lineCap = "round";
   handCtx.lineJoin = "round";
-  handCtx.lineWidth = guideWidth;
-  handCtx.strokeStyle = "rgba(98, 221, 255, .96)";
-  handCtx.shadowColor = "rgba(77, 236, 196, .58)";
-  handCtx.shadowBlur = Math.max(4, guideWidth * 3);
-  handCtx.beginPath();
-  HAND_BONES.forEach(([from, to]) => {
-    const a = mapped[from]; const b = mapped[to];
-    if (!a || !b) return;
-    handCtx.moveTo(a.x, a.y);
-    handCtx.lineTo(b.x, b.y);
-  });
-  handCtx.stroke();
 
-  handCtx.shadowBlur = 0;
-  mapped.forEach((point, index) => {
-    if (!point) return;
-    const isIndex = index === 8;
-    const isThumb = index === 4;
-    const radius = isIndex ? guideWidth * 2.5 + 3 : (isThumb ? guideWidth * 1.8 + 2.4 : Math.max(1.7, guideWidth * .66));
-    handCtx.fillStyle = isIndex ? "rgba(116, 255, 213, .98)" : (isThumb ? "rgba(255, 202, 116, .98)" : "rgba(117, 231, 255, .9)");
-    handCtx.beginPath();
-    handCtx.arc(point.x, point.y, radius, 0, Math.PI * 2);
-    handCtx.fill();
-  });
+  const paintLinks = (pairs, color, width = 1.45) => {
+    handCtx.strokeStyle = color;
+    handCtx.lineWidth = Math.max(.9, width * guideScale);
+    for (const [a, b] of pairs) {
+      const pa = map(points[a]);
+      const pb = map(points[b]);
+      if (!pa || !pb) continue;
+      handCtx.beginPath();
+      handCtx.moveTo(pa.x, pa.y);
+      handCtx.lineTo(pb.x, pb.y);
+      handCtx.stroke();
+    }
+  };
 
-  const index = mapped[8];
-  if (index) {
-    handCtx.globalAlpha = Math.min(1, guideOpacity + .18);
-    handCtx.lineWidth = Math.max(1.4, guideWidth * .8);
-    handCtx.strokeStyle = "rgba(188, 255, 234, .98)";
+  paintLinks(links.filter(([a, b]) => ![1,2,3,4,5,6,7,8].includes(a) && ![1,2,3,4,5,6,7,8].includes(b)), "rgba(118,203,255,.70)", 1.45);
+  paintLinks([[0,1],[1,2],[2,3],[3,4]], "rgba(255,202,116,.98)", 1.75);
+  paintLinks([[0,5],[5,6],[6,7],[7,8]], "rgba(117,231,255,.98)", 1.85);
+
+  const thumb = map(points[4]);
+  const index = map(points[8]);
+  if (thumb && index) {
+    handCtx.save();
+    handCtx.setLineDash([3, 3]);
+    handCtx.lineWidth = Math.max(.85, 1.15 * guideScale);
+    handCtx.strokeStyle = "rgba(255,255,255,.62)";
     handCtx.beginPath();
-    handCtx.arc(index.x, index.y, guideWidth * 3 + 7, 0, Math.PI * 2);
+    handCtx.moveTo(thumb.x, thumb.y);
+    handCtx.lineTo(index.x, index.y);
     handCtx.stroke();
+    handCtx.restore();
+  }
+
+  for (let joint = 0; joint < points.length; joint += 1) {
+    const p = map(points[joint]);
+    if (!p) continue;
+    handCtx.beginPath();
+    handCtx.fillStyle = joint === 4 ? "rgba(255,202,116,1)" : joint === 8 ? "rgba(117,231,255,1)" : "rgba(105,224,190,.88)";
+    const radius = joint === 4 || joint === 8 ? (3.25 * guideScale) : Math.max(1.4, 2.05 * guideScale);
+    handCtx.arc(p.x, p.y, radius, 0, Math.PI * 2);
+    handCtx.fill();
   }
   handCtx.restore();
 }

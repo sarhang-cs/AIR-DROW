@@ -1122,3 +1122,43 @@ html[lang="ku"] .about-grid b { line-height:1.7; }
   html[lang="ku"] .settings-section summary > span:not(.summary-icon) { line-height:1.7; }
 }
 
+
+
+/* ===== v8.2.0 restore: v7.6.2 hand guide look + Kurdish card rhythm ===== */
+/* Restore the original readable mobile proportions from v7.6.2 while keeping the newer persistent controls and safety fixes. */
+html[lang="ku"] .settings-title { font-size: 17px; line-height: 1.55; }
+html[lang="ku"] .settings-section summary > span:not(.summary-icon) { font-size: 13px; line-height: 1.55; }
+html[lang="ku"] .workspace-caption,
+html[lang="ku"] .setting-line > span:first-child,
+html[lang="ku"] .range-row > span,
+html[lang="ku"] .text-setting > span,
+html[lang="ku"] .about-summary { font-size: 11px; line-height: 1.72; }
+html[lang="ku"] .about-creator-card { grid-template-columns:minmax(0, 1fr) 126px !important; gap:10px !important; padding:10px !important; align-items:stretch !important; }
+html[lang="ku"] .about-creator-copy { order:initial !important; padding:4px 2px !important; text-align:start !important; }
+html[lang="ku"] .about-creator-kicker { font-size:9px !important; line-height:1.55 !important; }
+html[lang="ku"] .about-creator-name { margin-top:4px !important; font-size:15px !important; line-height:1.55 !important; }
+html[lang="ku"] .about-instagram-link { margin-top:10px !important; padding:9px 10px !important; }
+html[lang="ku"] .about-instagram-label { font-size:9px !important; line-height:1.45 !important; }
+html[lang="ku"] .about-instagram-link b { font-size:11px !important; line-height:1.4 !important; }
+html[lang="ku"] .about-instagram-note { font-size:8.5px !important; line-height:1.5 !important; }
+html[lang="ku"] .about-qr-link { order:initial !important; grid-template-columns:none !important; grid-template-rows:minmax(0, 1fr) auto !important; gap:6px !important; min-height:auto !important; padding:8px !important; }
+html[lang="ku"] .about-qr-copy, html[lang="ku"] .about-qr-media { order:initial !important; }
+html[lang="ku"] .about-qr-copy { gap:4px !important; }
+html[lang="ku"] .about-qr-copy strong { font-size:10px !important; line-height:1.45 !important; }
+html[lang="ku"] .about-qr-copy small, html[lang="ku"] .about-qr-media > span { font-size:8px !important; line-height:1.45 !important; }
+html[lang="ku"] .about-qr-media { gap:4px !important; }
+html[lang="ku"] .about-qr-media img { width:82px !important; height:82px !important; padding:5px !important; border-radius:12px !important; }
+html[lang="ku"] .about-grid { gap:8px !important; }
+html[lang="ku"] .about-grid div { min-height:78px !important; padding:9px !important; }
+html[lang="ku"] .about-grid span { font-size:8.5px !important; line-height:1.45 !important; }
+html[lang="ku"] .about-grid b { font-size:9px !important; line-height:1.55 !important; }
+@media (max-width:370px) {
+  html[lang="ku"] .about-creator-card { grid-template-columns:minmax(0, 1fr) 108px !important; gap:8px !important; padding:8px !important; }
+  html[lang="ku"] .about-qr-media img { width:72px !important; height:72px !important; }
+  html[lang="ku"] .about-qr-copy strong { font-size:9px !important; }
+  html[lang="ku"] .about-qr-copy small { font-size:7.4px !important; }
+  html[lang="ku"] .about-grid { gap:6px !important; }
+  html[lang="ku"] .about-grid div { min-height:74px !important; padding:7px !important; }
+  html[lang="ku"] .about-grid span { font-size:8px !important; }
+  html[lang="ku"] .about-grid b { font-size:8.4px !important; }
+}
