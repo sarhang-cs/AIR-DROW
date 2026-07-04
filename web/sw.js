@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v832-layout-legacy-runtime-hardening";
+const BUILD_ID = "air-drow-v840-hand-input-reliability";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 
@@ -9,14 +9,14 @@ const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [
   "/",
   "/index.html",
-  "/manifest.webmanifest?v=832",
+  "/manifest.webmanifest?v=840",
   "/favicon.svg",
-  "/assets/icons/toolbar/toolbar-icons.css?v=832",
-  "/assets/css/app.css?v=832",
-  "/assets/css/visual-system.css?v=832",
-  "/assets/css/icon-system.css?v=832",
-  "/assets/css/drawer-layout.css?v=832",
-  "/assets/css/production-ui.css?v=832"
+  "/assets/icons/toolbar/toolbar-icons.css?v=840",
+  "/assets/css/app.css?v=840",
+  "/assets/css/visual-system.css?v=840",
+  "/assets/css/icon-system.css?v=840",
+  "/assets/css/drawer-layout.css?v=840",
+  "/assets/css/production-ui.css?v=840"
 ];
 
 async function clearAirDrawCaches({ keepCurrent = false } = {}) {

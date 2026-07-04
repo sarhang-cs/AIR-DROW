@@ -22,7 +22,7 @@ import { createDeviceReadiness } from "./features/device-readiness.js";
 import { createFinalLiveQa } from "./features/final-live-qa.js";
 import { createDiagnostics } from "./core/diagnostics.js";
 import { smoothStrokePoint } from "./features/stroke-smoother.js";
-import { createHandStabilizer, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
+import { createHandStabilizer, createHandIntentGate, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
 import { createHandFrameScheduler } from "./features/hand-frame-scheduler.js";
 import { createTrackingQualityGovernor } from "./features/tracking-quality-governor.js";
 import { createLocalHandLandmarker, primeLocalHandAssets } from "./features/hand-engine-bootstrap.js";
@@ -148,6 +148,10 @@ const state = {
   handStabilizer: createHandStabilizer(),
   pinchGate: createPinchGate(),
   handContinuity: createStrokeContinuityGate(),
+  handIntentGate: createHandIntentGate(),
+  handNeedsRepinch: false,
+  handRecoveryOpenSeen: false,
+  handRecoveryDeadline: 0,
   handPosture: { closedFist: false, foldedFingers: 0, tipReach: Infinity },
   handContinuityState: "idle",
   handRejectedFrames: 0,
@@ -1306,6 +1310,14 @@ function finishHandStroke() {
   state.handDrawing = false;
   state.handContinuity.reset();
   state.handContinuityState = "idle";
+  state.handNeedsRepinch = false;
+  state.handRecoveryOpenSeen = false;
+  state.handRecoveryDeadline = 0;
+  state.handIntentGate.reset();
+  state.handOpenFrames = 0;
+  state.handArmed = false;
+  state.handIntentFrames = 0;
+  state.handIntentAnchor = null;
   finishStroke();
 }
 
@@ -1914,6 +1926,10 @@ function resetHandGestureState() {
   state.handStabilizer.reset();
   state.pinchGate.reset();
   state.handContinuity.reset();
+  state.handIntentGate.reset();
+  state.handNeedsRepinch = false;
+  state.handRecoveryOpenSeen = false;
+  state.handRecoveryDeadline = 0;
   state.handPosture = { closedFist: false, foldedFingers: 0, tipReach: Infinity };
   state.handContinuityState = "idle";
   state.handActionStartedAt = 0;
@@ -1929,6 +1945,7 @@ function resetHandGestureState() {
   clearTimeout(state.handScanReadyTimer);
   state.handScanReadyTimer = 0;
   setHandPoint(null);
+  if (handCtx) clearHandCanvas();
   setGestureStatus("ready", t("gestureReady", "Ready"));
 }
 
@@ -2123,9 +2140,9 @@ function showHandScanReady() {
   state.handScanReadyTimer = setTimeout(() => {
     setHandScanStage("ready", t("handCheckPassed", "Hand check passed"), t("handReadyToDraw", "Hand tracking is ready to draw"));
     state.handScanReadyTimer = setTimeout(() => {
-      hideHandScan(520);
-    }, 1850);
-  }, 640);
+      hideHandScan(260);
+    }, 860);
+  }, 300);
 }
 
 async function waitForCameraFrame(timeoutMs = 1800) {
@@ -2303,7 +2320,7 @@ function clearHandCanvas() {
 // landmarks but intentionally fails open-finger reach tests.
 const HAND_GUIDE_MIN_SCORE = .42;
 const HAND_GUIDE_MIN_SCALE = .026;
-const HAND_GUIDE_HOLD_MS = 420;
+const HAND_GUIDE_HOLD_MS = 260;
 // MediaPipe hand-landmark topology. This guide lives on handCanvas only, never
 // in the drawing stroke list, so it can guide the user without entering export.
 const HAND_BONES = Object.freeze([
@@ -2370,6 +2387,50 @@ function processGestureShortcut(landmarks, pinchRatio, now) {
   toast(t("shortcutEraser", "Eraser"));
 }
 
+function syncHandIntentState(intent = {}) {
+  state.handOpenFrames = Number(intent.openFrames) || 0;
+  state.handArmed = Boolean(intent.armed);
+  state.handIntentFrames = Number(intent.pendingFrames) || 0;
+  state.handIntentAnchor = intent.anchor ? { ...intent.anchor } : null;
+}
+
+function resetHandDrawIntent() {
+  state.handIntentGate.reset();
+  state.handOpenFrames = 0;
+  state.handArmed = false;
+  state.handIntentFrames = 0;
+  state.handIntentAnchor = null;
+}
+
+function requestHandRepinch(now, rule) {
+  if (!state.handDrawing || state.handNeedsRepinch) return;
+  state.handNeedsRepinch = true;
+  state.handRecoveryOpenSeen = false;
+  state.handRecoveryDeadline = now + Math.max(340, Number(rule?.resumeHoldMs) || 360);
+}
+
+function resolveHandRepinch({ now, pinchConfirmed, openHand = false, point, rule } = {}) {
+  if (!state.handDrawing || !state.handNeedsRepinch) return { waiting: false, resumed: false, finished: false };
+  if (openHand) state.handRecoveryOpenSeen = true;
+  if (state.handRecoveryOpenSeen && pinchConfirmed && point) {
+    state.handNeedsRepinch = false;
+    state.handRecoveryOpenSeen = false;
+    state.handRecoveryDeadline = 0;
+    state.handContinuity.begin(now, point);
+    state.handContinuityState = "drawing";
+    return { waiting: false, resumed: true, finished: false };
+  }
+  if (now >= state.handRecoveryDeadline) {
+    finishHandStroke();
+    return { waiting: false, resumed: false, finished: true };
+  }
+  const label = t("gestureRepinch", "Pinch again to continue");
+  setHandPoint(point || state.handPoint, "hold");
+  setGestureStatus("hold", label);
+  setText(ui.handStatus, label);
+  return { waiting: true, resumed: false, finished: false };
+}
+
 function holdOrFinishHandStroke({ now, rule, landmarksPresent, jumped = false, point = null, fist = false } = {}) {
   if (!state.handDrawing) return { active: false, paused: false, expired: false };
   const continuity = state.handContinuity.observe({
@@ -2417,9 +2478,12 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
       clearHandPaletteHover();
       drawHeldHandGuide(now);
       state.handMissingFrames += 1;
-      state.pinchGate.observe({ usable: false, rule });
+      const missingPinch = state.pinchGate.observe({ usable: false, rule });
       state.pinchOnFrames = 0;
       state.pinchOffFrames = 0;
+      state.handIntentGate.observe({ usable: false, stable: false, rule });
+      resetHandDrawIntent();
+      if (missingPinch.released || state.handDrawing) requestHandRepinch(now, rule);
       const continuity = holdOrFinishHandStroke({ now, rule, landmarksPresent: false });
       if (!continuity?.paused) setHandPoint(null);
       updateTrackingHealth({ score: 0, state: "searching", label: t("trackingSearching", "Looking for a hand…"), usable: false });
@@ -2461,9 +2525,12 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
       clearHandPaletteHover();
       state.handRejectedFrames += 1;
       state.handMissingFrames = 0;
-      state.pinchGate.observe({ usable: false, rule });
+      const rejectedPinch = state.pinchGate.observe({ usable: false, rule });
       state.pinchOnFrames = 0;
       state.pinchOffFrames = 0;
+      state.handIntentGate.observe({ usable: false, stable: false, rule });
+      resetHandDrawIntent();
+      if (rejectedPinch.released || state.handDrawing) requestHandRepinch(now, rule);
       const continuity = holdOrFinishHandStroke({
         now,
         rule,
@@ -2495,6 +2562,7 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
     });
     if (calibrationEvent?.active) {
       state.pinchGate.reset();
+      resetHandDrawIntent();
       state.pinchOnFrames = 0;
       state.pinchOffFrames = 0;
       updateCalibrationOverlay(calibrationEvent);
@@ -2535,6 +2603,20 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
     const pinchConfirmed = pinch.active;
     const releaseConfirmed = pinch.released;
     const stableHand = assessment.usable;
+    const openHand = stableHand && stablePosition && !posture.closedFist && geometry.pinchRatio >= rule.stop;
+    const handIntent = state.handDrawing
+      ? { armed: false, openFrames: 0, pendingFrames: 0, anchor: null }
+      : state.handIntentGate.observe({
+        usable: assessment.usable,
+        stable: stablePosition,
+        open: openHand,
+        pinchStarted: pinch.started,
+        pinchActive: pinch.active,
+        pinchReleased: pinch.released,
+        point: state.handPoint,
+        rule
+      });
+    syncHandIntentState(handIntent);
     const paletteState = updateHandPaletteHover(state.handPoint, now, {
       allowSelect: !state.handDrawing && !pinch.active && !pinch.started && !pinchConfirmed
     });
@@ -2543,6 +2625,7 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
       // zone without any toolbar button receiving a hand-generated click.
       if (state.handDrawing) finishHandStroke();
       state.pinchGate.reset();
+      resetHandDrawIntent();
       state.pinchOnFrames = 0;
       state.pinchOffFrames = 0;
       setHandPoint(state.handPoint, "palette");
@@ -2559,6 +2642,7 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
     if (isHandPointOnProtectedSurface(state.handPoint)) {
       if (state.handDrawing) finishHandStroke();
       state.pinchGate.reset();
+      resetHandDrawIntent();
       state.pinchOnFrames = 0;
       state.pinchOffFrames = 0;
       setHandPoint(state.handPoint, "blocked");
@@ -2576,6 +2660,7 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
     }
 
     if (!assessment.usable && state.handDrawing) {
+      requestHandRepinch(now, rule);
       const continuity = holdOrFinishHandStroke({
         now,
         rule,
@@ -2595,6 +2680,8 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
     }
 
     if (state.mode === "hand-eraser") {
+      // Erasing does not carry a pending drawing arm into the next mode.
+      resetHandDrawIntent();
       drawEraserTargetFromHand(state.handPoint, pinchConfirmed);
       setHandPoint(state.handPoint, pinchConfirmed ? "erasing" : (state.pinchOnFrames ? "hold" : "ready"));
       if (pinchConfirmed) {
@@ -2611,24 +2698,45 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
         state.erasingGesture = false;
       }
     } else {
-      setHandPoint(state.handPoint, state.handDrawing ? "drawing" : (state.pinchOnFrames ? "hold" : "ready"));
-      if (!state.handDrawing && pinch.started) {
+      setHandPoint(state.handPoint, state.handDrawing ? "drawing" : (handIntent.waiting || state.pinchOnFrames ? "hold" : "ready"));
+
+      if (!state.handDrawing && handIntent.commit) {
         state.handDrawing = true;
-        state.handContinuity.begin(now, state.handPoint);
+        state.handContinuity.begin(now, handIntent.anchor || state.handPoint);
         state.handContinuityState = "drawing";
-        startStroke(state.handPoint, "hand");
+        startStroke(handIntent.anchor || state.handPoint, "hand");
+        if (handIntent.anchor) addStrokePoint(state.handPoint, "hand");
       }
-      if (state.handDrawing && releaseConfirmed) {
-        finishHandStroke();
+
+      if (state.handDrawing && state.handNeedsRepinch) {
+        const recovery = resolveHandRepinch({ now, pinchConfirmed, openHand, point: state.handPoint, rule });
+        if (recovery.waiting || recovery.finished) {
+          updateInferenceFps(now, performance.now() - inferenceStartedAt);
+          setText(ui.fpsStatus, state.inferenceFps || "—");
+          updateLiveHud();
+          return;
+        }
       }
+
+      if (state.handDrawing && releaseConfirmed) finishHandStroke();
       if (state.handDrawing) {
         state.handContinuity.observe({ now, usable: true, landmarksPresent: true, point: state.handPoint, rule });
         state.handContinuityState = "drawing";
-      }
-      if (state.handDrawing) {
         addStrokePoint(state.handPoint, "hand");
         setGestureStatus("drawing", t("gestureDrawing", "Drawing"));
         setText(ui.handStatus, t("drawing", "Drawing"));
+      } else if (handIntent.blocked) {
+        const label = t("gestureOpenHandFirst", "Open your hand, then pinch");
+        setGestureStatus("hold", label);
+        setText(ui.handStatus, label);
+      } else if (handIntent.waiting) {
+        const label = t("gestureMoveToDraw", "Move a little to start drawing");
+        setGestureStatus("hold", label);
+        setText(ui.handStatus, label);
+      } else if (!state.handArmed && stableHand) {
+        const label = t("gestureArmOpen", "Hold an open hand to arm drawing");
+        setGestureStatus("hold", label);
+        setText(ui.handStatus, label);
       } else if (state.pinchOnFrames > 0) {
         setGestureStatus("hold", `${t("gestureHold", "Hold pinch")} ${state.pinchOnFrames}/${rule.enterFrames}`);
         setText(ui.handStatus, t("tracking", "Tracking"));

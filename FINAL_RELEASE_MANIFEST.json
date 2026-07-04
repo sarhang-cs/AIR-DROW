@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Layout & Legacy Runtime Hardening Edition",
-  "version": "8.3.2",
-  "buildId": "air-drow-v832-layout-legacy-runtime-hardening",
+  "name": "AIR-DROW Hand Input Reliability Edition",
+  "version": "8.4.0",
+  "buildId": "air-drow-v840-hand-input-reliability",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -22,28 +22,31 @@
     "docs/DEVICE_VALIDATION_CHECKLIST_KU.md",
     "docs/V832_LAYOUT_LEGACY_RUNTIME_HARDENING.md",
     "docs/V832_LAYOUT_LEGACY_RUNTIME_HARDENING_KU.md",
-    "docs/V832_QA_REPORT.md"
+    "docs/V832_QA_REPORT.md",
+    "docs/V840_HAND_INPUT_RELIABILITY.md",
+    "docs/V840_HAND_INPUT_RELIABILITY_KU.md",
+    "docs/V840_QA_REPORT.md"
   ],
   "developerProfile": {
     "name": "Sarhang Salah",
-    "kurdishName": "سەرهەنگ سلاح",
+    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
     "instagram": "https://www.instagram.com/sarhang.io/",
     "qr": "web/assets/brand/instagram-sarhang-io-qr.svg"
   },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
-  "installer": "termux/replace-with-v832-layout-legacy-runtime-hardening.sh",
-  "release": "Layout & Legacy Runtime Hardening",
-  "assetRevision": "832",
-  "releasedAt": "2026-07-04T12:00:00Z",
-  "releaseName": "AIR-DROW Layout & Legacy Runtime Hardening Edition",
-  "summary": "Wider Kurdish About cards, deterministic settings entry and WebKit-safe runtime helpers without changing the physical-action safety contract.",
+  "installer": "termux/replace-with-v840-hand-input-reliability.sh",
+  "release": "Hand Input Reliability",
+  "assetRevision": "840",
+  "releasedAt": "2026-07-04T15:45:00Z",
+  "releaseName": "AIR-DROW Hand Input Reliability Edition",
+  "summary": "A complete local source package that requires deliberate open-hand pinch drawing, safe re-pinch recovery and compact mobile scanner feedback.",
   "releaseChecks": [
     "Trusted physical controls are required before any file-producing or destructive action can run.",
-    "Raster exports render stored source strokes before any live-canvas snapshot fallback.",
+    "A hand stroke requires open-hand arming, a confirmed pinch and deliberate movement before ink is committed.",
+    "A tracking interruption pauses ink and requires a re-pinch before the existing stroke can continue.",
     "The hand guide is live-camera-only and is never part of exported artwork.",
-    "Older WebKit can fall back when structuredClone() or Array.prototype.at() are unavailable.",
-    "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.3.2 build identity."
+    "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.4.0 build identity."
   ],
-  "stage": "layout-legacy-runtime-hardening",
-  "phase": 21
+  "stage": "hand-input-reliability",
+  "phase": 22
 }

@@ -1899,3 +1899,33 @@ html.airdrow-editor-active textarea {
 
 /* Android text-entry follow-up: let the browser own editable taps fully. */
 .text-setting input, .ai-studio-section textarea, #apiUrlInput, input[type="text"], input[type="url"], textarea, select { touch-action: auto !important; -webkit-user-modify: read-write-plaintext-only; }
+
+
+/* ===== v8.4.0 hand-reliability scan UX =====
+ * On a phone the scanner must explain state without covering the canvas.
+ * Keep it in a compact top band; the draw surface remains visible below. */
+@media (max-width: 560px) {
+  .hand-scan {
+    top: calc(var(--safe-top) + 136px);
+    width: min(76vw, 272px);
+    transform: translateX(-50%);
+  }
+  .hand-scan.is-hiding { transform: translateX(-50%) scale(.97); }
+  .hand-scan-surface {
+    min-height: 128px;
+    gap: 5px;
+    padding: 12px 14px 11px;
+    border-radius: 18px;
+    backdrop-filter: blur(22px) saturate(150%);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+  }
+  .hand-scan-surface::after { border-radius: 17px; }
+  .hand-scan-reticle { width: 46px; height: 46px; }
+  .hand-scan-reticle::before { inset: 6px; }
+  .hand-scan-reticle::after { inset: -6px; }
+  .hand-scan-status { min-height: 0; }
+  .hand-scan-status-icon { width: 28px; height: 28px; }
+  .hand-scan-label { font-size: 12px; line-height: 1.55; }
+  .hand-scan-hint { font-size: 9px; line-height: 1.6; }
+  .hand-scan-progress { width: min(180px, 66vw); height: 5px; margin-top: 2px; }
+}

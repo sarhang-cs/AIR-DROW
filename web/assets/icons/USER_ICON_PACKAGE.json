@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "8.3.2",
-  "buildId": "air-drow-v832-layout-legacy-runtime-hardening",
+  "version": "8.4.0",
+  "buildId": "air-drow-v840-hand-input-reliability",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {

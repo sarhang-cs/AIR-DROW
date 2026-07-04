@@ -1,5 +1,2 @@
-AIR-DROW v8.3.2 — Layout & Legacy Runtime Hardening
-
-This release widens the Kurdish Touch / Pen / Hand card, opens newly launched Settings at the top, and adds safe local fallbacks for older WebKit APIs.
-
-Termux installer: termux/replace-with-v832-layout-legacy-runtime-hardening.sh
+AIR-DROW v8.4.0 — Hand Input Reliability
+Complete source package with a self-hosted hand model, deliberate hand-stroke intent gate, safe tracking recovery and Vercel/Termux verification workflow.

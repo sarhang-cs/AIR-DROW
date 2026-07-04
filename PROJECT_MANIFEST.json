@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "8.3.2",
-  "buildId": "air-drow-v832-layout-legacy-runtime-hardening",
-  "release": "Layout & Legacy Runtime Hardening",
+  "version": "8.4.0",
+  "buildId": "air-drow-v840-hand-input-reliability",
+  "release": "Hand Input Reliability",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -12,7 +12,7 @@
     "Private on-device preferences"
   ],
   "languages": [
-    "Kurdî (Sorani)",
+    "Kurd\u00ee (Sorani)",
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
@@ -20,20 +20,23 @@
   "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, release information and developer profile.",
   "developer": {
     "name": "Sarhang Salah",
-    "kurdishName": "سەرهەنگ سلاح",
+    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Layout & Legacy Runtime Hardening Edition",
-  "releasedAt": "2026-07-04T12:00:00Z",
-  "summary": "A complete local drawing source package with wider Kurdish About cards, resilient old-WebKit runtime helpers, and deterministic Settings entry.",
-  "stage": "layout-legacy-runtime-hardening",
-  "phase": 21,
-  "assetRevision": "832",
-  "releaseName": "AIR-DROW Layout & Legacy Runtime Hardening Edition",
-  "installer": "termux/replace-with-v832-layout-legacy-runtime-hardening.sh",
+  "name": "AIR-DROW Hand Input Reliability Edition",
+  "releasedAt": "2026-07-04T15:45:00Z",
+  "summary": "A complete local drawing source package with deliberate hand-drawing intent, safe tracking recovery and compact mobile scanner feedback.",
+  "stage": "hand-input-reliability",
+  "phase": 22,
+  "assetRevision": "840",
+  "releaseName": "AIR-DROW Hand Input Reliability Edition",
+  "installer": "termux/replace-with-v840-hand-input-reliability.sh",
   "userDocs": [
     "docs/V832_LAYOUT_LEGACY_RUNTIME_HARDENING.md",
     "docs/V832_LAYOUT_LEGACY_RUNTIME_HARDENING_KU.md",
-    "docs/V832_QA_REPORT.md"
+    "docs/V832_QA_REPORT.md",
+    "docs/V840_HAND_INPUT_RELIABILITY.md",
+    "docs/V840_HAND_INPUT_RELIABILITY_KU.md",
+    "docs/V840_QA_REPORT.md"
   ]
 }

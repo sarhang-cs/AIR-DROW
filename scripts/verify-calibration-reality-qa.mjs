@@ -44,7 +44,7 @@ for (const target of [{ x: .15, y: .20 }, { x: .85, y: .20 }, { x: .85, y: .80 }
   }
 }
 if (result?.type !== "complete" || !result?.calibration?.enabled) throw new Error("Target-confirmed four-point calibration must complete with a valid mapping.");
-if (!app.includes('t("handCheckPassed"') || !app.includes("hideHandScan(520)")) throw new Error("Verified hand-scan acknowledgement timing is incomplete.");
+if (!app.includes('t("handCheckPassed"') || !app.includes("hideHandScan(260)")) throw new Error("Verified hand-scan acknowledgement timing is incomplete.");
 const scannerHtml = read("web/index.html");
 if (!scannerHtml.includes('data-status-icon="verified"') || !scannerHtml.includes('data-status-icon="warning"')) throw new Error("Hand-scan status icons must use reliable inline SVG marks.");
 console.log(`AIR-DROW calibration/reality QA passed: ${kuKeys.length} bilingual keys, global selection lock, real four-target calibration and durable hand-check confirmation.`);

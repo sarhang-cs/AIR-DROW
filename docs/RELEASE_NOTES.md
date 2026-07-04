@@ -1,5 +1,12 @@
 # AIR-DROW release notes
 
+## v8.4.0 — Hand Input Reliability
+- Deliberate open-hand/pinch/movement gate for new hand strokes.
+- Re-pinch recovery after short lost-hand interruptions.
+- Short 260 ms guide fade and smaller mobile scan card.
+
+
+
 ## v8.3.2 — Export Preview & Save Polish
 
 ### Added

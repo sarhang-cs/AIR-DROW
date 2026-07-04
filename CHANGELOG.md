@@ -1,5 +1,12 @@
 # Changelog
 
+## v8.4.0 — Hand Input Reliability
+- Requires a stable open hand, a confirmed pinch and a small intentional movement before drawing starts.
+- Requires a re-pinch after a temporary hand-tracking loss before a paused stroke can resume.
+- Shortens frozen guide visibility and makes the scanner compact on mobile.
+
+
+
 ## v8.3.2 — Layout & Legacy Runtime Hardening
 - Widened the Kurdish Touch / Pen / Hand metadata card without expanding the app-version card.
 - Reset a newly opened Settings drawer to its top position.

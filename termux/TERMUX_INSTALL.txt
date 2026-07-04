@@ -1,6 +1,4 @@
-AIR-DROW v8.3.2 — Layout & Legacy Runtime Hardening
-
-1. Put AIR-DROW_v8.3.2_LAYOUT_LEGACY_RUNTIME_HARDENING.zip in /sdcard/Download/.
-2. Extract it and run termux/replace-with-v832-layout-legacy-runtime-hardening.sh.
-3. The installer keeps .git and preserves the existing Kurdish UI font from your repository.
-4. It runs npm ci, verify:all and tests before committing and pushing.
+AIR-DROW v8.4.0 — Hand Input Reliability
+1. Put AIR-DROW_v8.4.0_HAND_INPUT_RELIABILITY.zip in /sdcard/Download/.
+2. Extract it and run termux/replace-with-v840-hand-input-reliability.sh.
+3. The replacement verifies source, builds the local MediaPipe output, tests and pushes to GitHub.

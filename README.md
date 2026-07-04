@@ -1,12 +1,16 @@
 <a id="top"></a>
 
+## v8.4.0 — Hand Input Reliability
+
+Hand drawing now requires a stable open hand, a confirmed pinch and a small deliberate movement before ink starts. A short tracking loss pauses ink and requires a re-pinch before it can continue, avoiding ghost lines after recovery. The live guide fades quickly and the phone scanner is more compact. See [the phase report](docs/V840_HAND_INPUT_RELIABILITY.md).
+
 <div align="center">
 
 # AIR-DROW
 
 ### A private drawing studio for touch, pen and hand
 
-**Export Preview & Save Polish Edition · v8.3.2 · Created by Sarhang Salah**
+**Hand Input Reliability Edition · v8.4.0 · Created by Sarhang Salah**
 
 [![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)

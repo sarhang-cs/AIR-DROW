@@ -207,6 +207,81 @@ export function createPinchGate() {
 }
 
 /**
+ * Intent gate for hand drawing.
+ *
+ * A pinch alone is not treated as a drawing command. The user must first hold
+ * an open, stable hand for a few detector frames, then begin a pinch, then
+ * move a small intentional distance. This removes accidental dots/lines from
+ * natural hand motion while retaining responsive live ink once drawing begins.
+ */
+export function createHandIntentGate() {
+  let armed = false;
+  let openFrames = 0;
+  let pending = null;
+
+  function reset() {
+    armed = false;
+    openFrames = 0;
+    pending = null;
+  }
+
+  function snapshot(extra = {}) {
+    return {
+      armed,
+      openFrames,
+      pending: Boolean(pending),
+      pendingFrames: pending?.frames || 0,
+      anchor: pending?.anchor ? { ...pending.anchor } : null,
+      ...extra
+    };
+  }
+
+  function observe({ usable = false, stable = false, open = false, pinchStarted = false, pinchActive = false, pinchReleased = false, point = null, rule } = {}) {
+    const armFrames = clamp(Number(rule?.armFrames) || (Number(rule?.enterFrames) || 3) + 1, 2, 8);
+    const intentFrames = clamp(Number(rule?.intentFrames) || 2, 1, 6);
+    const intentTravel = clamp(Number(rule?.intentTravel) || .010, .003, .06);
+
+    if (!usable || !stable || !point) {
+      const cancelled = Boolean(pending);
+      reset();
+      return snapshot({ cancelled, reason: "unstable" });
+    }
+
+    if (pending) {
+      if (pinchReleased || !pinchActive) {
+        pending = null;
+        return snapshot({ cancelled: true, reason: "released" });
+      }
+      pending.frames += 1;
+      const travel = landmarkDistance(point, pending.anchor);
+      if (pending.frames >= intentFrames && travel >= intentTravel) {
+        const anchorPoint = { ...pending.anchor };
+        pending = null;
+        return snapshot({ commit: true, anchor: anchorPoint, travel });
+      }
+      return snapshot({ waiting: true, travel });
+    }
+
+    if (!pinchActive) {
+      openFrames = open ? Math.min(armFrames, openFrames + 1) : 0;
+      if (openFrames >= armFrames) armed = true;
+    }
+
+    if (pinchStarted) {
+      if (!armed) return snapshot({ blocked: true, reason: "open-hand" });
+      pending = { anchor: { ...point }, frames: 1 };
+      armed = false;
+      openFrames = 0;
+      return snapshot({ waiting: true, started: true, travel: 0 });
+    }
+
+    return snapshot({ ready: armed });
+  }
+
+  return { reset, observe, snapshot };
+}
+
+/**
  * Holds an already-started stroke through a short detector interruption. A
  * closed fist receives a slightly longer visual hold, but no samples are
  * added while tracking is ambiguous. This prevents a fist or one dropped
@@ -244,8 +319,11 @@ export function createStrokeContinuityGate() {
       return { active: false, paused: false, expired: true, reason: "jump", point: pointAtExit, elapsed: Infinity };
     }
 
-    const base = Math.max(220, Number(rule?.lostFrames || 4) * 60);
-    const holdMs = fist ? Math.max(560, base * 2) : (landmarksPresent ? Math.max(360, base * 1.45) : Math.max(260, base));
+    // Freeze ink only briefly. A guide can fade independently, while an active
+    // stroke waits long enough for one real detector miss or a closed-fist
+    // transition, then finishes instead of resuming as a ghost line.
+    const base = Math.max(260, Number(rule?.lostFrames || 4) * 75);
+    const holdMs = fist ? Math.max(700, base * 2.2) : (landmarksPresent ? Math.max(500, base * 1.65) : Math.max(380, base * 1.25));
     const elapsed = Math.max(0, timestamp - lastUsableAt);
     if (elapsed <= holdMs) return { active: true, paused: true, expired: false, point: lastPoint, elapsed, holdMs, fist };
 
