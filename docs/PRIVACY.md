@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 8.0.0 Final Release Readiness & Cache Integrity Edition
+> This guide applies to AIR-DROW 8.1.0 On-device Launch Validation & Final Release Gate Edition
 
 AIR-DROW is local-first.
 
@@ -14,6 +14,6 @@ AIR-DROW is local-first.
 
 Before changing phones or clearing browser storage, download a backup from Settings.
 
-## v8.0.0 release assurance
+## v8.1.0 release assurance
 
 The final release-readiness checks verify that cache and build identifiers are synchronized. They do not change AIR-DROW's on-device privacy model: diagnostics remain local and the camera is never opened by a readiness check.

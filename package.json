@@ -1,8 +1,8 @@
 {
   "name": "air-drow",
-  "version": "8.0.0",
+  "version": "8.1.0",
   "private": true,
-  "description": "AIR-DROW Final Release Readiness & Cache Integrity Edition — synchronized release metadata, guarded physical actions, source-first exports, quiet hand guidance, and Android deployment checks.",
+  "description": "AIR-DROW On-device Launch Validation & Final Release Gate — private browser readiness probes for canvas, PNG/JPG encoding and local file preparation, alongside protected camera and hand checks.",
   "type": "module",
   "dependencies": {
     "@mediapipe/tasks-vision": "0.10.35"
@@ -17,7 +17,7 @@
     "build:static": "node scripts/build-selfhosted-mediapipe.mjs",
     "hand-loader:verify": "node scripts/verify-hand-runtime-loader-fix.mjs",
     "deploy-build:verify": "node scripts/verify-deployment-build-order.mjs",
-    "verify:source": "npm run icons:sync && npm run icons:verify && npm run icons:local:verify && npm run preflight && npm run check && npm run model:verify && npm run release:verify && npm run production:verify && npm run localization:verify && npm run runtime:verify && npm run qa:reality && npm run qa:critical-input-export && npm run qa:release-readiness && npm test",
+    "verify:source": "npm run icons:sync && npm run icons:verify && npm run icons:local:verify && npm run preflight && npm run check && npm run model:verify && npm run release:verify && npm run production:verify && npm run localization:verify && npm run runtime:verify && npm run qa:reality && npm run qa:critical-input-export && npm run qa:release-readiness && npm run qa:launch-validation && npm test",
     "verify:deploy-output": "npm run hand-loader:verify && npm run deploy-build:verify",
     "build": "npm run verify:source && npm run build:static && npm run verify:deploy-output",
     "vercel:build": "npm run model:verify && npm run build",
@@ -28,13 +28,14 @@
     "localization:verify": "node scripts/verify-localization-theme-final.mjs",
     "runtime:verify": "node scripts/verify-runtime-experience.mjs",
     "qa:reality": "node scripts/verify-calibration-reality-qa.mjs",
-    "test": "node tests/export-gesture-reliability.test.mjs && node tests/mobile-safety.test.mjs && node tests/release-readiness.test.mjs",
+    "test": "node tests/export-gesture-reliability.test.mjs && node tests/mobile-safety.test.mjs && node tests/release-readiness.test.mjs && node tests/launch-validation.test.mjs",
     "qa:export-gesture": "node scripts/verify-input-export-safety.mjs",
     "qa:critical-input-export": "npm run qa:input-export-safety && npm run qa:mobile-final",
     "qa:hand-performance": "node scripts/verify-mobile-safety.mjs",
     "qa:input-export-safety": "node scripts/verify-input-export-safety.mjs",
     "qa:mobile-final": "node scripts/verify-mobile-safety.mjs",
-    "qa:release-readiness": "node scripts/verify-release-readiness.mjs"
+    "qa:release-readiness": "node scripts/verify-release-readiness.mjs",
+    "qa:launch-validation": "node scripts/verify-launch-validation.mjs"
   },
   "engines": {
     "node": ">=22 <25"

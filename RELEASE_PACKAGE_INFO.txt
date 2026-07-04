@@ -1,5 +1,6 @@
-AIR-DROW v8.0.0 — Final Release Readiness & Cache Integrity
+AIR-DROW v8.1.0 — On-device Launch Validation & Final Release Gate
 
-This complete source package contains the verified local MediaPipe runtime and hand model, bilingual release documentation, a cache/build identity contract and Android device-validation checklists.
-
-Build: npm ci --no-audit --no-fund && npm run vercel:build
+Complete source package with the verified local MediaPipe hand model and runtime.
+Run npm ci --no-audit --no-fund then npm run verify:all.
+The final package includes a private browser preflight for canvas, PNG/JPG encoding and local file preparation.
+Camera permission, real hand tracking and browser download-sheet confirmation must still be verified on the target phone.

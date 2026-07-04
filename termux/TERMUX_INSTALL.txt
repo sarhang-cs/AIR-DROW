@@ -1,6 +1,6 @@
-AIR-DROW v8.0.0 — Final Release Readiness & Cache Integrity
+AIR-DROW v8.1.0 — On-device Launch Validation & Final Release Gate
 
-1. Put AIR-DROW_v8.0.0_FINAL_RELEASE_READINESS_CACHE_INTEGRITY.zip in /sdcard/Download.
-2. Run termux/replace-with-v800-release-cache-integrity.sh from the extracted project folder.
+1. Put AIR-DROW_v8.1.0_ON_DEVICE_LAUNCH_VALIDATION.zip in /sdcard/Download.
+2. Run termux/replace-with-v810-on-device-launch-validation.sh from the extracted project folder.
 3. The script preserves .git, makes a rollback backup, validates npm ci + npm run verify:all, commits and pushes only after a successful production gate.
-4. After Vercel deploys, run docs/DEVICE_VALIDATION_CHECKLIST_KU.md on your Android phone before making a GitHub release tag.
+4. After Vercel deploys, run the in-app App readiness check and then docs/DEVICE_VALIDATION_CHECKLIST_KU.md on your Android phone before making a GitHub release tag.

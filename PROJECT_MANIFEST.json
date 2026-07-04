@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "8.0.0",
-  "buildId": "air-drow-v800-release-cache-integrity",
-  "release": "Final Release Readiness & Cache Integrity",
+  "version": "8.1.0",
+  "buildId": "air-drow-v810-on-device-launch-validation",
+  "release": "On-device Launch Validation & Final Release Gate",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -16,18 +16,18 @@
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
-  "releaseGate": "npm run vercel:build validates source integrity, local hand assets, bilingual markup, runtime coverage, export/gesture tests, cache/version contracts, theme tokens, documentation and generated production output.",
-  "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, release information and developer profile.",
+  "releaseGate": "npm run vercel:build validates source integrity, local hand assets, bilingual markup, runtime coverage, export/gesture tests, on-device launch-validation checks, cache/version contracts, theme tokens, documentation and generated production output.",
+  "support": "Use Settings > About App to review app readiness (including local PNG/JPG encoding), hand drawing readiness, language, release information and developer profile.",
   "developer": {
     "name": "Sarhang Salah",
     "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Final Release Readiness & Cache Integrity Edition",
-  "releasedAt": "2026-07-04T01:53:10Z",
-  "summary": "v8.0.0 synchronizes the cache revision and release metadata across the page, PWA manifest, worker, source modules and deployment output; it also locks the final physical-device validation contract into the project.",
-  "stage": "release-cache-integrity",
-  "phase": 17,
-  "assetRevision": "800",
-  "releaseName": "AIR-DROW Final Release Readiness & Cache Integrity Edition"
+  "name": "AIR-DROW On-device Launch Validation & Final Release Gate Edition",
+  "releasedAt": "2026-07-04T02:20:00Z",
+  "summary": "v8.1.0 adds a local, privacy-preserving preflight for canvas rendering, PNG/JPG encoding and local file preparation while clearly separating those checks from real camera and Android download validation.",
+  "stage": "on-device-launch-validation",
+  "phase": 18,
+  "assetRevision": "810",
+  "releaseName": "AIR-DROW On-device Launch Validation & Final Release Gate Edition"
 }

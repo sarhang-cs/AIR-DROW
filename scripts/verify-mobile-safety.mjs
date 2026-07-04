@@ -10,7 +10,7 @@ for (const file of [
   "web/assets/js/features/exporter.js",
   "web/assets/js/config/runtime.js",
   "tests/mobile-safety.test.mjs",
-  "docs/V800_RELEASE_CACHE_INTEGRITY.md"
+  "docs/V810_ON_DEVICE_VALIDATION.md"
 ]) if (!existsSync(resolve(root, file))) throw new Error(`Missing mobile-final QA file: ${file}`);
 
 const app = read("web/assets/js/app.js");
@@ -30,7 +30,7 @@ if (index.includes('id="handGuideToggle" type="checkbox" checked')) throw new Er
 if (!app.includes("!state.handDrawing) drawHandSkeleton") || !app.includes("full hand skeleton")) throw new Error("Hand guide must be quiet and hidden while drawing.");
 const sourceFirst = exporter.indexOf("const strokeRendererUsed") < exporter.indexOf("let snapshotUsed");
 if (!sourceFirst || !exporter.includes("if (!strokeRendererUsed &&")) throw new Error("Raster export must render source strokes before a live-canvas fallback.");
-if (release.version !== "8.0.0" || release.stage !== "release-cache-integrity") throw new Error("Mobile final QA release metadata is stale.");
+if (release.version !== "8.1.0" || release.stage !== "on-device-launch-validation") throw new Error("Mobile final QA release metadata is stale.");
 const result = spawnSync(process.execPath, ["tests/mobile-safety.test.mjs"], { cwd: root, encoding: "utf8" });
 if (result.status !== 0) throw new Error(result.stderr || result.stdout || "Mobile safety tests failed.");
 console.log("AIR-DROW mobile safety contract passed for the current release.");

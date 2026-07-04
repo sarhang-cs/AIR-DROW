@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Final Release Readiness & Cache Integrity Edition",
-  "version": "8.0.0",
-  "buildId": "air-drow-v800-release-cache-integrity",
+  "name": "AIR-DROW On-device Launch Validation & Final Release Gate Edition",
+  "version": "8.1.0",
+  "buildId": "air-drow-v810-on-device-launch-validation",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -21,7 +21,9 @@
     "docs/DEVICE_VALIDATION_CHECKLIST.md",
     "docs/DEVICE_VALIDATION_CHECKLIST_KU.md",
     "docs/screenshots/air-drow-studio-en.png",
-    "docs/screenshots/air-drow-hand-en.png"
+    "docs/screenshots/air-drow-hand-en.png",
+    "docs/V810_ON_DEVICE_VALIDATION.md",
+    "docs/V810_ON_DEVICE_VALIDATION_KU.md"
   ],
   "developerProfile": {
     "name": "Sarhang Salah",
@@ -31,19 +33,20 @@
   },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v800-release-cache-integrity.sh",
-  "release": "Final Release Readiness & Cache Integrity",
-  "assetRevision": "800",
-  "releasedAt": "2026-07-04T01:53:10Z",
-  "releaseName": "AIR-DROW Final Release Readiness & Cache Integrity Edition",
-  "summary": "A release-readiness package: cache/build metadata synchronization, static asset revisioning, final action-safety QA and bilingual real-device validation material.",
+  "installer": "termux/replace-with-v810-on-device-launch-validation.sh",
+  "release": "On-device Launch Validation & Final Release Gate",
+  "assetRevision": "810",
+  "releasedAt": "2026-07-04T02:20:00Z",
+  "releaseName": "AIR-DROW On-device Launch Validation & Final Release Gate Edition",
+  "summary": "A release-gate package: private on-device browser validation for canvas, image encoding and file preparation, cache/build synchronization, action safety QA and bilingual real-device guidance.",
   "releaseChecks": [
     "Trusted physical controls are required before any file-producing or destructive action can run.",
     "Raster exports render stored source strokes before any live-canvas snapshot fallback.",
+    "The local launch preflight verifies temporary canvas pixels, PNG/JPG encoding and object-URL preparation without opening the camera or downloading a file.",
     "The optional hand guide uses a compact pinch indicator and never appears over active ink.",
     "Hand coordinates cannot paint through palette, toolbar, dock, settings or dialog surfaces.",
-    "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.0.0 build identity."
+    "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.1.0 build identity."
   ],
-  "stage": "release-cache-integrity",
-  "phase": 17
+  "stage": "on-device-launch-validation",
+  "phase": 18
 }

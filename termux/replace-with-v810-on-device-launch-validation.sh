@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-# AIR-DROW v8.0.0 — Final Release Readiness & Cache Integrity
-# Transactional replacement: preserve .git, verify/build before push, then restore the old source if validation fails.
+# AIR-DROW v8.1.0 — On-device Launch Validation & Final Release Gate
+# Transactional replacement: preserve .git, verify/build before push, then restore old source if validation fails.
 set -Eeuo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="8.0.0"
+VERSION="8.1.0"
 REPO="${1:-$HOME/AIR-DROW-GITHUB}"
 BACKUP="${REPO}.backup-${VERSION//./-}-$(date +%Y%m%d-%H%M%S)"
 RESTORE_REQUIRED=0
+
 restore_previous() {
   set +e
   [ "${RESTORE_REQUIRED:-0}" -eq 1 ] || return 0
@@ -21,6 +22,7 @@ restore_previous() {
 }
 on_error() { code=$?; restore_previous || true; exit "$code"; }
 trap on_error ERR
+
 [ -d "$REPO/.git" ] || { echo "GitHub repository was not found: $REPO"; exit 1; }
 [ -f "$SOURCE/package.json" ] || { echo "AIR-DROW source is incomplete."; exit 1; }
 NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]')"
@@ -29,12 +31,14 @@ VERSION_FOUND="$(node -e 'const fs=require("fs"); console.log(JSON.parse(fs.read
 [ "$VERSION_FOUND" = "$VERSION" ] || { echo "Expected AIR-DROW v$VERSION, found v$VERSION_FOUND"; exit 1; }
 [ -s "$SOURCE/web/vendor/models/hand_landmarker.task" ] || { echo "The local hand model is missing."; exit 1; }
 [ -s "$SOURCE/web/vendor/mediapipe/vision_bundle.js" ] || { echo "The local hand runtime is missing."; exit 1; }
-[ -f "$SOURCE/docs/DEVICE_VALIDATION_CHECKLIST_KU.md" ] || { echo "The Android validation checklist is missing."; exit 1; }
+[ -f "$SOURCE/docs/V810_ON_DEVICE_VALIDATION_KU.md" ] || { echo "The on-device validation guide is missing."; exit 1; }
+
 echo "Creating a safe backup…"
 mkdir -p "$BACKUP"
 shopt -s dotglob nullglob
 for item in "$REPO"/*; do [ "$(basename "$item")" = ".git" ] && continue; mv -- "$item" "$BACKUP/"; done
 RESTORE_REQUIRED=1
+
 echo "Replacing old AIR-DROW project files with v$VERSION…"
 cp -a "$SOURCE"/. "$REPO"/
 [ -d "$REPO/.git" ] || { echo "Git metadata was not preserved."; restore_previous; exit 1; }
@@ -45,7 +49,7 @@ echo "Building and verifying AIR-DROW v$VERSION…"
 npm run verify:all && npm test
 RESTORE_REQUIRED=0
 git add -A
-if ! git diff --cached --quiet; then git commit -m "AIR-DROW v8.0.0 final release readiness and cache integrity"; fi
+if ! git diff --cached --quiet; then git commit -m "AIR-DROW v8.1.0 on-device launch validation"; fi
 BRANCH="$(git branch --show-current 2>/dev/null || true)"
 [ -n "$BRANCH" ] || BRANCH="main"
 git push origin "HEAD:$BRANCH"

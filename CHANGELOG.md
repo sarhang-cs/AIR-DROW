@@ -1,5 +1,11 @@
 # AIR-DROW changelog
 
+## v8.1.0 — On-device Launch Validation & Final Release Gate
+
+- Expanded the local App readiness view with private checks for a temporary drawing surface, PNG/JPG blob encoding and local object-URL preparation. These checks never open the camera, download a file, inspect artwork or send a report.
+- Added a source/test gate for the readiness probe and bilingual documentation that separates browser preflight coverage from real Android permission, camera and download-sheet validation.
+- Synchronized the page, runtime, model cache key, PWA manifest, worker cache and release descriptors under the v8.1.0 / revision 810 identity.
+
 ## v8.0.0 — Final Release Readiness & Cache Integrity
 
 - Synchronized the index build identifier, runtime module identifier, local hand-model cache key, PWA manifest, service-worker cache namespace, release descriptor and asset revision under one v8.0.0 identity.

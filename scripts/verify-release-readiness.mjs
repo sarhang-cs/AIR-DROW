@@ -12,7 +12,7 @@ const index = read("web/index.html");
 const worker = read("web/sw.js");
 const runtime = read("web/assets/js/config/runtime.js");
 const docs = [read("README.md"), read("README_KU.md"), read("docs/RELEASE_NOTES.md")].join("\n");
-const required = ["docs/DEVICE_VALIDATION_CHECKLIST.md", "docs/DEVICE_VALIDATION_CHECKLIST_KU.md", "docs/V800_RELEASE_CACHE_INTEGRITY.md"];
+const required = ["docs/DEVICE_VALIDATION_CHECKLIST.md", "docs/DEVICE_VALIDATION_CHECKLIST_KU.md", "docs/V810_ON_DEVICE_VALIDATION.md", "docs/V810_ON_DEVICE_VALIDATION_KU.md"];
 for (const file of required) if (!existsSync(resolve(root, file))) throw new Error(`Release readiness document is missing: ${file}`);
 if (packageJson.version !== release.version) throw new Error("Package and release versions differ.");
 if (!release.buildId || !release.assetRevision) throw new Error("Release build identity is incomplete.");

@@ -5,7 +5,7 @@ Use this checklist **after deploying the exact release**. It is a real-device va
 ## Before camera
 
 - [ ] Open the deployed URL once, then refresh once. Confirm the visible app version in **Settings → About App** is the current release.
-- [ ] Run **Settings → System → App readiness**. It should report the secure context, camera API, local model, storage, PWA, graphics and network state.
+- [ ] Run **Settings → System → App readiness**. It should report the secure context, camera API, local model, storage, PWA, graphics, network, temporary drawing surface, PNG/JPG encoding and local file preparation. The check must not open the camera or download a file.
 - [ ] Tap the toolbar, bottom dock, Settings tabs, top palette area and modal backdrop. None of those taps may create a drawing stroke.
 - [ ] Draw one manual stroke, undo it, redo it, and verify the result remains inside the canvas.
 

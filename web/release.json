@@ -1,27 +1,27 @@
 {
-  "version": "8.0.0",
-  "buildId": "air-drow-v800-release-cache-integrity",
-  "releasedAt": "2026-07-04T01:53:10Z",
+  "version": "8.1.0",
+  "buildId": "air-drow-v810-on-device-launch-validation",
+  "releasedAt": "2026-07-04T02:20:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Final Release Readiness & Cache Integrity Edition: release metadata, cache-busting asset revisions and final Android validation contracts are synchronized while physical actions, source-first exports and private on-device hand drawing remain protected.",
+  "summary": "AIR-DROW On-device Launch Validation & Final Release Gate: a private preflight now checks the canvas, PNG/JPG encoding and local file preparation without opening the camera, downloading a file, inspecting artwork or sending data.",
   "features": [
-    "Synchronizes the page build, module build, PWA manifest, service worker, release descriptor and cache-busting asset URLs under one v8.0.0 revision.",
-    "Keeps export, download, backup, diagnostics download and destructive clear actions behind trusted physical control activation only.",
-    "Preserves source-first raster export and optional quiet hand guidance so live UI overlays never enter saved artwork.",
-    "Adds final-release contract checks that reject stale cache markers and misleading hand shortcut documentation.",
-    "Includes a bilingual Android device-validation checklist for the camera, hand detection, palette, export, PWA update and offline hand-runtime checks."
+    "Adds a browser-local launch-validation probe for the drawing surface, PNG/JPG encoding and local object-URL preparation.",
+    "Keeps real downloads, exports, shares, backups and destructive clear actions behind trusted physical controls only.",
+    "Keeps camera permission and live hand validation explicitly user initiated; the readiness check never calls getUserMedia.",
+    "Adds source QA and a bilingual release note that distinguishes internal browser checks from real Android camera/download validation.",
+    "Synchronizes page, runtime, PWA manifest, service-worker cache and generated deployment output under v8.1.0 revision 810."
   ],
-  "assetRevision": "800",
-  "phase": 17,
-  "stage": "release-cache-integrity",
+  "assetRevision": "810",
+  "phase": 18,
+  "stage": "on-device-launch-validation",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",
     "handTracking": "The deployed app uses the local same-origin hand model and runtime. It does not download a hand model while you draw.",
-    "checks": "App readiness, hand drawing checks and local diagnostics read only browser/app state. They do not open the camera, upload a report, or include camera frames, hand landmarks, drawing points, project titles, or API URLs."
+    "checks": "App readiness, on-device launch validation, hand drawing checks and local diagnostics read only browser/app state. They do not open the camera, trigger a download, upload a report, or include camera frames, hand landmarks, drawing points, project titles, or API URLs."
   },
   "buildPolicy": {
     "sourceModel": "web/vendor/models/hand_landmarker.task",

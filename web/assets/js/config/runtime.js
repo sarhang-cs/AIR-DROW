@@ -17,9 +17,9 @@ export const OLD_MIRROR_KEY = "airdraw.phase22.reload-mirror";
 // so this base URL intentionally has NO trailing slash.
 export const MEDIAPIPE_MODULE_URLS = [new URL("../../../vendor/mediapipe/vision_bundle.js", import.meta.url).href];
 export const MEDIAPIPE_WASM_URLS = [new URL("../../../vendor/mediapipe/wasm", import.meta.url).href];
-export const HAND_MODEL = new URL("../../../vendor/models/hand_landmarker.task?model=v800-release-cache-integrity", import.meta.url).href;
+export const HAND_MODEL = new URL("../../../vendor/models/hand_landmarker.task?model=v810-on-device-launch-validation", import.meta.url).href;
 
-export const APP_RELEASE = Object.freeze({ version: "8.0.0", buildId: "air-drow-v800-release-cache-integrity" });
+export const APP_RELEASE = Object.freeze({ version: "8.1.0", buildId: "air-drow-v810-on-device-launch-validation" });
 export const QUICK_START_KEY = "air-drow.quick-start.v1";
 export const LEGACY_QUICK_START_KEYS = Object.freeze(["air-drow.v756.quick-start.complete", "air-drow.v755.quick-start.complete", "air-drow.v754.quick-start.complete"]);
 

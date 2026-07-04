@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 8.0.0 Final Release Readiness & Cache Integrity Edition
+> This guide applies to AIR-DROW 8.1.0 On-device Launch Validation & Final Release Gate Edition
 
 ## Start a drawing
 
@@ -41,7 +41,7 @@ Open Camera first. When the live camera is visible, open **Settings → About Ap
 Your drawings and settings remain local unless you export, share or intentionally use optional AI creation. Camera video is not stored by AIR-DROW.
 
 
-> **v8.0.0:** Added high-resolution export, hand palette/eraser gestures, adaptive smoothing and local diagnostics.
+> **v8.1.0:** Added high-resolution export, hand palette/eraser gestures, adaptive smoothing and local diagnostics.
 
 
 ### Download safety

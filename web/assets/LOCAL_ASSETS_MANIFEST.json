@@ -1,6 +1,6 @@
 {
-  "version": "8.0.0",
-  "buildId": "air-drow-v800-release-cache-integrity",
+  "version": "8.1.0",
+  "buildId": "air-drow-v810-on-device-launch-validation",
   "policy": "AIR-DROW uses local same-origin interface assets, MediaPipe modules, WASM files and the verified hand model. Your drawing session is private to this device unless you choose an export, share or optional AI action.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -22,7 +22,7 @@
   "assets/lottie/hand-detected-verify.json": "assets/lottie/hand-detected-verify.json",
   "assets/lottie/hand-missing-error.json": "assets/lottie/hand-missing-error.json",
   "assets/lottie/hand-problem-warning.json": "assets/lottie/hand-problem-warning.json",
-  "note": "Kurdish UI uses local Noto Kufi Arabic. Drawing, hand tracking, projects, backups, exports, App readiness and Hand drawing check work locally in the browser.",
+  "note": "Kurdish UI uses local Noto Kufi Arabic. Drawing, hand tracking, projects, backups, exports, App readiness, On-device launch validation and Hand drawing check work locally in the browser.",
   "interfaceIconSystem": {
     "folder": "assets/icons",
     "editable": true,
@@ -30,7 +30,7 @@
     "guide": "assets/icons/ICON_SYSTEM.md",
     "packageManifest": "assets/icons/USER_ICON_PACKAGE.json"
   },
-  "releaseStatus": "v8.0.0 Final Release Readiness & Cache Integrity Edition: static asset revisions, release metadata and local device-validation contracts are synchronized while physical-action gates and source-first artwork export remain active across AIR-DROW.",
-  "assetRevision": "800",
-  "revision": "800"
+  "releaseStatus": "v8.1.0 On-device Launch Validation & Final Release Gate Edition: the page, runtime and PWA cache share one revision while private local canvas/PNG/JPG/file-preparation checks and protected physical actions remain active across AIR-DROW.",
+  "assetRevision": "810",
+  "revision": "810"
 }

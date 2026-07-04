@@ -1,4 +1,4 @@
-const BUILD_ID = "air-drow-v800-release-cache-integrity";
+const BUILD_ID = "air-drow-v810-on-device-launch-validation";
 const CACHE_PREFIX = "air-drow-runtime-";
 const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 
@@ -9,15 +9,15 @@ const STATIC_CACHE = `${CACHE_PREFIX}${BUILD_ID}`;
 const APP_SHELL = [
   "/",
   "/index.html",
-  "/manifest.webmanifest?v=800",
+  "/manifest.webmanifest?v=810",
   "/favicon.svg",
   "/assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf",
-  "/assets/icons/toolbar/toolbar-icons.css?v=800",
-  "/assets/css/app.css?v=800",
-  "/assets/css/visual-system.css?v=800",
-  "/assets/css/icon-system.css?v=800",
-  "/assets/css/drawer-layout.css?v=800",
-  "/assets/css/production-ui.css?v=800"
+  "/assets/icons/toolbar/toolbar-icons.css?v=810",
+  "/assets/css/app.css?v=810",
+  "/assets/css/visual-system.css?v=810",
+  "/assets/css/icon-system.css?v=810",
+  "/assets/css/drawer-layout.css?v=810",
+  "/assets/css/production-ui.css?v=810"
 ];
 
 async function clearAirDrawCaches({ keepCurrent = false } = {}) {
