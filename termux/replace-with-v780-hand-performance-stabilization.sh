@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# AIR-DROW v7.7.1 — Critical Input & Export Recovery Edition
+# AIR-DROW v7.8.0 — Hand Tracking & Performance Stabilization Edition
 # Transactional replacement: preserve .git, verify/build before push, then restore the old source if validation fails.
 set -Eeuo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="7.7.1"
+VERSION="7.8.0"
 REPO="${1:-$HOME/AIR-DROW-GITHUB}"
 BACKUP="${REPO}.backup-${VERSION//./-}-$(date +%Y%m%d-%H%M%S)"
 RESTORE_REQUIRED=0
@@ -29,7 +29,8 @@ VERSION_FOUND="$(node -e 'const fs=require("fs"); console.log(JSON.parse(fs.read
 [ "$VERSION_FOUND" = "$VERSION" ] || { echo "Expected AIR-DROW v$VERSION, found v$VERSION_FOUND"; exit 1; }
 [ -s "$SOURCE/web/vendor/models/hand_landmarker.task" ] || { echo "The local hand model is missing."; exit 1; }
 [ -s "$SOURCE/web/vendor/mediapipe/vision_bundle.js" ] || { echo "The local hand runtime is missing."; exit 1; }
-[ -f "$SOURCE/web/assets/css/production-ui.css" ] || { echo "The production UI stylesheet is missing."; exit 1; }
+[ -f "$SOURCE/web/assets/js/features/hand-frame-scheduler.js" ] || { echo "The video-frame hand scheduler is missing."; exit 1; }
+[ -f "$SOURCE/web/assets/js/features/tracking-quality-governor.js" ] || { echo "The adaptive tracking governor is missing."; exit 1; }
 echo "Creating a safe backup…"
 mkdir -p "$BACKUP"
 shopt -s dotglob nullglob
@@ -45,7 +46,7 @@ echo "Building and verifying AIR-DROW v$VERSION…"
 npm run vercel:build
 RESTORE_REQUIRED=0
 git add -A
-if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.7.1 critical input and export recovery"; fi
+if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.8.0 hand tracking and performance stabilization"; fi
 BRANCH="$(git branch --show-current 2>/dev/null || true)"
 [ -n "$BRANCH" ] || BRANCH="main"
 git push origin "HEAD:$BRANCH"

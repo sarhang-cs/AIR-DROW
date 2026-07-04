@@ -1,22 +1,22 @@
 {
-  "version": "7.7.1",
-  "buildId": "air-drow-v771-critical-input-export-recovery",
+  "version": "7.8.0",
+  "buildId": "air-drow-v780-hand-performance-stabilization",
   "releasedAt": "2026-07-04T13:00:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Critical Input & Export Recovery Edition: hand gestures cannot download files, raster exports capture the visible artwork safely, and Kurdish mobile typography and protected UI spacing are refined.",
+  "summary": "AIR-DROW Hand Tracking & Performance Stabilization Edition: fresh-video-frame MediaPipe scheduling, adaptive tracking cadence, protected canvas zones, quieter stable-only guidance, and local-only privacy.",
   "features": [
-    "Removes hand-triggered save/export downloads. Export now requires a real tap on an on-screen control.",
-    "Adds a reliable raster artwork snapshot path so PNG/JPG/WebP include visible drawing strokes instead of exporting an empty background.",
-    "Makes the hand guide opt-in by default, adds a longer palette hover dwell, and blocks drawing through the top palette.",
-    "Migrates existing project settings to the safer input defaults while retaining touch, pen, hand drawing and the two-finger hand eraser.",
-    "Refines Kurdish RTL text sizing, line-height and About-card layout for Android phones."
+    "Schedules MediaPipe from fresh decoded video frames and blocks duplicate inference work on Android.",
+    "Adapts the hand-tracking cadence after repeated slow frames without changing drawing data or interrupting an active stroke.",
+    "Protects toolbar, palette, dock, drawers and dialogs from hand drawing or hand-triggered UI actions.",
+    "Makes the optional Hand Guide stable-only and compact; full landmark skeleton clutter is removed from normal drawing.",
+    "Preserves physical-tap-only save/export behavior and artwork-only raster exports."
   ],
-  "assetRevision": "771",
-  "phase": 14,
-  "stage": "critical-input-export-recovery",
+  "assetRevision": "780",
+  "phase": 15,
+  "stage": "hand-performance-stabilization",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",

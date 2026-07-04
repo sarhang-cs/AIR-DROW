@@ -1,8 +1,8 @@
 {
   "name": "air-drow",
-  "version": "7.7.1",
+  "version": "7.8.0",
   "private": true,
-  "description": "AIR-DROW Critical Input & Export Recovery Edition \u2014 physical-tap-only exports, visible-artwork raster recovery, safer hand controls and Kurdish mobile typography polish.",
+  "description": "AIR-DROW Hand Tracking & Performance Stabilization Edition — video-frame-aware MediaPipe scheduling, adaptive tracking cadence, protected canvas zones and quiet hand guidance.",
   "type": "module",
   "dependencies": {
     "@mediapipe/tasks-vision": "0.10.35"
@@ -29,8 +29,10 @@
     "runtime:verify": "node scripts/verify-runtime-experience.mjs",
     "qa:reality": "node scripts/verify-calibration-reality-qa.mjs",
     "test": "node tests/export-gesture-reliability.test.mjs",
-    "qa:export-gesture": "node scripts/verify-critical-input-export-recovery.mjs",
-    "qa:critical-input-export": "node scripts/verify-critical-input-export-recovery.mjs"
+    "qa:export-gesture": "node scripts/verify-input-export-safety.mjs",
+    "qa:critical-input-export": "npm run qa:input-export-safety && npm run qa:hand-performance",
+    "qa:hand-performance": "node scripts/verify-hand-performance-stabilization.mjs",
+    "qa:input-export-safety": "node scripts/verify-input-export-safety.mjs"
   },
   "engines": {
     "node": ">=22 <25"

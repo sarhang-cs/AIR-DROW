@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 7.7.1 Critical Input & Export Recovery Edition
+> This guide applies to AIR-DROW 7.8.0 Hand Tracking & Performance Stabilization Edition
 
 AIR-DROW is local-first.
 

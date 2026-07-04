@@ -1,4 +1,4 @@
-# AIR-DROW v7.7.1 — Critical Input & Export Recovery
+# AIR-DROW v7.8.0 — Hand Tracking & Performance Stabilization
 
 This stability release resolves the Android issues observed during live hand-drawing tests.
 
@@ -9,3 +9,10 @@ This stability release resolves the Android issues observed during live hand-dra
 - Kurdish RTL typography and the About panel have mobile-specific sizing and spacing.
 
 The two-finger eraser remains available only when gesture shortcuts are explicitly enabled.
+
+
+## Hand tracking and performance
+
+- Hand inference follows fresh decoded camera frames and a safe device budget.
+- The app never lets a hand pose save, export, clear, share, or download files.
+- The hand guide is optional and appears only when tracking is stable.

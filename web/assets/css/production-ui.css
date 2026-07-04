@@ -795,7 +795,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 :root.reduce-motion .hand-tutorial-card * { animation:none !important; }
 @media (max-width:390px) { .hand-tutorial-head { grid-template-columns:1fr; } .hand-tutorial-visual { max-width:190px; justify-self:center; } }
 
-/* ===== v7.7.1 Export, Gesture & Reliability ===== */
+/* ===== v7.8.0 Hand Tracking & Performance Stabilization ===== */
 /* One responsive source of truth: cards stay balanced on a phone and QR remains beside the creator profile. */
 .about-creator-card {
   display:grid;
@@ -935,7 +935,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v7.7.1 — top hand palette and local reliability controls.
+/* v7.8.0 — protected hand palette and local reliability controls.
  * The palette is a real control surface: it sits above the canvas and is
  * explicitly blocked from pointer / hand drawing by app.js surface guards. */
 .hand-palette {
@@ -1010,7 +1010,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v7.7.1 — critical input safety and Kurdish mobile typography. */
+/* v7.8.0 — critical input safety and Kurdish mobile typography. */
 .hand-palette[hidden] { display: none !important; }
 /* Palette, live HUD and camera state occupy distinct vertical bands. */
 @media (max-width: 560px) {

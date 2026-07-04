@@ -16,10 +16,10 @@ const productionUi = read("web/assets/css/production-ui.css");
 const model = resolve(root, "web/vendor/models/hand_landmarker.task");
 const runtimeBundle = resolve(root, "web/vendor/mediapipe/vision_bundle.js");
 const runtimeWasm = resolve(root, "web/vendor/mediapipe/wasm/vision_wasm_internal.wasm");
-for (const file of ["README.md", "README_KU.md", "CHANGELOG.md", "FINAL_RELEASE_MANIFEST.json", "docs/USER_GUIDE.md", "docs/USER_GUIDE_KU.md", "docs/PRIVACY.md", "docs/RELEASE_NOTES.md", "termux/replace-with-v771-critical-input-export-recovery.sh", "docs/screenshots/air-drow-studio-en.png", "docs/screenshots/air-drow-hand-en.png", "docs/V771_CRITICAL_INPUT_EXPORT_QA.md", "web/assets/brand/instagram-sarhang-io-qr.svg"]) if (!existsSync(resolve(root,file))) throw new Error(`Production release file is missing: ${file}`);
+for (const file of ["README.md", "README_KU.md", "CHANGELOG.md", "FINAL_RELEASE_MANIFEST.json", "docs/USER_GUIDE.md", "docs/USER_GUIDE_KU.md", "docs/PRIVACY.md", "docs/RELEASE_NOTES.md", "termux/replace-with-v780-hand-performance-stabilization.sh", "docs/screenshots/air-drow-studio-en.png", "docs/screenshots/air-drow-hand-en.png", "docs/V780_HAND_PERFORMANCE_QA.md", "web/assets/brand/instagram-sarhang-io-qr.svg"]) if (!existsSync(resolve(root,file))) throw new Error(`Production release file is missing: ${file}`);
 if (release.version !== pkg.version || release.version !== project.version || release.version !== assets.version) throw new Error("Version metadata is not synchronized.");
 if (release.buildId !== project.buildId || release.buildId !== assets.buildId) throw new Error("Build metadata is not synchronized.");
-if (release.assetRevision !== assets.assetRevision || release.assetRevision !== "771") throw new Error("Asset revision metadata is not synchronized.");
+if (release.assetRevision !== assets.assetRevision || release.assetRevision !== "780") throw new Error("Asset revision metadata is not synchronized.");
 if (!runtime.includes(`version: "${release.version}"`) || !runtime.includes(`buildId: "${release.buildId}"`)) throw new Error("Runtime release metadata is inconsistent.");
 if (!worker.includes(`const BUILD_ID = "${release.buildId}"`)) throw new Error("Service-worker release metadata is inconsistent.");
 if (!index.includes(`content="${release.buildId}"`) || !index.includes(`v${release.version}`)) throw new Error("Index release metadata is inconsistent.");
@@ -29,8 +29,8 @@ if (!existsSync(runtimeBundle) || statSync(runtimeBundle).size < 100_000 || !exi
 if (/sourceMappingURL=/u.test(read("web/vendor/mediapipe/vision_bundle.js"))) throw new Error("The source MediaPipe bundle must not reference a missing source map.");
 if (!productionUi.includes("about-creator-card") || !productionUi.includes("grid-template-columns:minmax(0, 1fr) 126px")) throw new Error("Responsive About-card layout is missing.");
 if (!index.includes("about-creator-card") || !index.includes("instagram-sarhang-io-qr.svg") || !index.includes("https://www.instagram.com/sarhang.io/") || !index.includes("data-airdrow-surface")) throw new Error("Developer profile, Instagram QR or protected surface markup is incomplete.");
-if (!read("README.md").includes("docs/screenshots/air-drow-studio-en.png") || !read("README_KU.md").includes("docs/screenshots/air-drow-hand-en.png") || !read("README.md").includes("v7.7.1")) throw new Error("README screenshots or current release notes are not linked.");
-if (!read("web/assets/js/app.js").includes("isStudioControlSurface") || !read("web/assets/js/app.js").includes("bindStudioSurfaceGuards")) throw new Error("Canvas input isolation is missing.");
+if (!read("README.md").includes("docs/screenshots/air-drow-studio-en.png") || !read("README_KU.md").includes("docs/screenshots/air-drow-hand-en.png") || !read("README.md").includes("v7.8.0")) throw new Error("README screenshots or current release notes are not linked.");
+if (!read("web/assets/js/app.js").includes("isStudioControlSurface") || !read("web/assets/js/app.js").includes("createHandFrameScheduler") || !read("web/assets/js/app.js").includes("bindStudioSurfaceGuards")) throw new Error("Canvas input isolation is missing.");
 const bootScriptMatches = [...index.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi)];
 if (bootScriptMatches.length !== 1 || (bootScriptMatches[0][1].match(/const BOOT_COPY/g) || []).length !== 1) throw new Error("Bootstrap script declarations are invalid.");
 

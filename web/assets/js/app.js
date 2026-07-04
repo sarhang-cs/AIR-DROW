@@ -22,6 +22,8 @@ import { createFinalLiveQa } from "./features/final-live-qa.js";
 import { createDiagnostics } from "./core/diagnostics.js";
 import { smoothStrokePoint } from "./features/stroke-smoother.js";
 import { createHandStabilizer, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
+import { createHandFrameScheduler } from "./features/hand-frame-scheduler.js";
+import { createTrackingQualityGovernor } from "./features/tracking-quality-governor.js";
 import { createLocalHandLandmarker, primeLocalHandAssets } from "./features/hand-engine-bootstrap.js";
 import { APP_RELEASE as AIRDROW_RELEASE, HAND_MODEL, HAND_CALIBRATION_STORAGE_KEY, LEGACY_HAND_CALIBRATION_STORAGE_KEYS, LEGACY_QUICK_START_KEYS, LEGACY_STORAGE_KEY, MEDIAPIPE_MODULE_URLS, MEDIAPIPE_WASM_URLS, OLD_MIRROR_KEY, PROFILE_RULES, QUICK_START_KEY, STORAGE_KEY, createDefaultSettings } from "./config/runtime.js";
 import { normalizeSkin } from "./config/appearance.js";
@@ -61,6 +63,11 @@ let challengeSession = null;
 let onboardingFlow = null;
 let pendingUpdate = null;
 const handCalibration = createHandCalibration();
+// The hand detector is synchronous in MediaPipe Tasks. Keep its scheduling and
+// adaptive budget outside DOM/event code so camera frames are never processed
+// twice and slow Android devices retain a responsive UI.
+let handFrameScheduler = null;
+const trackingQualityGovernor = createTrackingQualityGovernor();
 
 const state = {
   strokes: [],
@@ -82,6 +89,9 @@ const state = {
   handDelegate: "GPU",
   handEngineError: "",
   handLoop: 0,
+  handSessionId: 0,
+  lastInferenceMs: 0,
+  trackingDegraded: false,
   handDrawing: false,
   handPoint: null,
   lastDetection: 0,
@@ -478,13 +488,13 @@ function localDate(value) {
 function projectFromStorage(value) {
   if (!value || typeof value !== "object" || !Array.isArray(value.strokes)) return null;
   const settings = { ...defaults, ...(value.settings || {}) };
-  // Existing pre-v7.7.1 projects may still contain unsafe gesture defaults.
+  // Existing pre-v7.8.0 projects may still contain unsafe gesture defaults.
   // Migrate once: people can re-enable the guide or eraser gesture later,
   // but no restored project can trigger an unexpected export/download.
-  if (Number(settings.inputSafetyVersion || 0) < 2) {
+  if (Number(settings.inputSafetyVersion || 0) < 3) {
     settings.gestureShortcuts = false;
     settings.showHandGuide = false;
-    settings.inputSafetyVersion = 2;
+    settings.inputSafetyVersion = 3;
   }
   return {
     strokes: value.strokes,
@@ -1450,6 +1460,7 @@ async function startCamera() {
 
     ui.studio.classList.add("camera-on");
     state.cameraPerformanceReduced = false;
+    trackingQualityGovernor.reset();
     ui.app.classList.add("camera-session-active");
     applyCameraView();
     ui.cameraButton.classList.add("camera-live");
@@ -1483,6 +1494,8 @@ async function startCamera() {
 }
 
 function stopCamera() {
+  state.handSessionId += 1;
+  handFrameScheduler?.stop();
   stopHandLoop();
   state.stream?.getTracks?.().forEach(track => track.stop());
   state.stream = null;
@@ -1552,11 +1565,11 @@ async function loadMediaPipeModule() {
   throw lastError || new Error("MediaPipe module is unavailable");
 }
 
-async function loadHandLandmarker({ forceReload = false } = {}) {
+async function loadHandLandmarker({ forceReload = false, sessionId = state.handSessionId } = {}) {
   if (state.landmarker && !forceReload) return state.landmarker;
   if (state.handLoadPromise && !forceReload) return state.handLoadPromise;
 
-  state.handLoadPromise = (async () => {
+  const loadTask = (async () => {
     const { FilesetResolver, HandLandmarker } = await loadMediaPipeModule();
     // A closed fist naturally shortens finger reach. Keep the detector a little
     // more tolerant so it can return landmarks, while the separate geometry
@@ -1571,17 +1584,26 @@ async function loadHandLandmarker({ forceReload = false } = {}) {
       confidence,
       preferredDelegate: state.handDelegate
     });
+    // A superseded async task must never install a detector over the newer
+    // session. Close its private task before returning a controlled cancel.
+    if (sessionId !== state.handSessionId) {
+      try { result.landmarker?.close?.(); } catch {}
+      const cancelled = new Error("Hand engine load was superseded");
+      cancelled.airdrowStage = "cancelled";
+      throw cancelled;
+    }
     state.landmarker = result.landmarker;
     state.handDelegate = result.delegate || (result.strategy.includes("cpu") ? "CPU" : "GPU");
     state.handEngineStrategy = result.strategy;
     state.handEngineError = "";
     return state.landmarker;
   })();
+  state.handLoadPromise = loadTask;
 
   try {
-    return await state.handLoadPromise;
+    return await loadTask;
   } finally {
-    state.handLoadPromise = null;
+    if (state.handLoadPromise === loadTask) state.handLoadPromise = null;
   }
 }
 
@@ -1823,6 +1845,9 @@ function resetHandGestureState() {
   state.inferenceFpsAt = performance.now();
   state.inferenceFps = 0;
   state.effectiveTargetFps = 0;
+  state.lastInferenceMs = 0;
+  state.trackingDegraded = false;
+  trackingQualityGovernor.reset();
   state.erasingGesture = false;
   clearTimeout(state.handScanReadyTimer);
   state.handScanReadyTimer = 0;
@@ -1836,7 +1861,9 @@ function requestedHandFps() {
 }
 
 async function enableTrackingSafeCapture() {
-  if (state.cameraPerformanceReduced || state.settings.performanceMode === "max") return;
+  // Changing camera constraints while ink is active can move the decoded frame
+  // and cause a discontinuity. Defer the fallback until the stroke is safely finished.
+  if (state.handDrawing || state.cameraPerformanceReduced || state.settings.performanceMode === "max") return;
   const track = state.stream?.getVideoTracks?.()[0];
   if (!track?.applyConstraints) return;
   state.cameraPerformanceReduced = true;
@@ -1853,15 +1880,29 @@ async function enableTrackingSafeCapture() {
   }
 }
 
-function updateInferenceFps(now) {
+function updateInferenceFps(now, inferenceMs = state.lastInferenceMs) {
   state.inferenceFrames += 1;
+  state.lastInferenceMs = Math.max(0, Number(inferenceMs) || 0);
   const elapsed = now - state.inferenceFpsAt;
   if (elapsed >= 700) {
     state.inferenceFps = Math.round((state.inferenceFrames * 1000) / elapsed);
     state.fps = state.inferenceFps;
     const configured = Math.max(12, Math.min(30, Number(state.settings.targetFps) || 24));
-    state.effectiveTargetFps = effectiveTrackingFps({ configured, measured: state.inferenceFps });
-    if (state.inferenceFps <= 9) void enableTrackingSafeCapture();
+    const quality = trackingQualityGovernor.observe({
+      configured,
+      measured: state.inferenceFps,
+      inferenceMs: state.lastInferenceMs,
+      mode: state.settings.performanceMode || "auto",
+      drawing: state.handDrawing
+    });
+    // Keep the existing measured-FPS floor as a final guard; the quality
+    // governor adds slow-frame awareness and recovers gently after stability.
+    state.effectiveTargetFps = Math.min(
+      quality.effectiveFps,
+      effectiveTrackingFps({ configured, measured: state.inferenceFps })
+    );
+    state.trackingDegraded = Boolean(quality.degraded);
+    if (quality.requestCaptureReduction || state.inferenceFps <= 9) void enableTrackingSafeCapture();
     state.inferenceFrames = 0;
     state.inferenceFpsAt = now;
   }
@@ -2028,6 +2069,20 @@ async function waitForCameraFrame(timeoutMs = 1800) {
 async function startHandTracker({ forceReload = false } = {}) {
   if (!["hand", "hand-eraser"].includes(state.mode)) return;
   if (state.handStartPromise && !forceReload) return state.handStartPromise;
+  const sessionId = ++state.handSessionId;
+  if (forceReload) {
+    handFrameScheduler?.stop();
+    try { state.landmarker?.close?.(); } catch {}
+    state.landmarker = null;
+  }
+
+  const assertActiveSession = () => {
+    if (sessionId !== state.handSessionId || !["hand", "hand-eraser"].includes(state.mode)) {
+      const cancelled = new Error("Hand start was superseded by a newer session");
+      cancelled.airdrowStage = "cancelled";
+      throw cancelled;
+    }
+  };
 
   const startTask = (async () => {
     const engineAlreadyReady = Boolean(state.landmarker) && !forceReload;
@@ -2045,13 +2100,14 @@ async function startHandTracker({ forceReload = false } = {}) {
     let cameraReady = false;
     try {
       await startCamera();
+      assertActiveSession();
       cameraReady = true;
       if (!state.handScanHasDetected && !engineAlreadyReady) {
         setHandScanStage("camera", t("scanCameraLoading", "Camera is on; loading the hand engine…"), t("scanWaitForEngine", "Please wait while the hand engine starts."));
         setText(ui.handStatus, t("scanWarming", "Preparing hand engine…"));
       }
     } catch (error) {
-      error.airdrowStage = "camera";
+      if (error?.airdrowStage !== "cancelled") error.airdrowStage = "camera";
       throw error;
     }
 
@@ -2061,9 +2117,11 @@ async function startHandTracker({ forceReload = false } = {}) {
       await waitForCameraFrame(2200);
       if (ui.camera.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) throw new Error("Camera did not deliver a video frame");
       await Promise.all([assetPrime, modulePrime]);
-      await loadHandLandmarker({ forceReload });
+      assertActiveSession();
+      await loadHandLandmarker({ forceReload, sessionId });
+      assertActiveSession();
     } catch (error) {
-      error.airdrowStage = "engine";
+      if (error?.airdrowStage !== "cancelled") error.airdrowStage = "engine";
       throw error;
     }
 
@@ -2074,12 +2132,13 @@ async function startHandTracker({ forceReload = false } = {}) {
       setHandScanStage("detect", t("scanPlaceHandNow", "Hand engine is ready"), t("scanPlaceHandNowHint", "Now hold your hand in front of the camera"));
       setText(ui.handStatus, t("scanPlaceHandNow", "Hand engine is ready"));
       hideRecovery("camera");
-      handFrame();
+      startHandLoop();
     } catch (error) {
       error.airdrowStage = cameraReady ? "engine" : "camera";
       throw error;
     }
   })().catch(error => {
+    if (error?.airdrowStage === "cancelled") return;
     console.warn("Hand engine failed without stopping AIR-DROW.", error);
     setText(ui.handStatus, error.airdrowStage === "camera" ? t("cameraUnavailableTitle", "Camera cannot start") : t("engineUnavailable", "Hand engine unavailable"));
     setText(ui.fpsStatus, "—");
@@ -2106,25 +2165,12 @@ async function startHandTracker({ forceReload = false } = {}) {
   }
 }
 
-function isExpectedMediaPipeDiagnostic(args = []) {
-  const text = args.map(value => String(value || "")).join(" ");
-  return /OpenGL error checking is disabled|Using NORM_RECT without IMAGE_DIMENSIONS/.test(text);
-}
-
 function detectHandLandmarks(now) {
-  // MediaPipe emits these two internal diagnostic lines from its generated
-  // WASM graph on Chromium even when a frame is valid. They are not failures;
-  // isolate only those exact strings so genuine runtime warnings remain visible.
-  const originalWarn = console.warn;
-  console.warn = (...args) => {
-    if (isExpectedMediaPipeDiagnostic(args)) return;
-    originalWarn(...args);
-  };
-  try {
-    return state.landmarker.detectForVideo(ui.camera, now);
-  } finally {
-    console.warn = originalWarn;
-  }
+  // Never monkey-patch console during an inference frame. A global override is
+  // fragile when browser/media APIs warn concurrently and can hide actionable
+  // diagnostics. MediaPipe's harmless WASM messages are tolerated as normal
+  // browser diagnostics while real detector failures flow to recovery below.
+  return state.landmarker.detectForVideo(ui.camera, now);
 }
 
 function handleHandRuntimeFailure(error) {
@@ -2155,8 +2201,16 @@ function handleHandRuntimeFailure(error) {
   reportHandEngineFailure(error);
 }
 
+function startHandLoop() {
+  if (!handFrameScheduler) {
+    handFrameScheduler = createHandFrameScheduler({ getMinInterval: () => 1000 / requestedHandFps() });
+  }
+  handFrameScheduler.start(ui.camera, ({ now, mediaTime }) => handFrame(now, mediaTime));
+  state.handLoop = 1;
+}
+
 function stopHandLoop() {
-  cancelAnimationFrame(state.handLoop);
+  handFrameScheduler?.stop();
   state.handLoop = 0;
   if (state.handDrawing) finishHandStroke();
   resetHandGestureState();
@@ -2170,9 +2224,9 @@ function clearHandCanvas() {
 // The guide is visual feedback only. It must not be coupled to the stricter
 // open-hand geometry gate used for pinch drawing: a closed fist has valid
 // landmarks but intentionally fails open-finger reach tests.
-const HAND_GUIDE_MIN_SCORE = .34;
-const HAND_GUIDE_MIN_SCALE = .020;
-const HAND_GUIDE_HOLD_MS = 560;
+const HAND_GUIDE_MIN_SCORE = .58;
+const HAND_GUIDE_MIN_SCALE = .034;
+const HAND_GUIDE_HOLD_MS = 420;
 
 function cacheHandGuide(points, geometry, now) {
   if (!Array.isArray(points) || points.length < 21) return false;
@@ -2200,9 +2254,20 @@ function drawHeldHandGuide(now) {
 
   // Covers a single detector miss caused by finger occlusion while avoiding a
   // long-lived frozen guide when the hand actually leaves the camera.
-  const opacity = Math.max(.28, 1 - (elapsed / HAND_GUIDE_HOLD_MS) * .72);
+  const opacity = Math.max(.08, .22 - (elapsed / HAND_GUIDE_HOLD_MS) * .14);
   drawHandSkeleton(state.lastGuideLandmarks, opacity);
   return true;
+}
+
+function isHandPointOnProtectedSurface(point) {
+  if (!point) return false;
+  const screen = handPointToScreen(point);
+  const studioRect = ui.studio.getBoundingClientRect();
+  const clientX = studioRect.left + screen.x;
+  const clientY = studioRect.top + screen.y;
+  const target = document.elementFromPoint(clientX, clientY);
+  // Palette is checked before this guard and owns its own hover-safe behavior.
+  return isStudioControlSurface(target);
 }
 
 function processGestureShortcut(landmarks, pinchRatio, now) {
@@ -2246,18 +2311,14 @@ function holdOrFinishHandStroke({ now, rule, landmarksPresent, jumped = false, p
   return continuity;
 }
 
-function handFrame() {
+function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
   if (!["hand", "hand-eraser"].includes(state.mode) || !state.stream || !state.landmarker) return;
-  state.handLoop = requestAnimationFrame(handFrame);
-
-  const now = performance.now();
-  const frameInterval = 1000 / requestedHandFps();
   if (ui.camera.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) return;
-  const videoTime = ui.camera.currentTime;
-  if (videoTime === state.lastVideoTime || now - state.lastDetection < frameInterval) return;
-  state.lastVideoTime = videoTime;
+  if (Number.isFinite(Number(videoTime)) && videoTime === state.lastVideoTime) return;
+  state.lastVideoTime = Number(videoTime);
   state.lastDetection = now;
 
+  const inferenceStartedAt = performance.now();
   try {
     const result = detectHandLandmarks(now);
     const landmarks = result?.landmarks?.[0];
@@ -2281,14 +2342,14 @@ function handFrame() {
       if (performance.now() - state.handScanStartedAt > 3200 && !state.handScanHasDetected) {
         setHandScanStage("missing", t("handNotFound", "Hand not found"), t("scanCamera", "Camera is ready; place your hand in frame"));
       }
+      updateInferenceFps(now, performance.now() - inferenceStartedAt);
+      setText(ui.fpsStatus, state.inferenceFps || "—");
       updateLiveHud();
       return;
     }
 
     const geometry = readHandGeometry(landmarks, result);
     const posture = readHandPosture(landmarks, geometry);
-    const guideDetected = cacheHandGuide(landmarks, geometry, now);
-    if (state.settings.showHandGuide && guideDetected) drawHandSkeleton(landmarks);
     const candidate = handGeometryIsUsable(geometry, rule);
     const index = landmarks[8];
     const raw = { x: index.x, y: index.y, pressure: 1, time: now };
@@ -2301,6 +2362,10 @@ function handFrame() {
 
     const stablePosition = stabilised.stable;
     const assessment = trackingAssessment(geometry, stablePosition, stabilised.jumped);
+    // Hand-guide visuals must never make a weak/false detector result look
+    // trustworthy. Only a stable, drawable hand can populate the guide cache.
+    const guideDetected = candidate && assessment.usable && cacheHandGuide(landmarks, geometry, now);
+    if (state.settings.showHandGuide && guideDetected) drawHandSkeleton(landmarks, .22);
     updateTrackingHealth(assessment);
 
     if (!candidate || !stabilised.point) {
@@ -2323,7 +2388,7 @@ function handFrame() {
         setGestureStatus("blocked", assessment.label);
         setText(ui.handStatus, assessment.label);
       }
-      updateInferenceFps(now);
+      updateInferenceFps(now, performance.now() - inferenceStartedAt);
       setText(ui.fpsStatus, state.inferenceFps || "—");
       updateLiveHud();
       return;
@@ -2347,7 +2412,7 @@ function handFrame() {
       setHandPoint(state.handPoint, assessment.usable ? "ready" : "hold");
       setGestureStatus(assessment.usable ? "hold" : "blocked", assessment.usable ? t("calibrationHold", "Hold your hand steady…") : assessment.label);
       setText(ui.handStatus, assessment.usable ? t("calibrationHold", "Hold your hand steady…") : assessment.label);
-      updateInferenceFps(now);
+      updateInferenceFps(now, performance.now() - inferenceStartedAt);
       setText(ui.fpsStatus, state.inferenceFps || "—");
       updateLiveHud();
       return;
@@ -2394,7 +2459,23 @@ function handFrame() {
       setHandPoint(state.handPoint, "palette");
       setGestureStatus("ready", t("paletteHover", "Hover over a color to select it"));
       setText(ui.handStatus, t("paletteHover", "Hover over a color to select it"));
-      updateInferenceFps(now);
+      updateInferenceFps(now, performance.now() - inferenceStartedAt);
+      setText(ui.fpsStatus, state.inferenceFps || "—");
+      updateLiveHud();
+      return;
+    }
+
+    // Hand coordinates must never paint behind toolbars, the dock, settings or
+    // a dialog. Those controls remain physical-tap-only even while tracking.
+    if (isHandPointOnProtectedSurface(state.handPoint)) {
+      if (state.handDrawing) finishHandStroke();
+      state.pinchGate.reset();
+      state.pinchOnFrames = 0;
+      state.pinchOffFrames = 0;
+      setHandPoint(state.handPoint, "blocked");
+      setGestureStatus("blocked", t("gestureUiProtected", "Move your hand into the canvas to draw"));
+      setText(ui.handStatus, t("gestureUiProtected", "Move your hand into the canvas to draw"));
+      updateInferenceFps(now, performance.now() - inferenceStartedAt);
       setText(ui.fpsStatus, state.inferenceFps || "—");
       updateLiveHud();
       return;
@@ -2415,7 +2496,7 @@ function handFrame() {
         fist: posture.closedFist
       });
       if (continuity.paused) {
-        updateInferenceFps(now);
+        updateInferenceFps(now, performance.now() - inferenceStartedAt);
         setText(ui.fpsStatus, state.inferenceFps || "—");
         updateLiveHud();
         return;
@@ -2471,7 +2552,7 @@ function handFrame() {
     if (state.settings.gestureShortcuts && ["hand", "hand-eraser"].includes(state.mode) && assessment.usable) processGestureShortcut(landmarks, geometry.pinchRatio, now);
     else if (ui.shortcutStatus) setText(ui.shortcutStatus, state.settings.gestureShortcuts ? t("gestureReady", "Ready") : t("shortcutOff", "Shortcuts are off"));
 
-    updateInferenceFps(now);
+    updateInferenceFps(now, performance.now() - inferenceStartedAt);
     setText(ui.fpsStatus, state.inferenceFps || "—");
     updateLiveHud();
   } catch (error) {
@@ -2479,40 +2560,45 @@ function handFrame() {
   }
 }
 
-function drawHandSkeleton(points, opacity = .38) {
+function drawHandSkeleton(points, opacity = .22) {
   const { width, height } = canvasMetrics();
   handCtx.clearRect(0, 0, width, height);
   const map = point => normalizedToCanvasPoint(point);
-  const links = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[0,9],[9,10],[10,11],[11,12],[0,13],[13,14],[14,15],[15,16],[0,17],[17,18],[18,19],[19,20],[5,9],[9,13],[13,17]];
-  handCtx.save();
-  handCtx.globalAlpha = Math.max(.10, Math.min(.42, Number(opacity) || .38));
-  const paintLinks = (pairs, color, width = 1.45) => {
+  // A compact guide is intentionally quieter than a full diagnostic skeleton:
+  // it confirms the index/thumb pinch location without covering artwork or
+  // making an ambiguous hand shape look like a drawing result.
+  const thumbLinks = [[0, 1], [1, 2], [2, 3], [3, 4]];
+  const indexLinks = [[0, 5], [5, 6], [6, 7], [7, 8]];
+  const paint = (pairs, color, lineWidth) => {
     handCtx.strokeStyle = color;
-    handCtx.lineWidth = width;
+    handCtx.lineWidth = lineWidth;
     for (const [a, b] of pairs) {
-      const pa = map(points[a]), pb = map(points[b]);
+      const pa = map(points[a]);
+      const pb = map(points[b]);
       handCtx.beginPath();
       handCtx.moveTo(pa.x, pa.y);
       handCtx.lineTo(pb.x, pb.y);
       handCtx.stroke();
     }
   };
-  paintLinks(links.filter(([a,b]) => ![1,2,3,4,5,6,7,8].includes(a) && ![1,2,3,4,5,6,7,8].includes(b)), "rgba(118,203,255,.70)");
-  paintLinks([[0,1],[1,2],[2,3],[3,4]], "rgba(255,202,116,.98)", 1.75);
-  paintLinks([[0,5],[5,6],[6,7],[7,8]], "rgba(117,231,255,.98)", 1.85);
+  handCtx.save();
+  handCtx.globalAlpha = Math.max(.08, Math.min(.26, Number(opacity) || .22));
+  paint(thumbLinks, "rgba(255,202,116,.96)", 1.35);
+  paint(indexLinks, "rgba(117,231,255,.96)", 1.45);
   const thumb = map(points[4]);
   const index = map(points[8]);
-  handCtx.save();
-  handCtx.setLineDash([3, 3]);
-  handCtx.lineWidth = 1.15;
-  handCtx.strokeStyle = "rgba(255,255,255,.62)";
-  handCtx.beginPath(); handCtx.moveTo(thumb.x, thumb.y); handCtx.lineTo(index.x, index.y); handCtx.stroke();
-  handCtx.restore();
-  for (let joint = 0; joint < points.length; joint += 1) {
-    const p = map(points[joint]);
+  handCtx.setLineDash([3, 4]);
+  handCtx.lineWidth = 1;
+  handCtx.strokeStyle = "rgba(255,255,255,.54)";
+  handCtx.beginPath();
+  handCtx.moveTo(thumb.x, thumb.y);
+  handCtx.lineTo(index.x, index.y);
+  handCtx.stroke();
+  handCtx.setLineDash([]);
+  for (const [point, color] of [[thumb, "rgba(255,202,116,1)"], [index, "rgba(117,231,255,1)"]]) {
     handCtx.beginPath();
-    handCtx.fillStyle = joint === 4 ? "rgba(255,202,116,1)" : joint === 8 ? "rgba(117,231,255,1)" : "rgba(105,224,190,.88)";
-    handCtx.arc(p.x, p.y, joint === 4 || joint === 8 ? 3.25 : 2.05, 0, Math.PI * 2);
+    handCtx.fillStyle = color;
+    handCtx.arc(point.x, point.y, 2.55, 0, Math.PI * 2);
     handCtx.fill();
   }
   handCtx.restore();
@@ -4028,6 +4114,20 @@ async function boot() {
   bindStudioSurfaceGuards();
   bindMobileInteractionGuards();
   bindImmediateTextEntry();
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      // Suspend synchronous inference in background tabs; camera permission and
+      // the live stream remain intact, and drawing resumes only on fresh frames.
+      if (state.handDrawing) finishHandStroke();
+      handFrameScheduler?.stop();
+      return;
+    }
+    if (["hand", "hand-eraser"].includes(state.mode) && state.stream && state.landmarker) {
+      handFrameScheduler?.reset();
+      startHandLoop();
+    }
+  });
+
   bindPointerEvents();
   loadingManager.setBoot({ progress: 45, label: t("bootProject", "Opening local project…") });
   await loadProject();

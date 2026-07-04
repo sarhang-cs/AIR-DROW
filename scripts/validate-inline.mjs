@@ -19,6 +19,8 @@ const modules = [
   "web/assets/js/core/final-stability.js",
   "web/assets/js/features/hand-calibration.js",
   "web/assets/js/features/hand-tracking-engine.js",
+  "web/assets/js/features/hand-frame-scheduler.js",
+  "web/assets/js/features/tracking-quality-governor.js",
   "web/assets/js/features/exporter.js",
   "web/assets/js/features/brush-lab.js",
   "web/assets/js/features/shape-engine.js",

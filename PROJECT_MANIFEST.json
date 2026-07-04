@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.7.1",
-  "buildId": "air-drow-v771-critical-input-export-recovery",
-  "release": "Critical Input & Export Recovery Edition",
+  "version": "7.8.0",
+  "buildId": "air-drow-v780-hand-performance-stabilization",
+  "release": "Hand Tracking & Performance Stabilization Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -23,11 +23,11 @@
     "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Critical Input & Export Recovery Edition",
+  "name": "AIR-DROW Hand Tracking & Performance Stabilization Edition",
   "releasedAt": "2026-07-04T13:00:00Z",
-  "summary": "A stability-focused release: physical-tap-only downloads, visible-artwork raster export recovery, safer hand controls, and polished Kurdish mobile typography.",
-  "stage": "critical-input-export-recovery",
-  "phase": 14,
-  "assetRevision": "771",
-  "releaseName": "AIR-DROW Critical Input & Export Recovery Edition"
+  "summary": "Fresh-video-frame hand scheduling, adaptive cadence and protected canvas zones make tracking safer and smoother on mobile.",
+  "stage": "hand-performance-stabilization",
+  "phase": 15,
+  "assetRevision": "780",
+  "releaseName": "AIR-DROW Hand Tracking & Performance Stabilization Edition"
 }

@@ -40,7 +40,7 @@ async function writeManifest() {
     sha256: EXPECTED_SHA256,
     validation: "Exact byte length and SHA-256. No ZIP-header or archive-entry assumptions are made.",
     delivery: "Final release packages include this exact verified task asset. npm run model:sync is a controlled build-time fallback only when the source file is absent.",
-    networkPolicy: "No runtime hand-model download is allowed. The deployed app only reads /vendor/models/hand_landmarker.task?model=v771-critical-input-export-recovery.",
+    networkPolicy: "No runtime hand-model download is allowed. The deployed app only reads /vendor/models/hand_landmarker.task?model=v780-hand-performance-stabilization.",
     integrityPolicy: "Build fails unless the exact official task binary is present."
   };
   await mkdir(modelDirectory, { recursive: true });

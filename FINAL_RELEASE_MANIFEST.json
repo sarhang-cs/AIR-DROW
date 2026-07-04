@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Critical Input & Export Recovery Edition",
-  "version": "7.7.1",
-  "buildId": "air-drow-v771-critical-input-export-recovery",
+  "name": "AIR-DROW Hand Tracking & Performance Stabilization Edition",
+  "version": "7.8.0",
+  "buildId": "air-drow-v780-hand-performance-stabilization",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -29,18 +29,18 @@
   },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v771-critical-input-export-recovery.sh",
-  "release": "Critical Input & Export Recovery Edition",
-  "assetRevision": "771",
+  "installer": "termux/replace-with-v780-hand-performance-stabilization.sh",
+  "release": "Hand Tracking & Performance Stabilization Edition",
+  "assetRevision": "780",
   "releasedAt": "2026-07-04T13:00:00Z",
-  "releaseName": "AIR-DROW Critical Input & Export Recovery Edition",
-  "summary": "A stability-focused release: physical-tap-only downloads, visible-artwork raster export recovery, safer hand controls, and polished Kurdish mobile typography.",
+  "releaseName": "AIR-DROW Hand Tracking & Performance Stabilization Edition",
+  "summary": "A hand-reliability release: fresh-frame inference scheduling, adaptive performance, protected canvas zones and a quiet stable-only hand guide.",
   "releaseChecks": [
-    "Version, cache and build identifiers are synchronized across source, manifest and service worker.",
-    "Hand gestures never dispatch save or export actions; two raised fingers remain a guarded eraser toggle only.",
-    "PNG, JPG and WebP use a protected artwork-only canvas snapshot so drawn strokes are present in the exported file.",
-    "Toolbar, palette, workspace and settings remain explicit protected input surfaces; Kurdish mobile typography has dedicated RTL size tokens."
+    "Fresh decoded camera frames drive hand inference; duplicate video frames are skipped.",
+    "Slow devices adapt hand-tracking cadence without changing artwork or interrupting active ink.",
+    "Hand coordinates cannot paint through palette, toolbar, dock, settings or dialog surfaces.",
+    "Export remains physical-tap-only and captures artwork without UI or hand-guide overlays."
   ],
-  "stage": "critical-input-export-recovery",
-  "phase": 14
+  "stage": "hand-performance-stabilization",
+  "phase": 15
 }

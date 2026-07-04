@@ -1,7 +1,7 @@
-AIR-DROW v7.7.1 — Export, Gesture & Reliability
+AIR-DROW v7.8.0 — Hand Tracking & Performance Stabilization
 
-1. Put AIR-DROW_v7.7.1_EXPORT_GESTURE_RELIABILITY.zip in /sdcard/Download.
-2. Extract it on Termux using the full command from the delivery message.
+1. Put AIR-DROW_v7.8.0_HAND_TRACKING_PERFORMANCE_STABILIZATION.zip in /sdcard/Download.
+2. Extract it with the full Termux command from the delivery message.
 3. The transactional installer preserves .git, creates a rollback backup, validates npm run vercel:build, commits, and pushes only after all checks pass.
 4. Vercel deploys automatically from the pushed branch.
 
