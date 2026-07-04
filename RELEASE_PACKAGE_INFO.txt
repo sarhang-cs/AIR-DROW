@@ -1,10 +1,5 @@
-AIR-DROW v7.9.0 — Mobile Safety & Final QA
-Generated: 2026-07-04T01:48:59Z
-Excluded from this source ZIP: node_modules/, public/, .git/
+AIR-DROW v8.0.0 — Final Release Readiness & Cache Integrity
 
-Verified before packaging:
-- npm run verify:all
-- npm run qa:critical-input-export
-- npm run release:verify
-- npm run preflight
-- npm test
+This complete source package contains the verified local MediaPipe runtime and hand model, bilingual release documentation, a cache/build identity contract and Android device-validation checklists.
+
+Build: npm ci --no-audit --no-fund && npm run vercel:build

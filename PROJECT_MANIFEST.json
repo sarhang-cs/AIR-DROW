@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.9.0",
-  "buildId": "air-drow-v790-mobile-safety-final-qa",
-  "release": "Mobile Safety & Final QA Edition",
+  "version": "8.0.0",
+  "buildId": "air-drow-v800-release-cache-integrity",
+  "release": "Final Release Readiness & Cache Integrity",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -16,18 +16,18 @@
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
-  "releaseGate": "npm run vercel:build validates source integrity, local hand assets, bilingual markup, runtime coverage, export/gesture unit checks, theme tokens, documentation and generated production output.",
+  "releaseGate": "npm run vercel:build validates source integrity, local hand assets, bilingual markup, runtime coverage, export/gesture tests, cache/version contracts, theme tokens, documentation and generated production output.",
   "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, release information and developer profile.",
   "developer": {
     "name": "Sarhang Salah",
     "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Mobile Safety & Final QA Edition",
-  "releasedAt": "2026-07-04T14:00:00Z",
-  "summary": "Trusted physical actions, source-first export recovery, quiet hand guidance and mobile-focused final QA make the Android drawing workflow safer and more predictable.",
-  "stage": "mobile-safety-final-qa",
-  "phase": 16,
-  "assetRevision": "790",
-  "releaseName": "AIR-DROW Mobile Safety & Final QA Edition"
+  "name": "AIR-DROW Final Release Readiness & Cache Integrity Edition",
+  "releasedAt": "2026-07-04T01:53:10Z",
+  "summary": "v8.0.0 synchronizes the cache revision and release metadata across the page, PWA manifest, worker, source modules and deployment output; it also locks the final physical-device validation contract into the project.",
+  "stage": "release-cache-integrity",
+  "phase": 17,
+  "assetRevision": "800",
+  "releaseName": "AIR-DROW Final Release Readiness & Cache Integrity Edition"
 }

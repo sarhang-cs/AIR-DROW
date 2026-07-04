@@ -795,7 +795,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 :root.reduce-motion .hand-tutorial-card * { animation:none !important; }
 @media (max-width:390px) { .hand-tutorial-head { grid-template-columns:1fr; } .hand-tutorial-visual { max-width:190px; justify-self:center; } }
 
-/* ===== v7.9.0 Mobile Safety & Final QA ===== */
+/* ===== v8.0.0 Final Release Readiness & Cache Integrity ===== */
 /* One responsive source of truth: cards stay balanced on a phone and QR remains beside the creator profile. */
 .about-creator-card {
   display:grid;
@@ -935,7 +935,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v7.9.0 — protected hand palette and local reliability controls.
+/* v8.0.0 — release cache integrity with protected hand palette and local reliability controls.
  * The palette is a real control surface: it sits above the canvas and is
  * explicitly blocked from pointer / hand drawing by app.js surface guards. */
 .hand-palette {
@@ -1010,7 +1010,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v7.9.0 — critical input safety and Kurdish mobile typography. */
+/* v8.0.0 — critical input safety and Kurdish mobile typography. */
 .hand-palette[hidden] { display: none !important; }
 /* Palette, live HUD and camera state occupy distinct vertical bands. */
 @media (max-width: 560px) {
@@ -1054,7 +1054,7 @@ html[lang="ku"] .about-grid div { min-height: 88px; padding: 11px; }
 }
 
 
-/* v7.9.0 — mobile safety, quiet hand guide and Kurdish reading rhythm. */
+/* v8.0.0 — mobile safety, quiet hand guide and Kurdish reading rhythm. */
 .hand-canvas { isolation: isolate; }
 html[lang="ku"] .hand-gesture-help,
 html[lang="ku"] .hand-quality,

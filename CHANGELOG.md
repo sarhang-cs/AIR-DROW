@@ -1,5 +1,12 @@
 # AIR-DROW changelog
 
+## v8.0.0 — Final Release Readiness & Cache Integrity
+
+- Synchronized the index build identifier, runtime module identifier, local hand-model cache key, PWA manifest, service-worker cache namespace, release descriptor and asset revision under one v8.0.0 identity.
+- Replaced mixed `v770`/`v790` static stylesheet and manifest cache markers with one v800 revision, preventing a browser from pairing new JavaScript with an older visual shell after deployment.
+- Added a release-readiness QA contract that rejects stale version markers and documentation that would imply a hand pose can save, export, clear, share or download a file.
+- Added English and Sorani Kurdish Android device-validation checklists for camera permission, camera frames, hand detection, palette dwell, protected UI surfaces, PNG/JPG output, PWA update and offline local hand runtime checks.
+
 ## v7.9.0 — Mobile Safety & Final QA
 
 - Added a trusted physical-action gate for Export, Quick Save, Share fallback, backup download, diagnostics download, creator-template output, replay output, AI-result download and destructive Clear. Synthetic clicks and hand-tracking coordinates are rejected.

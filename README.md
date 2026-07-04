@@ -6,7 +6,7 @@
 
 ### A private drawing studio for touch, pen and hand
 
-**Mobile Safety & Final QA Edition · v7.9.0 · Created by Sarhang Salah**
+**Final Release Readiness & Cache Integrity Edition · v8.0.0 · Created by Sarhang Salah**
 
 [![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
@@ -86,18 +86,20 @@ The production gate validates local hand-model integrity, generated MediaPipe ru
 
 For Android/Termux replacement, use [`termux/TERMUX_INSTALL.txt`](./termux/TERMUX_INSTALL.txt). The installer keeps `.git`, makes a rollback backup, validates the production build, commits and pushes only after a successful gate.
 
+Before tagging a live deployment, complete the [Android Device Validation Checklist](./docs/DEVICE_VALIDATION_CHECKLIST.md). It is intentionally separate from automated checks because only a real phone can confirm its camera driver, permission prompt and browser download sheet.
+
 ---
 <div align="center">Made for ideas in motion · <strong>AIR-DROW</strong> · <a href="#top">Back to top</a></div>
 
 
-## v7.9.0 highlights
+## v8.0.0 highlights
 
 - **Export Studio:** PNG, JPG and WebP with 1×, 2× and 4× output, Fit/Fill/Stretch layouts, social presets and A4/A3 300 PPI layouts.
-- **Hand gesture controls:** hover an index finger over the top palette to select a color; hold up two fingers to toggle Hand Eraser. Palm quick-saves; thumb-up opens standard export.
+- **Hand gesture controls:** hover an index finger over the top palette to select a color; hold up two fingers to toggle Hand Eraser. No hand pose can save, export, clear, share or download a file; those actions require a real on-screen tap.
 - **Reliable drawing:** velocity-adaptive smoothing reduces tremor. When no hand is detected or a hand leaves the frame, the app pauses/holds safely rather than creating a jump stroke.
 - **Private diagnostics:** Camera, hand engine and export failures can be copied or downloaded as a local report. It excludes artwork, camera frames, landmarks, project titles and API URLs.
 
 
-## v7.9.0 mobile safety & final QA
+## v8.0.0 final release readiness
 
-This release is deliberately conservative: all downloads and destructive canvas actions require a trusted physical control activation; hand tracking cannot synthesize them. Raster exports now render the saved source strokes first, so the output cannot depend on a late live-canvas repaint. The optional hand guide is quiet, compact and hidden while drawing.
+This release synchronizes the app page, ES-module build, PWA manifest, service-worker cache namespace and release descriptor under one revision. It also adds a final bilingual device-validation contract. Hand tracking remains intentionally isolated from Save, Export, Clear, Share, Backup and diagnostics download actions.

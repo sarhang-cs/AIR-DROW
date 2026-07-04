@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# AIR-DROW v7.9.0 — Mobile Safety & Final QA Edition
+# AIR-DROW v8.0.0 — Final Release Readiness & Cache Integrity
 # Transactional replacement: preserve .git, verify/build before push, then restore the old source if validation fails.
 set -Eeuo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="7.9.0"
+VERSION="8.0.0"
 REPO="${1:-$HOME/AIR-DROW-GITHUB}"
 BACKUP="${REPO}.backup-${VERSION//./-}-$(date +%Y%m%d-%H%M%S)"
 RESTORE_REQUIRED=0
@@ -29,8 +29,7 @@ VERSION_FOUND="$(node -e 'const fs=require("fs"); console.log(JSON.parse(fs.read
 [ "$VERSION_FOUND" = "$VERSION" ] || { echo "Expected AIR-DROW v$VERSION, found v$VERSION_FOUND"; exit 1; }
 [ -s "$SOURCE/web/vendor/models/hand_landmarker.task" ] || { echo "The local hand model is missing."; exit 1; }
 [ -s "$SOURCE/web/vendor/mediapipe/vision_bundle.js" ] || { echo "The local hand runtime is missing."; exit 1; }
-[ -f "$SOURCE/web/assets/js/features/hand-frame-scheduler.js" ] || { echo "The video-frame hand scheduler is missing."; exit 1; }
-[ -f "$SOURCE/web/assets/js/features/tracking-quality-governor.js" ] || { echo "The adaptive tracking governor is missing."; exit 1; }
+[ -f "$SOURCE/docs/DEVICE_VALIDATION_CHECKLIST_KU.md" ] || { echo "The Android validation checklist is missing."; exit 1; }
 echo "Creating a safe backup…"
 mkdir -p "$BACKUP"
 shopt -s dotglob nullglob
@@ -46,7 +45,7 @@ echo "Building and verifying AIR-DROW v$VERSION…"
 npm run verify:all && npm test
 RESTORE_REQUIRED=0
 git add -A
-if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.9.0 mobile safety and final QA"; fi
+if ! git diff --cached --quiet; then git commit -m "AIR-DROW v8.0.0 final release readiness and cache integrity"; fi
 BRANCH="$(git branch --show-current 2>/dev/null || true)"
 [ -n "$BRANCH" ] || BRANCH="main"
 git push origin "HEAD:$BRANCH"

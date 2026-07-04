@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "7.9.0",
-  "buildId": "air-drow-v790-mobile-safety-final-qa",
+  "version": "8.0.0",
+  "buildId": "air-drow-v800-release-cache-integrity",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {
@@ -191,5 +191,5 @@
       "bytes": 502
     }
   ],
-  "release": "Interaction & Vision Tutorial Edition"
+  "release": "Final Release Readiness & Cache Integrity Edition"
 }

@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 7.9.0 Mobile Safety & Final QA Edition
+> This guide applies to AIR-DROW 8.0.0 Final Release Readiness & Cache Integrity Edition
 
 AIR-DROW is local-first.
 
@@ -13,3 +13,7 @@ AIR-DROW is local-first.
 - Optional AI creation is an explicit action. Only the sketch you choose for AI creation is sent to the configured AI service; camera video is never sent by AIR-DROW.
 
 Before changing phones or clearing browser storage, download a backup from Settings.
+
+## v8.0.0 release assurance
+
+The final release-readiness checks verify that cache and build identifiers are synchronized. They do not change AIR-DROW's on-device privacy model: diagnostics remain local and the camera is never opened by a readiness check.

@@ -1,23 +1,20 @@
-# AIR-DROW v7.9.0 — Mobile Safety & Final QA
+# AIR-DROW v8.0.0 — Final Release Readiness & Cache Integrity
 
-This stability release resolves the Android issues observed during live hand-drawing tests.
+This release closes the code-side release-readiness phase. It does not pretend that automated code checks can replace a physical Android camera test; instead, it makes the deployed build identity and final device checklist explicit and verifiable.
 
-- A tracked hand can no longer save, export, share or download any file.
-- PNG, JPG and WebP now use the isolated visible-artwork canvas after a synchronous final paint, preventing background-only exports.
-- The top color palette is hidden outside live Hand mode, requires a longer hover dwell and cannot be drawn through.
-- Hand skeleton feedback is off by default and remains outside saved artwork.
-- Kurdish RTL typography and the About panel have mobile-specific sizing and spacing.
+## Fixed
 
-The two-finger eraser remains available only when gesture shortcuts are explicitly enabled.
+- The HTML shell referenced inconsistent older CSS/manifest cache keys. All shipped static resources now use the same `v800` revision.
+- The PWA cache shell now pre-caches the same versioned URLs requested by the page, preventing an avoidable first-offline mismatch.
+- Release metadata is synchronized across package.json, release.json, source runtime, boot code, PWA manifest, service worker, health endpoint and local asset manifests.
+- Documentation no longer claims that a palm or thumb gesture can save or export. Only the guarded two-finger eraser gesture remains available when explicitly enabled.
 
+## Validation added
 
-## Hand tracking and performance
+- `npm run qa:release-readiness` checks the release identity, cache keys, source/build consistency and the safe-hand-action documentation contract.
+- `npm test` includes release-readiness regression checks in addition to gesture, export and mobile-safety tests.
+- The device checklist is available in English and Sorani Kurdish.
 
-- Hand inference follows fresh decoded camera frames and a safe device budget.
-- The app never lets a hand pose save, export, clear, share, or download files.
-- The hand guide is optional and appears only when tracking is stable.
+## Physical-device step
 
-
-## Mobile safety contract
-
-The application does not map hand pose recognition to download, export, share, backup, diagnostics download or clear actions. Those routes are protected by a trusted physical-action gate.
+After deployment, use the included checklist on the target Android phone. The only unautomatable items are the device-specific camera driver, permission prompt, real hand framing and Chrome download sheet.
