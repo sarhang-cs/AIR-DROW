@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW is a private drawing studio for touch, pen and optional hand drawing. Create, save and export from one place." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=840" />
-  <meta name="air-drow-build" content="air-drow-v840-hand-input-reliability" />
-  <meta name="air-drow-icon-pack" content="hand-input-reliability-v840" />
+  <link rel="manifest" href="./manifest.webmanifest?v=850" />
+  <meta name="air-drow-build" content="air-drow-v850-settings-kurdish-responsive-polish" />
+  <meta name="air-drow-icon-pack" content="settings-kurdish-responsive-polish-v850" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=840" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=850" />
   <title>AIR-DROW — Draw with Touch, Pen & Hand</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
@@ -23,11 +23,11 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=840" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=840" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=840" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=840" />
-    <link rel="stylesheet" href="./assets/css/production-ui.css?v=840" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=850" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=850" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=850" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=850" />
+    <link rel="stylesheet" href="./assets/css/production-ui.css?v=850" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
@@ -234,6 +234,10 @@
         </div>
         <h2 id="resetDialogTitle" data-i18n="resetSettings">ڕیسێتی ڕێکخستنەکان</h2>
         <p class="reset-scope" data-i18n="resetSettingsBody">تەنها ڕەنگ، ستایل، زمان، کامێرا و هەموو ڕێکخستنەکان دەگەڕێنێتەوە بۆ بنەڕەت. کێشانەکانت ناسڕدرێنەوە.</p>
+        <ul class="reset-scope-list">
+          <li data-i18n="resetSettingsKeeps">کێشان، مێژوو، پڕۆژەکان و گەلەری ناپارێزرێن.</li>
+          <li data-i18n="resetSettingsChanges">تەنها ڕێکخستنەکانی ئەپ دەگەڕێنەوە بۆ بنەڕەت.</li>
+        </ul>
         <div class="reset-actions">
           <button id="resetCancelBtn" class="reset-cancel" type="button" data-i18n="cancel">پاشگەزبوونەوە</button>
           <button id="resetConfirmBtn" class="reset-confirm" type="button" data-i18n="confirmReset">ڕیسێت بکە</button>
@@ -452,7 +456,31 @@
         </details>
 
         <p class="workspace-caption" data-workspace-caption="settings" data-i18n="workspaceSettingsHint">Choose how AIR-DROW looks, feels and works on this device.</p>
-        <details id="cameraHandSection" class="settings-section" data-workspace-section="settings">
+        <section id="settingsCommandCenter" class="settings-command-center" data-workspace-only="settings" aria-label="Quick settings navigation" data-i18n-aria-label="ariaSettingsQuickNav">
+          <div class="settings-command-head">
+            <div>
+              <strong data-i18n="settingsQuickTitle">ڕێکخستنی خێرا</strong>
+              <p data-i18n="settingsQuickHint">گۆڕانکارییەکان خۆکار لەم ئامێرە پاشەکەوت دەکرێن. تەنها ڕیسێت دەیانگەڕێنێتەوە بۆ بنەڕەت.</p>
+            </div>
+            <span class="settings-saved-chip" data-i18n="settingsSavedChip">لەسەر ئەم ئامێرە پاشەکەوتکراوە</span>
+          </div>
+          <div class="settings-command-group">
+            <span class="settings-command-label" data-i18n="settingsPrimaryGroup">ڕێکخستنە سەرەتاییەکان</span>
+            <div class="settings-command-grid">
+              <button type="button" class="settings-command-link" data-settings-jump="cameraHandSection"><b data-i18n="cameraHand">کامێرا و دەست</b><small data-i18n="settingsQuickHandHint">پڕۆفایل، ڕێنمایی و کالیبراسیۆن</small></button>
+              <button type="button" class="settings-command-link" data-settings-jump="appearanceSection"><b data-i18n="uiStyle">ڕووکار و ستایل</b><small data-i18n="settingsQuickAppearanceHint">دۆخی تاریک/ڕوون و شەش theme</small></button>
+              <button type="button" class="settings-command-link" data-settings-jump="displaySection"><b data-i18n="display">پیشاندان</b><small data-i18n="settingsQuickDisplayHint">جوڵە، grid و performance</small></button>
+            </div>
+          </div>
+          <div class="settings-command-group settings-command-group-advanced">
+            <span class="settings-command-label" data-i18n="settingsAdvancedGroup">پێشکەوتوو و داتا</span>
+            <div class="settings-command-grid settings-command-grid-advanced">
+              <button type="button" class="settings-command-link" data-settings-jump="infoSection"><b data-i18n="info">زانیاری</b><small data-i18n="settingsQuickInfoHint">دۆخی live و توانای ئامێر</small></button>
+              <button type="button" class="settings-command-link" data-settings-jump="systemSection"><b data-i18n="systemData">سیستەم و داتا</b><small data-i18n="settingsQuickSystemHint">backup، diagnostics و ڕیسێت</small></button>
+            </div>
+          </div>
+        </section>
+        <details id="cameraHandSection" class="settings-section" data-workspace-section="settings" data-settings-tier="primary">
           <summary>
             <span class="summary-icon"><span class="app-icon icon-camera-hand" aria-hidden="true"></span></span>
             <span data-i18n="cameraHand">کامێرا و دەست</span>
@@ -578,7 +606,7 @@
           </div>
         </details>
 
-        <details class="settings-section" data-workspace-section="settings">
+        <details id="appearanceSection" class="settings-section" data-workspace-section="settings" data-settings-tier="primary">
           <summary>
             <span class="summary-icon"><span class="app-icon icon-appearance" aria-hidden="true"></span></span>
             <span data-i18n="uiStyle">ڕووکار و ستایلی پڕیمیۆم</span>
@@ -601,7 +629,7 @@
           </div>
         </details>
 
-        <details class="settings-section" data-workspace-section="settings">
+        <details id="displaySection" class="settings-section" data-workspace-section="settings" data-settings-tier="primary">
           <summary>
             <span class="summary-icon"><span class="app-icon icon-display" aria-hidden="true"></span></span>
             <span data-i18n="display">پیشاندان</span>
@@ -630,7 +658,7 @@
           </div>
         </details>
 
-        <details class="settings-section" data-workspace-section="settings">
+        <details id="infoSection" class="settings-section" data-workspace-section="settings" data-settings-tier="advanced">
           <summary>
             <span class="summary-icon"><span class="app-icon icon-info" aria-hidden="true"></span></span>
             <span data-i18n="info">زانیاری</span>
@@ -646,7 +674,7 @@
           </div>
         </details>
 
-        <details class="settings-section" id="systemSection" data-workspace-section="settings">
+        <details class="settings-section" id="systemSection" data-workspace-section="settings" data-settings-tier="advanced">
           <summary>
             <span class="summary-icon"><span class="app-icon icon-system" aria-hidden="true"></span></span>
             <span data-i18n="systemData">سیستەم و داتا</span>
@@ -709,7 +737,7 @@
               <p class="about-summary" data-i18n="aboutSummary">ستودیۆیەکی ئازادە بۆ کێشان بە تەچ، قەڵەم و دەست. کێشان و ڕێکخستنەکانت لەسەر ئەم ئامێرە دەمێنن.</p>
             </div>
             <div class="about-grid about-grid-clean">
-              <div class="about-meta-card about-meta-version"><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v8.4.0</b></div>
+              <div class="about-meta-card about-meta-version"><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v8.5.0</b></div>
               <div class="about-meta-card about-meta-input"><span data-i18n="aboutMadeFor">بۆ چی دروستکراوە؟</span><b data-i18n="aboutMadeForValue">تەچ • قەڵەم • دەست</b></div>
               <div class="about-meta-card about-meta-privacy"><span data-i18n="aboutPrivacy">تایبەتمەندی</span><b data-i18n="aboutPrivacyValue">داتاکەت لەسەر ئامێرەکەت دەمێنێت</b></div>
             </div>
@@ -829,7 +857,7 @@
       parked on the first loading frame.
     */
     (() => {
-      const BUILD_ID = "air-drow-v840-hand-input-reliability";
+      const BUILD_ID = "air-drow-v850-settings-kurdish-responsive-polish";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

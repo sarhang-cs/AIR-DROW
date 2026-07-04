@@ -1,0 +1,21 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const read = file => readFileSync(resolve(root, file), "utf8");
+const html = read("web/index.html");
+const app = read("web/assets/js/app.js");
+const css = read("web/assets/css/production-ui.css");
+assert.match(html, /id="settingsCommandCenter"/);
+assert.match(html, /data-settings-tier="primary"/);
+assert.match(html, /data-settings-tier="advanced"/);
+assert.match(html, /data-i18n="resetSettingsKeeps"/);
+assert.match(html, /data-i18n="resetSettingsChanges"/);
+assert.match(app, /function openSettingsSection\(sectionId\)/);
+assert.match(app, /ui\.settingsJumpLinks\.forEach/);
+assert.match(app, /const reselectingSettings = workspace === "settings"/);
+assert.match(css, /v8\.5\.0 Settings \+ Kurdish Responsive Polish/);
+assert.match(css, /html\[lang="ku"\] \.settings-command-center/);
+console.log("Settings route, reset scope and Kurdish responsive layout QA passed.");

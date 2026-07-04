@@ -1,7 +1,7 @@
 {
   "name": "AIR-DROW Hand Input Reliability Edition",
-  "version": "8.4.0",
-  "buildId": "air-drow-v840-hand-input-reliability",
+  "version": "8.5.0",
+  "buildId": "air-drow-v850-settings-kurdish-responsive-polish",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -29,7 +29,7 @@
   ],
   "developerProfile": {
     "name": "Sarhang Salah",
-    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
+    "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/",
     "qr": "web/assets/brand/instagram-sarhang-io-qr.svg"
   },

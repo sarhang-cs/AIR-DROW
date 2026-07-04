@@ -1237,3 +1237,89 @@ html[lang="ku"] .export-preview-card { font-family:"Noto Kufi Arabic",system-ui,
 html[lang="ku"] .export-preview-head h2 { font-size:16px; line-height:1.65; }
 html[lang="ku"] .export-preview-head p,.export-preview-meta { line-height:1.9; }
 html[lang="ku"] .export-preview-note,.export-preview-empty { line-height:1.95; }
+
+
+/* ===== v8.5.0 Settings + Kurdish Responsive Polish =====
+ * The Settings home now separates everyday controls from maintenance tools.
+ * These rules are intentionally self-contained so the actual setting cards
+ * remain the single editable source of truth. */
+.settings-drawer[data-workspace]:not([data-workspace="settings"]) .settings-command-center { display:none; }
+.settings-command-center {
+  display:grid;
+  gap:12px;
+  margin:4px 0 14px;
+  padding:13px;
+  border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));
+  border-radius:18px;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--panel-solid,var(--panel)) 86%,var(--accent-soft)),color-mix(in srgb,var(--panel) 96%,transparent));
+  box-shadow:inset 0 1px 0 var(--glass-highlight,rgba(255,255,255,.08));
+}
+.settings-command-head { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+.settings-command-head > div { min-width:0; }
+.settings-command-head strong { display:block; color:var(--text); font-size:12px; line-height:1.45; }
+.settings-command-head p { margin:3px 0 0; color:var(--muted); font-size:9px; line-height:1.65; }
+.settings-saved-chip { flex:0 0 auto; max-width:46%; padding:5px 7px; border:1px solid color-mix(in srgb,var(--accent) 27%,var(--line)); border-radius:999px; color:var(--accent); background:color-mix(in srgb,var(--accent-soft) 58%,transparent); font-size:8px; font-weight:850; line-height:1.35; text-align:center; }
+.settings-command-group { display:grid; gap:7px; }
+.settings-command-group-advanced { padding-top:10px; border-top:1px solid color-mix(in srgb,var(--line) 82%,transparent); }
+.settings-command-label { color:var(--muted); font-size:8.5px; font-weight:850; letter-spacing:.02em; }
+.settings-command-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
+.settings-command-grid-advanced { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.settings-command-link {
+  display:grid;
+  min-width:0;
+  min-height:64px;
+  padding:8px;
+  border:1px solid color-mix(in srgb,var(--accent) 18%,var(--line));
+  border-radius:13px;
+  color:var(--text);
+  background:color-mix(in srgb,var(--panel-solid,var(--panel)) 78%,transparent);
+  text-align:start;
+  touch-action:manipulation;
+  transition:border-color .16s ease,transform .16s ease,background .16s ease;
+}
+.settings-command-link b { min-width:0; font-size:9px; line-height:1.5; overflow-wrap:anywhere; }
+.settings-command-link small { display:block; margin-top:3px; color:var(--muted); font-size:7.6px; line-height:1.5; overflow-wrap:anywhere; }
+.settings-command-link:hover,.settings-command-link:focus-visible { border-color:color-mix(in srgb,var(--accent) 60%,var(--line)); background:color-mix(in srgb,var(--accent-soft) 44%,var(--panel-solid,var(--panel))); transform:translateY(-1px); }
+.settings-command-link:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+.settings-section[data-settings-tier="advanced"] summary { background:color-mix(in srgb,var(--panel-solid,var(--panel)) 70%,transparent); }
+.settings-section[data-settings-tier="advanced"] summary .summary-icon { opacity:.84; }
+.reset-scope-list { display:grid; gap:6px; margin:0 0 16px; padding:10px 11px 10px 25px; border:1px solid color-mix(in srgb,var(--accent) 17%,var(--line)); border-radius:13px; color:var(--muted); background:color-mix(in srgb,var(--panel-solid,var(--panel)) 68%,transparent); font-size:9px; line-height:1.7; }
+html[dir="rtl"] .reset-scope-list { padding:10px 25px 10px 11px; }
+
+/* Kurdish needs a little more leading and a reliable minimum size. */
+html[lang="ku"] .settings-command-center,
+html[lang="ku"] .settings-command-center button,
+html[lang="ku"] .reset-scope-list { font-family:"Noto Kufi Arabic",system-ui,sans-serif; letter-spacing:0; }
+html[lang="ku"] .settings-command-head strong { font-size:12px; line-height:1.7; }
+html[lang="ku"] .settings-command-head p { font-size:9.5px; line-height:1.85; }
+html[lang="ku"] .settings-saved-chip { font-size:8px; line-height:1.7; }
+html[lang="ku"] .settings-command-label { font-size:9px; line-height:1.7; }
+html[lang="ku"] .settings-command-link b { font-size:9.5px; line-height:1.72; }
+html[lang="ku"] .settings-command-link small { font-size:8px; line-height:1.72; }
+html[lang="ku"] .settings-section summary > span:not(.summary-icon) { min-width:0; overflow-wrap:anywhere; }
+html[lang="ku"] .settings-section .setting-body > .setting-line > span:first-child,
+html[lang="ku"] .settings-section .setting-body > .range-row > span,
+html[lang="ku"] .settings-section .setting-body > .text-setting > span { font-size:max(10px,2.72vw); line-height:1.85; overflow-wrap:anywhere; }
+html[lang="ku"] .small-status,
+html[lang="ku"] .system-note,
+html[lang="ku"] .performance-status { font-size:max(10px,2.65vw); line-height:1.88; overflow-wrap:anywhere; }
+html[lang="ku"] .reset-scope-list { font-size:9.5px; line-height:1.9; }
+
+@media (max-width:420px) {
+  .settings-command-center { padding:11px; gap:10px; border-radius:16px; }
+  .settings-command-head { gap:8px; }
+  .settings-saved-chip { max-width:43%; padding:4px 6px; }
+  .settings-command-grid { gap:6px; }
+  .settings-command-link { min-height:60px; padding:7px; border-radius:12px; }
+  .settings-command-link b { font-size:8.7px; }
+  .settings-command-link small { font-size:7.2px; }
+}
+@media (max-width:360px) {
+  .settings-command-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .settings-command-grid .settings-command-link:last-child:nth-child(odd) { grid-column:1 / -1; }
+  .settings-command-grid-advanced { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .settings-command-head { display:grid; }
+  .settings-saved-chip { max-width:none; justify-self:start; }
+  html[lang="ku"] .settings-command-link b { font-size:9px; }
+  html[lang="ku"] .settings-command-link small { font-size:7.6px; }
+}

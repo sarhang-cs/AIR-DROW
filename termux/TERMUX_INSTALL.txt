@@ -1,4 +1,5 @@
-AIR-DROW v8.4.0 — Hand Input Reliability
-1. Put AIR-DROW_v8.4.0_HAND_INPUT_RELIABILITY.zip in /sdcard/Download/.
-2. Extract it and run termux/replace-with-v840-hand-input-reliability.sh.
-3. The replacement verifies source, builds the local MediaPipe output, tests and pushes to GitHub.
+AIR-DROW v8.5.0 — Settings + Kurdish Responsive Polish
+
+1. Put AIR-DROW_v8.5.0_SETTINGS_KURDISH_RESPONSIVE_POLISH.zip in /sdcard/Download/.
+2. Extract it and run termux/replace-with-v850-settings-kurdish-responsive-polish.sh.
+3. The replacement preserves .git, runs verify:all, commits and pushes.

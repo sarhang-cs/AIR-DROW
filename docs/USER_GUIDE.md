@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 8.4.0 Hand Input Reliability Edition.
+> This guide applies to AIR-DROW 8.5.0 Hand Input Reliability Edition.
 
 ## Start a drawing
 

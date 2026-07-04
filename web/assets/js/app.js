@@ -3806,6 +3806,23 @@ function scrollOpenedSectionIntoView(section) {
   window.setTimeout(reveal, state.settings.reduceMotion ? 0 : 220);
 }
 
+function openSettingsSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (!section || section.dataset.workspaceSection !== "settings") return;
+
+  // Quick navigation deliberately opens one card at a time. This keeps the
+  // mobile drawer calm and ensures the requested settings start at the top.
+  document.querySelectorAll('.settings-section[data-workspace-section="settings"]').forEach(other => {
+    other.open = other === section;
+  });
+  requestAnimationFrame(() => {
+    if (!ui.drawerScroll) return;
+    const top = Math.max(0, section.offsetTop - 10);
+    ui.drawerScroll.scrollTo({ top, behavior: state.settings.reduceMotion ? "auto" : "smooth" });
+    scrollOpenedSectionIntoView(section);
+  });
+}
+
 function setWorkspace(name, { resetPanels = true } = {}) {
   const workspace = WORKSPACES.includes(name) ? name : "draw";
   const previous = state.workspace;
@@ -3849,8 +3866,13 @@ function openSettings(forceOpen = true, workspace = null) {
 }
 
 function openWorkspace(workspace) {
+  const reselectingSettings = workspace === "settings" && state.workspace === "settings";
   setWorkspace(workspace);
   openSettings(true);
+  if (reselectingSettings) {
+    document.querySelectorAll('.settings-section[data-workspace-section="settings"]').forEach((section, index) => { section.open = index === 0; });
+    requestAnimationFrame(() => ui.drawerScroll?.scrollTo({ top: 0, behavior: state.settings.reduceMotion ? "auto" : "smooth" }));
+  }
   if (workspace === "projects") void renderProjectGallery({ interactive: true });
 }
 
@@ -4119,6 +4141,9 @@ function bindControls() {
     applySettings();
     syncSettingsUI();
     queueSave();
+  }));
+  ui.settingsJumpLinks.forEach(button => button.addEventListener("click", () => {
+    openSettingsSection(button.dataset.settingsJump);
   }));
   [...ui.colorSwatches, ...ui.handPaletteColors].forEach(button => button.addEventListener("click", () => {
     setDrawingColor(button.dataset.color, { save: true, announce: false });

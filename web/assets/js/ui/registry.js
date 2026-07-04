@@ -136,6 +136,7 @@ export function collectUi() {
   themeChoices: [...document.querySelectorAll("[data-theme-mode]")],
   skinChoices: [...document.querySelectorAll("[data-skin]")],
   languageChoices: [...document.querySelectorAll("[data-language]")],
+  settingsJumpLinks: [...document.querySelectorAll("[data-settings-jump]")],
   colorSwatches: [...document.querySelectorAll(".color-swatch[data-color]")],
   fontStatus: $("fontStatus"),
   appVersionValue: $("appVersionValue"),

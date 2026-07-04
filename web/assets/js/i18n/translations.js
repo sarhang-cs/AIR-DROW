@@ -660,7 +660,20 @@ const ku = Object.freeze({
   "exportPreviewProjectMeta": "پڕۆژەی AIR-DROW · {count} هێڵ",
   "exportPreviewProjectOnly": "ئەم فایلە هێڵ و ڕێکخستنە دەستکاریکراوەکانت دەپارێزێت؛ پێشبینینی وێنەی نییە.",
   "engineLegacyBrowserTitle": "وێبگەڕی کۆن پێویستی بە ڕێکخستنی زیاتر هەیە",
-  "engineLegacyBrowserBody": "کێشەکە لە سازگاری WebAssembly ـی وێبگەڕەکەیە. دوای ئەوەی وەشانی نوێ بڵاوبووەوە، ئەپەکە داخە و دووبارە بکەرەوە؛ کێشانەکانت پارێزراون."
+  "engineLegacyBrowserBody": "کێشەکە لە سازگاری WebAssembly ـی وێبگەڕەکەیە. دوای ئەوەی وەشانی نوێ بڵاوبووەوە، ئەپەکە داخە و دووبارە بکەرەوە؛ کێشانەکانت پارێزراون.",
+  "ariaSettingsQuickNav": "گەشتکردنی خێرای ڕێکخستنەکان",
+  "settingsQuickTitle": "ڕێکخستنی خێرا",
+  "settingsQuickHint": "گۆڕانکارییەکان خۆکار لەم ئامێرە پاشەکەوت دەکرێن. تەنها ڕیسێت دەیانگەڕێنێتەوە بۆ بنەڕەت.",
+  "settingsSavedChip": "لەسەر ئەم ئامێرە پاشەکەوتکراوە",
+  "settingsPrimaryGroup": "ڕێکخستنە سەرەتاییەکان",
+  "settingsAdvancedGroup": "پێشکەوتوو و داتا",
+  "settingsQuickHandHint": "پڕۆفایل، ڕێنمایی و کالیبراسیۆن",
+  "settingsQuickAppearanceHint": "دۆخی تاریک/ڕوون و شەش theme",
+  "settingsQuickDisplayHint": "جوڵە، grid و performance",
+  "settingsQuickInfoHint": "دۆخی live و توانای ئامێر",
+  "settingsQuickSystemHint": "backup، diagnostics و ڕیسێت",
+  "resetSettingsKeeps": "کێشان، مێژوو، پڕۆژەکان و گەلەری ناپارێزرێن.",
+  "resetSettingsChanges": "تەنها ڕێکخستنەکانی ئەپ دەگەڕێنەوە بۆ بنەڕەت.",
 
 });
 
@@ -1322,7 +1335,20 @@ const en = Object.freeze({
   "exportPreviewProjectMeta": "AIR-DROW project · {count} strokes",
   "exportPreviewProjectOnly": "This project file keeps your editable strokes and settings. It has no image preview.",
   "engineLegacyBrowserTitle": "This older browser needs compatibility support",
-  "engineLegacyBrowserBody": "The hand runtime was blocked by this browser’s WebAssembly security policy. After the updated app deploys, close and reopen the app. Your drawings are safe."
+  "engineLegacyBrowserBody": "The hand runtime was blocked by this browser’s WebAssembly security policy. After the updated app deploys, close and reopen the app. Your drawings are safe.",
+  "ariaSettingsQuickNav": "Quick settings navigation",
+  "settingsQuickTitle": "Quick settings",
+  "settingsQuickHint": "Changes are saved automatically on this device. Only Reset returns preferences to their defaults.",
+  "settingsSavedChip": "Saved on this device",
+  "settingsPrimaryGroup": "Everyday settings",
+  "settingsAdvancedGroup": "Advanced & data",
+  "settingsQuickHandHint": "Profile, guide and calibration",
+  "settingsQuickAppearanceHint": "Dark/light mode and six themes",
+  "settingsQuickDisplayHint": "Motion, grid and performance",
+  "settingsQuickInfoHint": "Live status and device capability",
+  "settingsQuickSystemHint": "Backup, diagnostics and reset",
+  "resetSettingsKeeps": "Your drawing, history, projects and gallery stay untouched.",
+  "resetSettingsChanges": "Only AIR-DROW preferences return to their defaults.",
 
 });
 

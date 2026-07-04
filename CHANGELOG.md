@@ -1,6 +1,12 @@
 # Changelog
 
-## v8.4.0 — Hand Input Reliability
+## v8.5.0 — Settings + Kurdish Responsive Polish
+- Added compact everyday/advanced Settings navigation for mobile.
+- Improved Sorani Kurdish line-height, wrapping and safe minimum sizes across the Settings drawer.
+- Clarified the local-persistence and preference-only reset contract.
+- Reselecting Settings returns to the top of the focused Settings home.
+
+## v8.5.0 — Hand Input Reliability
 - Requires a stable open hand, a confirmed pinch and a small intentional movement before drawing starts.
 - Requires a re-pinch after a temporary hand-tracking loss before a paused stroke can resume.
 - Shortens frozen guide visibility and makes the scanner compact on mobile.
