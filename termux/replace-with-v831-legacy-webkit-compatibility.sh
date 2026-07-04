@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# AIR-DROW v8.3.0 — Export Preview & Save Polish
+# AIR-DROW v8.3.1 — Legacy WebKit Compatibility
 # Transactional replacement: preserve .git, verify/build before push, then restore old source if validation fails.
 set -Eeuo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="8.3.0"
+VERSION="8.3.1"
 REPO="${1:-$HOME/AIR-DROW-GITHUB}"
 BACKUP="${REPO}.backup-${VERSION//./-}-$(date +%Y%m%d-%H%M%S)"
 RESTORE_REQUIRED=0
@@ -26,7 +26,7 @@ NODE_MAJOR="$(node -p 'process.versions.node.split(".")[0]')"
 VERSION_FOUND="$(node -e 'const fs=require("fs"); console.log(JSON.parse(fs.readFileSync(process.argv[1],"utf8")).version)' "$SOURCE/package.json")"
 [ "$VERSION_FOUND" = "$VERSION" ] || { echo "Expected AIR-DROW v$VERSION, found v$VERSION_FOUND"; exit 1; }
 [ -s "$SOURCE/web/vendor/models/hand_landmarker.task" ] || { echo "The local hand model is missing."; exit 1; }
-[ -f "$SOURCE/docs/V830_EXPORT_PREVIEW_SAVE_POLISH_KU.md" ] || { echo "The v8.3 export guide is missing."; exit 1; }
+[ -f "$SOURCE/docs/V831_LEGACY_WEBKIT_COMPATIBILITY_KU.md" ] || { echo "The v8.3.1 legacy WebKit compatibility guide is missing."; exit 1; }
 mkdir -p "$BACKUP"
 shopt -s dotglob nullglob
 for item in "$REPO"/*; do [ "$(basename "$item")" = ".git" ] && continue; mv -- "$item" "$BACKUP/"; done
@@ -38,7 +38,7 @@ npm_config_loglevel=error npm ci --no-audit --no-fund
 npm run verify:all && npm test
 RESTORE_REQUIRED=0
 git add -A
-if ! git diff --cached --quiet; then git commit -m "AIR-DROW v8.3.0 export preview and save polish"; fi
+if ! git diff --cached --quiet; then git commit -m "AIR-DROW v8.3.1 legacy WebKit compatibility"; fi
 BRANCH="$(git branch --show-current 2>/dev/null || true)"
 [ -n "$BRANCH" ] || BRANCH="main"
 git push origin "HEAD:$BRANCH"

@@ -1,7 +1,7 @@
 {
   "project": "AIR-DROW",
-  "version": "8.3.0",
-  "buildId": "air-drow-v830-export-preview-save-polish",
+  "version": "8.3.1",
+  "buildId": "air-drow-v831-legacy-webkit-compatibility",
   "release": "Export Preview & Save Polish",
   "experience": [
     "Touch drawing",
@@ -28,12 +28,12 @@
   "summary": "A complete local drawing source package with protected no-download export preview, explicit file actions and Android-safe output flow.",
   "stage": "export-preview-save-polish",
   "phase": 20,
-  "assetRevision": "830",
+  "assetRevision": "831",
   "releaseName": "AIR-DROW Export Preview & Save Polish Edition",
-  "installer": "termux/replace-with-v830-export-preview-save-polish.sh",
+  "installer": "termux/replace-with-v831-legacy-webkit-compatibility.sh",
   "userDocs": [
-    "docs/V830_EXPORT_PREVIEW_SAVE_POLISH.md",
-    "docs/V830_EXPORT_PREVIEW_SAVE_POLISH_KU.md",
-    "docs/V830_QA_REPORT.md"
+    "docs/V831_EXPORT_PREVIEW_SAVE_POLISH.md",
+    "docs/V831_EXPORT_PREVIEW_SAVE_POLISH_KU.md",
+    "docs/V831_QA_REPORT.md"
   ]
 }

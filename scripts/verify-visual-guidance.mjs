@@ -21,7 +21,7 @@ for (const token of ["HAND_BONES", "handGuideOpacity", "handGuideThickness", "no
 if (!app.includes("updateModeButtons();\n    updateLiveHud")) throw new Error("Palette is not resynchronized after camera startup.");
 for (const id of ["handGuideOpacity", "handGuideThickness", "handGuideOpacityOut", "handGuideThicknessOut"]) if (!html.includes(`id=\"${id}\"`)) throw new Error(`Guide UI control missing: ${id}`);
 for (const key of ["handGuideOpacity", "handGuideThickness", "handGuideHint"]) if (!translation.includes(`\"${key}\"`)) throw new Error(`Missing bilingual guide copy: ${key}`);
-if (!css.includes("v8.3.0 Visual Guidance") || !css.includes("restore: v7.6.2 hand guide look")) throw new Error("Compact Kurdish card CSS is missing.");
+if (!css.includes("v8.3.1 Visual Guidance") || !css.includes("restore: v7.6.2 hand guide look")) throw new Error("Compact Kurdish card CSS is missing.");
 if ((app.match(/bindPhysicalAction\(ui\.clear, clearCanvas\)/g) || []).length !== 1) throw new Error("Clear action has duplicate or missing physical binding.");
 const result = spawnSync(process.execPath, ["tests/visual-guidance.test.mjs"], { cwd: root, encoding: "utf8" });
 if (result.status !== 0) throw new Error(result.stderr || result.stdout || "Visual guidance test failed.");

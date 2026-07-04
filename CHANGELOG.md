@@ -1,6 +1,6 @@
 # AIR-DROW changelog
 
-## v8.3.0 — Export Preview & Save Polish
+## v8.3.1 — Export Preview & Save Polish
 
 - Added local, memory-capped export preview that does not invoke a browser download.
 - Added explicit protected Export/Share actions inside the preview dialog, with cleanup of temporary object URLs.

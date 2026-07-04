@@ -1,6 +1,6 @@
-AIR-DROW v8.3.0 — Export Preview & Save Polish
+AIR-DROW v8.3.1 — Legacy WebKit Compatibility
 
-1. Put AIR-DROW_v8.3.0_EXPORT_PREVIEW_SAVE_POLISH.zip in /sdcard/Download.
-2. Extract it, then run termux/replace-with-v830-export-preview-save-polish.sh from the extracted AIR-DROW-main folder.
+1. Put AIR-DROW_v8.3.1_LEGACY_WEBKIT_COMPATIBILITY.zip in /sdcard/Download.
+2. Extract it, then run termux/replace-with-v831-legacy-webkit-compatibility.sh from the extracted AIR-DROW-main folder.
 3. The script preserves .git, creates a rollback backup, runs npm ci + npm run verify:all + npm test, commits and pushes only after success.
-4. After Vercel deploys, use Export Preview once, close it, then explicitly test PNG/JPG export on Android.
+4. After Vercel deploys, fully close and reopen the app once, then test Camera + Hand on the older browser and PNG/JPG export.

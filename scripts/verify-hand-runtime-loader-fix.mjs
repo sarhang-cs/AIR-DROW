@@ -25,5 +25,5 @@ if (!runtime.includes('new URL("../../../vendor/mediapipe/wasm", import.meta.url
 if (!bootstrap.includes('replace(/\\/+$/, "")')) throw new Error("WASM base normalization is missing.");
 if (!worker.includes("cacheFirstOnDemand") || !worker.includes('url.pathname.startsWith("/vendor/")')) throw new Error("Service worker must lazy-cache the local hand runtime on demand.");
 if (!vercel.includes('application/javascript; charset=utf-8') || !vercel.includes('application/wasm')) throw new Error("Explicit runtime MIME headers are missing.");
-if (!app.includes('engineDiagnostic')) throw new Error("Visible hand-engine diagnostic is missing.");
+if (!app.includes('diagnostics?.record("hand-engine", error)') || !app.includes('Keep technical browser/CSP details in local Diagnostics')) throw new Error("Local hand-engine diagnostics and safe recovery are missing.");
 console.log("Hand runtime loader contract passed.");

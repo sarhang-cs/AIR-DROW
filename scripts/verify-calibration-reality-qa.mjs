@@ -13,7 +13,7 @@ const vercel = JSON.parse(read("vercel.json"));
 const securityGroup = vercel.headers.find(item => item.source === "/(.*)");
 const csp = securityGroup?.headers?.find(item => item.key === "Content-Security-Policy")?.value || "";
 if (!/script-src[^;]*'wasm-unsafe-eval'/.test(csp)) throw new Error("The Content Security Policy must allow WebAssembly compilation for the local MediaPipe runtime.");
-if (/script-src[^;]*'unsafe-eval'/.test(csp.replace(/'wasm-unsafe-eval'/g, ""))) throw new Error("The MediaPipe CSP exception must not allow general unsafe JavaScript eval.");
+if (!/script-src[^;]*'unsafe-eval'/.test(csp)) throw new Error("Legacy WebKit compatibility requires the CSP unsafe-eval token for WebAssembly.");
 const app = read("web/assets/js/app.js");
 const calibration = await import(resolve(root, "web/assets/js/features/hand-calibration.js"));
 const store = read("web/assets/js/core/project-store.js");

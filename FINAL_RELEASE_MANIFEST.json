@@ -1,7 +1,7 @@
 {
   "name": "AIR-DROW Export Preview & Save Polish Edition",
-  "version": "8.3.0",
-  "buildId": "air-drow-v830-export-preview-save-polish",
+  "version": "8.3.1",
+  "buildId": "air-drow-v831-legacy-webkit-compatibility",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -22,11 +22,11 @@
     "docs/DEVICE_VALIDATION_CHECKLIST_KU.md",
     "docs/screenshots/air-drow-studio-en.png",
     "docs/screenshots/air-drow-hand-en.png",
-    "docs/V830_EXPORT_PREVIEW_SAVE_POLISH.md",
-    "docs/V830_EXPORT_PREVIEW_SAVE_POLISH_KU.md",
-    "docs/V830_EXPORT_PREVIEW_SAVE_POLISH.md",
-    "docs/V830_EXPORT_PREVIEW_SAVE_POLISH_KU.md",
-    "docs/V830_QA_REPORT.md"
+    "docs/V831_EXPORT_PREVIEW_SAVE_POLISH.md",
+    "docs/V831_EXPORT_PREVIEW_SAVE_POLISH_KU.md",
+    "docs/V831_EXPORT_PREVIEW_SAVE_POLISH.md",
+    "docs/V831_EXPORT_PREVIEW_SAVE_POLISH_KU.md",
+    "docs/V831_QA_REPORT.md"
   ],
   "developerProfile": {
     "name": "Sarhang Salah",
@@ -36,9 +36,9 @@
   },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v830-export-preview-save-polish.sh",
+  "installer": "termux/replace-with-v831-legacy-webkit-compatibility.sh",
   "release": "Export Preview & Save Polish",
-  "assetRevision": "830",
+  "assetRevision": "831",
   "releasedAt": "2026-07-04T06:00:00Z",
   "releaseName": "AIR-DROW Export Preview & Save Polish Edition",
   "summary": "A complete local drawing source package with protected no-download export preview, explicit file actions and Android-safe output flow.",
@@ -48,7 +48,7 @@
     "The local launch preflight verifies temporary canvas pixels, PNG/JPG encoding and object-URL preparation without opening the camera or downloading a file.",
     "The optional hand guide uses a compact pinch indicator and never appears over active ink.",
     "Hand coordinates cannot paint through palette, toolbar, dock, settings or dialog surfaces.",
-    "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.3.0 build identity."
+    "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.3.1 build identity."
   ],
   "stage": "export-preview-save-polish",
   "phase": 20

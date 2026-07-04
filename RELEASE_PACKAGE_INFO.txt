@@ -1,6 +1,6 @@
-AIR-DROW v8.3.0 — Visual Guidance & Persistent Settings Refinement
+AIR-DROW v8.3.1 — Legacy WebKit Compatibility
 
 Complete source package with the verified local MediaPipe hand model and runtime.
+This release adds a legacy WebKit WebAssembly CSP compatibility path and bumps the service-worker/cache revision to v831.
 Run npm ci --no-audit --no-fund then npm run verify:all.
-The final package includes a private browser preflight for canvas, PNG/JPG encoding and local file preparation.
-Camera permission, real hand tracking and browser download-sheet confirmation must still be verified on the target phone.
+After Vercel deploys, close the app completely and reopen it once on the older browser so the new service worker and cache identity take effect.

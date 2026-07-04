@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 8.3.0 Export Preview & Save Polish Edition.
+> This guide applies to AIR-DROW 8.3.1 Export Preview & Save Polish Edition.
 
 AIR-DROW is local-first.
 

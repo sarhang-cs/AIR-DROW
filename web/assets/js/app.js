@@ -360,6 +360,12 @@ function reportCameraFailure(error) {
 function handEngineFailureCopy(error) {
   const stage = String(error?.stage || "").toLowerCase();
   const message = String(error?.message || error || "").toLowerCase();
+  // Older WebKit engines classify WebAssembly compilation under `unsafe-eval`
+  // instead of the narrower `wasm-unsafe-eval` CSP token. This is a browser
+  // compatibility condition, not a camera or hand-detection failure.
+  if (/unsafe-eval|content security policy|webassembly object|webassembly.*policy/.test(message)) {
+    return { title: t("engineLegacyBrowserTitle", "This older browser needs compatibility support"), body: t("engineLegacyBrowserBody", "The hand runtime was blocked by this browser’s WebAssembly security policy. After the updated app deploys, close and reopen the app. Your drawings are safe.") };
+  }
   if (stage === "asset" || /hand_landmarker|model|404|failed to fetch/.test(message)) {
     return { title: t("engineModelTitle", "Hand model is unavailable"), body: t("engineModelBody", "The local hand model could not be opened. Reload the engine and try again.") };
   }
@@ -376,14 +382,13 @@ function reportHandEngineFailure(error) {
   diagnostics?.record("hand-engine", error);
   state.handEngineError = String(error?.message || error || "");
   const copy = handEngineFailureCopy(error);
-  const stage = String(error?.stage || error?.airdrowStage || "engine");
-  const raw = String(error?.message || "").replace(/\s+/g, " ").trim();
-  const detail = raw ? `\n${t("engineDiagnostic", "Diagnostic")}: ${stage} — ${raw.slice(0, 180)}` : "";
+  // Keep technical browser/CSP details in local Diagnostics instead of
+  // filling the mobile recovery card with an English runtime exception.
   showRecovery({
     kind: "hand-engine",
     icon: "!",
     title: copy.title,
-    body: `${copy.body}${detail}`,
+    body: copy.body,
     actionLabel: t("engineTryAgain", "Reload engine"),
     action: () => ui.retryHand?.click()
   });

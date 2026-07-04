@@ -1,22 +1,21 @@
 {
-  "version": "8.3.0",
-  "buildId": "air-drow-v830-export-preview-save-polish",
+  "version": "8.3.1",
+  "buildId": "air-drow-v831-legacy-webkit-compatibility",
   "releasedAt": "2026-07-04T06:00:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Export Preview & Save Polish: local preview before export, explicit physical file actions, cleanup of temporary preview URLs and protected mobile output UI.",
+  "summary": "AIR-DROW Legacy WebKit Compatibility: local MediaPipe hand tracking on older WebKit, cache refresh and clear mobile recovery.",
   "features": [
-    "Adds a local export preview before creating a file; preview is capped for mobile memory safety and never downloads a file.",
-    "Keeps Export and Share behind trusted physical taps, including the explicit actions shown inside the preview dialog.",
-    "Uses the same output layout, aspect ratio, brush geometry, transparency and optional camera-composite rules in preview and final export.",
-    "Releases temporary object URLs when preview is closed or replaced.",
-    "Keeps all existing local-project, privacy, camera and hand-tracking protections."
+    "Adds legacy WebKit WebAssembly CSP compatibility while retaining the modern WASM policy.",
+    "Keeps the MediaPipe runtime and hand model self-hosted and same-origin.",
+    "Shows translated recovery copy instead of raw CSP/WebAssembly exceptions.",
+    "Bumps service-worker and asset identity to v831 for clean cache replacement."
   ],
-  "assetRevision": "830",
+  "assetRevision": "831",
   "phase": 20,
-  "stage": "export-preview-save-polish",
+  "stage": "legacy-webkit-compatibility",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",

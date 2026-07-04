@@ -654,7 +654,9 @@ const ku = Object.freeze({
   "exportPreviewTarget": "دەرئەنجام",
   "exportPreviewCanvas": "پێشبینین",
   "exportPreviewProjectMeta": "پڕۆژەی AIR-DROW · {count} هێڵ",
-  "exportPreviewProjectOnly": "ئەم فایلە هێڵ و ڕێکخستنە دەستکاریکراوەکانت دەپارێزێت؛ پێشبینینی وێنەی نییە."
+  "exportPreviewProjectOnly": "ئەم فایلە هێڵ و ڕێکخستنە دەستکاریکراوەکانت دەپارێزێت؛ پێشبینینی وێنەی نییە.",
+  "engineLegacyBrowserTitle": "وێبگەڕی کۆن پێویستی بە ڕێکخستنی زیاتر هەیە",
+  "engineLegacyBrowserBody": "کێشەکە لە سازگاری WebAssembly ـی وێبگەڕەکەیە. دوای ئەوەی وەشانی نوێ بڵاوبووەوە، ئەپەکە داخە و دووبارە بکەرەوە؛ کێشانەکانت پارێزراون."
 
 });
 
@@ -1310,7 +1312,9 @@ const en = Object.freeze({
   "exportPreviewTarget": "Output",
   "exportPreviewCanvas": "Preview",
   "exportPreviewProjectMeta": "AIR-DROW project · {count} strokes",
-  "exportPreviewProjectOnly": "This project file keeps your editable strokes and settings. It has no image preview."
+  "exportPreviewProjectOnly": "This project file keeps your editable strokes and settings. It has no image preview.",
+  "engineLegacyBrowserTitle": "This older browser needs compatibility support",
+  "engineLegacyBrowserBody": "The hand runtime was blocked by this browser’s WebAssembly security policy. After the updated app deploys, close and reopen the app. Your drawings are safe."
 
 });
 
