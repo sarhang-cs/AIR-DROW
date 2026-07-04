@@ -909,3 +909,49 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 .quick-start-hand-guide .hand-tutorial-copy p { font-size:9px; }
 .quick-start-hand-guide .hand-tutorial-head { grid-template-columns:minmax(0,1fr) 136px; }
 @media (max-width:390px) { .about-qr-link { grid-template-columns:1fr; } .about-qr-copy { min-height:0; } .about-qr-media { justify-items:start; text-align:start; } }
+
+
+/* v7.6.1 about card layout fix: make the Instagram block horizontal and remove the empty right side. */
+.about-creator-card {
+  grid-template-columns: 1fr !important;
+}
+.about-qr-link {
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center;
+  justify-items: stretch;
+  min-height: 0;
+}
+.about-qr-copy {
+  min-height: 112px;
+}
+.about-qr-media {
+  align-self: stretch;
+  align-content: center;
+  min-width: 132px;
+  padding-inline-start: 4px;
+}
+.about-qr-media img {
+  width: 96px;
+  height: 96px;
+}
+@media (max-width: 520px) {
+  .about-qr-link {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+  .about-qr-copy {
+    min-height: 96px;
+  }
+  .about-qr-media {
+    min-width: 112px;
+  }
+}
+@media (max-width: 390px) {
+  .about-qr-link {
+    grid-template-columns: 1fr !important;
+  }
+  .about-qr-media {
+    min-width: 0;
+    padding-inline-start: 0;
+  }
+}
