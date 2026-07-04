@@ -27,7 +27,7 @@ export function setCanvasTextDirection(ctx, useKurdish = false) {
 
 let KurdishFontPromise = null;
 export function ensureKurdishFont() {
-  if (typeof document === "undefined" || !document.fonts?.load) return Promise.resolve(false);
+  if (typeof document === "undefined" || !document.fonts?.load) return Promise.resolve(true);
   if (!KurdishFontPromise) {
     KurdishFontPromise = Promise.all([
       document.fonts.load('400 16px "Noto Kufi Arabic"'),

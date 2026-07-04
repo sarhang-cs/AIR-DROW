@@ -4,7 +4,7 @@
  * disclosures, complete DOM switches, and viewport-safe scrolling.
  */
 :root {
-  --drawer-height-mobile: min(92dvh, 860px);
+  --drawer-height-mobile: min(92dvh, 870px);
   --drawer-header-height: 70px;
   --drawer-tabs-height: 70px;
   --drawer-scroll-safe-end: max(138px, calc(env(safe-area-inset-bottom) + 112px));

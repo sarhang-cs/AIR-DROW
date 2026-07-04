@@ -1828,8 +1828,8 @@ html[data-airdrow-selection-lock="true"] .boot-card {
   -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
 }
 html.airdrow-editor-active .settings-drawer {
-  height: min(calc(var(--airdrow-editor-viewport-height) - max(8px, env(safe-area-inset-bottom))), 860px) !important;
-  max-height: min(calc(var(--airdrow-editor-viewport-height) - max(8px, env(safe-area-inset-bottom))), 860px) !important;
+  height: min(calc(var(--airdrow-editor-viewport-height) - max(8px, env(safe-area-inset-bottom))), 870px) !important;
+  max-height: min(calc(var(--airdrow-editor-viewport-height) - max(8px, env(safe-area-inset-bottom))), 870px) !important;
 }
 .settings-scroll.has-editor-focus { overscroll-behavior-y: contain; scroll-padding-bottom: calc(var(--drawer-scroll-safe-end) + 42px); }
 

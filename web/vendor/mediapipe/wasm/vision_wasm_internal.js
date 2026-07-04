@@ -873,7 +873,7 @@ var Browser = {
     // check if SDL is available
     if (typeof SDL != "undefined") {
       var flags = HEAPU32[((SDL.screen) >> 2)];
-      flags = flags | 8388608;
+      flags = flags | 8388708;
       // set SDL_FULLSCREEN flag
       HEAP32[((SDL.screen) >> 2)] = flags;
     }
@@ -884,7 +884,7 @@ var Browser = {
     // check if SDL is available
     if (typeof SDL != "undefined") {
       var flags = HEAPU32[((SDL.screen) >> 2)];
-      flags = flags & ~8388608;
+      flags = flags & ~8388708;
       // clear SDL_FULLSCREEN flag
       HEAP32[((SDL.screen) >> 2)] = flags;
     }

@@ -1,21 +1,21 @@
 {
-  "version": "8.6.0",
-  "buildId": "air-drow-v860-all-feature-device-qa",
-  "releasedAt": "2026-07-04T16:30:00Z",
-  "channel": "stable",
+  "version": "8.7.0",
+  "buildId": "air-drow-v870-final-release-font-restoration",
+  "releasedAt": "2026-07-04T18:00:00Z",
+  "channel": "release-candidate",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW All-Feature Device QA: a private on-device validation for projects, export routes, PWA and browser support.",
+  "summary": "AIR-DROW Final Release + Font Restoration: restores the local Kurdish typography asset, validates the delivery path and prepares a final on-device release candidate.",
   "features": [
-    "Adds Feature Check in Settings \u2192 System & Data for project storage, PNG/JPG/WebP, SVG/PDF, save/share, PWA and browser capability.",
-    "Runs only local, temporary probes; camera permission, downloads, artwork mutation and external reporting are excluded.",
-    "Keeps Camera & Hand Check separate for genuine live camera/hand verification on the current device.",
-    "Preserves existing hand reliability, Settings/Kurdish polish, physical-action safety and local MediaPipe runtime."
+    "Restores the local Kurdish UI typography asset to the source and generated application path.",
+    "Adds source and generated-output verification for the local font, preload route, font-face rule and font response header.",
+    "Keeps previous hand reliability, safe export, Settings persistence, WebKit fallback and device-check features unchanged.",
+    "Prepares the final release candidate without claiming that physical Android/iPhone testing has already been performed."
   ],
-  "assetRevision": "860",
-  "phase": 23,
-  "stage": "all-feature-device-qa",
+  "assetRevision": "870",
+  "phase": 24,
+  "stage": "final-release-font-restoration",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you explicitly export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",
@@ -28,5 +28,11 @@
     "deploy": "npm run vercel:build",
     "runtimeNetwork": "The deployed browser loads the hand runtime and model from the same AIR-DROW site.",
     "delivery": "The update package preserves the existing local Kurdish UI font during Termux replacement; the build validates source and local hand assets before publishing."
+  },
+  "delivery": {
+    "sourceFont": "The Kurdish UI typography asset is included in the source application path and copied to public during build.",
+    "fontHeaders": "The font is served same-origin with an explicit font/ttf content type and on-demand cache policy.",
+    "runtimeNetwork": "The deployed browser loads local same-origin application assets. Camera and hand model behavior remains user initiated.",
+    "finalGate": "Run the on-device checklist on Android and iPhone/Safari after deployment before publishing a GitHub release tag."
   }
 }

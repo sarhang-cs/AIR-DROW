@@ -58,7 +58,7 @@ async function render({ source, template, title, creator, tagline, background, a
     ctx.font = "900 56px system-ui, sans-serif";
     ctx.fillText((title || "AIR-DROW").slice(0, 26).toUpperCase(), width / 2, height - 120);
   } else {
-    const artSize = normalized === "story" ? 860 : 790;
+    const artSize = normalized === "story" ? 870 : 790;
     const x = (width - artSize) / 2;
     const y = normalized === "story" ? 360 : 238;
     ctx.save();

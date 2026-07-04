@@ -1,16 +1,17 @@
 {
-  "name": "AIR-DROW Hand Input Reliability Edition",
-  "version": "8.6.0",
-  "buildId": "air-drow-v860-all-feature-device-qa",
+  "name": "AIR-DROW Final Release + Font Restoration",
+  "version": "8.7.0",
+  "buildId": "air-drow-v870-final-release-font-restoration",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
     "web/vendor/mediapipe/vision_bundle.js",
     "web/vendor/mediapipe/wasm/vision_wasm_internal.wasm",
     "web/vendor/mediapipe/wasm/vision_wasm_module_internal.wasm",
-    "web/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.wasm"
+    "web/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.wasm",
+    "web/assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf"
   ],
-  "delivery": "The source package is ready for npm ci and npm run vercel:build. The Termux installer preserves the existing local Kurdish UI font while replacing the rest of the project transactionally.",
+  "delivery": "The source package restores local Kurdish typography, is ready for npm ci and npm run vercel:build, and uses a transactional Termux replacement workflow.",
   "userDocs": [
     "README.md",
     "README_KU.md",
@@ -29,7 +30,7 @@
   ],
   "developerProfile": {
     "name": "Sarhang Salah",
-    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
+    "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/",
     "qr": "web/assets/brand/instagram-sarhang-io-qr.svg"
   },
@@ -48,5 +49,6 @@
     "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.4.0 build identity."
   ],
   "stage": "hand-input-reliability",
-  "phase": 22
+  "phase": 22,
+  "releaseStatus": "release-candidate; final GitHub tag is gated by real Android and iPhone/Safari acceptance checks."
 }

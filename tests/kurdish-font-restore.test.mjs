@@ -1,0 +1,12 @@
+import assert from "node:assert/strict";
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const source = resolve(root, "web/assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf");
+assert.equal(existsSync(source), true, "Local Kurdish font asset must exist.");
+assert.ok(statSync(source).size >= 100_000, "Local Kurdish font asset is unexpectedly small.");
+const html = readFileSync(resolve(root, "web/index.html"), "utf8");
+assert.match(html, /NotoKufiArabic-VariableFont_wght\.ttf/);
+assert.match(html, /font-display:\s*swap/);
+console.log("Kurdish typography asset and font-face QA passed.");

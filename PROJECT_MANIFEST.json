@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "8.6.0",
-  "buildId": "air-drow-v860-all-feature-device-qa",
-  "release": "Hand Input Reliability",
+  "version": "8.7.0",
+  "buildId": "air-drow-v870-final-release-font-restoration",
+  "release": "Final Release + Font Restoration",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -12,31 +12,34 @@
     "Private on-device preferences"
   ],
   "languages": [
-    "Kurd\u00ee (Sorani)",
+    "Kurdî (Sorani)",
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
-  "releaseGate": "npm run vercel:build validates source integrity, local hand assets, bilingual markup, runtime coverage, export/gesture tests, legacy compatibility, version/cache contracts, and generated production output.",
+  "releaseGate": "npm run vercel:build validates source integrity, local hand assets, local Kurdish typography, bilingual markup, runtime coverage, export/gesture tests, legacy compatibility, cache contracts and generated production output.",
   "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, release information and developer profile.",
   "developer": {
     "name": "Sarhang Salah",
-    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
+    "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Hand Input Reliability Edition",
-  "releasedAt": "2026-07-04T15:45:00Z",
-  "summary": "A complete local drawing source package with deliberate hand-drawing intent, safe tracking recovery and compact mobile scanner feedback.",
-  "stage": "hand-input-reliability",
-  "phase": 22,
-  "assetRevision": "840",
-  "releaseName": "AIR-DROW Hand Input Reliability Edition",
-  "installer": "termux/replace-with-v840-hand-input-reliability.sh",
+  "name": "AIR-DROW Final Release + Font Restoration",
+  "releasedAt": "2026-07-04T18:00:00Z",
+  "summary": "A complete local drawing source package with restored Kurdish typography, deliberate hand input, protected physical actions and final device-release preparation.",
+  "stage": "final-release-font-restoration",
+  "phase": 24,
+  "assetRevision": "870",
+  "releaseName": "AIR-DROW Final Release + Font Restoration",
+  "installer": "termux/replace-with-v870-final-release-font-restoration.sh",
   "userDocs": [
-    "docs/V832_LAYOUT_LEGACY_RUNTIME_HARDENING.md",
-    "docs/V832_LAYOUT_LEGACY_RUNTIME_HARDENING_KU.md",
-    "docs/V832_QA_REPORT.md",
     "docs/V840_HAND_INPUT_RELIABILITY.md",
     "docs/V840_HAND_INPUT_RELIABILITY_KU.md",
-    "docs/V840_QA_REPORT.md"
+    "docs/V850_SETTINGS_KURDISH_RESPONSIVE_POLISH.md",
+    "docs/V850_SETTINGS_KURDISH_RESPONSIVE_POLISH_KU.md",
+    "docs/V860_ALL_FEATURE_DEVICE_QA.md",
+    "docs/V860_ALL_FEATURE_DEVICE_QA_KU.md",
+    "docs/V870_FINAL_RELEASE_FONT_RESTORATION.md",
+    "docs/V870_FINAL_RELEASE_FONT_RESTORATION_KU.md",
+    "docs/V870_QA_REPORT.md"
   ]
 }

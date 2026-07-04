@@ -1,12 +1,8 @@
-<a id="top"></a>
+## v8.7.0 — Final Release + Font Restoration
 
-## v8.6.0 — All-Feature Device QA
+AIR-DROW v8.7.0 restores the bundled Kurdish typography path and validates that the local font face, preload route, static build and deployment header stay synchronized. All earlier hand-input, export, settings and WebKit fixes remain intact.
 
-Settings now opens with a focused quick-navigation panel: everyday Camera & Hand, Appearance and Display controls are separated from Live Info and System & Data. Sorani Kurdish reading rhythm, mobile wrapping and reset scope are clearer, while settings remain automatically saved on the device. See [the phase report](docs/V850_SETTINGS_KURDISH_RESPONSIVE_POLISH.md).
-
-## v8.6.0 — Hand Input Reliability
-
-Hand drawing now requires a stable open hand, a confirmed pinch and a small deliberate movement before ink starts. A short tracking loss pauses ink and requires a re-pinch before it can continue, avoiding ghost lines after recovery. The live guide fades quickly and the phone scanner is more compact. See [the phase report](docs/V840_HAND_INPUT_RELIABILITY.md).
+This package is a **final release candidate**. It passes source/build QA, but the final GitHub release tag should be created only after the real-device checklist is completed on Android Chrome and iPhone Safari. See [final release notes](docs/V870_FINAL_RELEASE_FONT_RESTORATION.md) and the [device checklist](docs/DEVICE_VALIDATION_CHECKLIST.md).
 
 <div align="center">
 
@@ -14,7 +10,7 @@ Hand drawing now requires a stable open hand, a confirmed pinch and a small deli
 
 ### A private drawing studio for touch, pen and hand
 
-**All-Feature Device QA Edition · v8.6.0 · Created by Sarhang Salah**
+**Final Release + Font Restoration Edition · v8.7.0 · Created by Sarhang Salah**
 
 [![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)

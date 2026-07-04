@@ -1,4 +1,4 @@
-# AIR-DROW v8.6.0 — All-Feature Device QA
+# AIR-DROW v8.7.0 — Final Release + Font Restoration
 
 This phase adds an on-device **Feature Check** under Settings → System & Data. It validates project-storage round-tripping through a private temporary record, PNG/JPG and WebP encoding, SVG/PDF file routes, save/share capability, PWA registration/cache availability and baseline legacy browser APIs.
 

@@ -1,2 +1,2 @@
-AIR-DROW v8.4.0 — Hand Input Reliability
-Complete source package with a self-hosted hand model, deliberate hand-stroke intent gate, safe tracking recovery and Vercel/Termux verification workflow.
+AIR-DROW v8.7.0 — Final Release + Font Restoration
+Complete source package with restored local Kurdish typography, self-hosted hand runtime, protected physical actions and a real-device acceptance gate before a final GitHub tag.

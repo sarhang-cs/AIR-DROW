@@ -1,6 +1,6 @@
 {
-  "version": "8.6.0",
-  "buildId": "air-drow-v860-all-feature-device-qa",
+  "version": "8.7.0",
+  "buildId": "air-drow-v870-final-release-font-restoration",
   "policy": "AIR-DROW uses local same-origin interface assets, MediaPipe modules, WASM files and the verified hand model. Your drawing session is private to this device unless you choose an export, share or optional AI action.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -30,7 +30,7 @@
     "guide": "assets/icons/ICON_SYSTEM.md",
     "packageManifest": "assets/icons/USER_ICON_PACKAGE.json"
   },
-  "releaseStatus": "v8.6.0 All-Feature Device QA: local feature validation for project storage, export routes, PWA and browser capability without touching user work.",
-  "assetRevision": "860",
-  "revision": "860"
+  "releaseStatus": "v8.7.0 Final Release + Font Restoration: local Kurdish typography is restored and verified alongside protected drawing, export and hand-runtime paths.",
+  "assetRevision": "870",
+  "revision": "870"
 }

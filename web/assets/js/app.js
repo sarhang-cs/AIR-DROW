@@ -2143,7 +2143,7 @@ function showHandScanReady() {
     setHandScanStage("ready", t("handCheckPassed", "Hand check passed"), t("handReadyToDraw", "Hand tracking is ready to draw"));
     state.handScanReadyTimer = setTimeout(() => {
       hideHandScan(260);
-    }, 860);
+    }, 870);
   }, 300);
 }
 

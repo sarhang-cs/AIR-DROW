@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 8.6.0 All-Feature Device QA Edition.
+> This guide applies to AIR-DROW 8.7.0 Final Release + Font Restoration Edition.
 
 ## Start a drawing
 

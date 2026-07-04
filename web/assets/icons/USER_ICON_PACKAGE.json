@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "8.6.0",
-  "buildId": "air-drow-v860-all-feature-device-qa",
+  "version": "8.7.0",
+  "buildId": "air-drow-v870-final-release-font-restoration",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {

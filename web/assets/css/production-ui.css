@@ -268,7 +268,7 @@ html[dir="ltr"] .setting-line > select { text-align: left; }
   .toolbar::-webkit-scrollbar { display: none; }
   .toolbar .tool-button { scroll-snap-align: center; }
   .tool-button { flex-basis: 42px; width: 42px; height: 42px; }
-  .settings-drawer { height: min(94dvh, 860px) !important; max-height: min(94dvh, 860px) !important; }
+  .settings-drawer { height: min(94dvh, 870px) !important; max-height: min(94dvh, 870px) !important; }
   .workspace-tabs { padding-inline: 8px; gap: 4px; }
   .workspace-tab { min-height: 50px; font-size: 8px; }
   .settings-scroll { padding-inline: 11px; }
@@ -286,7 +286,7 @@ html[dir="ltr"] .setting-line > select { text-align: left; }
   html[dir="rtl"] .skin-choice::before { right: auto; left: 9px; }
 }
 
-@media (min-width: 860px) and (hover: hover) and (pointer: fine) {
+@media (min-width: 870px) and (hover: hover) and (pointer: fine) {
   .settings-drawer {
     top: 14px;
     right: 14px;
@@ -1325,7 +1325,7 @@ html[lang="ku"] .reset-scope-list { font-size:9.5px; line-height:1.9; }
 }
 
 
-/* ===== v8.6.0 All-Feature Device QA ===== */
+/* ===== v8.7.0 Final Release + Font Restoration ===== */
 .feature-validation-card { border-color:color-mix(in srgb,var(--accent) 33%,var(--line)); }
 .feature-validation-card .device-readiness-list li { grid-template-columns:minmax(0,1fr) auto; }
 .feature-validation-card .device-readiness-list b { max-width:46%; overflow-wrap:anywhere; text-align:end; }

@@ -12,4 +12,4 @@ assert.deepEqual(summarizeFeatureValidation(FEATURE_VALIDATION_CHECK_IDS.map(() 
 assert.match(read("web/assets/js/core/project-store.js"), /async probeIntegrity\(\)/);
 assert.match(read("web/assets/js/core/project-store.js"), /finally \{\s*try \{ await removeRecord\(id\); \} catch \{\}/);
 assert.match(read("web/assets/js/features/feature-validation.js"), /never opens the camera/i);
-console.log("Final Release + Font Restoration safety contract passed.");
+console.log("Final release candidate feature-validation safety contract passed.");

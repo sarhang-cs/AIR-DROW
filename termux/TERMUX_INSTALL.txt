@@ -1,5 +1,7 @@
-AIR-DROW v8.6.0 — All-Feature Device QA
+AIR-DROW v8.7.0 — Final Release + Font Restoration
 
-1. Put AIR-DROW_v8.6.0_ALL_FEATURE_DEVICE_QA.zip in /sdcard/Download/.
-2. Extract it and run termux/replace-with-v860-all-feature-device-qa.sh from AIR-DROW-main.
-3. The script preserves .git, validates source/build, commits and pushes the clean replacement.
+1. Extract the release ZIP on Android.
+2. From AIR-DROW-main, run:
+   bash termux/replace-with-v870-final-release-font-restoration.sh "$HOME/AIR-DROW-GITHUB"
+
+The workflow preserves .git, replaces application source, verifies the local Kurdish typography asset and production build, then commits/pushes only on success.

@@ -16,4 +16,4 @@ for (const key of ["featureQaTitle", "featureQaProjectStorage", "featureQaLegacy
 if (!registry.includes("featureQaStatus") || !css.includes("v8.7.0 Final Release + Font Restoration")) throw new Error("Feature QA registry or responsive CSS is missing.");
 const result = spawnSync(process.execPath, ["tests/final-release-font-restoration.test.mjs"], { cwd: root, encoding: "utf8" });
 if (result.status !== 0) throw new Error(result.stderr || result.stdout || "Final Release + Font Restoration test failed.");
-console.log("AIR-DROW final release + font restoration passed.");
+console.log("AIR-DROW final release candidate feature validation passed.");
