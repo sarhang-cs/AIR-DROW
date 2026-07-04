@@ -1,13 +1,18 @@
 function distance(a, b) { return Math.hypot(a.x - b.x, a.y - b.y); }
 function angle(a, b, c) {
   const abx = a.x - b.x, aby = a.y - b.y, cbx = c.x - b.x, cby = c.y - b.y;
-  const den = Math.hypot(abx, aby) * Math.hypot(cbx, cby);
-  if (!den) return 0;
-  return Math.acos(Math.max(-1, Math.min(1, (abx * cbx + aby * cby) / den))) * 180 / Math.PI;
+  const denominator = Math.hypot(abx, aby) * Math.hypot(cbx, cby);
+  if (!denominator) return 0;
+  return Math.acos(Math.max(-1, Math.min(1, (abx * cbx + aby * cby) / denominator))) * 180 / Math.PI;
 }
 function extended(points, mcp, pip, tip) { return angle(points[mcp], points[pip], points[tip]) > 148 && distance(points[tip], points[0]) > distance(points[pip], points[0]) * 1.08; }
 function folded(points, mcp, pip, tip) { return angle(points[mcp], points[pip], points[tip]) < 125 || distance(points[tip], points[0]) < distance(points[pip], points[0]) * 1.06; }
 
+/**
+ * Deliberately conservative non-drawing shortcuts. A closed fist is not an
+ * action because the tracking continuity gate uses it as a safe stroke hold.
+ * Two raised fingers toggle the eraser only after the shortcut dwell timer.
+ */
 export function recognizeGestureShortcut(points, pinchRatio = 1) {
   if (!Array.isArray(points) || points.length < 21 || pinchRatio < .22) return "";
   const index = extended(points, 5, 6, 8);
@@ -17,10 +22,12 @@ export function recognizeGestureShortcut(points, pinchRatio = 1) {
   const ringFolded = folded(points, 13, 14, 16);
   const pinkyFolded = folded(points, 17, 18, 20);
   const thumbExtended = distance(points[4], points[2]) > distance(points[3], points[2]) * 1.14;
-  const thumbUp = thumbExtended && ringFolded && pinkyFolded && !index && !middle && points[4].y < points[2].y - .035;
-  if (index && middle && ringFolded && pinkyFolded) return "victory";
+
+  // Two fingers are the requested hand eraser gesture. It is tested before
+  // open-palm so the V sign is never mistaken for a save action.
+  if (index && middle && ringFolded && pinkyFolded) return "two-finger";
   if (index && middle && ring && pinky) return "palm";
-  if (!index && !middle && ringFolded && pinkyFolded && !thumbExtended) return "fist";
+  const thumbUp = thumbExtended && ringFolded && pinkyFolded && !index && !middle && points[4].y < points[2].y - .035;
   if (thumbUp) return "thumb-up";
   return "";
 }
@@ -43,8 +50,7 @@ export function createShortcutGate({ holdMs = 650, cooldownMs = 1500 } = {}) {
 }
 
 export const SHORTCUT_LABELS = Object.freeze({
-  palm: "Save",
-  victory: "Undo",
-  "thumb-up": "Export",
-  fist: "Eraser"
+  palm: "Save image",
+  "two-finger": "Eraser",
+  "thumb-up": "Export"
 });

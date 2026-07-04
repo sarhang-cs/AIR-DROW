@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.6.2",
-  "buildId": "air-drow-v762-layout-input-integrity",
-  "release": "Interaction & Vision Tutorial Edition",
+  "version": "7.7.0",
+  "buildId": "air-drow-v770-export-gesture-reliability",
+  "release": "Export, Gesture & Reliability Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -16,16 +16,16 @@
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
-  "releaseGate": "npm run vercel:build validates source integrity, real local hand assets, bilingual markup and runtime coverage, theme tokens, screenshots, developer profile assets and generated production output.",
+  "releaseGate": "npm run vercel:build validates source integrity, local hand assets, bilingual markup, runtime coverage, export/gesture unit checks, theme tokens, documentation and generated production output.",
   "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, release information and developer profile.",
   "developer": {
     "name": "Sarhang Salah",
     "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Interaction & Vision Tutorial Edition",
-  "releasedAt": "2026-07-04T03:16:00Z",
-  "summary": "AIR-DROW Layout & Input Integrity Edition: compact responsive About profile, protected control surfaces, bilingual UI consistency and refreshed GitHub documentation.",
-  "stage": "layout-input-integrity",
-  "phase": 12
+  "name": "AIR-DROW Export, Gesture & Reliability Edition",
+  "releasedAt": "2026-07-04T12:00:00Z",
+  "summary": "High-resolution/print-aware export, protected hand color palette, two-finger eraser, local diagnostics and resilient input recovery.",
+  "stage": "export-gesture-reliability",
+  "phase": 13
 }

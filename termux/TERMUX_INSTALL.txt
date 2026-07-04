@@ -1,8 +1,8 @@
-AIR-DROW v7.6.2 — Layout & Input Integrity
+AIR-DROW v7.7.0 — Export, Gesture & Reliability
 
-1. Put AIR-DROW_v7.6.2_LAYOUT_INPUT_INTEGRITY.zip in /sdcard/Download
-2. Copy the full Termux command from the delivery message.
-3. It removes the old AIR-DROW repository checkout, extracts this complete archive, validates it, commits it and pushes main.
-4. Vercel builds automatically from the pushed main branch.
+1. Put AIR-DROW_v7.7.0_EXPORT_GESTURE_RELIABILITY.zip in /sdcard/Download.
+2. Extract it on Termux using the full command from the delivery message.
+3. The transactional installer preserves .git, creates a rollback backup, validates npm run vercel:build, commits, and pushes only after all checks pass.
+4. Vercel deploys automatically from the pushed branch.
 
-The command intentionally replaces the old source tree so stale styles and old release identifiers cannot remain.
+The source tree is replaced as one clean release so old code, stale styles and previous cache identifiers cannot remain.

@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 7.6.2 Layout & Input Integrity Edition
+> This guide applies to AIR-DROW 7.7.0 Export, Gesture & Reliability Edition
 
 ## Start a drawing
 
@@ -15,7 +15,8 @@
 2. Read the camera message and allow access only when you are ready.
 3. Keep one hand fully visible in good light.
 4. Bring your fingers together, then move your hand to draw.
-5. Use **Hand eraser** when you want to erase with your hand.
+5. Hold up **two fingers** for a short moment to toggle Hand Eraser, then pinch to erase.
+6. Move your index finger over the top color palette briefly to select a color. If tracking is lost, AIR-DROW safely holds or pauses the stroke.
 
 AIR-DROW does not start the camera until you choose Camera.
 
@@ -25,7 +26,7 @@ Open the Projects area, name the project if you wish, then choose Save. Your pro
 
 ## Export artwork
 
-Open Export, choose the available format and size, then create the file. AIR-DROW saves the current project first so your newest changes are protected.
+Open Export, choose PNG, JPG, WebP, SVG, PDF or AIR-DROW project. For image export choose 1×, 2× or 4× quality, a layout (Fit/Fill/Stretch), and a social or print preset. AIR-DROW saves the current project first so your newest changes are protected. Camera composite is optional and only appears if you opened the camera yourself; the UI is never included.
 
 ## Use App readiness
 
@@ -40,4 +41,4 @@ Open Camera first. When the live camera is visible, open **Settings → About Ap
 Your drawings and settings remain local unless you export, share or intentionally use optional AI creation. Camera video is not stored by AIR-DROW.
 
 
-> **v7.6.2:** The About App layout now uses compact side-by-side cards, protected control surfaces prevent accidental canvas strokes behind UI, and the GitHub covers were refreshed from genuine app screens.
+> **v7.7.0:** Added high-resolution export, hand palette/eraser gestures, adaptive smoothing and local diagnostics.

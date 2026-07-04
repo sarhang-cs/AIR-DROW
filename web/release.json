@@ -1,26 +1,27 @@
 {
-  "version": "7.6.2",
-  "buildId": "air-drow-v762-layout-input-integrity",
-  "releasedAt": "2026-07-04T03:16:00Z",
+  "version": "7.7.0",
+  "buildId": "air-drow-v770-export-gesture-reliability",
+  "releasedAt": "2026-07-04T12:00:00Z",
   "channel": "stable",
   "updatePolicy": "save-before-apply",
   "handEngine": "self-hosted-local-hand-tracking",
   "mediaPipePackageVersion": "0.10.35",
-  "summary": "AIR-DROW Layout & Input Integrity Edition: a compact responsive About profile, protected studio controls, synchronized bilingual copy, and refreshed GitHub covers.",
+  "summary": "AIR-DROW Export, Gesture & Reliability Edition: high-resolution and print-aware exports, two-finger hand eraser, hover color palette, local diagnostics, guarded input and resilient local hand tracking.",
   "features": [
-    "Prevents toolbar and workspace navigation input from starting a canvas stroke behind the interface.",
-    "Recomposes About App into compact side-by-side information, creator and QR cards for mobile screens.",
-    "Keeps every product-facing string synchronized in Kurdish and English and removes stale release references.",
-    "Refreshes GitHub documentation with two genuine cover-style app visuals built from AIR-DROW screens."
+    "Adds PNG, JPG and WebP raster exports with 1×, 2× and 4× output scaling, Fit/Fill/Stretch layouts, social presets and A4/A3 300 PPI presets.",
+    "Adds a protected top color palette that changes brush color after a short index-finger hover, without drawing behind the overlay.",
+    "Maps a conservative two-finger hand gesture to toggle hand eraser mode; palm quick-saves and thumb-up opens standard export after a dwell.",
+    "Adds velocity-adaptive coordinate smoothing and local-only diagnostics with copy/download controls.",
+    "Keeps Camera, MediaPipe WASM and the local hand model opt-in and same-origin; missing hands or a hand leaving frame safely pauses or holds the stroke."
   ],
-  "assetRevision": "762",
-  "phase": 12,
-  "stage": "layout-input-integrity",
+  "assetRevision": "770",
+  "phase": 13,
+  "stage": "export-gesture-reliability",
   "privacy": {
     "drawings": "Your drawing data and preferences stay on your device unless you choose to export, share, or use an optional AI creation action.",
     "camera": "Camera permission is requested only after you choose to open the camera. Camera video is not saved by AIR-DROW.",
     "handTracking": "The deployed app uses the local same-origin hand model and runtime. It does not download a hand model while you draw.",
-    "checks": "App readiness and Hand drawing check only read local browser and app state. They do not open the camera themselves or send a report anywhere."
+    "checks": "App readiness, hand drawing checks and local diagnostics read only browser/app state. They do not open the camera, upload a report, or include camera frames, hand landmarks, drawing points, project titles, or API URLs."
   },
   "buildPolicy": {
     "sourceModel": "web/vendor/models/hand_landmarker.task",

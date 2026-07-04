@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Interaction & Vision Tutorial Edition",
-  "version": "7.6.2",
-  "buildId": "air-drow-v762-layout-input-integrity",
+  "name": "AIR-DROW Export, Gesture & Reliability Edition",
+  "version": "7.7.0",
+  "buildId": "air-drow-v770-export-gesture-reliability",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -29,16 +29,16 @@
   },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v762-layout-input-integrity.sh",
-  "release": "Interaction & Vision Tutorial Edition",
-  "assetRevision": "762",
-  "releasedAt": "2026-07-04T03:16:00Z",
-  "releaseName": "AIR-DROW Layout & Input Integrity Edition",
-  "summary": "A clean production release focused on responsive About cards, canvas-input isolation, verified bilingual copy, and refreshed GitHub covers.",
+  "installer": "termux/replace-with-v770-export-gesture-reliability.sh",
+  "release": "Export, Gesture & Reliability Edition",
+  "assetRevision": "770",
+  "releasedAt": "2026-07-04T12:00:00Z",
+  "releaseName": "AIR-DROW Export, Gesture & Reliability Edition",
+  "summary": "A clean production release for high-resolution export, social and print layouts, protected hand color selection, two-finger eraser control, smoothing and private recovery diagnostics.",
   "releaseChecks": [
-    "Version and build identifiers are synchronized across source, web manifests and service worker.",
-    "Toolbar and workspace controls are explicitly isolated from the canvas pointer pipeline.",
-    "About cards use stable responsive columns with QR and creator information kept side by side.",
-    "README cover visuals are shipped locally and validated by the production gate."
+    "Version, cache and build identifiers are synchronized across source, manifest and service worker.",
+    "Export plans preserve artwork geometry across Fit, Fill and Stretch layouts and exercise scale, smoothing and gesture QA in Node.",
+    "Toolbar, palette, workspace and settings are explicit protected input surfaces so UI actions never start a canvas stroke behind them.",
+    "Camera and MediaPipe remain optional and local; diagnostics excludes sensitive artwork/camera information."
   ]
 }

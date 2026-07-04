@@ -1,13 +1,15 @@
 # AIR-DROW release notes
 
+## v7.7.0 · Export, Gesture & Reliability
+
+- **Export Studio Pro:** PNG, JPG and WebP export at 1×, 2× or 4× resolution. Choose Fit (no distortion), Fill (edge crop) or Stretch, plus Current Canvas, Square, Story, Widescreen, A4 and A3 presets.
+- **Reliable visual output:** strokes, glow and brush thickness are transformed together during scaled export so artwork does not become thin or distorted at higher resolutions.
+- **Hand controls:** two raised fingers toggles Hand Eraser after a short hold. A palm quick-saves an image; a thumb-up opens export. Fist remains a safe hold rather than a destructive shortcut.
+- **Top color palette:** hover the index finger over a color briefly to change the active brush. The palette is a protected interface surface; it cannot create a stroke behind itself.
+- **Resilience & privacy:** missing hands, hands leaving the frame, camera issues and local MediaPipe startup failures recover safely. Diagnostics are stored locally and omit camera frames, hand landmarks, drawing points, project titles and API URLs.
+- **Performance:** AI Studio is loaded on demand; Camera/MediaPipe assets remain opt-in and cache only after Camera is opened.
+
 ## v7.6.2 · Layout & Input Integrity
 
-- Rebuilt the **About App** profile layout for phone screens: app facts, developer profile and QR action now use compact, balanced side-by-side cards.
-- Fixed the pointer-routing defect where workspace controls could start a stroke in the canvas behind the visible UI. Toolbar, workspace dock, drawer and backdrop are now explicit protected control surfaces.
-- Removed the conflicting About-card overrides that had accumulated in the production stylesheet and kept one responsive source of truth.
-- Synchronized version/build/cache identifiers, translated release copy, Termux installer metadata and documentation references.
-- Replaced the GitHub screenshots with two local cover-style visuals created from genuine AIR-DROW app screens.
-
-## v7.6.1 · Interaction & Vision Tutorial
-
-- Introduced the local hand tutorial, QR developer profile and verified local hand runtime.
+- Rebuilt the About App profile layout for phone screens.
+- Fixed pointer routing from visible UI controls to the underlying canvas.

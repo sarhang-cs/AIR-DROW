@@ -6,7 +6,7 @@
 
 ### A private drawing studio for touch, pen and hand
 
-**Layout & Input Integrity Edition · v7.6.2 · Created by Sarhang Salah**
+**Export, Gesture & Reliability Edition · v7.7.0 · Created by Sarhang Salah**
 
 [![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
@@ -32,7 +32,7 @@ AIR-DROW is a responsive PWA drawing studio designed for touch, pen and optional
 
 - Draw with touch, pen, brush, eraser and shape assistance.
 - Open Camera only when you choose Hand drawing.
-- Save local projects, export artwork and make a local backup.
+- Save local projects, export PNG/JPG/WebP/SVG/PDF artwork and make a local backup.
 - Switch the complete UI between **Kurdî (Sorani)** and **English**.
 - Choose from Violet, Pink, Sapphire, Obsidian, Silver and Gold—each with its own tuned dark and light palette.
 
@@ -40,7 +40,7 @@ AIR-DROW is a responsive PWA drawing studio designed for touch, pen and optional
 
 **Touch and pen.** Open AIR-DROW and draw immediately. Brush size, smoothing, color, pressure, undo and redo are available from the studio.
 
-**Hand drawing.** Open Camera, wait for the local hand engine to become ready, then place one hand in view. The app does not ask you to hold your hand up while the model is still loading. The built-in offline animated guide shows phone placement, a 35–55 cm hand distance, index/thumb pinch and smooth movement. A four-target calibration is saved locally after a real successful check.
+**Hand drawing.** Open Camera, wait for the local hand engine to become ready, then place one hand in view. Pinch index and thumb to draw. Hover the index finger over the protected top palette to pick a color. Hold up two fingers to toggle Hand Eraser. If the hand leaves the frame or tracking becomes unstable, AIR-DROW holds or pauses the stroke safely instead of creating a jump.
 
 **Shape assistance.** Use shape assistance for cleaner lines, circles, rectangles and triangles while keeping direct control of every stroke.
 
@@ -50,7 +50,7 @@ AIR-DROW is a responsive PWA drawing studio designed for touch, pen and optional
 - Camera permission is requested only after **Open Camera** is selected.
 - Camera frames are used for live hand tracking and are not saved.
 - The hand model and runtime are served from AIR-DROW itself—no third-party model CDN is used.
-- App checks run locally and do not send a report to an external service.
+- App checks and diagnostics run locally and do not send a report to an external service. Diagnostics exclude drawing points, camera frames, hand landmarks, project titles and API URLs.
 - Optional AI creation stays disabled until you explicitly configure a controlled server deployment.
 
 Read the full [Privacy Guide](./docs/PRIVACY.md).
@@ -90,4 +90,9 @@ For Android/Termux replacement, use [`termux/TERMUX_INSTALL.txt`](./termux/TERMU
 <div align="center">Made for ideas in motion · <strong>AIR-DROW</strong> · <a href="#top">Back to top</a></div>
 
 
-> **v7.6.2:** The About App layout now uses compact side-by-side cards, protected control surfaces prevent accidental canvas strokes behind UI, and the GitHub covers were refreshed from genuine app screens.
+## v7.7.0 highlights
+
+- **Export Studio:** PNG, JPG and WebP with 1×, 2× and 4× output, Fit/Fill/Stretch layouts, social presets and A4/A3 300 PPI layouts.
+- **Hand gesture controls:** hover an index finger over the top palette to select a color; hold up two fingers to toggle Hand Eraser. Palm quick-saves; thumb-up opens standard export.
+- **Reliable drawing:** velocity-adaptive smoothing reduces tremor. When no hand is detected or a hand leaves the frame, the app pauses/holds safely rather than creating a jump stroke.
+- **Private diagnostics:** Camera, hand engine and export failures can be copied or downloaded as a local report. It excludes artwork, camera frames, landmarks, project titles and API URLs.

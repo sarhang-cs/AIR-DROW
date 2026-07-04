@@ -8,7 +8,6 @@ import { createReplayStudio } from "./features/replay-engine.js";
 import { createShareCardStudio } from "./features/share-card.js";
 import { createDailyChallengeSession, challengeText } from "./features/air-challenge.js";
 import { createTemplateStudio } from "./features/template-studio.js";
-import { createAiStudio } from "./features/ai-studio.js";
 import { createOnboardingFlow } from "./features/onboarding-flow.js";
 import { ensureKurdishFont } from "./core/font-kit.js";
 import { createLoadingManager } from "./core/loading-manager.js";
@@ -20,6 +19,8 @@ import { createPersistenceGuard } from "./core/persistence-guard.js";
 import { createFinalStability } from "./core/final-stability.js";
 import { createDeviceReadiness } from "./features/device-readiness.js";
 import { createFinalLiveQa } from "./features/final-live-qa.js";
+import { createDiagnostics } from "./core/diagnostics.js";
+import { smoothStrokePoint } from "./features/stroke-smoother.js";
 import { createHandStabilizer, createPinchGate, createStrokeContinuityGate, effectiveTrackingFps, handGeometryIsUsable, landmarkDistance, normalizedPinch, readHandGeometry, readHandPosture } from "./features/hand-tracking-engine.js";
 import { createLocalHandLandmarker, primeLocalHandAssets } from "./features/hand-engine-bootstrap.js";
 import { APP_RELEASE as AIRDROW_RELEASE, HAND_MODEL, HAND_CALIBRATION_STORAGE_KEY, LEGACY_HAND_CALIBRATION_STORAGE_KEYS, LEGACY_QUICK_START_KEYS, LEGACY_STORAGE_KEY, MEDIAPIPE_MODULE_URLS, MEDIAPIPE_WASM_URLS, OLD_MIRROR_KEY, PROFILE_RULES, QUICK_START_KEY, STORAGE_KEY, createDefaultSettings } from "./config/runtime.js";
@@ -54,6 +55,8 @@ let replayStudio = null;
 let shareCardStudio = null;
 let templateStudio = null;
 let aiStudio = null;
+let aiStudioPromise = null;
+let diagnostics = null;
 let challengeSession = null;
 let onboardingFlow = null;
 let pendingUpdate = null;
@@ -155,7 +158,10 @@ const state = {
   galleryFailureShown: false,
   networkState: "checking",
   networkProbeInFlight: null,
-  shortcutGate: createShortcutGate()
+  shortcutGate: createShortcutGate(),
+  paletteHoverColor: "",
+  paletteHoverAt: 0,
+  paletteActive: false
 };
 
 function currentRule() {
@@ -289,6 +295,7 @@ function cameraFailureCopy(error) {
 }
 
 function reportCameraFailure(error) {
+  diagnostics?.record("camera", error);
   const copy = cameraFailureCopy(error);
   showRecovery({ kind: "camera", icon: "◌", title: copy.title, body: copy.body, actionLabel: t("cameraTryAgain", "Try camera again"), action: () => openCameraConsent({ hand: true }) });
 }
@@ -309,6 +316,7 @@ function handEngineFailureCopy(error) {
 }
 
 function reportHandEngineFailure(error) {
+  diagnostics?.record("hand-engine", error);
   state.handEngineError = String(error?.message || error || "");
   const copy = handEngineFailureCopy(error);
   const stage = String(error?.stage || error?.airdrowStage || "engine");
@@ -332,6 +340,7 @@ function aiFailureMessage(error) {
 }
 
 function reportAiFailure(error) {
+  diagnostics?.record("ai", error);
   const message = aiFailureMessage(error);
   setText(ui.aiStatus, message);
   // AI feedback belongs inside Create > AI Studio. It must never cover the canvas.
@@ -340,6 +349,7 @@ function reportAiFailure(error) {
 }
 
 function reportExportFailure(retry) {
+  diagnostics?.record("export-recovery", "Export recovery shown");
   showRecovery({ kind: "export", icon: "↓", title: t("exportRecoveryTitle", "Export was not completed"), body: t("exportRecoveryBody", "Your drawing is still saved locally. Try again or choose another format."), actionLabel: t("exportTryAgain", "Try again"), action: retry });
 }
 
@@ -720,10 +730,30 @@ function queueSave() {
   state.saveTimer = setTimeout(() => { void saveProject({ quiet: true, reason: "autosave" }); }, 350);
 }
 
+function updateColorSurfaces() {
+  const color = String(state.settings.color || "#7fd8ff").toLowerCase();
+  if (ui.color) ui.color.value = color;
+  [...(ui.colorSwatches || []), ...(ui.handPaletteColors || [])].forEach(button => {
+    const active = String(button.dataset.color || "").toLowerCase() === color;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
+function setDrawingColor(color, { save = true, announce = false } = {}) {
+  const normalized = /^#[0-9a-f]{6}$/i.test(String(color || "")) ? String(color).toLowerCase() : "#7fd8ff";
+  if (state.settings.color === normalized) return false;
+  state.settings.color = normalized;
+  updateColorSurfaces();
+  if (save) queueSave();
+  if (announce) toast(t("paletteColorSelected", "Color selected"));
+  return true;
+}
+
 function syncSettingsUI() {
   ui.brush.value = state.settings.brushSize;
   ui.smoothing.value = state.settings.smoothing;
-  ui.color.value = state.settings.color;
+  updateColorSurfaces();
   if (ui.brushStyle) ui.brushStyle.value = normalizeBrush(state.settings.brushStyle);
   if (ui.symmetryCount) ui.symmetryCount.value = String(state.settings.symmetry || 1);
   if (ui.symmetryMirror) ui.symmetryMirror.checked = Boolean(state.settings.symmetryMirror);
@@ -757,7 +787,14 @@ function syncSettingsUI() {
   ui.themeMode.value = state.settings.theme;
   ui.themeChoices.forEach(button => button.classList.toggle("selected", button.dataset.themeMode === state.settings.theme));
   ui.apiUrl.value = state.settings.apiUrl || "";
-  ui.colorSwatches.forEach(button => button.classList.toggle("active", button.dataset.color.toLowerCase() === String(state.settings.color).toLowerCase()));
+  if (ui.exportScale) ui.exportScale.value = String(state.settings.exportScale || 1);
+  if (ui.exportLayout) ui.exportLayout.value = state.settings.exportLayout || "fit";
+  if (ui.exportQuality) ui.exportQuality.value = String(state.settings.exportQuality || 92);
+  if (ui.exportTransparent) ui.exportTransparent.checked = Boolean(state.settings.exportTransparent);
+  if (ui.exportCameraComposite) ui.exportCameraComposite.checked = Boolean(state.settings.exportCameraComposite);
+  syncExportCompatibility();
+  updateColorSurfaces();
+  updateExportInfo();
   updateSettingOutputs();
   updatePerformanceStatus();
   updateHandCalibrationStatus();
@@ -778,7 +815,8 @@ function updateSettingOutputs() {
   setText(ui.eraserSizeOut, state.settings.eraserSize);
   setText(ui.gridOut, `${state.settings.grid}%`);
   setText(ui.shapeConfidenceOut, `${Math.round(Number(state.settings.shapeConfidence) || 86)}%`);
-  [ui.brush, ui.smoothing, ui.eraserSize, ui.grid, ui.shapeConfidence].forEach(updateRangeProgress);
+  setText(ui.exportQualityOut, `${Math.round(Number(state.settings.exportQuality) || 92)}%`);
+  [ui.brush, ui.smoothing, ui.eraserSize, ui.grid, ui.shapeConfidence, ui.exportQuality].forEach(updateRangeProgress);
 }
 
 
@@ -1126,24 +1164,12 @@ function addStrokePoint(point, source) {
   if (!state.currentStroke) return;
   const raw = source === "hand" ? handToWorld(point) : screenToWorld(point);
   const previous = state.currentStroke.points.at(-1) || raw;
-  const smooth = Number(state.settings.smoothing) / 100;
   const distance = Math.hypot(raw.x - previous.x, raw.y - previous.y);
-  // Hand points are already filtered by the velocity-aware stabilizer. Applying
-  // the full UI smoothing value a second time caused visible lag, so hand ink
-  // uses a smaller adaptive follow filter while pointer drawing is unchanged.
-  const handSmooth = Math.max(.08, Math.min(.30, smooth * .48));
-  const follow = source === "hand" ? (1 - handSmooth) : (1 - smooth);
-  // In hand mode, refuse an implausibly large landmark leap before it enters
-  // the drawn history. This is separate from the detector-side jump gate.
+  // The landmark stabilizer rejects detector jumps first; this second,
+  // velocity-adaptive pass removes tiny tremor without adding visible lag.
   if (source === "hand" && distance > .16) return;
-  const next = {
-    x: previous.x + (raw.x - previous.x) * follow,
-    y: previous.y + (raw.y - previous.y) * follow,
-    pressure: raw.pressure,
-    time: raw.time
-  };
-  const minDistance = source === "hand" ? .002 : .001;
-  if (Math.hypot(next.x - previous.x, next.y - previous.y) < minDistance) return;
+  const next = smoothStrokePoint(previous, raw, { smoothing: state.settings.smoothing, source });
+  if (!next) return;
   state.currentStroke.points.push(next);
   render();
 }
@@ -1824,6 +1850,42 @@ function updateInferenceFps(now) {
   }
 }
 
+function clearHandPaletteHover() {
+  if (!state.paletteActive && !state.paletteHoverColor) return;
+  state.paletteActive = false;
+  state.paletteHoverColor = "";
+  state.paletteHoverAt = 0;
+  ui.handPalette?.classList.remove("is-hovering");
+  ui.handPaletteColors?.forEach(button => button.classList.remove("is-hovered"));
+}
+
+function updateHandPaletteHover(point, now = performance.now()) {
+  if (!ui.handPalette || !point) { clearHandPaletteHover(); return false; }
+  const studioRect = ui.studio.getBoundingClientRect();
+  const screen = mappedHandPointToScreen(point);
+  const clientX = studioRect.left + screen.x;
+  const clientY = studioRect.top + screen.y;
+  const button = (ui.handPaletteColors || []).find(candidate => {
+    const rect = candidate.getBoundingClientRect();
+    return clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
+  });
+  const color = button?.dataset?.color || "";
+  if (!color) { clearHandPaletteHover(); return false; }
+  if (color !== state.paletteHoverColor) {
+    state.paletteHoverColor = color;
+    state.paletteHoverAt = now;
+    state.paletteActive = true;
+  }
+  ui.handPalette.classList.add("is-hovering");
+  (ui.handPaletteColors || []).forEach(candidate => candidate.classList.toggle("is-hovered", candidate === button));
+  // Dwell prevents a quick pass over the overlay from changing the brush.
+  if (now - state.paletteHoverAt >= 190) {
+    const changed = setDrawingColor(color, { save: true, announce: true });
+    state.paletteHoverAt = now + (changed ? 620 : 160);
+  }
+  return true;
+}
+
 function setMode(next) {
   if (handCalibration?.current?.().active && next !== "hand") cancelHandCalibration({ quiet: true });
   finishStroke();
@@ -2116,10 +2178,12 @@ function processGestureShortcut(landmarks, pinchRatio, now) {
   const action = state.shortcutGate.observe(name, now);
   if (ui.shortcutStatus) setText(ui.shortcutStatus, name ? `${SHORTCUT_LABELS[name] || name}…` : t("shortcutOff", "Shortcuts are off"));
   if (!action) return;
-  if (action === "palm") { void saveProject(); toast(t("shortcutSaved", "Saved")); }
-  if (action === "victory") { undo(); toast(t("shortcutUndo", "Undo")); }
+  if (action === "palm") { void quickSaveCurrent(); }
   if (action === "thumb-up") { void exportCurrent(); toast(t("shortcutExport", "Export")); }
-  if (action === "fist") { setMode(state.mode === "hand-eraser" ? "hand" : "eraser"); toast(t("shortcutEraser", "Eraser")); }
+  if (action === "two-finger") {
+    setMode(state.mode === "hand-eraser" ? "hand" : "eraser");
+    toast(t("shortcutEraser", "Eraser"));
+  }
 }
 
 function holdOrFinishHandStroke({ now, rule, landmarksPresent, jumped = false, point = null, fist = false } = {}) {
@@ -2170,6 +2234,7 @@ function handFrame() {
 
     const rule = currentRule();
     if (!landmarks) {
+      clearHandPaletteHover();
       drawHeldHandGuide(now);
       state.handMissingFrames += 1;
       state.pinchGate.observe({ usable: false, rule });
@@ -2208,6 +2273,7 @@ function handFrame() {
     updateTrackingHealth(assessment);
 
     if (!candidate || !stabilised.point) {
+      clearHandPaletteHover();
       state.handRejectedFrames += 1;
       state.handMissingFrames = 0;
       state.pinchGate.observe({ usable: false, rule });
@@ -2284,6 +2350,22 @@ function handFrame() {
     const pinchConfirmed = pinch.active;
     const releaseConfirmed = pinch.released;
     const stableHand = assessment.usable;
+    const paletteIntercepted = updateHandPaletteHover(state.handPoint, now);
+    if (paletteIntercepted) {
+      // Do not draw through the overlay: while a finger is inside the palette
+      // the UI owns the interaction and the pinch gate is reset safely.
+      if (state.handDrawing) finishHandStroke();
+      state.pinchGate.reset();
+      state.pinchOnFrames = 0;
+      state.pinchOffFrames = 0;
+      setHandPoint(state.handPoint, "palette");
+      setGestureStatus("ready", t("paletteHover", "Hover over a color to select it"));
+      setText(ui.handStatus, t("paletteHover", "Hover over a color to select it"));
+      updateInferenceFps(now);
+      setText(ui.fpsStatus, state.inferenceFps || "—");
+      updateLiveHud();
+      return;
+    }
 
     if (!state.handScanHasDetected && stableHand) {
       state.handScanHasDetected = true;
@@ -2353,7 +2435,7 @@ function handFrame() {
       }
     }
 
-    if (state.settings.gestureShortcuts && state.mode === "hand" && assessment.usable) processGestureShortcut(landmarks, geometry.pinchRatio, now);
+    if (state.settings.gestureShortcuts && ["hand", "hand-eraser"].includes(state.mode) && assessment.usable) processGestureShortcut(landmarks, geometry.pinchRatio, now);
     else if (ui.shortcutStatus) setText(ui.shortcutStatus, state.settings.gestureShortcuts ? t("gestureReady", "Ready") : t("shortcutOff", "Shortcuts are off"));
 
     updateInferenceFps(now);
@@ -2767,9 +2849,19 @@ function ensureTemplateStudio() {
   return templateStudio;
 }
 
-function ensureAiStudio() {
-  if (!aiStudio) aiStudio = createAiStudio({ getApiBase: () => state.settings.apiUrl || "" });
-  return aiStudio;
+async function ensureAiStudio() {
+  if (aiStudio) return aiStudio;
+  if (!aiStudioPromise) {
+    // AI Studio is never needed to draw, track a hand or export. Keep it out
+    // of the boot module graph until the creator explicitly opens its action.
+    aiStudioPromise = import("./features/ai-studio.js")
+      .then(({ createAiStudio }) => {
+        aiStudio = createAiStudio({ getApiBase: () => state.settings.apiUrl || "" });
+        return aiStudio;
+      })
+      .finally(() => { aiStudioPromise = null; });
+  }
+  return aiStudioPromise;
 }
 
 function templateSourceCanvas() {
@@ -2838,7 +2930,7 @@ async function checkAiStudio() {
   if (!(await refreshNetworkState())) { reportAiFailure(new Error("offline")); return null; }
   setAiBusy(true, t("aiChecking", "Checking AI Studio…"));
   try {
-    const health = await ensureAiStudio().health();
+    const health = await (await ensureAiStudio()).health();
     const message = health.aiConfigured
       ? t("aiReady", "AI creation is ready.")
       : t("aiNotConfigured", "AI creation is unavailable right now. Your drawing stays on this device.");
@@ -2865,7 +2957,7 @@ async function generateAiArtwork() {
     loadingManager?.updateTask("ai", { label: t("aiPreparingSketch", "Preparing sketch…"), progress: 24, indeterminate: false });
     const sourceCanvas = ensureExporter().buildCanvas({ preset: "square", transparent: false, maxSide: 768 });
     loadingManager?.updateTask("ai", { label: t("aiSending", "Sending to AI…"), progress: 52, indeterminate: true });
-    const result = await ensureAiStudio().generate({
+    const result = await (await ensureAiStudio()).generate({
       sourceCanvas,
       preset: state.settings.aiPreset,
       size: state.settings.aiSize,
@@ -2895,14 +2987,14 @@ async function generateAiArtwork() {
 
 async function downloadAiArtwork() {
   if (!state.aiResult) return;
-  ensureAiStudio().downloadResult(state.aiResult);
+  (await ensureAiStudio()).downloadResult(state.aiResult);
   toast(t("aiDownloaded", "AI artwork downloaded"));
 }
 
 async function shareAiArtwork() {
   if (!state.aiResult) return;
   try {
-    const shared = await ensureAiStudio().shareResult(state.aiResult);
+    const shared = await (await ensureAiStudio()).shareResult(state.aiResult);
     toast(shared ? t("aiShared", "AI artwork shared") : t("aiDownloaded", "AI artwork downloaded"));
   } catch (error) {
     if (error?.name !== "AbortError") { console.error(error); toast(t("aiFailed", "AI artwork could not be created")); }
@@ -2921,9 +3013,47 @@ function ensureExporter() {
     getProject: serializeProject,
     getCanvasSize: () => { const { width, height } = canvasMetrics(); return { width, height }; },
     drawStroke,
-    getBackground: () => getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || "#07101b"
+    getBackground: () => getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || "#07101b",
+    getCameraFrame: () => state.stream && ui.camera?.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA ? ui.camera : null
   });
   return exporter;
+}
+
+function syncExportCompatibility({ announce = false } = {}) {
+  const format = ui.exportFormat?.value || "png";
+  const vector = ["svg", "pdf", "airdrow"].includes(format);
+  const opaque = format === "jpg";
+  let adjusted = false;
+  if (ui.exportCameraComposite) {
+    ui.exportCameraComposite.disabled = vector;
+    if (vector && ui.exportCameraComposite.checked) { ui.exportCameraComposite.checked = false; adjusted = true; }
+  }
+  if (ui.exportTransparent) {
+    ui.exportTransparent.disabled = opaque;
+    if (opaque && ui.exportTransparent.checked) { ui.exportTransparent.checked = false; adjusted = true; }
+  }
+  if (adjusted && announce) toast(t("exportCompatibilityAdjusted", "Export options were adjusted for this format."));
+  return { format, vector, opaque };
+}
+
+function updateExportInfo() {
+  if (!ui.exportInfo) return;
+  try {
+    const { format, vector } = syncExportCompatibility();
+    const info = ensureExporter().getOutputInfo({
+      preset: ui.exportPreset?.value || "current",
+      // Vector output is resolution independent, so it deliberately uses the
+      // base layout rather than advertising a raster scale that does not apply.
+      scale: vector ? 1 : Number(ui.exportScale?.value || state.settings.exportScale || 1),
+      layout: ui.exportLayout?.value || state.settings.exportLayout || "fit"
+    });
+    const quality = Number(ui.exportQuality?.value || state.settings.exportQuality || 92);
+    const suffix = vector ? t("exportVectorInfo", "Vector layout") : `${quality}%`;
+    const limited = info.limited ? ` · ${t("exportOutputLimited", "Adjusted for device memory")}` : "";
+    setText(ui.exportInfo, `${info.width} × ${info.height} px · ${suffix}${limited}`);
+  } catch {
+    setText(ui.exportInfo, "—");
+  }
 }
 
 function exportFormatLabel(format) {
@@ -2946,7 +3076,7 @@ async function prepareProjectOutput() {
 
 function setExportBusy(busy, message = "", { progress = 14, indeterminate = false } = {}) {
   state.exportBusy = Boolean(busy);
-  [ui.export, ui.share, ui.save].filter(Boolean).forEach(button => { button.disabled = Boolean(busy); button.setAttribute("aria-busy", String(Boolean(busy))); });
+  [ui.export, ui.share, ui.save, ui.quickSave].filter(Boolean).forEach(button => { button.disabled = Boolean(busy); button.setAttribute("aria-busy", String(Boolean(busy))); });
   if (busy) {
     setExportStatus(message || t("exportPreparing", "Preparing file…"), "working");
     loadingManager?.beginTask("export", { label: message || t("exportPreparing", "Preparing file…"), progress, indeterminate });
@@ -2955,12 +3085,22 @@ function setExportBusy(busy, message = "", { progress = 14, indeterminate = fals
 
 async function exportCurrent() {
   if (state.exportBusy) return;
+  syncExportCompatibility({ announce: true });
   const format = ui.exportFormat.value;
   try {
     setExportBusy(true, t("exportSaving", "Saving your project…"), { progress: 10 });
     await prepareProjectOutput();
     loadingManager?.updateTask("export", { label: t("exportPreparing", "Preparing file…"), progress: 42 });
-    const result = await ensureExporter().exportFile({ format, preset: ui.exportPreset.value, transparent: ui.exportTransparent.checked, filenameBase: state.projectTitle || `air-drow-${Date.now()}` });
+    const result = await ensureExporter().exportFile({
+      format,
+      preset: ui.exportPreset.value,
+      transparent: ui.exportTransparent.checked,
+      scale: Number(ui.exportScale?.value || state.settings.exportScale || 1),
+      layout: ui.exportLayout?.value || state.settings.exportLayout || "fit",
+      quality: Number(ui.exportQuality?.value || state.settings.exportQuality || 92),
+      includeCamera: Boolean(ui.exportCameraComposite?.checked),
+      filenameBase: state.projectTitle || `air-drow-${Date.now()}`
+    });
     const label = exportFormatLabel(result.format || format);
     loadingManager?.updateTask("export", { label: t("exportFinalizing", "Finalizing output…"), progress: 100 });
     const message = result.fallback
@@ -2970,6 +3110,7 @@ async function exportCurrent() {
     toast(result.fallback ? t("exportFallbackPngShort", "PNG exported for compatibility") : t("exportDoneShort", "{format} exported").replace("{format}", label));
   } catch (error) {
     console.error(error);
+    diagnostics?.record("export", error);
     const message = t("exportFailed", "Export failed");
     setExportStatus(message, "error");
     toast(message);
@@ -2977,19 +3118,58 @@ async function exportCurrent() {
   } finally { setExportBusy(false); }
 }
 
+async function quickSaveCurrent() {
+  if (state.exportBusy) return;
+  syncExportCompatibility({ announce: true });
+  const selected = ui.exportFormat?.value || "png";
+  const format = ["png", "jpg", "webp"].includes(selected) ? selected : "png";
+  try {
+    setExportBusy(true, t("exportPreparing", "Preparing file…"), { progress: 28 });
+    await prepareProjectOutput();
+    const result = await ensureExporter().exportFile({
+      format,
+      preset: ui.exportPreset?.value || "current",
+      transparent: ui.exportTransparent?.checked,
+      scale: Number(ui.exportScale?.value || state.settings.exportScale || 1),
+      layout: ui.exportLayout?.value || state.settings.exportLayout || "fit",
+      quality: Number(ui.exportQuality?.value || state.settings.exportQuality || 92),
+      includeCamera: Boolean(ui.exportCameraComposite?.checked),
+      filenameBase: state.projectTitle || `air-drow-${Date.now()}`
+    });
+    setExportStatus(t("exportDone", "{format} is ready: {name}").replace("{format}", exportFormatLabel(result.format)).replace("{name}", result.filename), "success");
+    toast(t("quickSaveDone", "Image saved"));
+  } catch (error) {
+    console.error(error);
+    diagnostics?.record("quick-export", error);
+    setExportStatus(t("exportFailed", "Export failed"), "error");
+    reportExportFailure(() => quickSaveCurrent());
+  } finally { setExportBusy(false); }
+}
+
 async function shareCurrent() {
   if (state.exportBusy) return;
+  syncExportCompatibility({ announce: true });
   try {
     setExportBusy(true, t("exportSaving", "Saving your project…"), { progress: 10 });
     await prepareProjectOutput();
     loadingManager?.updateTask("export", { label: t("sharePreparing", "Preparing share image…"), progress: 48 });
-    const result = await ensureExporter().shareFile({ preset: ui.exportPreset.value === "current" ? "story" : ui.exportPreset.value, transparent: ui.exportTransparent.checked, filenameBase: state.projectTitle || `air-drow-${Date.now()}` });
+    const result = await ensureExporter().shareFile({
+      format: ui.exportFormat?.value || "png",
+      preset: ui.exportPreset?.value || "current",
+      transparent: ui.exportTransparent.checked,
+      scale: Number(ui.exportScale?.value || state.settings.exportScale || 1),
+      layout: ui.exportLayout?.value || state.settings.exportLayout || "fit",
+      quality: Number(ui.exportQuality?.value || state.settings.exportQuality || 92),
+      includeCamera: Boolean(ui.exportCameraComposite?.checked),
+      filenameBase: state.projectTitle || `air-drow-${Date.now()}`
+    });
     loadingManager?.updateTask("export", { label: t("exportFinalizing", "Finalizing output…"), progress: 100 });
     if (result.shared) { setExportStatus(t("shareSuccess", "Shared"), "success"); toast(t("shareSuccess", "Shared")); }
     else { setExportStatus(t("shareDownloaded", "Sharing is unavailable, so a PNG was downloaded."), "success"); toast(t("shareUnavailableDownload", "Share is unavailable — PNG downloaded")); }
   } catch (error) {
     if (error?.name === "AbortError") { setExportStatus(t("shareCancelled", "Sharing was cancelled"), "ready"); return; }
     console.error(error);
+    diagnostics?.record("share", error);
     const message = t("shareFailed", "Share failed");
     setExportStatus(message, "error");
     toast(message);
@@ -3272,6 +3452,13 @@ function applyControlChanges() {
   state.settings.aiSize = ui.aiSize?.value || "1024x1024";
   state.settings.aiDirection = String(ui.aiDirection?.value || "").trim().slice(0, 280);
   state.settings.performanceMode = ui.performanceMode?.value || "auto";
+  state.settings.exportScale = [1, 2, 4].includes(Number(ui.exportScale?.value)) ? Number(ui.exportScale.value) : 1;
+  state.settings.exportLayout = ["fit", "fill", "stretch"].includes(ui.exportLayout?.value) ? ui.exportLayout.value : "fit";
+  state.settings.exportQuality = Math.max(80, Math.min(100, Number(ui.exportQuality?.value || 92)));
+  state.settings.exportCameraComposite = Boolean(ui.exportCameraComposite?.checked);
+  syncExportCompatibility({ announce: document.activeElement === ui.exportFormat });
+  state.settings.exportCameraComposite = Boolean(ui.exportCameraComposite?.checked);
+  state.settings.exportTransparent = Boolean(ui.exportTransparent?.checked);
   state.settings.handCalibration = normalizeHandCalibration(state.settings.handCalibration);
   state.settings.pressure = ui.pressure.checked;
   state.settings.eraserSize = Number(ui.eraserSize.value);
@@ -3295,6 +3482,7 @@ function applyControlChanges() {
   state.settings.apiUrl = ui.apiUrl.value.trim();
   applySettings();
   updatePerformanceStatus();
+  updateExportInfo();
   queueSave();
 }
 
@@ -3409,6 +3597,58 @@ function bindImmediateTextEntry() {
   }, { capture: true });
 }
 
+async function copyDiagnosticsReport() {
+  const report = diagnostics?.report?.();
+  if (!report) { toast(t("diagnosticsUnavailable", "A local report is not available.")); return; }
+  try {
+    if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(report);
+    else {
+      const field = document.createElement("textarea");
+      field.value = report;
+      field.setAttribute("readonly", "");
+      field.style.position = "fixed";
+      field.style.opacity = "0";
+      document.body.appendChild(field);
+      field.select();
+      const copied = document.execCommand("copy");
+      field.remove();
+      if (!copied) throw new Error("Clipboard copy was not available");
+    }
+    setText(ui.diagnosticsStatus, t("diagnosticsCopied", "The report was copied."));
+    toast(t("diagnosticsCopied", "The report was copied."));
+  } catch (error) {
+    diagnostics?.record("diagnostics-copy", error);
+    toast(t("copyUnavailable", "Text unavailable"));
+  }
+}
+
+function downloadDiagnosticsReport() {
+  const report = diagnostics?.report?.();
+  if (!report) { toast(t("diagnosticsUnavailable", "A local report is not available.")); return; }
+  try {
+    const blob = new Blob([report], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `AIR-DROW_diagnostics_${new Date().toISOString().slice(0, 10)}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1200);
+    setText(ui.diagnosticsStatus, t("diagnosticsDownloaded", "The report was downloaded."));
+    toast(t("diagnosticsDownloaded", "The report was downloaded."));
+  } catch (error) {
+    diagnostics?.record("diagnostics-download", error);
+    toast(t("diagnosticsUnavailable", "A local report is not available."));
+  }
+}
+
+function clearDiagnosticsReport() {
+  diagnostics?.clear?.();
+  setText(ui.diagnosticsStatus, t("diagnosticsCleared", "The local log was cleared."));
+  toast(t("diagnosticsCleared", "The local log was cleared."));
+}
+
 function bindControls() {
   ui.manual.addEventListener("click", () => setMode("manual"));
   ui.eraser.addEventListener("click", () => setMode("eraser"));
@@ -3454,12 +3694,9 @@ function bindControls() {
     syncSettingsUI();
     queueSave();
   }));
-  ui.colorSwatches.forEach(button => button.addEventListener("click", () => {
-    state.settings.color = button.dataset.color;
-    ui.color.value = state.settings.color;
-    syncSettingsUI();
+  [...ui.colorSwatches, ...ui.handPaletteColors].forEach(button => button.addEventListener("click", () => {
+    setDrawingColor(button.dataset.color, { save: true, announce: false });
     applySettings();
-    queueSave();
   }));
   document.querySelectorAll(".settings-section").forEach(section => {
     section.addEventListener("toggle", () => {
@@ -3494,6 +3731,7 @@ function bindControls() {
   ui.undo.addEventListener("click", undo);
   ui.redo.addEventListener("click", redo);
   ui.clear.addEventListener("click", clearCanvas);
+  ui.quickSave?.addEventListener("click", () => { void quickSaveCurrent(); });
   ui.settings.addEventListener("click", () => openWorkspace("settings"));
   [...ui.workspaceTabs, ...ui.workspaceDock].forEach(button => {
     button.addEventListener("click", () => openWorkspace(button.dataset.workspaceNav));
@@ -3512,6 +3750,9 @@ function bindControls() {
   ui.importBackup?.addEventListener("click", () => ui.importBackupInput?.click());
   ui.importBackupInput?.addEventListener("change", event => { const file = event.target.files?.[0]; void restoreBackupArchive(file); event.target.value = ""; });
   ui.runStabilityCheck?.addEventListener("click", () => { void refreshStabilityStatus({ announce: true }); });
+  ui.copyDiagnostics?.addEventListener("click", () => { void copyDiagnosticsReport(); });
+  ui.downloadDiagnostics?.addEventListener("click", downloadDiagnosticsReport);
+  ui.clearDiagnostics?.addEventListener("click", clearDiagnosticsReport);
   ui.runDeviceReadiness?.addEventListener("click", () => { void deviceReadiness?.run(); });
   ui.copyDeviceReadiness?.addEventListener("click", () => { void deviceReadiness?.copyReport(); });
   ui.runFinalLiveQa?.addEventListener("click", () => { void finalLiveQa?.run(); });
@@ -3577,7 +3818,7 @@ function bindControls() {
     // Android is opening the keyboard and can steal focus from the field.
     queueSave();
   };
-  [ui.brush, ui.smoothing, ui.color, ui.brushStyle, ui.symmetryCount, ui.symmetryMirror, ui.shapeAssist, ui.shapeSnapMode, ui.shapeIntent, ui.shapeConfidence, ui.gestureShortcuts, ui.pressure, ui.eraserSize, ui.profile, ui.trackingFps, ui.bright, ui.mirror, ui.resolution, ui.cameraView, ui.handGuide, ui.safePinch, ui.warmEngine, ui.grid, ui.reduceMotion, ui.themeMode, ui.projectName, ui.apiUrl, ui.replayDuration, ui.replayBrand, ui.creatorName, ui.creatorTagline, ui.templatePack, ui.aiPreset, ui.aiSize, ui.aiDirection, ui.performanceMode].filter(Boolean)
+  [ui.brush, ui.smoothing, ui.color, ui.brushStyle, ui.symmetryCount, ui.symmetryMirror, ui.shapeAssist, ui.shapeSnapMode, ui.shapeIntent, ui.shapeConfidence, ui.gestureShortcuts, ui.pressure, ui.eraserSize, ui.profile, ui.trackingFps, ui.bright, ui.mirror, ui.resolution, ui.cameraView, ui.handGuide, ui.safePinch, ui.warmEngine, ui.grid, ui.reduceMotion, ui.themeMode, ui.projectName, ui.apiUrl, ui.replayDuration, ui.replayBrand, ui.creatorName, ui.creatorTagline, ui.templatePack, ui.aiPreset, ui.aiSize, ui.aiDirection, ui.performanceMode, ui.exportScale, ui.exportLayout, ui.exportQuality, ui.exportCameraComposite].filter(Boolean)
     .forEach(input => input.addEventListener("input", () => {
       if (textOnlyControls.has(input)) {
         syncTextDraft(input);
@@ -3587,6 +3828,9 @@ function bindControls() {
       if (input === ui.warmEngine && ui.warmEngine.checked) scheduleHandEngineWarmup();
     }));
   ui.resolution?.addEventListener("change", () => { void restartCameraCapture(); });
+  [ui.exportFormat, ui.exportPreset, ui.exportScale, ui.exportLayout, ui.exportQuality, ui.exportTransparent, ui.exportCameraComposite].filter(Boolean).forEach(control => {
+    control.addEventListener("change", () => { applyControlChanges(); updateExportInfo(); });
+  });
   ui.profile?.addEventListener("change", () => { void reloadHandEngineForProfile(); });
 
   document.addEventListener("keydown", event => {
@@ -3691,6 +3935,20 @@ async function boot() {
   if (!drawCtx || !handCtx) throw new Error("AIR-DROW canvas contexts are unavailable");
 
   syncReleaseIdentity();
+  diagnostics = createDiagnostics({
+    release: `AIR-DROW v${AIRDROW_RELEASE.version}`,
+    getContext: () => ({
+      release: AIRDROW_RELEASE.buildId,
+      mode: state.mode,
+      handRuntime: state.handRuntimePhase,
+      cameraActive: Boolean(state.stream?.active),
+      handEngineReady: Boolean(state.landmarker),
+      screen: document.documentElement.dataset.screen || "unknown",
+      language: state.settings.language === "en" ? "en" : "ku"
+    })
+  });
+  diagnostics.attachGlobalHandlers();
+  setText(ui.diagnosticsStatus, t("diagnosticsIdle", "No report is open. Diagnostics stay on this device until you copy or download them."));
   setupReliabilityCenter();
   loadingManager = createLoadingManager();
   performanceGovernor = createPerformanceGovernor({ mode: state.settings.performanceMode });

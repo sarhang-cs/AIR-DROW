@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "7.6.2",
-  "buildId": "air-drow-v762-layout-input-integrity",
+  "version": "7.7.0",
+  "buildId": "air-drow-v770-export-gesture-reliability",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {

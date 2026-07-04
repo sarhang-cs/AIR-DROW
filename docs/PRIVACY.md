@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 7.6.2 Layout & Input Integrity Edition
+> This guide applies to AIR-DROW 7.7.0 Export, Gesture & Reliability Edition
 
 AIR-DROW is local-first.
 
@@ -8,8 +8,8 @@ AIR-DROW is local-first.
 - AIR-DROW asks for camera permission only after you choose to open Camera.
 - Camera video is used only for the live hand drawing experience and is not saved by AIR-DROW.
 - The hand runtime and model are packaged as local same-origin files for the deployed app.
-- App Check and Camera & Hand Check run locally. They do not open the camera by themselves, enumerate hardware, or send diagnostic reports.
-- Exports and shares happen only when you ask for them.
+- App Check, Camera & Hand Check, and diagnostics run locally. They do not open the camera by themselves, enumerate hardware, or send a report anywhere. The diagnostics export excludes camera frames, hand landmarks, drawing points, project titles and API URLs.
+- Exports and shares happen only when you ask for them. Camera composite export is optional and only uses the live camera after you chose to open it.
 - Optional AI creation is an explicit action. Only the sketch you choose for AI creation is sent to the configured AI service; camera video is never sent by AIR-DROW.
 
 Before changing phones or clearing browser storage, download a backup from Settings.
