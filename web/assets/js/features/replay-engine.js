@@ -1,3 +1,4 @@
+import { lastItem } from "../core/legacy-compat.js";
 import { drawStrokeWithBrush } from "./brush-lab.js";
 import { canvasFont, ensureKurdishFont, setCanvasTextDirection, shouldUseKurdishTypography } from "../core/font-kit.js";
 
@@ -29,7 +30,7 @@ function partialStrokes(strokes, progress) {
     if (take > 0) {
       const points = stroke.points.slice(0, take);
       visible.push({ ...stroke, points });
-      cursor = points.at(-1) || cursor;
+      cursor = lastItem(points) || cursor;
     }
     quota -= take;
     if (quota <= 0) break;

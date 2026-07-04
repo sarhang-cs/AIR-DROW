@@ -1,6 +1,6 @@
 # AIR-DROW release notes
 
-## v8.3.1 — Export Preview & Save Polish
+## v8.3.2 — Export Preview & Save Polish
 
 ### Added
 
@@ -20,7 +20,7 @@
 - `npm run verify:all` runs preflight, localization, hand-runtime, release, input/export, visual-guidance, export-preview and test contracts.
 - Physical Android testing remains required for the real Chrome download sheet and camera permission prompt.
 
-## v8.3.1 — Legacy WebKit Compatibility
+## v8.3.2 — Legacy WebKit Compatibility
 - Added CSP compatibility for older WebKit WebAssembly handling.
 - Kept technical CSP errors in local Diagnostics instead of the visible mobile recovery card.
-- Bumped asset and service-worker identity to v831.
+- Bumped asset and service-worker identity to v832.

@@ -1,6 +1,6 @@
-AIR-DROW v8.3.1 — Legacy WebKit Compatibility
+AIR-DROW v8.3.2 — Layout & Legacy Runtime Hardening
 
-1. Put AIR-DROW_v8.3.1_LEGACY_WEBKIT_COMPATIBILITY.zip in /sdcard/Download.
-2. Extract it, then run termux/replace-with-v831-legacy-webkit-compatibility.sh from the extracted AIR-DROW-main folder.
-3. The script preserves .git, creates a rollback backup, runs npm ci + npm run verify:all + npm test, commits and pushes only after success.
-4. After Vercel deploys, fully close and reopen the app once, then test Camera + Hand on the older browser and PNG/JPG export.
+1. Put AIR-DROW_v8.3.2_LAYOUT_LEGACY_RUNTIME_HARDENING.zip in /sdcard/Download/.
+2. Extract it and run termux/replace-with-v832-layout-legacy-runtime-hardening.sh.
+3. The installer keeps .git and preserves the existing Kurdish UI font from your repository.
+4. It runs npm ci, verify:all and tests before committing and pushing.

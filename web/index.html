@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#07101b" />
   <meta name="description" content="AIR-DROW is a private drawing studio for touch, pen and optional hand drawing. Create, save and export from one place." />
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <link rel="manifest" href="./manifest.webmanifest?v=831" />
-  <meta name="air-drow-build" content="air-drow-v831-legacy-webkit-compatibility" />
-  <meta name="air-drow-icon-pack" content="visual-guidance-persistence-v831" />
+  <link rel="manifest" href="./manifest.webmanifest?v=832" />
+  <meta name="air-drow-build" content="air-drow-v832-layout-legacy-runtime-hardening" />
+  <meta name="air-drow-icon-pack" content="visual-guidance-persistence-v832" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="alternate icon" href="./favicon.ico" />
 <link rel="preload" href="./assets/fonts/noto-kufi-arabic/NotoKufiArabic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
-<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=831" />
+<link rel="stylesheet" href="./assets/icons/toolbar/toolbar-icons.css?v=832" />
   <title>AIR-DROW — Draw with Touch, Pen & Hand</title>
   <style id="airdrow-local-noto-kufi-font">
     @font-face {
@@ -23,11 +23,11 @@
       font-display: swap;
     }
   </style>
-    <link rel="stylesheet" href="./assets/css/app.css?v=831" />
-    <link rel="stylesheet" href="./assets/css/visual-system.css?v=831" />
-    <link rel="stylesheet" href="./assets/css/icon-system.css?v=831" />
-    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=831" />
-    <link rel="stylesheet" href="./assets/css/production-ui.css?v=831" />
+    <link rel="stylesheet" href="./assets/css/app.css?v=832" />
+    <link rel="stylesheet" href="./assets/css/visual-system.css?v=832" />
+    <link rel="stylesheet" href="./assets/css/icon-system.css?v=832" />
+    <link rel="stylesheet" href="./assets/css/drawer-layout.css?v=832" />
+    <link rel="stylesheet" href="./assets/css/production-ui.css?v=832" />
 </head>
 <body>
   <section id="appBoot" class="boot-splash" role="status" aria-live="polite" aria-label="AIR-DROW loading" data-i18n-aria-label="ariaAppLoading">
@@ -709,9 +709,9 @@
               <p class="about-summary" data-i18n="aboutSummary">ستودیۆیەکی ئازادە بۆ کێشان بە تەچ، قەڵەم و دەست. کێشان و ڕێکخستنەکانت لەسەر ئەم ئامێرە دەمێنن.</p>
             </div>
             <div class="about-grid about-grid-clean">
-              <div><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v8.3.1</b></div>
-              <div><span data-i18n="aboutMadeFor">بۆ چی دروستکراوە؟</span><b data-i18n="aboutMadeForValue">تەچ • قەڵەم • دەست</b></div>
-              <div><span data-i18n="aboutPrivacy">تایبەتمەندی</span><b data-i18n="aboutPrivacyValue">داتاکەت لەسەر ئامێرەکەت دەمێنێت</b></div>
+              <div class="about-meta-card about-meta-version"><span data-i18n="appVersion">وەشانی ئەپ</span><b id="appVersionValue" class="numeric-value">v8.3.2</b></div>
+              <div class="about-meta-card about-meta-input"><span data-i18n="aboutMadeFor">بۆ چی دروستکراوە؟</span><b data-i18n="aboutMadeForValue">تەچ • قەڵەم • دەست</b></div>
+              <div class="about-meta-card about-meta-privacy"><span data-i18n="aboutPrivacy">تایبەتمەندی</span><b data-i18n="aboutPrivacyValue">داتاکەت لەسەر ئامێرەکەت دەمێنێت</b></div>
             </div>
             <section class="about-creator-card" data-i18n-aria-label="ariaDeveloperProfile">
               <div class="about-creator-copy">
@@ -829,7 +829,7 @@
       parked on the first loading frame.
     */
     (() => {
-      const BUILD_ID = "air-drow-v831-legacy-webkit-compatibility";
+      const BUILD_ID = "air-drow-v832-layout-legacy-runtime-hardening";
       const ATTEMPT_KEY = `air-drow-bootstrap-repair:${BUILD_ID}`;
       const boot = document.getElementById("appBoot");
       const label = document.getElementById("bootLabel");

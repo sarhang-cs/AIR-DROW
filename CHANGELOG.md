@@ -1,6 +1,14 @@
+# Changelog
+
+## v8.3.2 — Layout & Legacy Runtime Hardening
+- Widened the Kurdish Touch / Pen / Hand metadata card without expanding the app-version card.
+- Reset a newly opened Settings drawer to its top position.
+- Added safe local fallbacks for legacy WebKit `structuredClone()` and `Array.prototype.at()` gaps.
+- Cleaned release metadata so package, manifests, cache revision and docs agree.
+
 # AIR-DROW changelog
 
-## v8.3.1 — Export Preview & Save Polish
+## v8.3.2 — Export Preview & Save Polish
 
 - Added local, memory-capped export preview that does not invoke a browser download.
 - Added explicit protected Export/Share actions inside the preview dialog, with cleanup of temporary object URLs.

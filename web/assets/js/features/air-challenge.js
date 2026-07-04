@@ -1,3 +1,4 @@
+import { lastItem } from "../core/legacy-compat.js";
 const STORAGE_KEY = "air-drow.v220.daily-challenge";
 
 const CHALLENGES = [
@@ -33,7 +34,7 @@ function turning(points) {
 function scoreStroke(id, stroke, language = "ku") {
   const points = stroke?.points || [];
   if (points.length < 4) return { score: 0, reason: language === "ku" ? "هێڵێکی درێژتر بکێشە" : "Draw a longer stroke" };
-  const box = bounds(points), diagonal = Math.hypot(box.width, box.height), close = 1 - clamp(distance(points[0], points.at(-1)) / Math.max(.0001, diagonal), 0, 1);
+  const box = bounds(points), diagonal = Math.hypot(box.width, box.height), close = 1 - clamp(distance(points[0], lastItem(points)) / Math.max(.0001, diagonal), 0, 1);
   const ratio = Math.min(box.width, box.height) / Math.max(box.width, box.height);
   const turns = turning(points);
   let score = 0;

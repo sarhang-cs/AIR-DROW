@@ -1,6 +1,5 @@
-AIR-DROW v8.3.1 — Legacy WebKit Compatibility
+AIR-DROW v8.3.2 — Layout & Legacy Runtime Hardening
 
-Complete source package with the verified local MediaPipe hand model and runtime.
-This release adds a legacy WebKit WebAssembly CSP compatibility path and bumps the service-worker/cache revision to v831.
-Run npm ci --no-audit --no-fund then npm run verify:all.
-After Vercel deploys, close the app completely and reopen it once on the older browser so the new service worker and cache identity take effect.
+This release widens the Kurdish Touch / Pen / Hand card, opens newly launched Settings at the top, and adds safe local fallbacks for older WebKit APIs.
+
+Termux installer: termux/replace-with-v832-layout-legacy-runtime-hardening.sh

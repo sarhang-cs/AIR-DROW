@@ -1,4 +1,5 @@
 import { projectStore } from "./core/project-store.js";
+import { cloneValue, lastItem } from "./core/legacy-compat.js";
 import { createReleaseManager } from "./core/release-manager.js";
 import { createExporter } from "./features/exporter.js";
 import { drawStrokeWithBrush, normalizeBrush } from "./features/brush-lab.js";
@@ -1223,7 +1224,7 @@ function drawStroke(ctx, stroke, width, height) {
 }
 
 function pushUndoSnapshot() {
-  state.undoStack.push(structuredClone(state.strokes));
+  state.undoStack.push(cloneValue(state.strokes));
   if (state.undoStack.length > 40) state.undoStack.shift();
   state.redoStack = [];
   updateHistoryControls();
@@ -1251,7 +1252,7 @@ function startStroke(point, source) {
 function addStrokePoint(point, source) {
   if (!state.currentStroke) return;
   const raw = source === "hand" ? handToWorld(point) : screenToWorld(point);
-  const previous = state.currentStroke.points.at(-1) || raw;
+  const previous = lastItem(state.currentStroke.points) || raw;
   const distance = Math.hypot(raw.x - previous.x, raw.y - previous.y);
   // The landmark stabilizer rejects detector jumps first; this second,
   // velocity-adaptive pass removes tiny tremor without adding visible lag.
@@ -1272,7 +1273,7 @@ function shapeOptions() {
 function finishStroke() {
   if (!state.currentStroke) return;
   let finished = state.currentStroke;
-  const original = structuredClone(finished);
+  const original = cloneValue(finished);
   state.currentStroke = null;
   state.lastShapeCandidate = null;
   if (finished.points.length) {
@@ -2710,7 +2711,7 @@ function drawHandSkeleton(points, opacity = 1) {
 function undo() {
   const previous = state.undoStack.pop();
   if (!previous) return;
-  state.redoStack.push(structuredClone(state.strokes));
+  state.redoStack.push(cloneValue(state.strokes));
   state.strokes = previous;
   state.currentStroke = null;
   updateHistoryControls();
@@ -2721,7 +2722,7 @@ function undo() {
 function redo() {
   const next = state.redoStack.pop();
   if (!next) return;
-  state.undoStack.push(structuredClone(state.strokes));
+  state.undoStack.push(cloneValue(state.strokes));
   state.strokes = next;
   state.currentStroke = null;
   updateHistoryControls();
@@ -2976,7 +2977,7 @@ async function importProjectFile(file) {
 }
 
 function snapLastStroke() {
-  const last = state.strokes.at(-1);
+  const last = lastItem(state.strokes);
   if (!last) return toast(t("viralNeedDrawing", "Draw a stroke first"));
   const previous = state.lastShapeCandidate;
   const source = previous?.source || last;
@@ -2993,7 +2994,7 @@ function snapLastStroke() {
   const copies = expandSymmetry(snapped.stroke, state.settings.symmetry, state.settings.symmetryMirror);
   pushUndoSnapshot();
   state.strokes.splice(startIndex, count, ...copies);
-  state.lastShapeCandidate = { candidate: snapped, source: structuredClone(source), startIndex, count: copies.length };
+  state.lastShapeCandidate = { candidate: snapped, source: cloneValue(source), startIndex, count: copies.length };
   setShapeStatus(snapped, { snapped: true });
   queueSave();
   render();
@@ -3026,7 +3027,7 @@ async function resetAllSettings() {
   state.handWarmed = false;
   state.lastGuideLandmarks = null;
   state.lastGuideSeenAt = 0;
-  state.settings = structuredClone(defaults);
+  state.settings = cloneValue(defaults);
   normalizeHandGuideSettings();
   state.shortcutGate.reset();
   state.pinchGate.reset();
@@ -3593,7 +3594,7 @@ function startDailyChallenge() {
 function scoreDailyChallenge() {
   if (!challengeSession) return;
   const record = challengeSession.record;
-  const candidate = state.strokes.slice(record.strokeStart).at(-1);
+  const candidate = lastItem(state.strokes.slice(record.strokeStart));
   const result = challengeSession.score(candidate, state.settings.language);
   if (!result.ok) { toast(t("challengeNeedStroke", result.message || "Draw a new stroke first")); renderChallengeStatus(); return; }
   const label = result.score >= 85 ? t("challengeLegend", "Legendary") : result.score >= 60 ? t("challengeGreat", "Great") : t("challengeTryAgain", "Try again");
@@ -3725,12 +3726,17 @@ function setWorkspace(name, { resetPanels = true } = {}) {
 }
 
 function openSettings(forceOpen = true, workspace = null) {
+  const wasOpen = ui.app.classList.contains("settings-open");
   if (workspace) setWorkspace(workspace);
-  const open = typeof forceOpen === "boolean" ? forceOpen : !ui.app.classList.contains("settings-open");
+  const open = typeof forceOpen === "boolean" ? forceOpen : !wasOpen;
   if (open) finishActiveCanvasInput();
   ui.app.classList.toggle("settings-open", open);
   ui.drawer.setAttribute("aria-hidden", String(!open));
   ui.backdrop.hidden = !open;
+  // Reopening the Settings home must not expose a clipped middle of a prior card.
+  if (open && !wasOpen && !workspace) {
+    requestAnimationFrame(() => ui.drawerScroll?.scrollTo({ top: 0, behavior: state.settings.reduceMotion ? "auto" : "smooth" }));
+  }
   syncBodyScroll();
 }
 

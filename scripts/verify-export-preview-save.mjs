@@ -15,7 +15,7 @@ if (!exporter.includes("async function previewFile") || !exporter.includes("maxS
 const block = exporter.slice(exporter.indexOf("async function previewFile"), exporter.indexOf("async function shareFile"));
 if (block.includes("downloadBlob(")) throw new Error("Preview must not trigger a download.");
 if (!app.includes("previewExportCurrent") || !app.includes("releaseExportPreviewUrl")) throw new Error("Preview lifecycle is incomplete.");
-if (!css.includes("v8.3.1 Export Preview & Save Polish")) throw new Error("Export preview mobile CSS is missing.");
+if (!css.includes("Export Preview & Save Polish")) throw new Error("Export preview mobile CSS is missing.");
 const result = spawnSync(process.execPath, ["tests/export-preview-save.test.mjs"], { cwd: root, encoding: "utf8" });
 if (result.status !== 0) throw new Error(result.stderr || result.stdout || "Export preview test failed.");
 console.log("AIR-DROW export preview & save polish QA passed.");

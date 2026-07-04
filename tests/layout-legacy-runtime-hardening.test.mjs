@@ -1,0 +1,26 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { cloneValue, lastItem } from "../web/assets/js/core/legacy-compat.js";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const read = file => readFileSync(resolve(root, file), "utf8");
+const original = [{ x: 1 }, { x: 2 }];
+const copied = cloneValue(original);
+assert.deepEqual(copied, original);
+assert.notEqual(copied, original);
+assert.equal(lastItem(original).x, 2);
+assert.equal(lastItem([]), undefined);
+const app = read("web/assets/js/app.js");
+const shape = read("web/assets/js/features/shape-engine.js");
+const css = read("web/assets/css/production-ui.css");
+assert.match(app, /cloneValue, lastItem/);
+assert.match(app, /const wasOpen = ui\.app\.classList\.contains\("settings-open"\)/);
+assert.doesNotMatch(app, /structuredClone\(/);
+assert.doesNotMatch(app, /\.at\(-1\)/);
+assert.doesNotMatch(shape, /structuredClone\(/);
+assert.doesNotMatch(shape, /\.at\(-1\)/);
+assert.match(css, /about-meta-input/);
+assert.match(css, /grid-template-areas:"inputs version"/);
+console.log("Layout proportions, deterministic settings entry and legacy WebKit runtime fallbacks passed.");

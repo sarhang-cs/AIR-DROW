@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Export Preview & Save Polish Edition",
-  "version": "8.3.1",
-  "buildId": "air-drow-v831-legacy-webkit-compatibility",
+  "name": "AIR-DROW Layout & Legacy Runtime Hardening Edition",
+  "version": "8.3.2",
+  "buildId": "air-drow-v832-layout-legacy-runtime-hardening",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -10,7 +10,7 @@
     "web/vendor/mediapipe/wasm/vision_wasm_module_internal.wasm",
     "web/vendor/mediapipe/wasm/vision_wasm_nosimd_internal.wasm"
   ],
-  "delivery": "This complete source package is ready for npm ci and npm run vercel:build. The generated public folder is included for inspection; deployment output is always regenerated from package-lock.json and web during build.",
+  "delivery": "The source package is ready for npm ci and npm run vercel:build. The Termux installer preserves the existing local Kurdish UI font while replacing the rest of the project transactionally.",
   "userDocs": [
     "README.md",
     "README_KU.md",
@@ -20,36 +20,30 @@
     "docs/RELEASE_NOTES.md",
     "docs/DEVICE_VALIDATION_CHECKLIST.md",
     "docs/DEVICE_VALIDATION_CHECKLIST_KU.md",
-    "docs/screenshots/air-drow-studio-en.png",
-    "docs/screenshots/air-drow-hand-en.png",
-    "docs/V831_EXPORT_PREVIEW_SAVE_POLISH.md",
-    "docs/V831_EXPORT_PREVIEW_SAVE_POLISH_KU.md",
-    "docs/V831_EXPORT_PREVIEW_SAVE_POLISH.md",
-    "docs/V831_EXPORT_PREVIEW_SAVE_POLISH_KU.md",
-    "docs/V831_QA_REPORT.md"
+    "docs/V832_LAYOUT_LEGACY_RUNTIME_HARDENING.md",
+    "docs/V832_LAYOUT_LEGACY_RUNTIME_HARDENING_KU.md",
+    "docs/V832_QA_REPORT.md"
   ],
   "developerProfile": {
     "name": "Sarhang Salah",
-    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
+    "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/",
     "qr": "web/assets/brand/instagram-sarhang-io-qr.svg"
   },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
-  "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v831-legacy-webkit-compatibility.sh",
-  "release": "Export Preview & Save Polish",
-  "assetRevision": "831",
-  "releasedAt": "2026-07-04T06:00:00Z",
-  "releaseName": "AIR-DROW Export Preview & Save Polish Edition",
-  "summary": "A complete local drawing source package with protected no-download export preview, explicit file actions and Android-safe output flow.",
+  "installer": "termux/replace-with-v832-layout-legacy-runtime-hardening.sh",
+  "release": "Layout & Legacy Runtime Hardening",
+  "assetRevision": "832",
+  "releasedAt": "2026-07-04T12:00:00Z",
+  "releaseName": "AIR-DROW Layout & Legacy Runtime Hardening Edition",
+  "summary": "Wider Kurdish About cards, deterministic settings entry and WebKit-safe runtime helpers without changing the physical-action safety contract.",
   "releaseChecks": [
     "Trusted physical controls are required before any file-producing or destructive action can run.",
     "Raster exports render stored source strokes before any live-canvas snapshot fallback.",
-    "The local launch preflight verifies temporary canvas pixels, PNG/JPG encoding and object-URL preparation without opening the camera or downloading a file.",
-    "The optional hand guide uses a compact pinch indicator and never appears over active ink.",
-    "Hand coordinates cannot paint through palette, toolbar, dock, settings or dialog surfaces.",
-    "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.3.1 build identity."
+    "The hand guide is live-camera-only and is never part of exported artwork.",
+    "Older WebKit can fall back when structuredClone() or Array.prototype.at() are unavailable.",
+    "The PWA page, manifest, source module graph, worker cache namespace and release descriptor use the same v8.3.2 build identity."
   ],
-  "stage": "export-preview-save-polish",
-  "phase": 20
+  "stage": "layout-legacy-runtime-hardening",
+  "phase": 21
 }

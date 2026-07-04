@@ -1,3 +1,4 @@
+import { cloneValue, lastItem } from "../core/legacy-compat.js";
 /*
  * AIR-DROW Smart Shape 2.0
  *
@@ -63,7 +64,7 @@ function cleanPoints(points = []) {
   const cleaned = [];
   for (const point of points) {
     if (!Number.isFinite(point?.x) || !Number.isFinite(point?.y)) continue;
-    const previous = cleaned.at(-1);
+    const previous = lastItem(cleaned);
     if (!previous || distance(point, previous) > 0.00035) {
       cleaned.push({ x: point.x, y: point.y, pressure: point.pressure ?? 1, time: point.time ?? now() });
     }
@@ -137,7 +138,7 @@ function resample(points, count, closed = false) {
     }
     travelled += segment;
   }
-  while (result.length < count) result.push(clonePoint(route.at(-1)));
+  while (result.length < count) result.push(clonePoint(lastItem(route)));
   return result;
 }
 
@@ -208,7 +209,7 @@ function polygonArea(vertices) {
 
 function createStroke(stroke, points, shape, confidence) {
   return {
-    ...structuredClone(stroke),
+    ...cloneValue(stroke),
     points,
     meta: {
       ...(stroke.meta || {}),
@@ -225,7 +226,7 @@ function describeStroke(stroke) {
   const box = bounds(points);
   const lengthValue = pathLength(points);
   const start = points[0];
-  const end = points.at(-1);
+  const end = lastItem(points);
   const endpointDistance = distance(start, end);
   const closedness = endpointDistance / Math.max(box.diagonal, EPSILON);
   return { points, box, length: lengthValue, start, end, endpointDistance, closedness, directness: endpointDistance / Math.max(lengthValue, EPSILON) };
@@ -417,8 +418,8 @@ export function expandSymmetry(stroke, count = 1, mirror = false) {
   };
   for (let index = 0; index < turns; index += 1) {
     const angle = (Math.PI * 2 * index) / turns;
-    copies.push({ ...structuredClone(stroke), points: stroke.points.map(source => rotatePoint(source, angle, false)), meta: { ...(stroke.meta || {}), symmetry: turns, mirror } });
-    if (mirror && turns > 1) copies.push({ ...structuredClone(stroke), points: stroke.points.map(source => rotatePoint(source, angle, true)), meta: { ...(stroke.meta || {}), symmetry: turns, mirror } });
+    copies.push({ ...cloneValue(stroke), points: stroke.points.map(source => rotatePoint(source, angle, false)), meta: { ...(stroke.meta || {}), symmetry: turns, mirror } });
+    if (mirror && turns > 1) copies.push({ ...cloneValue(stroke), points: stroke.points.map(source => rotatePoint(source, angle, true)), meta: { ...(stroke.meta || {}), symmetry: turns, mirror } });
   }
   return copies;
 }

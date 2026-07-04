@@ -6,7 +6,7 @@
 
 ### A private drawing studio for touch, pen and hand
 
-**Export Preview & Save Polish Edition · v8.3.1 · Created by Sarhang Salah**
+**Export Preview & Save Polish Edition · v8.3.2 · Created by Sarhang Salah**
 
 [![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
@@ -16,6 +16,14 @@
 </div>
 
 ---
+
+
+## v8.3.2 — Layout & Legacy Runtime Hardening
+
+- Wider About metadata layout for Touch / Pen / Hand.
+- Deterministic Settings entry and WebKit-safe clone/last-item fallbacks.
+- See `docs/V832_LAYOUT_LEGACY_RUNTIME_HARDENING.md`.
+
 
 ## Screenshots
 
@@ -92,7 +100,7 @@ Before tagging a live deployment, run the in-app App readiness check and complet
 <div align="center">Made for ideas in motion · <strong>AIR-DROW</strong> · <a href="#top">Back to top</a></div>
 
 
-## v8.3.1 highlights
+## v8.3.2 highlights
 
 - **Export Studio:** PNG, JPG and WebP with 1×, 2× and 4× output, Fit/Fill/Stretch layouts, social presets and A4/A3 300 PPI layouts.
 - **Hand gesture controls:** hover an index finger over the top palette to select a color; hold up two fingers to toggle Hand Eraser. No hand pose can save, export, clear, share or download a file; those actions require a real on-screen tap.
@@ -101,11 +109,11 @@ Before tagging a live deployment, run the in-app App readiness check and complet
 - **On-device launch validation:** Settings → About App → App readiness now checks a temporary canvas, PNG/JPG encoding and local file preparation without opening the camera or downloading a file. Real camera permission and the Android download sheet still require a physical phone test.
 
 
-## v8.3.1 on-device launch validation
+## v8.3.2 on-device launch validation
 
 This release adds a private on-device preflight: it verifies a temporary drawing surface, PNG/JPG encoding and local file preparation without opening the camera, downloading a file, reading your artwork or sending a report. It keeps the real Android camera and browser download confirmation clearly separate, so final release claims remain honest.
 
-## v8.3.1 — Visual Guidance & Persistent Settings
+## v8.3.2 — Visual Guidance & Persistent Settings
 
 - Full, configurable live hand guide on the non-exported camera feedback layer.
 - Hand palette re-sync after live camera startup.
@@ -115,5 +123,5 @@ This release adds a private on-device preflight: it verifies a temporary drawing
 See [`docs/V831_EXPORT_PREVIEW_SAVE_POLISH.md`](docs/V831_EXPORT_PREVIEW_SAVE_POLISH.md).
 
 
-## v8.3.1 compatibility
-Older Safari/WebKit variants now receive the CSP compatibility needed for local MediaPipe WebAssembly. After deployment, reopen the app once so the v831 service worker and assets replace any old cached copy.
+## v8.3.2 compatibility
+Older Safari/WebKit variants now receive the CSP compatibility needed for local MediaPipe WebAssembly. After deployment, reopen the app once so the v832 service worker and assets replace any old cached copy.

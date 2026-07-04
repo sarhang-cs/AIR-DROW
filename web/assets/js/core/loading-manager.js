@@ -1,3 +1,4 @@
+import { lastItem } from "./legacy-compat.js";
 const clamp = (value, min = 0, max = 100) => Math.max(min, Math.min(max, Number(value) || 0));
 const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 
@@ -40,7 +41,7 @@ export function createLoadingManager({ root = document } = {}) {
       routeFill.style.setProperty("--progress", "0%");
       return;
     }
-    const latest = tasks.at(-1);
+    const latest = lastItem(tasks);
     route.hidden = false;
     route.dataset.indeterminate = latest.indeterminate ? "true" : "false";
     routeFill.style.setProperty("--progress", `${latest.indeterminate ? 72 : clamp(latest.progress, 6, 96)}%`);
