@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 7.8.0 Hand Tracking & Performance Stabilization Edition
+> This guide applies to AIR-DROW 7.9.0 Mobile Safety & Final QA Edition
 
 AIR-DROW is local-first.
 

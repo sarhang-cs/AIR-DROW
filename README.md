@@ -6,7 +6,7 @@
 
 ### A private drawing studio for touch, pen and hand
 
-**Hand Tracking & Performance Stabilization Edition · v7.8.0 · Created by Sarhang Salah**
+**Mobile Safety & Final QA Edition · v7.9.0 · Created by Sarhang Salah**
 
 [![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
@@ -90,9 +90,14 @@ For Android/Termux replacement, use [`termux/TERMUX_INSTALL.txt`](./termux/TERMU
 <div align="center">Made for ideas in motion · <strong>AIR-DROW</strong> · <a href="#top">Back to top</a></div>
 
 
-## v7.8.0 highlights
+## v7.9.0 highlights
 
 - **Export Studio:** PNG, JPG and WebP with 1×, 2× and 4× output, Fit/Fill/Stretch layouts, social presets and A4/A3 300 PPI layouts.
 - **Hand gesture controls:** hover an index finger over the top palette to select a color; hold up two fingers to toggle Hand Eraser. Palm quick-saves; thumb-up opens standard export.
 - **Reliable drawing:** velocity-adaptive smoothing reduces tremor. When no hand is detected or a hand leaves the frame, the app pauses/holds safely rather than creating a jump stroke.
 - **Private diagnostics:** Camera, hand engine and export failures can be copied or downloaded as a local report. It excludes artwork, camera frames, landmarks, project titles and API URLs.
+
+
+## v7.9.0 mobile safety & final QA
+
+This release is deliberately conservative: all downloads and destructive canvas actions require a trusted physical control activation; hand tracking cannot synthesize them. Raster exports now render the saved source strokes first, so the output cannot depend on a late live-canvas repaint. The optional hand guide is quiet, compact and hidden while drawing.

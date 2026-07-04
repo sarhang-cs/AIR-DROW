@@ -795,7 +795,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 :root.reduce-motion .hand-tutorial-card * { animation:none !important; }
 @media (max-width:390px) { .hand-tutorial-head { grid-template-columns:1fr; } .hand-tutorial-visual { max-width:190px; justify-self:center; } }
 
-/* ===== v7.8.0 Hand Tracking & Performance Stabilization ===== */
+/* ===== v7.9.0 Mobile Safety & Final QA ===== */
 /* One responsive source of truth: cards stay balanced on a phone and QR remains beside the creator profile. */
 .about-creator-card {
   display:grid;
@@ -935,7 +935,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v7.8.0 — protected hand palette and local reliability controls.
+/* v7.9.0 — protected hand palette and local reliability controls.
  * The palette is a real control surface: it sits above the canvas and is
  * explicitly blocked from pointer / hand drawing by app.js surface guards. */
 .hand-palette {
@@ -963,7 +963,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
   padding-inline: 3px 1px;
   color: var(--muted);
   font-size: 10px;
-  font-weight: 780;
+  font-weight: 790;
   line-height: 1;
   white-space: nowrap;
 }
@@ -1010,7 +1010,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v7.8.0 — critical input safety and Kurdish mobile typography. */
+/* v7.9.0 — critical input safety and Kurdish mobile typography. */
 .hand-palette[hidden] { display: none !important; }
 /* Palette, live HUD and camera state occupy distinct vertical bands. */
 @media (max-width: 560px) {
@@ -1051,4 +1051,26 @@ html[lang="ku"] .about-grid div { min-height: 88px; padding: 11px; }
 @media (max-width: 370px) {
   html[lang="ku"] .about-creator-card { grid-template-columns: minmax(0, 1fr) 108px; gap: 8px; }
   html[lang="ku"] .about-grid div { min-height: 82px; padding: 9px; }
+}
+
+
+/* v7.9.0 — mobile safety, quiet hand guide and Kurdish reading rhythm. */
+.hand-canvas { isolation: isolate; }
+html[lang="ku"] .hand-gesture-help,
+html[lang="ku"] .hand-quality,
+html[lang="ku"] .small-status {
+  font-size: clamp(9.5px, 2.55vw, 11px);
+  line-height: 1.9;
+  letter-spacing: 0;
+}
+html[lang="ku"] .about-grid b,
+html[lang="ku"] .about-creator-name,
+html[lang="ku"] .about-qr-copy strong {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+@media (max-width: 420px) {
+  html[lang="ku"] .workspace-label { font-size: 10px; line-height: 1.55; }
+  html[lang="ku"] .settings-section summary > span:not(.summary-icon) { font-size: 12px; line-height: 1.68; }
+  html[lang="ku"] .about-summary { font-size: 11px; line-height: 1.92; }
 }

@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# AIR-DROW v7.8.0 — Hand Tracking & Performance Stabilization Edition
+# AIR-DROW v7.9.0 — Mobile Safety & Final QA Edition
 # Transactional replacement: preserve .git, verify/build before push, then restore the old source if validation fails.
 set -Eeuo pipefail
 SOURCE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="7.8.0"
+VERSION="7.9.0"
 REPO="${1:-$HOME/AIR-DROW-GITHUB}"
 BACKUP="${REPO}.backup-${VERSION//./-}-$(date +%Y%m%d-%H%M%S)"
 RESTORE_REQUIRED=0
@@ -43,10 +43,10 @@ cd "$REPO"
 echo "Installing exact dependencies…"
 npm_config_loglevel=error npm ci --no-audit --no-fund
 echo "Building and verifying AIR-DROW v$VERSION…"
-npm run vercel:build
+npm run verify:all && npm test
 RESTORE_REQUIRED=0
 git add -A
-if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.8.0 hand tracking and performance stabilization"; fi
+if ! git diff --cached --quiet; then git commit -m "AIR-DROW v7.9.0 mobile safety and final QA"; fi
 BRANCH="$(git branch --show-current 2>/dev/null || true)"
 [ -n "$BRANCH" ] || BRANCH="main"
 git push origin "HEAD:$BRANCH"

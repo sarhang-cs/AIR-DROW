@@ -171,7 +171,12 @@ const state = {
   shortcutGate: createShortcutGate(),
   paletteHoverColor: "",
   paletteHoverAt: 0,
-  paletteActive: false
+  paletteActive: false,
+  // A browser download must always start from a verified, trusted control
+  // activation. Hand tracking only supplies canvas coordinates; it never
+  // receives or synthesizes browser pointer/click events.
+  physicalActionTarget: null,
+  physicalActionAt: 0
 };
 
 function currentRule() {
@@ -242,6 +247,46 @@ function finishActiveCanvasInput() {
   state.erasingGesture = false;
   if (state.currentStroke) finishStroke();
   else if (state.mode === "eraser") clearHandCanvas();
+}
+
+const PHYSICAL_ACTION_WINDOW_MS = 1600;
+
+/**
+ * Protect actions that can create a file or remove artwork. A real tap creates
+ * a trusted pointerdown followed by a trusted click. Keyboard activation is
+ * retained for accessibility, while synthetic `.click()` calls and any future
+ * hand-gesture routing are rejected before an export/download can begin.
+ */
+function markPhysicalAction(event) {
+  if (!event?.isTrusted || event.button !== 0) return;
+  state.physicalActionTarget = event.currentTarget;
+  state.physicalActionAt = performance.now();
+}
+
+function consumePhysicalAction(event) {
+  if (!event?.isTrusted) return false;
+  // Trusted keyboard activation reports detail 0. Keep it accessible without
+  // accepting arbitrary programmatic button clicks.
+  if (event.detail === 0) return true;
+  const accepted = state.physicalActionTarget === event.currentTarget
+    && (performance.now() - state.physicalActionAt) <= PHYSICAL_ACTION_WINDOW_MS;
+  state.physicalActionTarget = null;
+  state.physicalActionAt = 0;
+  return accepted;
+}
+
+function bindPhysicalAction(button, callback) {
+  if (!button || typeof callback !== "function") return;
+  button.addEventListener("pointerdown", markPhysicalAction, { capture: true, passive: true });
+  button.addEventListener("click", event => {
+    if (!consumePhysicalAction(event)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      diagnostics?.record("blocked-action", new Error("An untrusted file or destructive action was blocked"));
+      return;
+    }
+    callback(event);
+  });
 }
 
 function syncBodyScroll() {
@@ -488,13 +533,13 @@ function localDate(value) {
 function projectFromStorage(value) {
   if (!value || typeof value !== "object" || !Array.isArray(value.strokes)) return null;
   const settings = { ...defaults, ...(value.settings || {}) };
-  // Existing pre-v7.8.0 projects may still contain unsafe gesture defaults.
-  // Migrate once: people can re-enable the guide or eraser gesture later,
-  // but no restored project can trigger an unexpected export/download.
-  if (Number(settings.inputSafetyVersion || 0) < 3) {
+  // Projects from releases before the physical-action gate may retain a
+  // noisy hand guide or old shortcut preference. Migrate once to a quiet,
+  // opt-in hand experience; real controls remain the only route to files.
+  if (Number(settings.inputSafetyVersion || 0) < 4) {
     settings.gestureShortcuts = false;
     settings.showHandGuide = false;
-    settings.inputSafetyVersion = 3;
+    settings.inputSafetyVersion = 4;
   }
   return {
     strokes: value.strokes,
@@ -2248,7 +2293,9 @@ function cacheHandGuide(points, geometry, now) {
 }
 
 function drawHeldHandGuide(now) {
-  if (!state.settings.showHandGuide || !state.lastGuideLandmarks?.length) return false;
+  // During an active stroke the cursor alone is enough. Holding an old guide
+  // underneath live ink makes the canvas look like it is part of the artwork.
+  if (state.handDrawing || !state.settings.showHandGuide || !state.lastGuideLandmarks?.length) return false;
   const elapsed = now - state.lastGuideSeenAt;
   if (!Number.isFinite(elapsed) || elapsed < 0 || elapsed > HAND_GUIDE_HOLD_MS) return false;
 
@@ -2365,7 +2412,7 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
     // Hand-guide visuals must never make a weak/false detector result look
     // trustworthy. Only a stable, drawable hand can populate the guide cache.
     const guideDetected = candidate && assessment.usable && cacheHandGuide(landmarks, geometry, now);
-    if (state.settings.showHandGuide && guideDetected) drawHandSkeleton(landmarks, .22);
+    if (state.settings.showHandGuide && guideDetected && !state.handDrawing) drawHandSkeleton(landmarks, .16);
     updateTrackingHealth(assessment);
 
     if (!candidate || !stabilised.point) {
@@ -2560,47 +2607,36 @@ function handFrame(now = performance.now(), videoTime = ui.camera.currentTime) {
   }
 }
 
-function drawHandSkeleton(points, opacity = .22) {
+function drawHandSkeleton(points, opacity = .16) {
   const { width, height } = canvasMetrics();
   handCtx.clearRect(0, 0, width, height);
   const map = point => normalizedToCanvasPoint(point);
-  // A compact guide is intentionally quieter than a full diagnostic skeleton:
-  // it confirms the index/thumb pinch location without covering artwork or
-  // making an ambiguous hand shape look like a drawing result.
-  const thumbLinks = [[0, 1], [1, 2], [2, 3], [3, 4]];
-  const indexLinks = [[0, 5], [5, 6], [6, 7], [7, 8]];
-  const paint = (pairs, color, lineWidth) => {
-    handCtx.strokeStyle = color;
-    handCtx.lineWidth = lineWidth;
-    for (const [a, b] of pairs) {
-      const pa = map(points[a]);
-      const pb = map(points[b]);
-      handCtx.beginPath();
-      handCtx.moveTo(pa.x, pa.y);
-      handCtx.lineTo(pb.x, pb.y);
-      handCtx.stroke();
-    }
-  };
-  handCtx.save();
-  handCtx.globalAlpha = Math.max(.08, Math.min(.26, Number(opacity) || .22));
-  paint(thumbLinks, "rgba(255,202,116,.96)", 1.35);
-  paint(indexLinks, "rgba(117,231,255,.96)", 1.45);
   const thumb = map(points[4]);
   const index = map(points[8]);
-  handCtx.setLineDash([3, 4]);
+
+  // This is deliberately a pinch-position aid, not a full hand skeleton. Full
+  // bones visually compete with the artwork on a phone and can be mistaken for
+  // drawn lines. The guide is optional and disappears while ink is active.
+  handCtx.save();
+  handCtx.globalAlpha = Math.max(.06, Math.min(.18, Number(opacity) || .16));
+  handCtx.setLineDash([2, 5]);
   handCtx.lineWidth = 1;
-  handCtx.strokeStyle = "rgba(255,255,255,.54)";
+  handCtx.strokeStyle = "rgba(193,236,255,.9)";
   handCtx.beginPath();
   handCtx.moveTo(thumb.x, thumb.y);
   handCtx.lineTo(index.x, index.y);
   handCtx.stroke();
   handCtx.setLineDash([]);
-  for (const [point, color] of [[thumb, "rgba(255,202,116,1)"], [index, "rgba(117,231,255,1)"]]) {
-    handCtx.beginPath();
-    handCtx.fillStyle = color;
-    handCtx.arc(point.x, point.y, 2.55, 0, Math.PI * 2);
-    handCtx.fill();
-  }
+  handCtx.globalAlpha = Math.max(.34, Math.min(.62, (Number(opacity) || .16) + .28));
+  handCtx.strokeStyle = "rgba(117,231,255,.95)";
+  handCtx.lineWidth = 1.5;
+  handCtx.beginPath();
+  handCtx.arc(index.x, index.y, 6.5, 0, Math.PI * 2);
+  handCtx.stroke();
+  handCtx.fillStyle = "rgba(255,202,116,.92)";
+  handCtx.beginPath();
+  handCtx.arc(thumb.x, thumb.y, 2.25, 0, Math.PI * 2);
+  handCtx.fill();
   handCtx.restore();
 }
 
@@ -3792,7 +3828,7 @@ function bindControls() {
     queueSave();
   });
   ui.clearCancel.addEventListener("click", closeClearDialog);
-  ui.clearConfirm.addEventListener("click", confirmClearCanvas);
+  bindPhysicalAction(ui.clearConfirm, confirmClearCanvas);
   ui.clearDialog.addEventListener("click", event => {
     if (event.target === ui.clearDialog) closeClearDialog();
   });
@@ -3856,8 +3892,8 @@ function bindControls() {
   });
   ui.undo.addEventListener("click", undo);
   ui.redo.addEventListener("click", redo);
-  ui.clear.addEventListener("click", clearCanvas);
-  ui.quickSave?.addEventListener("click", () => { void quickSaveCurrent(); });
+  bindPhysicalAction(ui.clear, clearCanvas);
+  bindPhysicalAction(ui.quickSave, () => { void quickSaveCurrent(); });
   ui.settings.addEventListener("click", () => openWorkspace("settings"));
   [...ui.workspaceTabs, ...ui.workspaceDock].forEach(button => {
     button.addEventListener("click", () => openWorkspace(button.dataset.workspaceNav));
@@ -3865,19 +3901,19 @@ function bindControls() {
   ui.closeSettings.addEventListener("click", () => openSettings(false));
   ui.backdrop.addEventListener("click", () => openSettings(false));
 
-  ui.export.addEventListener("click", exportCurrent);
-  ui.share.addEventListener("click", shareCurrent);
+  bindPhysicalAction(ui.export, () => { void exportCurrent(); });
+  bindPhysicalAction(ui.share, () => { void shareCurrent(); });
   ui.save.addEventListener("click", () => { projectNameFromInput(); void saveProject(); });
   ui.snapLast?.addEventListener("click", snapLastStroke);
   ui.saveGallery?.addEventListener("click", () => { void saveProjectToGallery(); });
   ui.importProject?.addEventListener("click", () => ui.importInput?.click());
   ui.importInput?.addEventListener("change", event => { const file = event.target.files?.[0]; void importProjectFile(file); event.target.value = ""; });
-  ui.exportBackup?.addEventListener("click", () => { void exportBackupArchive(); });
+  bindPhysicalAction(ui.exportBackup, () => { void exportBackupArchive(); });
   ui.importBackup?.addEventListener("click", () => ui.importBackupInput?.click());
   ui.importBackupInput?.addEventListener("change", event => { const file = event.target.files?.[0]; void restoreBackupArchive(file); event.target.value = ""; });
   ui.runStabilityCheck?.addEventListener("click", () => { void refreshStabilityStatus({ announce: true }); });
   ui.copyDiagnostics?.addEventListener("click", () => { void copyDiagnosticsReport(); });
-  ui.downloadDiagnostics?.addEventListener("click", downloadDiagnosticsReport);
+  bindPhysicalAction(ui.downloadDiagnostics, downloadDiagnosticsReport);
   ui.clearDiagnostics?.addEventListener("click", clearDiagnosticsReport);
   ui.runDeviceReadiness?.addEventListener("click", () => { void deviceReadiness?.run(); });
   ui.copyDeviceReadiness?.addEventListener("click", () => { void deviceReadiness?.copyReport(); });
@@ -3892,19 +3928,19 @@ function bindControls() {
       projectStore.deleteGalleryProject(id).then(renderProjectGallery).then(() => toast(t("projectDeleted", "Project deleted"))).catch(() => toast(t("projectDeleteFailed", "Delete failed")));
     }
   });
-  ui.replayExport?.addEventListener("click", () => { void createAirReplay(false); });
-  ui.replayShare?.addEventListener("click", () => { void createAirReplay(true); });
-  ui.storyExport?.addEventListener("click", () => { void createStoryCard(false); });
-  ui.storyShare?.addEventListener("click", () => { void createStoryCard(true); });
-  ui.remix?.addEventListener("click", () => { void saveRemixCopy(); });
-  ui.exportTemplate?.addEventListener("click", () => { void createCreatorTemplate(false); });
-  ui.shareTemplate?.addEventListener("click", () => { void createCreatorTemplate(true); });
+  bindPhysicalAction(ui.replayExport, () => { void createAirReplay(false); });
+  bindPhysicalAction(ui.replayShare, () => { void createAirReplay(true); });
+  bindPhysicalAction(ui.storyExport, () => { void createStoryCard(false); });
+  bindPhysicalAction(ui.storyShare, () => { void createStoryCard(true); });
+  bindPhysicalAction(ui.remix, () => { void saveRemixCopy(); });
+  bindPhysicalAction(ui.exportTemplate, () => { void createCreatorTemplate(false); });
+  bindPhysicalAction(ui.shareTemplate, () => { void createCreatorTemplate(true); });
   ui.checkAi?.addEventListener("click", () => { void checkAiStudio(); });
   ui.generateAi?.addEventListener("click", () => { void generateAiArtwork(); });
   ui.closeAiResult?.addEventListener("click", closeAiResult);
   ui.aiResultModal?.addEventListener("click", event => { if (event.target === ui.aiResultModal) closeAiResult(); });
-  ui.downloadAiResult?.addEventListener("click", () => { void downloadAiArtwork(); });
-  ui.shareAiResult?.addEventListener("click", () => { void shareAiArtwork(); });
+  bindPhysicalAction(ui.downloadAiResult, () => { void downloadAiArtwork(); });
+  bindPhysicalAction(ui.shareAiResult, () => { void shareAiArtwork(); });
   ui.challengeStart?.addEventListener("click", startDailyChallenge);
   ui.challengeScore?.addEventListener("click", scoreDailyChallenge);
   ui.updateDismiss.addEventListener("click", hideUpdateBanner);

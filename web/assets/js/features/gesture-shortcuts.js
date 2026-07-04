@@ -28,7 +28,9 @@ export function recognizeGestureShortcut(points, pinchRatio = 1) {
 export function createShortcutGate({ holdMs = 700, cooldownMs = 1800 } = {}) {
   let active = "";
   let activeAt = 0;
-  let lastTriggeredAt = 0;
+  // -Infinity means the first legitimate hold is never blocked by a
+  // fabricated cooldown at app start (performance.now() may be near zero).
+  let lastTriggeredAt = -Infinity;
   return {
     observe(name, now = performance.now()) {
       if (!name) { active = ""; activeAt = 0; return ""; }
@@ -38,7 +40,7 @@ export function createShortcutGate({ holdMs = 700, cooldownMs = 1800 } = {}) {
       activeAt = now;
       return name;
     },
-    reset() { active = ""; activeAt = 0; lastTriggeredAt = 0; }
+    reset() { active = ""; activeAt = 0; lastTriggeredAt = -Infinity; }
   };
 }
 

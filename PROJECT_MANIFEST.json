@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.8.0",
-  "buildId": "air-drow-v780-hand-performance-stabilization",
-  "release": "Hand Tracking & Performance Stabilization Edition",
+  "version": "7.9.0",
+  "buildId": "air-drow-v790-mobile-safety-final-qa",
+  "release": "Mobile Safety & Final QA Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -23,11 +23,11 @@
     "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Hand Tracking & Performance Stabilization Edition",
-  "releasedAt": "2026-07-04T13:00:00Z",
-  "summary": "Fresh-video-frame hand scheduling, adaptive cadence and protected canvas zones make tracking safer and smoother on mobile.",
-  "stage": "hand-performance-stabilization",
-  "phase": 15,
-  "assetRevision": "780",
-  "releaseName": "AIR-DROW Hand Tracking & Performance Stabilization Edition"
+  "name": "AIR-DROW Mobile Safety & Final QA Edition",
+  "releasedAt": "2026-07-04T14:00:00Z",
+  "summary": "Trusted physical actions, source-first export recovery, quiet hand guidance and mobile-focused final QA make the Android drawing workflow safer and more predictable.",
+  "stage": "mobile-safety-final-qa",
+  "phase": 16,
+  "assetRevision": "790",
+  "releaseName": "AIR-DROW Mobile Safety & Final QA Edition"
 }

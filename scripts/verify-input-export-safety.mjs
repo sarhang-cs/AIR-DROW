@@ -26,11 +26,13 @@ for (const id of ["quickSaveBtn", "handPalette", "exportScale", "exportLayout", 
   if (!html.includes(`id=\"${id}\"`)) throw new Error(`Missing export/input UI control: ${id}`);
 }
 if (!html.includes('data-airdrow-surface="hand-palette"')) throw new Error("Hand palette must remain a protected UI surface.");
-if (!runtime.includes("gestureShortcuts: false") || !runtime.includes("showHandGuide: false") || !runtime.includes("inputSafetyVersion: 3")) throw new Error("Safe hand defaults are missing.");
+if (!runtime.includes("gestureShortcuts: false") || !runtime.includes("showHandGuide: false") || !runtime.includes("inputSafetyVersion: 4")) throw new Error("Safe hand defaults are missing.");
 if (gesture.includes("thumb-up") || gesture.includes('"palm"') || gesture.includes("Save image") || gesture.includes('"Export"')) throw new Error("A hand gesture may not trigger save/export.");
 if (!gesture.includes('"two-finger"') || !app.includes('action !== "two-finger"')) throw new Error("Two-finger eraser guard is missing.");
 if (!app.includes("getArtworkCanvas: () => ui.draw") || !app.includes("render({ immediate: true })")) throw new Error("Artwork snapshot export path is not wired from the live canvas.");
 if (!exporter.includes("drawArtworkSnapshot") || !exporter.includes("snapshotUsed") || !exporter.includes("drawProjectStrokes")) throw new Error("Raster export recovery is incomplete.");
+if (!(exporter.indexOf("const strokeRendererUsed") < exporter.indexOf("let snapshotUsed")) || !exporter.includes("if (!strokeRendererUsed &&")) throw new Error("Raster export must be source-first with a snapshot-only fallback.");
+if (!app.includes("bindPhysicalAction") || !app.includes("event?.isTrusted")) throw new Error("File actions must be protected by a trusted physical-action gate.");
 if (!css.includes('html[lang="ku"]') || !css.includes(".hand-palette[hidden]")) throw new Error("Kurdish typography or hand palette safety CSS is missing.");
 
 const result = spawnSync(process.execPath, ["tests/export-gesture-reliability.test.mjs"], { cwd: root, encoding: "utf8" });

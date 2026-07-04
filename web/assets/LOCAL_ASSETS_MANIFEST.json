@@ -1,6 +1,6 @@
 {
-  "version": "7.8.0",
-  "buildId": "air-drow-v780-hand-performance-stabilization",
+  "version": "7.9.0",
+  "buildId": "air-drow-v790-mobile-safety-final-qa",
   "policy": "AIR-DROW uses local same-origin interface assets, MediaPipe modules, WASM files and the verified hand model. Your drawing session is private to this device unless you choose an export, share or optional AI action.",
   "toolbarIconSystem": {
     "folder": "assets/icons/toolbar",
@@ -30,7 +30,7 @@
     "guide": "assets/icons/ICON_SYSTEM.md",
     "packageManifest": "assets/icons/USER_ICON_PACKAGE.json"
   },
-  "releaseStatus": "v7.8.0 Export, Gesture & Reliability Edition: high-resolution export, protected hand palette, two-finger eraser, local diagnostics and resilient hand recovery are active across AIR-DROW.",
-  "assetRevision": "780",
+  "releaseStatus": "v7.9.0 Mobile Safety & Final QA Edition: verified physical-action gates, source-first artwork export, quiet optional hand guidance and local-only diagnostics are active across AIR-DROW.",
+  "assetRevision": "790",
   "revision": "770"
 }

@@ -9,7 +9,7 @@ const manifestPath = resolve(iconRoot, "USER_ICON_PACKAGE.json");
 if (!existsSync(manifestPath)) throw new Error("Local icon package manifest is missing.");
 
 const pack = JSON.parse(readFileSync(manifestPath, "utf8"));
-if (pack.version !== "7.8.0" || pack.buildId !== "air-drow-v780-hand-performance-stabilization") {
+if (pack.version !== "7.9.0" || pack.buildId !== "air-drow-v790-mobile-safety-final-qa") {
   throw new Error("Local icon package metadata is inconsistent.");
 }
 if (!Array.isArray(pack.files) || pack.files.length < 30) {

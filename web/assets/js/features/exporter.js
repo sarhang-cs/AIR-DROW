@@ -232,11 +232,21 @@ function drawArtworkSnapshot(context, artwork, plan) {
 }
 
 function drawProjectStrokes(context, project, plan, drawStroke) {
-  context.save();
-  context.translate(plan.offsetX, plan.offsetY);
-  context.scale(plan.scaleX, plan.scaleY);
-  for (const stroke of project.strokes || []) drawStroke(context, stroke, plan.sourceWidth, plan.sourceHeight);
-  context.restore();
+  // Source strokes are the authoritative artwork. Rendering them first avoids
+  // an Android canvas snapshot race where the visible layer has not repainted
+  // yet and an export would otherwise contain only the background.
+  try {
+    context.save();
+    context.translate(plan.offsetX, plan.offsetY);
+    context.scale(plan.scaleX, plan.scaleY);
+    for (const stroke of project.strokes || []) drawStroke(context, stroke, plan.sourceWidth, plan.sourceHeight);
+    context.restore();
+    return true;
+  } catch (error) {
+    try { context.restore(); } catch {}
+    console.warn("AIR-DROW stroke export renderer failed; trying the artwork snapshot.", error);
+    return false;
+  }
 }
 
 function drawVideoCover(context, video, width, height) {
@@ -271,13 +281,15 @@ export function createExporter({ getProject, getCanvasSize, drawStroke, getArtwo
     else if (!transparent) { context.fillStyle = getBackground?.() || "#07101b"; context.fillRect(0, 0, plan.width, plan.height); }
 
     const project = projectSnapshot();
-    // Raster output mirrors the actual artwork layer first. This avoids the
-    // Android edge case where a just-finished hand stroke is visible on screen
-    // but a separate renderer captures only the background. Vector formats
-    // continue to use source points below for editable SVG/PDF output.
-    const snapshotUsed = project.strokes.length > 0 && drawArtworkSnapshot(context, getArtworkCanvas?.(), plan);
-    if (!snapshotUsed) drawProjectStrokes(context, project, plan, drawStroke);
-    return { canvas: output, plan, cameraIncluded: Boolean(camera), snapshotUsed };
+    // Stored source points are rendered first. The artwork canvas remains a
+    // recovery-only snapshot if a custom brush renderer throws; it is never the
+    // primary source of truth for a download.
+    const strokeRendererUsed = project.strokes.length > 0 && drawProjectStrokes(context, project, plan, drawStroke);
+    let snapshotUsed = false;
+    if (!strokeRendererUsed && project.strokes.length > 0) {
+      snapshotUsed = drawArtworkSnapshot(context, getArtworkCanvas?.(), plan);
+    }
+    return { canvas: output, plan, cameraIncluded: Boolean(camera), snapshotUsed, strokeRendererUsed };
   }
 
   function buildThumbnail() {

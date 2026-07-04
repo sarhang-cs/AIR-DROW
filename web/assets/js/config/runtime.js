@@ -17,9 +17,9 @@ export const OLD_MIRROR_KEY = "airdraw.phase22.reload-mirror";
 // so this base URL intentionally has NO trailing slash.
 export const MEDIAPIPE_MODULE_URLS = [new URL("../../../vendor/mediapipe/vision_bundle.js", import.meta.url).href];
 export const MEDIAPIPE_WASM_URLS = [new URL("../../../vendor/mediapipe/wasm", import.meta.url).href];
-export const HAND_MODEL = new URL("../../../vendor/models/hand_landmarker.task?model=v780-hand-performance-stabilization", import.meta.url).href;
+export const HAND_MODEL = new URL("../../../vendor/models/hand_landmarker.task?model=v790-mobile-safety-final-qa", import.meta.url).href;
 
-export const APP_RELEASE = Object.freeze({ version: "7.8.0", buildId: "air-drow-v780-hand-performance-stabilization" });
+export const APP_RELEASE = Object.freeze({ version: "7.9.0", buildId: "air-drow-v790-mobile-safety-final-qa" });
 export const QUICK_START_KEY = "air-drow.quick-start.v1";
 export const LEGACY_QUICK_START_KEYS = Object.freeze(["air-drow.v756.quick-start.complete", "air-drow.v755.quick-start.complete", "air-drow.v754.quick-start.complete"]);
 
@@ -36,7 +36,7 @@ export function createDefaultSettings() {
     theme: "dark", skin: "violet", language: "ku", warmHandEngine: false, safePinch: true, cameraView: "board",
     // Safety-first hand defaults: guide visuals and shortcuts are opt-in. The
     // only supported hand shortcut is the guarded two-finger eraser toggle.
-    showHandGuide: false, gestureShortcuts: false, inputSafetyVersion: 3, apiUrl: "", brushStyle: "classic", symmetry: 1, symmetryMirror: false, shapeAssist: true,
+    showHandGuide: false, gestureShortcuts: false, inputSafetyVersion: 4, apiUrl: "", brushStyle: "classic", symmetry: 1, symmetryMirror: false, shapeAssist: true,
     shapeSnapMode: "auto", shapeIntent: "auto", shapeConfidence: 86, exportScale: 1, exportLayout: "fit", exportQuality: 92, exportTransparent: false, exportCameraComposite: false, replayDuration: 6,
     replayBrand: true, creatorName: "", creatorTagline: "", templatePack: "poster", performanceMode: "auto",
     handCalibration: { ...HAND_CALIBRATION_DEFAULT }, aiPreset: "poster", aiSize: "1024x1024", aiDirection: ""

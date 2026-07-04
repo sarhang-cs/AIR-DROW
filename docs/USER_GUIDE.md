@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 7.8.0 Hand Tracking & Performance Stabilization Edition
+> This guide applies to AIR-DROW 7.9.0 Mobile Safety & Final QA Edition
 
 ## Start a drawing
 
@@ -41,4 +41,9 @@ Open Camera first. When the live camera is visible, open **Settings → About Ap
 Your drawings and settings remain local unless you export, share or intentionally use optional AI creation. Camera video is not stored by AIR-DROW.
 
 
-> **v7.8.0:** Added high-resolution export, hand palette/eraser gestures, adaptive smoothing and local diagnostics.
+> **v7.9.0:** Added high-resolution export, hand palette/eraser gestures, adaptive smoothing and local diagnostics.
+
+
+### Download safety
+
+Hand tracking cannot start a download. Only a trusted physical activation of Save, Export or Share can begin a file action.
