@@ -9,30 +9,23 @@ function extended(points, mcp, pip, tip) { return angle(points[mcp], points[pip]
 function folded(points, mcp, pip, tip) { return angle(points[mcp], points[pip], points[tip]) < 125 || distance(points[tip], points[0]) < distance(points[pip], points[0]) * 1.06; }
 
 /**
- * Deliberately conservative non-drawing shortcuts. A closed fist is not an
- * action because the tracking continuity gate uses it as a safe stroke hold.
- * Two raised fingers toggle the eraser only after the shortcut dwell timer.
+ * A deliberately narrow hand shortcut recognizer. Export, share, clear and
+ * save are never mapped to a hand pose: a tracked hand can drift near the
+ * toolbar, and downloads must always require a real on-screen tap.
  */
 export function recognizeGestureShortcut(points, pinchRatio = 1) {
   if (!Array.isArray(points) || points.length < 21 || pinchRatio < .22) return "";
   const index = extended(points, 5, 6, 8);
   const middle = extended(points, 9, 10, 12);
-  const ring = extended(points, 13, 14, 16);
-  const pinky = extended(points, 17, 18, 20);
   const ringFolded = folded(points, 13, 14, 16);
   const pinkyFolded = folded(points, 17, 18, 20);
-  const thumbExtended = distance(points[4], points[2]) > distance(points[3], points[2]) * 1.14;
-
-  // Two fingers are the requested hand eraser gesture. It is tested before
-  // open-palm so the V sign is never mistaken for a save action.
-  if (index && middle && ringFolded && pinkyFolded) return "two-finger";
-  if (index && middle && ring && pinky) return "palm";
-  const thumbUp = thumbExtended && ringFolded && pinkyFolded && !index && !middle && points[4].y < points[2].y - .035;
-  if (thumbUp) return "thumb-up";
-  return "";
+  return index && middle && ringFolded && pinkyFolded ? "two-finger" : "";
 }
 
-export function createShortcutGate({ holdMs = 650, cooldownMs = 1500 } = {}) {
+/**
+ * The gate prevents noisy landmarks from toggling the hand eraser repeatedly.
+ */
+export function createShortcutGate({ holdMs = 700, cooldownMs = 1800 } = {}) {
   let active = "";
   let activeAt = 0;
   let lastTriggeredAt = 0;
@@ -49,8 +42,4 @@ export function createShortcutGate({ holdMs = 650, cooldownMs = 1500 } = {}) {
   };
 }
 
-export const SHORTCUT_LABELS = Object.freeze({
-  palm: "Save image",
-  "two-finger": "Eraser",
-  "thumb-up": "Export"
-});
+export const SHORTCUT_LABELS = Object.freeze({ "two-finger": "Eraser" });

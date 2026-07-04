@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 7.7.0 Export, Gesture & Reliability Edition
+> This guide applies to AIR-DROW 7.7.1 Critical Input & Export Recovery Edition
 
 ## Start a drawing
 
@@ -41,4 +41,4 @@ Open Camera first. When the live camera is visible, open **Settings → About Ap
 Your drawings and settings remain local unless you export, share or intentionally use optional AI creation. Camera video is not stored by AIR-DROW.
 
 
-> **v7.7.0:** Added high-resolution export, hand palette/eraser gestures, adaptive smoothing and local diagnostics.
+> **v7.7.1:** Added high-resolution export, hand palette/eraser gestures, adaptive smoothing and local diagnostics.

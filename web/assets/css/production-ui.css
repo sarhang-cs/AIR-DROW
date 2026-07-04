@@ -795,7 +795,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 :root.reduce-motion .hand-tutorial-card * { animation:none !important; }
 @media (max-width:390px) { .hand-tutorial-head { grid-template-columns:1fr; } .hand-tutorial-visual { max-width:190px; justify-self:center; } }
 
-/* ===== v7.7.0 Export, Gesture & Reliability ===== */
+/* ===== v7.7.1 Export, Gesture & Reliability ===== */
 /* One responsive source of truth: cards stay balanced on a phone and QR remains beside the creator profile. */
 .about-creator-card {
   display:grid;
@@ -935,7 +935,7 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 }
 
 
-/* v7.7.0 — top hand palette and local reliability controls.
+/* v7.7.1 — top hand palette and local reliability controls.
  * The palette is a real control surface: it sits above the canvas and is
  * explicitly blocked from pointer / hand drawing by app.js surface guards. */
 .hand-palette {
@@ -1007,4 +1007,48 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 @media (max-width: 390px) {
   .hand-palette { gap: 4px; }
   .hand-palette-color { width: 21px; height: 21px; flex-basis: 21px; }
+}
+
+
+/* v7.7.1 — critical input safety and Kurdish mobile typography. */
+.hand-palette[hidden] { display: none !important; }
+/* Palette, live HUD and camera state occupy distinct vertical bands. */
+@media (max-width: 560px) {
+  .hand-palette { top: calc(var(--safe-top) + 58px); z-index: 14; }
+  .live-hud { top: calc(var(--safe-top) + 98px); right: 14px; z-index: 13; }
+  .camera-indicator { top: calc(var(--safe-top) + 121px); right: 14px; z-index: 13; }
+}
+/* Keep hand indicators useful but quiet when a person intentionally enables them. */
+.hand-canvas { pointer-events: none !important; }
+
+html[lang="ku"] .settings-drawer,
+html[lang="ku"] .settings-drawer button,
+html[lang="ku"] .settings-drawer input,
+html[lang="ku"] .settings-drawer select {
+  font-family: "Noto Kufi Arabic", system-ui, sans-serif;
+  letter-spacing: 0;
+}
+html[lang="ku"] .settings-title { font-size: clamp(16px, 4.3vw, 19px); line-height: 1.7; }
+html[lang="ku"] .workspace-label { font-size: clamp(10px, 2.75vw, 12px); line-height: 1.65; }
+html[lang="ku"] .settings-section summary > span:not(.summary-icon) { font-size: clamp(12px, 3.25vw, 14px); line-height: 1.75; }
+html[lang="ku"] .workspace-caption,
+html[lang="ku"] .setting-line > span:first-child,
+html[lang="ku"] .range-row > span,
+html[lang="ku"] .text-setting > span { font-size: clamp(10px, 2.7vw, 12px); line-height: 1.95; }
+html[lang="ku"] .about-summary { font-size: clamp(11px, 3vw, 13px); line-height: 2.05; }
+html[lang="ku"] .about-grid span,
+html[lang="ku"] .about-creator-kicker,
+html[lang="ku"] .about-instagram-label,
+html[lang="ku"] .about-qr-copy small,
+html[lang="ku"] .about-qr-media > span { font-size: clamp(9px, 2.5vw, 10.5px); line-height: 1.9; }
+html[lang="ku"] .about-grid b,
+html[lang="ku"] .about-creator-name,
+html[lang="ku"] .about-qr-copy strong { font-size: clamp(11px, 3vw, 13px); line-height: 1.85; }
+/* The About information remains side-by-side but gains enough width for readable Kurdish text. */
+html[lang="ku"] .about-creator-card { grid-template-columns: minmax(0, 1fr) 126px; gap: 10px; }
+html[lang="ku"] .about-grid { gap: 10px; }
+html[lang="ku"] .about-grid div { min-height: 88px; padding: 11px; }
+@media (max-width: 370px) {
+  html[lang="ku"] .about-creator-card { grid-template-columns: minmax(0, 1fr) 108px; gap: 8px; }
+  html[lang="ku"] .about-grid div { min-height: 82px; padding: 9px; }
 }

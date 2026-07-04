@@ -1,6 +1,6 @@
 # ڕێنمایی بەکارهێنانی AIR-DROW
 
-> ئەم ڕێنماییە بۆ AIR-DROW 7.7.0 Export, Gesture & Reliability Edition
+> ئەم ڕێنماییە بۆ AIR-DROW 7.7.1 Critical Input & Export Recovery Edition
 
 ## دەستپێکردن بە کێشان
 
@@ -41,4 +41,4 @@ AIR-DROW تا خۆت دوگمەی کامێرا هەڵنەبژێریت، کامێ
 کێشان و ڕێکخستنەکانت ناوخۆیین، مەگەر خۆت export، share یان دروستکردنی AI هەڵبژێریت. ڤیدیۆی کامێرا لەلایەن AIR-DROW ـەوە پاشەکەوت ناکرێت.
 
 
-> **v7.7.0:** دەرکردنی کوالێتی بەرز، gesture ـی پالێت و سڕینەوە، smoothing ـی خۆکار و diagnostics ـی تایبەتی زیادکرا.
+> **v7.7.1:** دەرکردنی کوالێتی بەرز، gesture ـی پالێت و سڕینەوە، smoothing ـی خۆکار و diagnostics ـی تایبەتی زیادکرا.

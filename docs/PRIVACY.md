@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 7.7.0 Export, Gesture & Reliability Edition
+> This guide applies to AIR-DROW 7.7.1 Critical Input & Export Recovery Edition
 
 AIR-DROW is local-first.
 

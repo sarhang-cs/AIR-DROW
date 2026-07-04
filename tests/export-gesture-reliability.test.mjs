@@ -49,6 +49,10 @@ assert.equal(smoothStrokePoint(previous, { ...previous, time: 110 }, { smoothing
 
 assert.equal(recognizeGestureShortcut(twoFingerHand(), .45), "two-finger");
 assert.equal(SHORTCUT_LABELS["two-finger"], "Eraser");
+assert.equal(Object.keys(SHORTCUT_LABELS).length, 1);
+const raisedPalm = twoFingerHand();
+raisedPalm[16] = { x: .66, y: .20 }; raisedPalm[20] = { x: .77, y: .18 };
+assert.equal(recognizeGestureShortcut(raisedPalm, .45), "");
 const gate = createShortcutGate({ holdMs: 100, cooldownMs: 300 });
 assert.equal(gate.observe("two-finger", 1000), "");
 assert.equal(gate.observe("two-finger", 1099), "");
@@ -56,4 +60,4 @@ assert.equal(gate.observe("two-finger", 1100), "two-finger");
 assert.equal(gate.observe("two-finger", 1220), "");
 assert.equal(gate.observe("two-finger", 1401), "two-finger");
 
-console.log("Export, smoothing and hand-gesture QA passed.");
+console.log("Critical input, export planning, smoothing and safe hand-gesture QA passed.");

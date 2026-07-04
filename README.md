@@ -6,7 +6,7 @@
 
 ### A private drawing studio for touch, pen and hand
 
-**Export, Gesture & Reliability Edition · v7.7.0 · Created by Sarhang Salah**
+**Critical Input & Export Recovery Edition · v7.7.1 · Created by Sarhang Salah**
 
 [![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
@@ -90,7 +90,7 @@ For Android/Termux replacement, use [`termux/TERMUX_INSTALL.txt`](./termux/TERMU
 <div align="center">Made for ideas in motion · <strong>AIR-DROW</strong> · <a href="#top">Back to top</a></div>
 
 
-## v7.7.0 highlights
+## v7.7.1 highlights
 
 - **Export Studio:** PNG, JPG and WebP with 1×, 2× and 4× output, Fit/Fill/Stretch layouts, social presets and A4/A3 300 PPI layouts.
 - **Hand gesture controls:** hover an index finger over the top palette to select a color; hold up two fingers to toggle Hand Eraser. Palm quick-saves; thumb-up opens standard export.

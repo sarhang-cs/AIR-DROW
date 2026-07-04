@@ -204,6 +204,41 @@ function buildPdfBlob({ project, plan, background, transparent }) {
   return new Blob([pdf], { type: "application/pdf" });
 }
 
+/**
+ * Draw the visible artwork layer into an export plan. `drawCanvas` is kept
+ * separate from the hand guide and all HTML controls, so this path cannot
+ * accidentally export landmarks, the toolbar or an empty CSS background.
+ *
+ * The source canvas may be backed at device-pixel-ratio resolution. Supplying
+ * both source and destination rectangles normalises it back to logical canvas
+ * coordinates before Fit/Fill/Stretch is applied.
+ */
+function drawArtworkSnapshot(context, artwork, plan) {
+  if (!artwork || !Number(artwork.width) || !Number(artwork.height)) return false;
+  try {
+    context.save();
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = "high";
+    context.translate(plan.offsetX, plan.offsetY);
+    context.scale(plan.scaleX, plan.scaleY);
+    context.drawImage(artwork, 0, 0, artwork.width, artwork.height, 0, 0, plan.sourceWidth, plan.sourceHeight);
+    context.restore();
+    return true;
+  } catch (error) {
+    try { context.restore(); } catch {}
+    console.warn("AIR-DROW artwork snapshot failed; using stroke renderer.", error);
+    return false;
+  }
+}
+
+function drawProjectStrokes(context, project, plan, drawStroke) {
+  context.save();
+  context.translate(plan.offsetX, plan.offsetY);
+  context.scale(plan.scaleX, plan.scaleY);
+  for (const stroke of project.strokes || []) drawStroke(context, stroke, plan.sourceWidth, plan.sourceHeight);
+  context.restore();
+}
+
 function drawVideoCover(context, video, width, height) {
   const sourceWidth = Number(video?.videoWidth) || 0;
   const sourceHeight = Number(video?.videoHeight) || 0;
@@ -216,7 +251,7 @@ function drawVideoCover(context, video, width, height) {
   context.drawImage(video, sx, sy, sw, sh, 0, 0, width, height);
 }
 
-export function createExporter({ getProject, getCanvasSize, drawStroke, getBackground, getCameraFrame } = {}) {
+export function createExporter({ getProject, getCanvasSize, drawStroke, getArtworkCanvas, getBackground, getCameraFrame } = {}) {
   function projectSnapshot() {
     const project = getProject?.();
     if (!project || !Array.isArray(project.strokes)) throw new Error("The current project is unavailable");
@@ -235,12 +270,14 @@ export function createExporter({ getProject, getCanvasSize, drawStroke, getBackg
     if (camera) drawVideoCover(context, camera, plan.width, plan.height);
     else if (!transparent) { context.fillStyle = getBackground?.() || "#07101b"; context.fillRect(0, 0, plan.width, plan.height); }
 
-    context.save();
-    context.translate(plan.offsetX, plan.offsetY);
-    context.scale(plan.scaleX, plan.scaleY);
-    for (const stroke of projectSnapshot().strokes) drawStroke(context, stroke, plan.sourceWidth, plan.sourceHeight);
-    context.restore();
-    return { canvas: output, plan, cameraIncluded: Boolean(camera) };
+    const project = projectSnapshot();
+    // Raster output mirrors the actual artwork layer first. This avoids the
+    // Android edge case where a just-finished hand stroke is visible on screen
+    // but a separate renderer captures only the background. Vector formats
+    // continue to use source points below for editable SVG/PDF output.
+    const snapshotUsed = project.strokes.length > 0 && drawArtworkSnapshot(context, getArtworkCanvas?.(), plan);
+    if (!snapshotUsed) drawProjectStrokes(context, project, plan, drawStroke);
+    return { canvas: output, plan, cameraIncluded: Boolean(camera), snapshotUsed };
   }
 
   function buildThumbnail() {

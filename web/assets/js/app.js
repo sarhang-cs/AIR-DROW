@@ -477,9 +477,18 @@ function localDate(value) {
 
 function projectFromStorage(value) {
   if (!value || typeof value !== "object" || !Array.isArray(value.strokes)) return null;
+  const settings = { ...defaults, ...(value.settings || {}) };
+  // Existing pre-v7.7.1 projects may still contain unsafe gesture defaults.
+  // Migrate once: people can re-enable the guide or eraser gesture later,
+  // but no restored project can trigger an unexpected export/download.
+  if (Number(settings.inputSafetyVersion || 0) < 2) {
+    settings.gestureShortcuts = false;
+    settings.showHandGuide = false;
+    settings.inputSafetyVersion = 2;
+  }
   return {
     strokes: value.strokes,
-    settings: { ...defaults, ...(value.settings || {}) },
+    settings,
     view: value.view && typeof value.view === "object" ? value.view : { x: 0, y: 0, scale: 1 },
     title: typeof value.title === "string" ? value.title.slice(0, 72) : "Untitled"
   };
@@ -1582,6 +1591,14 @@ function updateModeButtons() {
   ui.manual.classList.toggle("active", state.mode === "manual");
   ui.eraser.classList.toggle("eraser-active", eraserActive);
   ui.handMode.classList.toggle("active", handActive);
+  // The top palette is only a hand-drawing aid. Hiding it outside a live hand
+  // session keeps normal drawing clear and removes another accidental target.
+  if (ui.handPalette) {
+    const visible = handActive && Boolean(state.stream);
+    ui.handPalette.hidden = !visible;
+    ui.handPalette.setAttribute("aria-hidden", String(!visible));
+    if (!visible) clearHandPaletteHover();
+  }
   const labels = { manual: t("manual", "Manual"), eraser: t("eraser", "Eraser"), hand: t("handMode", "Hand"), "hand-eraser": t("handEraser", "Hand eraser") };
   setText(ui.modeStatus, labels[state.mode] || t("manual", "Manual"));
 }
@@ -1859,8 +1876,11 @@ function clearHandPaletteHover() {
   ui.handPaletteColors?.forEach(button => button.classList.remove("is-hovered"));
 }
 
-function updateHandPaletteHover(point, now = performance.now()) {
-  if (!ui.handPalette || !point) { clearHandPaletteHover(); return false; }
+function updateHandPaletteHover(point, now = performance.now(), { allowSelect = false } = {}) {
+  if (!ui.handPalette || ui.handPalette.hidden || !point) {
+    clearHandPaletteHover();
+    return { over: false, selected: false };
+  }
   const studioRect = ui.studio.getBoundingClientRect();
   const screen = mappedHandPointToScreen(point);
   const clientX = studioRect.left + screen.x;
@@ -1870,7 +1890,17 @@ function updateHandPaletteHover(point, now = performance.now()) {
     return clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
   });
   const color = button?.dataset?.color || "";
-  if (!color) { clearHandPaletteHover(); return false; }
+  if (!color) {
+    clearHandPaletteHover();
+    return { over: false, selected: false };
+  }
+
+  // Palette is an explicit safe zone: even an active pinch may never draw
+  // through it. Selection itself only occurs while no stroke/pinch is active.
+  if (!allowSelect) {
+    clearHandPaletteHover();
+    return { over: true, selected: false };
+  }
   if (color !== state.paletteHoverColor) {
     state.paletteHoverColor = color;
     state.paletteHoverAt = now;
@@ -1878,12 +1908,15 @@ function updateHandPaletteHover(point, now = performance.now()) {
   }
   ui.handPalette.classList.add("is-hovering");
   (ui.handPaletteColors || []).forEach(candidate => candidate.classList.toggle("is-hovered", candidate === button));
-  // Dwell prevents a quick pass over the overlay from changing the brush.
-  if (now - state.paletteHoverAt >= 190) {
-    const changed = setDrawingColor(color, { save: true, announce: true });
-    state.paletteHoverAt = now + (changed ? 620 : 160);
+
+  // A longer dwell prevents a moving index finger from changing colors while
+  // the person is only passing below the toolbar.
+  let selected = false;
+  if (now - state.paletteHoverAt >= 520) {
+    selected = setDrawingColor(color, { save: true, announce: true });
+    state.paletteHoverAt = now + (selected ? 760 : 260);
   }
-  return true;
+  return { over: true, selected };
 }
 
 function setMode(next) {
@@ -2177,13 +2210,11 @@ function processGestureShortcut(landmarks, pinchRatio, now) {
   const name = recognizeGestureShortcut(landmarks, pinchRatio);
   const action = state.shortcutGate.observe(name, now);
   if (ui.shortcutStatus) setText(ui.shortcutStatus, name ? `${SHORTCUT_LABELS[name] || name}…` : t("shortcutOff", "Shortcuts are off"));
-  if (!action) return;
-  if (action === "palm") { void quickSaveCurrent(); }
-  if (action === "thumb-up") { void exportCurrent(); toast(t("shortcutExport", "Export")); }
-  if (action === "two-finger") {
-    setMode(state.mode === "hand-eraser" ? "hand" : "eraser");
-    toast(t("shortcutEraser", "Eraser"));
-  }
+  if (action !== "two-finger") return;
+  // Save, export, share and clear intentionally have no hand gesture. File
+  // downloads must always originate from a physical on-screen button tap.
+  setMode(state.mode === "hand-eraser" ? "hand" : "eraser");
+  toast(t("shortcutEraser", "Eraser"));
 }
 
 function holdOrFinishHandStroke({ now, rule, landmarksPresent, jumped = false, point = null, fist = false } = {}) {
@@ -2350,10 +2381,12 @@ function handFrame() {
     const pinchConfirmed = pinch.active;
     const releaseConfirmed = pinch.released;
     const stableHand = assessment.usable;
-    const paletteIntercepted = updateHandPaletteHover(state.handPoint, now);
-    if (paletteIntercepted) {
-      // Do not draw through the overlay: while a finger is inside the palette
-      // the UI owns the interaction and the pinch gate is reset safely.
+    const paletteState = updateHandPaletteHover(state.handPoint, now, {
+      allowSelect: !state.handDrawing && !pinch.active && !pinch.started && !pinchConfirmed
+    });
+    if (paletteState.over) {
+      // Do not draw through the overlay. The index finger can enter this safe
+      // zone without any toolbar button receiving a hand-generated click.
       if (state.handDrawing) finishHandStroke();
       state.pinchGate.reset();
       state.pinchOnFrames = 0;
@@ -2446,13 +2479,13 @@ function handFrame() {
   }
 }
 
-function drawHandSkeleton(points, opacity = 1) {
+function drawHandSkeleton(points, opacity = .38) {
   const { width, height } = canvasMetrics();
   handCtx.clearRect(0, 0, width, height);
   const map = point => normalizedToCanvasPoint(point);
   const links = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[0,9],[9,10],[10,11],[11,12],[0,13],[13,14],[14,15],[15,16],[0,17],[17,18],[18,19],[19,20],[5,9],[9,13],[13,17]];
   handCtx.save();
-  handCtx.globalAlpha = Math.max(.18, Math.min(1, Number(opacity) || 1));
+  handCtx.globalAlpha = Math.max(.10, Math.min(.42, Number(opacity) || .38));
   const paintLinks = (pairs, color, width = 1.45) => {
     handCtx.strokeStyle = color;
     handCtx.lineWidth = width;
@@ -3013,6 +3046,9 @@ function ensureExporter() {
     getProject: serializeProject,
     getCanvasSize: () => { const { width, height } = canvasMetrics(); return { width, height }; },
     drawStroke,
+    // The draw canvas contains only finished artwork; hand landmarks/UI live
+    // on separate layers. It is therefore the most reliable raster source.
+    getArtworkCanvas: () => ui.draw,
     getBackground: () => getComputedStyle(document.documentElement).getPropertyValue("--bg").trim() || "#07101b",
     getCameraFrame: () => state.stream && ui.camera?.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA ? ui.camera : null
   });
@@ -3069,6 +3105,10 @@ function setExportStatus(message, stateName = "ready") {
 
 async function prepareProjectOutput() {
   finishStroke();
+  // Export snapshots read only the artwork canvas, never the hand guide/UI.
+  // Paint synchronously after finishing a stroke so Android cannot capture a
+  // stale empty frame while its next animation frame is still pending.
+  render({ immediate: true });
   projectNameFromInput();
   const saved = await flushProjectSave({ reason: "export" });
   if (!saved?.saved) throw new Error("Project could not be saved before export");

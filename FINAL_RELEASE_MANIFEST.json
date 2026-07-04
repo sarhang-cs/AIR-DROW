@@ -1,7 +1,7 @@
 {
-  "name": "AIR-DROW Export, Gesture & Reliability Edition",
-  "version": "7.7.0",
-  "buildId": "air-drow-v770-export-gesture-reliability",
+  "name": "AIR-DROW Critical Input & Export Recovery Edition",
+  "version": "7.7.1",
+  "buildId": "air-drow-v771-critical-input-export-recovery",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -29,16 +29,18 @@
   },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v770-export-gesture-reliability.sh",
-  "release": "Export, Gesture & Reliability Edition",
-  "assetRevision": "770",
-  "releasedAt": "2026-07-04T12:00:00Z",
-  "releaseName": "AIR-DROW Export, Gesture & Reliability Edition",
-  "summary": "A clean production release for high-resolution export, social and print layouts, protected hand color selection, two-finger eraser control, smoothing and private recovery diagnostics.",
+  "installer": "termux/replace-with-v771-critical-input-export-recovery.sh",
+  "release": "Critical Input & Export Recovery Edition",
+  "assetRevision": "771",
+  "releasedAt": "2026-07-04T13:00:00Z",
+  "releaseName": "AIR-DROW Critical Input & Export Recovery Edition",
+  "summary": "A stability-focused release: physical-tap-only downloads, visible-artwork raster export recovery, safer hand controls, and polished Kurdish mobile typography.",
   "releaseChecks": [
     "Version, cache and build identifiers are synchronized across source, manifest and service worker.",
-    "Export plans preserve artwork geometry across Fit, Fill and Stretch layouts and exercise scale, smoothing and gesture QA in Node.",
-    "Toolbar, palette, workspace and settings are explicit protected input surfaces so UI actions never start a canvas stroke behind them.",
-    "Camera and MediaPipe remain optional and local; diagnostics excludes sensitive artwork/camera information."
-  ]
+    "Hand gestures never dispatch save or export actions; two raised fingers remain a guarded eraser toggle only.",
+    "PNG, JPG and WebP use a protected artwork-only canvas snapshot so drawn strokes are present in the exported file.",
+    "Toolbar, palette, workspace and settings remain explicit protected input surfaces; Kurdish mobile typography has dedicated RTL size tokens."
+  ],
+  "stage": "critical-input-export-recovery",
+  "phase": 14
 }

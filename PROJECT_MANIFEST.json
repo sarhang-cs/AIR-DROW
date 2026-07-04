@@ -1,8 +1,8 @@
 {
   "project": "AIR-DROW",
-  "version": "7.7.0",
-  "buildId": "air-drow-v770-export-gesture-reliability",
-  "release": "Export, Gesture & Reliability Edition",
+  "version": "7.7.1",
+  "buildId": "air-drow-v771-critical-input-export-recovery",
+  "release": "Critical Input & Export Recovery Edition",
   "experience": [
     "Touch drawing",
     "Pen drawing",
@@ -23,9 +23,11 @@
     "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Export, Gesture & Reliability Edition",
-  "releasedAt": "2026-07-04T12:00:00Z",
-  "summary": "High-resolution/print-aware export, protected hand color palette, two-finger eraser, local diagnostics and resilient input recovery.",
-  "stage": "export-gesture-reliability",
-  "phase": 13
+  "name": "AIR-DROW Critical Input & Export Recovery Edition",
+  "releasedAt": "2026-07-04T13:00:00Z",
+  "summary": "A stability-focused release: physical-tap-only downloads, visible-artwork raster export recovery, safer hand controls, and polished Kurdish mobile typography.",
+  "stage": "critical-input-export-recovery",
+  "phase": 14,
+  "assetRevision": "771",
+  "releaseName": "AIR-DROW Critical Input & Export Recovery Edition"
 }
