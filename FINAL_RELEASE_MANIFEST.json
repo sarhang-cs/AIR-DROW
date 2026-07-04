@@ -1,7 +1,7 @@
 {
   "name": "AIR-DROW Interaction & Vision Tutorial Edition",
-  "version": "7.6.1",
-  "buildId": "air-drow-v761-interaction-vision-tutorial",
+  "version": "7.6.2",
+  "buildId": "air-drow-v762-layout-input-integrity",
   "completePackage": true,
   "includedRuntimeAssets": [
     "web/vendor/models/hand_landmarker.task",
@@ -23,13 +23,22 @@
   ],
   "developerProfile": {
     "name": "Sarhang Salah",
-    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
+    "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/",
     "qr": "web/assets/brand/instagram-sarhang-io-qr.svg"
   },
   "includedIconPackage": "web/assets/icons/USER_ICON_PACKAGE.json",
   "iconReplacement": "The complete local icon package remains installed. Scanner status marks use resilient inline vectors for Android, while the editable local icon package remains available for future artwork replacement.",
-  "installer": "termux/replace-with-v761-interaction-vision-tutorial.sh",
+  "installer": "termux/replace-with-v762-layout-input-integrity.sh",
   "release": "Interaction & Vision Tutorial Edition",
-  "assetRevision": "760"
+  "assetRevision": "762",
+  "releasedAt": "2026-07-04T03:16:00Z",
+  "releaseName": "AIR-DROW Layout & Input Integrity Edition",
+  "summary": "A clean production release focused on responsive About cards, canvas-input isolation, verified bilingual copy, and refreshed GitHub covers.",
+  "releaseChecks": [
+    "Version and build identifiers are synchronized across source, web manifests and service worker.",
+    "Toolbar and workspace controls are explicitly isolated from the canvas pointer pipeline.",
+    "About cards use stable responsive columns with QR and creator information kept side by side.",
+    "README cover visuals are shipped locally and validated by the production gate."
+  ]
 }

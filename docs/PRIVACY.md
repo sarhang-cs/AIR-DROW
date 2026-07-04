@@ -1,6 +1,6 @@
 # AIR-DROW Privacy Guide
 
-> This guide applies to AIR-DROW 7.6.1 Interaction & Vision Tutorial Edition
+> This guide applies to AIR-DROW 7.6.2 Layout & Input Integrity Edition
 
 AIR-DROW is local-first.
 

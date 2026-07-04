@@ -214,6 +214,20 @@ function hasBlockingOverlay() {
   );
 }
 
+function isStudioControlSurface(target) {
+  const element = target instanceof Element ? target : target?.parentElement;
+  return Boolean(element?.closest?.('[data-airdrow-surface], .toolbar, .workspace-dock, .settings-drawer, .drawer-backdrop'));
+}
+
+function finishActiveCanvasInput() {
+  if (!state.currentStroke && !state.pointers.size && !state.erasingGesture) return;
+  state.pointers.clear();
+  state.gesture = null;
+  state.erasingGesture = false;
+  if (state.currentStroke) finishStroke();
+  else if (state.mode === "eraser") clearHandCanvas();
+}
+
 function syncBodyScroll() {
   const blocked = hasBlockingOverlay() || (ui.app.classList.contains("settings-open") && isTouchLayout());
   document.body.style.overflow = blocked ? "hidden" : "";
@@ -1207,7 +1221,9 @@ function updateGesture() {
 
 function bindPointerEvents() {
   ui.studio.addEventListener("pointerdown", event => {
-    if (event.target.closest?.(".toolbar, .settings-drawer")) return;
+    // Controls live inside the studio on touch layouts. They are never drawing targets.
+    // In particular, workspace-dock taps must not begin a hidden stroke before opening a panel.
+    if (isStudioControlSurface(event.target)) return;
     if (event.pointerType === "mouse" && event.button !== 0) return;
     ui.studio.setPointerCapture?.(event.pointerId);
     const point = pointFromEvent(event);
@@ -3222,6 +3238,7 @@ function setWorkspace(name, { resetPanels = true } = {}) {
 function openSettings(forceOpen = true, workspace = null) {
   if (workspace) setWorkspace(workspace);
   const open = typeof forceOpen === "boolean" ? forceOpen : !ui.app.classList.contains("settings-open");
+  if (open) finishActiveCanvasInput();
   ui.app.classList.toggle("settings-open", open);
   ui.drawer.setAttribute("aria-hidden", String(!open));
   ui.backdrop.hidden = !open;
@@ -3289,6 +3306,20 @@ function isEditableControlTarget(target) {
   const element = target instanceof Element ? target : target?.parentElement;
   if (!(element instanceof Element)) return false;
   return Boolean(element.closest('input:not([type="range"]):not([type="checkbox"]):not([type="color"]):not([type="file"]), textarea, select, [contenteditable="true"], .text-setting, .editable-control'));
+}
+
+function bindStudioSurfaceGuards() {
+  const surfaces = [...document.querySelectorAll("[data-airdrow-surface]")];
+  const stopCanvasRouting = event => {
+    if (event.type === "pointerdown" || event.type === "touchstart") finishActiveCanvasInput();
+    // Keep button clicks, focus and native form controls intact; only stop the route to the studio canvas listener.
+    event.stopPropagation();
+  };
+  for (const surface of surfaces) {
+    for (const type of ["pointerdown", "pointermove", "pointerup", "pointercancel", "touchstart", "touchmove", "touchend", "touchcancel"]) {
+      surface.addEventListener(type, stopCanvasRouting, { passive: true });
+    }
+  }
 }
 
 function bindMobileInteractionGuards() {
@@ -3696,6 +3727,7 @@ async function boot() {
   setWorkspace(state.workspace, { resetPanels: false });
   loadingManager.setBoot({ progress: 20, label: t("bootCanvas", "Setting up canvas…") });
   bindControls();
+  bindStudioSurfaceGuards();
   bindMobileInteractionGuards();
   bindImmediateTextEntry();
   bindPointerEvents();

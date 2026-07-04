@@ -587,7 +587,7 @@ textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in
 }
 
 
-/* v7.6.1 finish pass: preserve each skin's personality while keeping light-mode
+/* final icon contrast pass: preserve each skin's personality while keeping light-mode
    cards, tool icons and muted labels comfortably legible on mobile OLED/LCD. */
 :root[data-theme="light"] .settings-section,
 :root[data-theme="light"] .hand-calibration-card,

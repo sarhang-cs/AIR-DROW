@@ -6,7 +6,7 @@
 
 ### A private drawing studio for touch, pen and hand
 
-**Interaction & Vision Tutorial Edition · v7.6.1 · Created by Sarhang Salah**
+**Layout & Input Integrity Edition · v7.6.2 · Created by Sarhang Salah**
 
 [![Private by default](https://img.shields.io/badge/Privacy-On--device-7C5CFF?style=for-the-badge)](./docs/PRIVACY.md)
 [![Draw methods](https://img.shields.io/badge/Draw-Touch%20%7C%20Pen%20%7C%20Hand-18C8F5?style=for-the-badge)](#ways-to-draw)
@@ -21,8 +21,8 @@
 
 <table>
   <tr>
-    <td width="50%" align="center"><img src="./docs/screenshots/air-drow-studio-en.png" alt="AIR-DROW drawing studio in English dark mode" width="100%" /><br /><sub>Drawing studio · English · Obsidian dark</sub></td>
-    <td width="50%" align="center"><img src="./docs/screenshots/air-drow-hand-en.png" alt="AIR-DROW hand tracking readiness in English dark mode" width="100%" /><br /><sub>Hand tracking readiness · English · Dark</sub></td>
+    <td width="50%" align="center"><img src="./docs/screenshots/air-drow-studio-en.png" alt="AIR-DROW studio promotional cover built from a genuine app screen" width="100%" /><br /><sub>Studio cover · Touch, pen & local projects</sub></td>
+    <td width="50%" align="center"><img src="./docs/screenshots/air-drow-hand-en.png" alt="AIR-DROW hand-drawing tutorial cover built from a genuine app screen" width="100%" /><br /><sub>Tutorial cover · Camera opens only by choice</sub></td>
   </tr>
 </table>
 
@@ -90,4 +90,4 @@ For Android/Termux replacement, use [`termux/TERMUX_INSTALL.txt`](./termux/TERMU
 <div align="center">Made for ideas in motion · <strong>AIR-DROW</strong> · <a href="#top">Back to top</a></div>
 
 
-> **v7.6.1:** Android keyboard reliability, high-contrast live-camera controls, and an offline animated hand-position tutorial were added.
+> **v7.6.2:** The About App layout now uses compact side-by-side cards, protected control surfaces prevent accidental canvas strokes behind UI, and the GitHub covers were refreshed from genuine app screens.

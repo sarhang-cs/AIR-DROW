@@ -18,7 +18,7 @@
 }
 
 * { box-sizing: border-box; }
-/* Mobile interaction contract: AIR-DROW is a native-feeling drawing studio, so
+/* Mobile input and interaction contract: AIR-DROW is a native-feeling drawing studio, so
    Android text-selection callouts and browser tap flashes must never attach to
    controls, cards or labels. Real text-entry fields remain editable below. */
 *, *::before, *::after {
@@ -1813,7 +1813,7 @@ html[data-airdrow-selection-lock="true"] .boot-card {
 }
 
 
-/* v7.6.1 mobile text-entry contract: native controls keep the Android keyboard
+/* mobile text-entry contract: native controls keep the Android keyboard
    on the first tap. Static AIR-DROW copy remains protected by the selection lock. */
 :root { --airdrow-editor-viewport-height: 100dvh; }
 .text-setting, .text-setting input, .ai-studio-section textarea, #apiUrlInput { pointer-events: auto !important; }
@@ -1851,7 +1851,7 @@ html.airdrow-editor-active .settings-drawer {
 :root.reduce-motion .hand-calibration-overlay .hand-calibration-sheet { transition: none !important; }
 
 
-/* v7.6.1: live-camera controls keep a deliberate contrast pair on white themes. */
+/* release camera controls keep a deliberate contrast pair on white themes. */
 :root[data-theme="light"] .toolbar .tool-button.camera-live {
   color: var(--theme-icon-ink, var(--accent-ink)) !important;
   background: linear-gradient(145deg, color-mix(in srgb, var(--panel-solid) 72%, var(--accent-soft)), color-mix(in srgb, var(--panel) 88%, var(--accent-soft))) !important;
@@ -1862,7 +1862,7 @@ html.airdrow-editor-active .settings-drawer {
 :root[data-theme="light"] .toolbar .tool-button.camera-live .toolbar-icon svg { color: currentColor !important; stroke: currentColor !important; }
 
 
-/* v7.6.1 Android keyboard final guard: a text entry owns the drawer until
+/* Android keyboard final guard: a text entry owns the drawer until
    the native focus transition has settled; no render is allowed mid-transition. */
 html.airdrow-editor-active .settings-scroll {
   scroll-behavior: auto !important;
@@ -1897,5 +1897,5 @@ html.airdrow-editor-active textarea {
 }
 
 
-/* v7.6.2 Android text-entry follow-up: let the browser own editable taps fully. */
+/* Android text-entry follow-up: let the browser own editable taps fully. */
 .text-setting input, .ai-studio-section textarea, #apiUrlInput, input[type="text"], input[type="url"], textarea, select { touch-action: auto !important; -webkit-user-modify: read-write-plaintext-only; }

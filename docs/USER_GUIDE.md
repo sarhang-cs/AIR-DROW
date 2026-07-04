@@ -1,6 +1,6 @@
 # AIR-DROW User Guide
 
-> This guide applies to AIR-DROW 7.6.1 Interaction & Vision Tutorial Edition
+> This guide applies to AIR-DROW 7.6.2 Layout & Input Integrity Edition
 
 ## Start a drawing
 
@@ -40,4 +40,4 @@ Open Camera first. When the live camera is visible, open **Settings → About Ap
 Your drawings and settings remain local unless you export, share or intentionally use optional AI creation. Camera video is not stored by AIR-DROW.
 
 
-> **v7.6.1:** Android keyboard reliability, high-contrast live-camera controls, and an offline animated hand-position tutorial were added.
+> **v7.6.2:** The About App layout now uses compact side-by-side cards, protected control surfaces prevent accidental canvas strokes behind UI, and the GitHub covers were refreshed from genuine app screens.

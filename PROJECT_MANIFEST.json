@@ -1,7 +1,7 @@
 {
   "project": "AIR-DROW",
-  "version": "7.6.1",
-  "buildId": "air-drow-v761-interaction-vision-tutorial",
+  "version": "7.6.2",
+  "buildId": "air-drow-v762-layout-input-integrity",
   "release": "Interaction & Vision Tutorial Edition",
   "experience": [
     "Touch drawing",
@@ -12,7 +12,7 @@
     "Private on-device preferences"
   ],
   "languages": [
-    "Kurd\u00ee (Sorani)",
+    "Kurdî (Sorani)",
     "English"
   ],
   "privacy": "Artwork, projects and preferences stay on the device unless the person using AIR-DROW explicitly exports, shares or starts an optional AI creation.",
@@ -20,8 +20,12 @@
   "support": "Use Settings > About App to review app readiness, hand drawing readiness, language, release information and developer profile.",
   "developer": {
     "name": "Sarhang Salah",
-    "kurdishName": "\u0633\u06d5\u0631\u0647\u06d5\u0646\u06af \u0633\u0644\u0627\u062d",
+    "kurdishName": "سەرهەنگ سلاح",
     "instagram": "https://www.instagram.com/sarhang.io/"
   },
-  "name": "AIR-DROW Interaction & Vision Tutorial Edition"
+  "name": "AIR-DROW Interaction & Vision Tutorial Edition",
+  "releasedAt": "2026-07-04T03:16:00Z",
+  "summary": "AIR-DROW Layout & Input Integrity Edition: compact responsive About profile, protected control surfaces, bilingual UI consistency and refreshed GitHub documentation.",
+  "stage": "layout-input-integrity",
+  "phase": 12
 }

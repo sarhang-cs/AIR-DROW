@@ -1,7 +1,8 @@
-AIR-DROW v7.6.1 — Final Clean Delivery
+AIR-DROW v7.6.2 — Layout & Input Integrity
 
-1. Put AIR-DROW_v7.6.1_FINAL_CLEAN_DELIVERY.zip in /sdcard/Download
-2. Run the one-line Termux command supplied with the release.
-3. The installer keeps .git, creates a rollback backup, installs exact dependencies, runs npm run vercel:build, then commits and pushes only after every verification passes.
+1. Put AIR-DROW_v7.6.2_LAYOUT_INPUT_INTEGRITY.zip in /sdcard/Download
+2. Copy the full Termux command from the delivery message.
+3. It removes the old AIR-DROW repository checkout, extracts this complete archive, validates it, commits it and pushes main.
+4. Vercel builds automatically from the pushed main branch.
 
-The source package intentionally excludes node_modules and public. Vercel/Termux regenerate production output from web/ during the verified build.
+The command intentionally replaces the old source tree so stale styles and old release identifiers cannot remain.

@@ -1,8 +1,8 @@
 {
   "package": "AIR-DROW Local Icon Package",
   "source": "web.zip / web/assets/icons",
-  "version": "7.6.1",
-  "buildId": "air-drow-v761-interaction-vision-tutorial",
+  "version": "7.6.2",
+  "buildId": "air-drow-v762-layout-input-integrity",
   "replacementPolicy": "The previous icon tree was removed before this complete user-supplied icon tree was copied.",
   "files": [
     {

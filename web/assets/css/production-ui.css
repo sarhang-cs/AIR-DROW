@@ -1,5 +1,5 @@
 /* AIR-DROW production UI system
- * Consolidated in v7.6.1 so mobile layout, RTL/LTR behavior, brand treatment
+ * Consolidated for production so mobile layout, RTL/LTR behavior, brand treatment
  * and control fixes have one ordered source of truth. Keep structural styles
  * in app.css, visual-system.css, icon-system.css and drawer-layout.css.
  */
@@ -758,78 +758,10 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
   .settings-section .setting-body { padding-inline: 18px !important; }
 }
 
-
-/* Final developer profile: stable, high-contrast in every AIR-DROW palette. */
-.about-creator-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 126px;
-  align-items: center;
-  gap: 14px;
-  margin-top: 12px;
-  padding: 13px;
-  border: 1px solid var(--ui-hairline);
-  border-radius: 17px;
-  background:
-    linear-gradient(132deg, color-mix(in srgb, var(--accent-soft) 66%, transparent), transparent 58%),
-    color-mix(in srgb, var(--panel-2) 82%, transparent);
-  box-shadow: inset 0 1px 0 var(--glass-highlight);
-}
-.about-creator-copy { min-width: 0; display: grid; gap: 4px; }
-.about-creator-kicker { color: var(--muted); font-size: 10px; line-height: 1.45; }
-.about-creator-name { color: var(--text); font-size: 14px; line-height: 1.42; }
-.about-instagram-link {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: baseline;
-  column-gap: 7px;
-  row-gap: 2px;
-  margin-top: 5px;
-  padding: 8px 9px;
-  border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--line-soft));
-  border-radius: 12px;
-  color: var(--text);
-  background: color-mix(in srgb, var(--panel-solid) 74%, transparent);
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.about-instagram-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-.about-instagram-link:hover { border-color: color-mix(in srgb, var(--accent) 58%, var(--line)); }
-.about-instagram-label { color: var(--muted); font-size: 10px; }
-.about-instagram-link b { color: var(--accent); font-size: 12px; }
-.about-instagram-note { grid-column: 1 / -1; color: var(--muted); font-size: 9px; line-height: 1.35; }
-.about-qr-link {
-  display: grid;
-  justify-items: center;
-  gap: 5px;
-  color: var(--muted);
-  font-size: 9px;
-  line-height: 1.25;
-  text-align: center;
-  text-decoration: none;
-  -webkit-tap-highlight-color: transparent;
-}
-.about-qr-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 14px; }
-.about-qr-link img {
-  display: block;
-  width: 112px;
-  height: 112px;
-  padding: 7px;
-  border: 1px solid color-mix(in srgb, var(--accent) 22%, var(--line-soft));
-  border-radius: 15px;
-  background: #fff;
-  box-shadow: 0 7px 17px color-mix(in srgb, var(--skin-shadow) 24%, transparent);
-}
-@media (max-width: 390px) {
-  .about-creator-card { grid-template-columns: 1fr; }
-  .about-qr-link { justify-self: start; grid-template-columns: 62px 1fr; text-align: start; align-items: center; }
-  .about-qr-link img { width: 62px; height: 62px; padding: 4px; grid-row: 1 / span 2; }
-}
-
-
-/* v7.6.1 hand tutorial and developer QR presentation. Native SVG/CSS keeps this
-   fully offline; no third-party animation player or remote asset is required. */
+/* Offline hand-position tutorial remains self-contained and works without a remote animation runtime. */
 .hand-tutorial-card {
-  display:grid; gap:12px; margin:12px 0; padding:13px; border:1px solid color-mix(in srgb,var(--accent) 34%,var(--ui-hairline)); border-radius:18px;
+  display:grid; gap:12px; margin:12px 0; padding:13px;
+  border:1px solid color-mix(in srgb,var(--accent) 34%,var(--ui-hairline)); border-radius:18px;
   background:linear-gradient(140deg,color-mix(in srgb,var(--accent-soft) 62%,transparent),transparent 62%),color-mix(in srgb,var(--panel-2) 88%,transparent);
   box-shadow:inset 0 1px 0 var(--glass-highlight);
 }
@@ -863,95 +795,142 @@ html[dir="rtl"] .about-sub { text-align: right !important; }
 :root.reduce-motion .hand-tutorial-card * { animation:none !important; }
 @media (max-width:390px) { .hand-tutorial-head { grid-template-columns:1fr; } .hand-tutorial-visual { max-width:190px; justify-self:center; } }
 
-.about-creator-card { grid-template-columns:minmax(0,1fr) 138px; align-items:stretch; }
-.about-creator-copy { align-content:center; }
-.about-creator-kicker { color:var(--accent); font-weight:900; letter-spacing:.025em; }
-.about-creator-name { font-size:15px; letter-spacing:.005em; }
-.about-qr-link { display:grid; grid-template-columns:1fr; place-items:center; align-content:center; min-height:132px; padding:8px; border:1px solid color-mix(in srgb,var(--accent) 28%,var(--line)); border-radius:16px; background:linear-gradient(145deg,color-mix(in srgb,var(--panel-solid) 84%,var(--accent-soft)),var(--panel-solid)); box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 8px 18px color-mix(in srgb,var(--skin-shadow) 22%,transparent); }
-.about-qr-link img { width:94px; height:94px; padding:6px; border-radius:12px; box-shadow:none; }
-.about-qr-link span { max-width:112px; color:var(--muted); font-size:8.5px; line-height:1.35; }
-@media (max-width:390px) { .about-creator-card { grid-template-columns:1fr; } .about-qr-link { grid-template-columns:70px minmax(0,1fr); justify-items:start; min-height:0; text-align:start; } .about-qr-link img { width:70px; height:70px; grid-row:1 / span 2; } }
-
-
-/* Final About profile composition: profile text and scan action read as one glass unit. */
+/* ===== v7.6.2 About layout and canvas-input integrity ===== */
+/* One responsive source of truth: cards stay balanced on a phone and QR remains beside the creator profile. */
 .about-creator-card {
-  border-color: color-mix(in srgb, var(--accent) 34%, var(--ui-hairline));
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) 126px;
+  gap:10px;
+  align-items:stretch;
+  margin-top:10px;
+  padding:10px;
+  border:1px solid color-mix(in srgb, var(--accent) 34%, var(--line));
+  border-radius:18px;
+  background:linear-gradient(145deg, color-mix(in srgb, var(--panel-2) 88%, transparent), color-mix(in srgb, var(--panel) 96%, transparent));
+  box-shadow:inset 0 1px 0 var(--glass-highlight, rgba(255,255,255,.06));
 }
-.about-creator-copy { padding-block: 3px; }
-.about-creator-kicker { text-transform: uppercase; font-size: 9px; }
-.about-creator-name { font-size: 16px; font-weight: 900; }
+.about-creator-copy {
+  display:grid;
+  align-content:center;
+  min-width:0;
+  padding:4px 2px;
+}
+.about-creator-kicker {
+  display:block;
+  color:var(--accent);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.02em;
+}
+.about-creator-name {
+  display:block;
+  margin-top:4px;
+  color:var(--text);
+  font-size:15px;
+  font-weight:900;
+  line-height:1.55;
+}
+.about-instagram-link {
+  display:grid;
+  grid-template-columns:auto minmax(0, 1fr);
+  gap:3px 7px;
+  align-items:baseline;
+  margin-top:10px;
+  padding:9px 10px;
+  border:1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+  border-radius:13px;
+  color:var(--text);
+  background:color-mix(in srgb, var(--panel-solid, var(--panel)) 78%, transparent);
+  text-decoration:none;
+  overflow:hidden;
+}
+.about-instagram-link:hover, .about-instagram-link:focus-visible {
+  border-color:color-mix(in srgb, var(--accent) 58%, var(--line));
+}
+.about-instagram-label { color:var(--muted); font-size:9px; }
+.about-instagram-link b { min-width:0; color:var(--accent); font:900 11px/1.4 var(--font-en, inherit); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.about-instagram-note { grid-column:1 / -1; color:var(--muted); font-size:8.5px; line-height:1.5; }
 .about-qr-link {
-  position: relative;
-  overflow: hidden;
-  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+  position:relative;
+  display:grid;
+  grid-template-rows:minmax(0, 1fr) auto;
+  gap:6px;
+  min-width:0;
+  padding:8px;
+  border:1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+  border-radius:15px;
+  color:var(--text);
+  background:linear-gradient(145deg, color-mix(in srgb, var(--panel-solid, var(--panel)) 88%, var(--accent-soft)), color-mix(in srgb, var(--panel) 94%, transparent));
+  box-shadow:inset 0 1px 0 var(--glass-highlight, rgba(255,255,255,.14)), 0 8px 18px color-mix(in srgb, var(--skin-shadow, #000) 18%, transparent);
+  text-decoration:none;
+  overflow:hidden;
 }
 .about-qr-link::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(135deg, rgba(255,255,255,.34), transparent 44%);
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(135deg, rgba(255,255,255,.18), transparent 44%);
 }
-.about-qr-link img, .about-qr-link span { position: relative; z-index: 1; }
-
-
-/* v7.6.2 minimal polish: restore previous scan icon, fill About scan area, and reuse the hand guide inside onboarding. */
-.about-qr-link { grid-template-columns:minmax(0,1fr) auto; gap:10px; align-items:center; justify-items:stretch; min-height:132px; }
-.about-qr-copy { position:relative; display:grid; gap:6px; align-content:center; min-height:100px; padding:11px 12px; border:1px solid color-mix(in srgb,var(--accent) 18%,var(--line-soft)); border-radius:14px; background:linear-gradient(145deg,color-mix(in srgb,var(--panel-solid) 76%,transparent),color-mix(in srgb,var(--panel) 82%,transparent)); box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 10px 24px color-mix(in srgb,var(--skin-shadow) 20%,transparent); overflow:hidden; }
-.about-qr-copy::before { content:""; position:absolute; inset:-30% -15%; background:linear-gradient(115deg, transparent 18%, rgba(255,255,255,.28) 42%, transparent 62%); transform:translateX(-65%) rotate(8deg); animation:aboutGlassSweep 4.2s linear infinite; }
-.about-qr-copy strong, .about-qr-copy small, .about-qr-media { position:relative; z-index:1; }
-.about-qr-copy strong { color:var(--text); font-size:11px; line-height:1.5; }
-.about-qr-copy small { color:var(--muted); font-size:8.8px; line-height:1.6; }
-.about-qr-media { display:grid; justify-items:center; gap:5px; text-align:center; }
-@keyframes aboutGlassSweep { to { transform:translateX(95%) rotate(8deg); } }
-.quick-start-hand-guide { margin-top:10px; }
-.quick-start-hand-guide .hand-tutorial-copy h4 { font-size:12px; }
-.quick-start-hand-guide .hand-tutorial-copy p { font-size:9px; }
-.quick-start-hand-guide .hand-tutorial-head { grid-template-columns:minmax(0,1fr) 136px; }
-@media (max-width:390px) { .about-qr-link { grid-template-columns:1fr; } .about-qr-copy { min-height:0; } .about-qr-media { justify-items:start; text-align:start; } }
-
-
-/* v7.6.1 about card layout fix: make the Instagram block horizontal and remove the empty right side. */
-.about-creator-card {
-  grid-template-columns: 1fr !important;
-}
-.about-qr-link {
-  width: 100%;
-  grid-template-columns: minmax(0, 1fr) auto !important;
-  align-items: center;
-  justify-items: stretch;
-  min-height: 0;
-}
-.about-qr-copy {
-  min-height: 112px;
-}
-.about-qr-media {
-  align-self: stretch;
-  align-content: center;
-  min-width: 132px;
-  padding-inline-start: 4px;
-}
+.about-qr-copy, .about-qr-media { position:relative; z-index:1; }
+.about-qr-copy { display:grid; gap:4px; align-content:center; min-width:0; text-align:center; }
+.about-qr-copy strong { color:var(--text); font-size:10px; line-height:1.45; }
+.about-qr-copy small { color:var(--muted); font-size:8px; line-height:1.45; }
+.about-qr-media { display:grid; justify-items:center; gap:4px; text-align:center; }
 .about-qr-media img {
-  width: 96px;
-  height: 96px;
+  display:block;
+  width:82px;
+  height:82px;
+  padding:5px;
+  border:1px solid color-mix(in srgb, var(--accent) 24%, var(--line));
+  border-radius:12px;
+  background:#fff;
 }
-@media (max-width: 520px) {
-  .about-qr-link {
-    grid-template-columns: minmax(0, 1fr) auto !important;
-  }
-  .about-qr-copy {
-    min-height: 96px;
-  }
-  .about-qr-media {
-    min-width: 112px;
-  }
+.about-qr-media > span { color:var(--muted); font-size:8px; line-height:1.25; }
+.about-grid {
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:8px;
+  margin-top:10px;
 }
-@media (max-width: 390px) {
-  .about-qr-link {
-    grid-template-columns: 1fr !important;
-  }
-  .about-qr-media {
-    min-width: 0;
-    padding-inline-start: 0;
-  }
+.about-grid div {
+  display:grid;
+  align-content:start;
+  min-width:0;
+  min-height:78px;
+  padding:9px;
+  border:1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+  border-radius:13px;
+  background:color-mix(in srgb, var(--panel-solid, var(--panel)) 72%, transparent);
 }
+.about-grid span { color:var(--muted); font-size:8.5px; line-height:1.45; }
+.about-grid b {
+  display:block;
+  margin-top:5px;
+  overflow:visible;
+  color:var(--text);
+  font-size:9px;
+  font-weight:800;
+  line-height:1.55;
+  text-overflow:clip;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-align:start;
+}
+.toolbar, .workspace-dock, .settings-drawer, .drawer-backdrop { touch-action:manipulation; }
+.workspace-dock, .toolbar { isolation:isolate; }
+@media (max-width:370px) {
+  .about-creator-card { grid-template-columns:minmax(0, 1fr) 108px; gap:8px; padding:8px; }
+  .about-qr-media img { width:72px; height:72px; }
+  .about-qr-copy strong { font-size:9px; }
+  .about-qr-copy small { font-size:7.4px; }
+  .about-grid { gap:6px; }
+  .about-grid div { min-height:74px; padding:7px; }
+  .about-grid span { font-size:8px; }
+  .about-grid b { font-size:8.4px; }
+}
+@media (min-width:680px) {
+  .about-creator-card { grid-template-columns:minmax(0, 1fr) 154px; }
+  .about-qr-media img { width:104px; height:104px; }
+}
+
